@@ -412,7 +412,7 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20vh;
+    gap: 10vh;
 }
 
 .loginScreenOpen{
