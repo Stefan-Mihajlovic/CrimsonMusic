@@ -8,24 +8,42 @@
 }
 
 :root{
-    --purpleMain: #282237;
-    --purpleSecondary: rgba(29, 23, 44, 0.45);
+    --mainColor: #242027;
+    --secondaryColor: rgba(19, 19, 19, 0.45);
     --offWhite: #DCD6F7;
     --offWhiteDark: #8a85a1;
-    --accentRed: #FF6845;
+    --accentColor: #8d6ffc;
 }
 
 body{
     background-color: black;
     font-family: 'Outfit', sans-serif;
+    height: 100vh;
+    color: var(--offWhite);
+    overflow: hidden !important;
+}
+
+.bodyHolder{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
     padding: 10px;
     gap: 10px;
-    height: 100vh;
-    color: var(--offWhite);
-    overflow: hidden hidden !important;
+    border-top: 7.5px solid var(--accentColor);
+}
+
+.bubble{
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 1000px;
+    aspect-ratio: 1 / 1;
+    z-index: -1;
+    background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
 }
 
 /* ----- HEADER ----- */
@@ -36,11 +54,10 @@ header{
     justify-content: space-between;
     width: 100%;
     height: 70px;
-    background-color: var(--purpleMain);
     border-radius: 10px;
     padding-inline: 15px;
-    position: relative;
     flex-shrink: 0;
+    overflow: hidden;
 }
 
 header h2{
@@ -49,7 +66,8 @@ header h2{
 }
 
 .accountName{
-    color: var(--accentRed);
+    color: var(--accentColor);
+    text-transform: uppercase;
 }
 
 header button{
@@ -57,12 +75,29 @@ header button{
     border: none;
 }
 
+.greeting{
+    position: relative;
+}
+
 .moodImage{
     position: absolute;
-    left: 50%;
-    top: 5%;
-    mix-blend-mode: color-dodge;
+    left: 110%;
+    top: -10%;
+    font-size: 30px;
+    color: var(--accentColor);
+    opacity: 0.2;
+}
+
+.rotatingI{
     animation: rotatingAnim 15s linear infinite;
+    left: 110%;
+    top: 0%;
+}
+
+.rotatingII{
+    top: 1%;
+    left: 110%;
+    transform: rotate(220deg);
 }
 
 @keyframes rotatingAnim {
@@ -76,7 +111,6 @@ header button{
 main{
     width: 100%;
     height: calc(100vh - 135px);
-    background-color: var(--purpleMain);
     border-radius: 10px;
     z-index: 10;
     padding: 15px;
@@ -97,9 +131,7 @@ main{
 .vibeVaultItem{
     width: 100%;
     height: 80px;
-    background-color: var(--purpleSecondary);
-    background-image: url("images/TheVaultBannerImage.gif");
-    background-size: cover;
+    background-color: var(--secondaryColor);
     border-radius: 15px;
     margin-bottom: 35px;
     display: flex;
@@ -110,6 +142,19 @@ main{
     box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
     border: 2px solid var(--offWhite);
     gap: 10px;
+}
+
+.vibeVaultItem::before{
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    border-radius: 15px;
+    background-image: url("images/TheVaultBannerImage.gif");
+    background-size: cover;
+    opacity: 0.4;
 }
 
 .vibeVaultItem i{
@@ -134,7 +179,7 @@ main{
 }
 
 .vibeVaultItem button i{
-    color: var(--accentRed);
+    color: var(--accentColor);
     text-shadow: 3px 2px 0px rgba(0, 0, 0, 0.4);
     opacity: 1;
     font-size: 23px;
@@ -153,16 +198,6 @@ main{
     text-transform:uppercase;
 }
 
-.vibeVaultBubble{
-    position: absolute;
-    top: -500%;
-    right: -100%;
-    width: 750px;
-    aspect-ratio: 1 / 1;
-    z-index: -1;
-    background-image: radial-gradient(closest-side, rgba(255, 103, 69, 0.2), transparent);
-}
-
 /* ----- Recommended songs Section ----- */
 
 .recSongs{
@@ -177,7 +212,7 @@ main{
 .songItem{
     width: 100%;
     height: 50px;
-    background-color: var(--purpleSecondary);
+    background-color: var(--secondaryColor);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -239,7 +274,7 @@ nav{
 nav button{
     height: 100%;
     border-radius: 10px;
-    background-color: var(--purpleMain);
+    background-color: var(--mainColor);
     outline: none;
     border: none;
     flex-grow: 1;
@@ -248,7 +283,7 @@ nav button{
 }
 
 .activeScreen{
-    background-color: var(--accentRed);
+    background-color: var(--accentColor);
 }
 
 .activeScreen i{

@@ -12,21 +12,22 @@
     <title>Crimson Music</title>
 </head>
 <body>
+    <div class="bodyHolder">
+        <div class="bubble"></div>
+
     <header>
         <div class="greeting">
+            <i class="fa-solid fa-sun moodImage"></i>
             <h2 id="timeOfDay">Good Afternoon</h2>
             <h2 class="accountName" name="accountName">STEFAN</h2>
         </div>
         <button type="button"><img src="images/noUserImg.svg" alt="userButtonImage"></button>
-
-        <img class="moodImage" src="images/AfternoonImg.svg" alt="moodImage">
     </header>
 
     <main>
         <section class="vaultSection">
             <h2 class="catTitle">TheVault</h2>
             <div class="vibeVaultItem">
-                <div class="vibeVaultBubble"></div>
                 <i class="fa-solid fa-face-smile-wink"></i>
                 <h2>Embrace the rhythm of your feelings!</h2>
                 <i class="fa-solid fa-face-sad-cry"></i>
@@ -85,5 +86,6 @@
         <button type="button" onclick="setScreen('Search', this)"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button type="button" onclick="setScreen('Playlists', this)"><i class="fa-solid fa-border-all"></i></button>
     </nav>
+    </div>
 </body>
 </html>

@@ -10,19 +10,31 @@ function getTime(){
 
     if (time < 12) {
         todEl.innerHTML = 'Good Morning';
-        todImg.src = "images/AfternoonImg.svg";
+        todImg.classList.remove("fa-sun");
+        todImg.classList.remove("fa-moon");
+        todImg.classList.remove("rotatingII");
+        todImg.classList.remove("rotatingI");
+        todImg.classList.add("fa-spa");
     }
     if (time >= 12 && time < 18) {
         todEl.innerHTML = 'Good Afternoon';
-        todImg.src = "images/AfternoonImg.svg";
+        todImg.classList.remove("fa-spa");
+        todImg.classList.remove("fa-moon");
+        todImg.classList.remove("rotatingII");
+        todImg.classList.add("rotatingI");
+        todImg.classList.add("fa-sun");
     }
     if (time >= 18) {
         todEl.innerHTML = 'Good Evening';
-        todImg.src = "images/AfternoonImg.svg";
+        todImg.classList.remove("fa-sun");
+        todImg.classList.remove("fa-spa");
+        todImg.classList.remove("rotatingI");
+        todImg.classList.add("rotatingII");
+        todImg.classList.add("fa-moon");
     }
 }
 
-
+/* ----- SET SCREEN HEIGHT ON IPHONES/IPADS/IPODS ----- */
 
 if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     document.querySelector('main').style.height = "calc(100vh - 255px)";
@@ -39,3 +51,16 @@ function setScreen(screenToSet, clickedBtn){
     });
     clickedBtn.classList.add("activeScreen");
 }
+
+/* ----- SET ACCOUNT INFO ----- */
+
+let loggedIn = false;
+
+let accountNames = document.getElementsByName("accountName");
+accountNames.forEach((accountName) => {
+    if(!loggedIn){
+        accountName.innerHTML = "Guest";
+    }else{
+        accountName.innerHTML = "Guest";
+    }
+})
