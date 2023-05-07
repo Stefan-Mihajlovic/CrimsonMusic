@@ -22,6 +22,14 @@ function getTime(){
     }
 }
 
+
+
+if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    document.querySelector('main').style.height = "calc(100vh - 195px)";
+  }else{
+    document.querySelector('main').style.height = "calc(100vh - 135px)";
+  }
+
 /* ----- SET SCREEN ----- */
 
 function setScreen(screenToSet, clickedBtn){
