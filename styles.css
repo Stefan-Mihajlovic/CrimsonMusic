@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+*{
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --purpleMain: #282237;
+    --purpleSecondary: #1d172c9f;
+    --offWhite: #DCD6F7;
+    --offWhiteDark: #8a85a1;
+    --accentRed: #FF6845;
+}
+
+body{
+    background-color: black;
+    font-family: 'Outfit', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 10px;
+    gap: 10px;
+    height: 100vh;
+    color: var(--offWhite);
+    overflow: hidden hidden !important;
+}
+
+/* ----- HEADER ----- */
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 70px;
+    background-color: var(--purpleMain);
+    border-radius: 10px;
+    padding-inline: 15px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+header h2{
+    color: var(--offWhite);
+    line-height: 20px;
+}
+
+.accountName{
+    color: var(--accentRed);
+}
+
+header button{
+    background: none;
+    border: none;
+}
+
+.moodImage{
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    mix-blend-mode: color-dodge;
+    animation: rotatingAnim 15s linear infinite;
+}
+
+@keyframes rotatingAnim {
+    0%{ transform: rotate(0deg) scale(1); }
+    50%{ transform: rotate(180deg) scale(1.2); }
+    100%{ transform: rotate(360deg) scale(1); }
+}
+
+/* ----- MAIN ----- */
+
+main{
+    width: 100%;
+    flex-grow: 1;
+    background-color: var(--purpleMain);
+    border-radius: 10px;
+    z-index: 10;
+    padding: 15px;
+    overflow-y: scroll;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.catTitle{
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* ----- VibeVault Section ----- */
+
+.vibeVaultBubble{
+    position: absolute;
+    top: -40%;
+    right: -80%;
+    width: 750px;
+    aspect-ratio: 1 / 1;
+    background-image: radial-gradient(closest-side, rgba(255, 103, 69, 0.2), transparent);
+}
+
+/* ----- Recommended songs Section ----- */
+
+.recSongs{
+    list-style: none;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.songItem{
+    width: 100%;
+    height: 50px;
+    background-color: var(--purpleSecondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 7px;
+}
+
+.songInfo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 18px;
+}
+
+.songText h2{
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.songText h3{
+    font-size: 14px;
+    color: var(--offWhiteDark);
+}
+
+.songInfo img{
+    border-radius: 5px;
+    width: 35px;
+    aspect-ratio: 1 / 1;
+}
+
+.songBtns{
+    display: flex;
+    gap: 15px;
+    padding-right: 5px;
+}
+
+.songBtns button{
+    background: none;
+    border: none;
+}
+
+.songBtns i{
+    font-size: 20px;
+    color: var(--offWhite);
+}
+
+/* ----- NAV ----- */
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 65px;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+nav button{
+    height: 100%;
+    border-radius: 10px;
+    background-color: var(--purpleMain);
+    outline: none;
+    border: none;
+    flex-grow: 1;
+    flex-shrink: 0;
+    transition: all .2s linear;
+}
+
+.activeScreen{
+    background-color: var(--accentRed);
+}
+
+.activeScreen i{
+    color: black !important;
+}
+
+nav button i{
+    font-size: 25px;
+    color: var(--offWhite);
+}
