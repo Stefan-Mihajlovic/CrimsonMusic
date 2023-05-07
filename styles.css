@@ -69,6 +69,10 @@ header h2{
     text-transform: uppercase;
 }
 
+.accountImage{
+    border-radius: 50%;
+}
+
 header button{
     background: none;
     border: none;
@@ -118,6 +122,7 @@ main{
     position: relative;
     display: flex;
     flex-direction: column;
+    gap: 25px;
 }
 
 .catTitle{
@@ -132,7 +137,7 @@ main{
     height: 80px;
     background-color: var(--secondaryColor);
     border-radius: 15px;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -258,6 +263,47 @@ main{
 .songBtns i{
     font-size: 20px;
     color: var(--offWhite);
+}
+
+/* ----- Recommended artists Section ----- */
+
+.recArtists{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+}
+
+.artistItem{
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+    flex-shrink: 0;
+    padding-top: 5px;
+}
+
+.artistItem img{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.artistItem h3{
+    text-align: center;
+    font-size: 13px;
+    width: 80%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--offWhiteDark);
 }
 
 /* ----- NAV ----- */
