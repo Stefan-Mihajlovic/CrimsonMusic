@@ -25,7 +25,7 @@ function getTime(){
 
 
 if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    document.querySelector('main').style.height = "calc(100vh - 195px)";
+    document.querySelector('main').style.height = "calc(100vh - 255px)";
   }else{
     document.querySelector('main').style.height = "calc(100vh - 135px)";
   }
