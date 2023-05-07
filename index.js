@@ -36,12 +36,6 @@ function getTime(){
 
 /* ----- SET SCREEN HEIGHT ON IPHONES/IPADS/IPODS ----- */
 
-if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    document.querySelector('main').style.height = "calc(100vh - 265px)";
-  }else{
-    document.querySelector('main').style.height = "calc(100vh - 135px)";
-  }
-
 /* ----- SET SCREEN ----- */
 
 function setScreen(screenToSet, clickedBtn){
