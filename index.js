@@ -48,12 +48,14 @@ function setScreen(screenToSet, clickedBtn){
 
 function openLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
+    window.location.href = "index.html#login";
 
     loginScreen.classList.add("loginScreenOpen");
 }
 
 function closeLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
+    window.location.href = "index.html";
 
     loginScreen.classList.remove("loginScreenOpen");
 }
