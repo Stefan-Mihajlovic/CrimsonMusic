@@ -9,6 +9,8 @@
 
 :root{
     --mainColor: #242027;
+    --mainColorLighter: rgb(45, 43, 49);
+    --mainColorLighter2:rgb(103, 98, 110);
     --secondaryColor: rgba(19, 19, 19, 0.45);
     --offWhite: #DCD6F7;
     --offWhiteDark: #8a85a1;
@@ -48,18 +50,6 @@ body{
 .highlightSpan{
     color: var(--accentColor);
     font-weight: 900;
-    text-shadow: 2px 2px 10px var(--accentColor);
-    animation: textShadowVortex 2s linear infinite;
-}
-
-@keyframes textShadowVortex {
-    0%{ text-shadow: 2px 2px 10px var(--accentColor); }
-    15%{ text-shadow: 0px 2px 10px var(--accentColor); }
-    30%{ text-shadow: -2px 2px 10px var(--accentColor); }
-    45%{ text-shadow: -2px 0px 10px var(--accentColor); }
-    60%{ text-shadow: -2px -2px 10px var(--accentColor); }
-    75%{ text-shadow: 2px 0px 10px var(--accentColor); }
-    100%{ text-shadow: 2px 2px 10px var(--accentColor); }
 }
 
 /* ----- HEADER ----- */
@@ -383,6 +373,118 @@ main{
     white-space: nowrap;
     text-overflow: ellipsis;
     color: var(--offWhiteDark);
+}
+
+/* ----- LOGIN SCREEN ----- */
+
+.pageBar{
+    width: 100%;
+    display: flex;
+    height: 50px;
+    align-items: center;
+    padding-inline: 15px;
+    gap: 15px;
+    border-bottom: 2px solid var(--offWhite);
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
+}
+
+.pageBar button{
+    background: none;
+    border: none;
+}
+
+.pageBar button i{
+    color: var(--offWhite);
+    font-size: 20px;
+}
+
+.loginScreen{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgb(22, 20, 27);
+    z-index: 999;
+    pointer-events: none;
+    transform: translateX(110%);
+    transition: all .2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20vh;
+}
+
+.loginScreenOpen{
+    transform: translateX(0%);
+    pointer-events: all;
+}
+
+.loginForm{
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 225px;
+}
+
+.loginForm h2{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.loginForm input{
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 11px;
+    border: 1px solid var(--mainColorLighter);
+    background-color: var(--secondaryColor);
+    color: var(--offWhite);
+}
+
+.loginForm h5{
+    font-size: 11px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--mainColorLighter2);
+    opacity: 1; /* Firefox */
+}
+  
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--mainColorLighter2);
+}
+  
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--mainColorLighter2);
+}
+
+.buttonField{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px;
+    gap: 5px;
+}
+
+.buttonField input, .buttonField button{
+    border-radius: 8px;
+    background-color: var(--offWhite);
+    color: black;
+    border: none;
+    padding: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.buttonField input{
+    background-color: var(--secondaryColor);
+    border: 1px solid var(--offWhite);
+    color: var(--offWhite);
 }
 
 /* ----- NAV ----- */

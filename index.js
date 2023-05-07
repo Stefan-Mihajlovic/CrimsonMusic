@@ -34,8 +34,6 @@ function getTime(){
     }
 }
 
-/* ----- SET SCREEN HEIGHT ON IPHONES/IPADS/IPODS ----- */
-
 /* ----- SET SCREEN ----- */
 
 function setScreen(screenToSet, clickedBtn){
@@ -44,6 +42,20 @@ function setScreen(screenToSet, clickedBtn){
         button.classList.remove("activeScreen");
     });
     clickedBtn.classList.add("activeScreen");
+}
+
+/* ----- LOGIN SCREEN ----- */
+
+function openLoginScreen(){
+    let loginScreen = document.getElementsByClassName("loginScreen")[0];
+
+    loginScreen.classList.add("loginScreenOpen");
+}
+
+function closeLoginScreen(){
+    let loginScreen = document.getElementsByClassName("loginScreen")[0];
+
+    loginScreen.classList.remove("loginScreenOpen");
 }
 
 /* ----- SET ACCOUNT INFO ----- */

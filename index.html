@@ -22,7 +22,7 @@
             <h2 id="timeOfDay">Good Afternoon</h2>
             <h2 class="accountName" name="accountName">STEFAN</h2>
         </div>
-        <button name="accountImage" type="button"><img src="images/noUserImg.svg" alt="userButtonImage"></button>
+        <button name="accountImage" type="button" onclick="openLoginScreen()"><img src="images/noUserImg.svg" alt="userButtonImage"></button>
     </header>
 
     <main>
@@ -187,6 +187,27 @@
             </ul>
         </section>
     </main>
+
+    <div class="loginScreen">
+        <div class="pageBar">
+            <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-circle-left"></i></button>
+            <h2>Register</h2>
+        </div>
+        <form class="loginForm">
+            <h2>Sign Up</h2>
+
+            <input type="text" id="username" aria-describedby="usernameHelp" placeholder="Username">
+            <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email">
+            <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password">
+
+            <h5>Already have an account? <span class="highlightSpan">Log in!</span></h5>
+
+            <div class="buttonField">
+                <input type="submit" value="Register">
+                <button type="submit"><i class="fa-brands fa-google"></i>&nbsp;Login with Google</button>
+            </div>
+        </form>
+    </div>
 
     <nav>
         <button class="activeScreen" type="button" onclick="setScreen('Home', this)"><i class="fa-solid fa-house"></i></button>
