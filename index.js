@@ -55,7 +55,7 @@ function openLoginScreen(){
 
 function closeLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
-    window.location.href = "index.html";
+    window.location.href = "index.html#home";
 
     loginScreen.classList.remove("loginScreenOpen");
 }
