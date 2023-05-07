@@ -426,7 +426,7 @@ main{
     display: flex;
     flex-direction: column;
     gap: 5px;
-    min-width: 225px;
+    min-width: 275px;
 }
 
 .loginForm h2{
@@ -437,10 +437,10 @@ main{
 
 .loginForm input{
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     border-radius: 8px;
     border: none;
-    font-size: 11px;
+    font-size: 13px;
     border: 1px solid var(--mainColorLighter);
     background-color: var(--secondaryColor);
     color: var(--offWhite);
@@ -476,8 +476,8 @@ main{
     background-color: var(--offWhite);
     color: black;
     border: none;
-    padding: 10px;
-    font-size: 11px;
+    padding: 15px;
+    font-size: 13px;
     font-weight: 600;
 }
 
