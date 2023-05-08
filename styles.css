@@ -52,6 +52,15 @@ body{
     font-weight: 900;
 }
 
+ul::-webkit-scrollbar{
+    display: none;
+}
+
+ul{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 /* ----- HEADER ----- */
 
 header{
@@ -310,6 +319,7 @@ main{
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 50%;
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
 }
 
 .artistItem h3{
@@ -350,6 +360,7 @@ main{
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-bottom: 2px solid var(--accentColor);
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
 }
 
 .playlistItem h3{
@@ -398,6 +409,11 @@ main{
     font-size: 20px;
 }
 
+.pageBar h2{
+    transition: all .45s ease-in-out;
+    transform: translateX(100%);
+}
+
 .loginScreen{
     position: absolute;
     top: 0;
@@ -408,7 +424,7 @@ main{
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
-    transition: all .2s ease-in-out;
+    transition: all .3s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -420,6 +436,10 @@ main{
     pointer-events: all;
 }
 
+.loginScreenOpen .pageBar h2{
+    transform: translateX(0%);
+}
+
 .loginForm{
     padding: 15px;
     border-radius: 15px;
@@ -427,6 +447,12 @@ main{
     flex-direction: column;
     gap: 5px;
     min-width: 275px;
+    transition: all .4s ease-in-out;
+    transform: translateX(100%);
+}
+
+.loginScreenOpen .loginForm{
+    transform: translateX(0%);
 }
 
 .loginForm h2{
@@ -448,6 +474,10 @@ main{
 
 .loginForm h5{
     font-size: 11px;
+    width: 100%;
+    text-align: center;
+    color: var(--offWhiteDark);
+    font-weight: 400;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

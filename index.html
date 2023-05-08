@@ -8,8 +8,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
-    <script src="index.js" defer></script>
+    <script src="js/index.js" defer></script>
+    <script src="js/userController.js" type="module"></script>
     <script src="https://kit.fontawesome.com/1d408b5acd.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Crimson Music</title>
 </head>
 <body>
@@ -120,7 +123,7 @@
                     <h3>Demo Artist</h3>
                 </li>
                 <li class="artistItem">
-                    <img src="images/CrimsonLogo.png" alt="artistImage">
+                    <img src="images/demoSongBanner.jpg" alt="artistImage">
                     <h3>Demo Artist</h3>
                 </li>
                 <li class="artistItem">
@@ -128,7 +131,7 @@
                     <h3>Demo Artist</h3>
                 </li>
                 <li class="artistItem">
-                    <img src="images/CrimsonLogo.png" alt="artistImage">
+                    <img src="images/demoSongBanner.jpg" alt="artistImage">
                     <h3>Demo Artist</h3>
                 </li>
                 <li class="artistItem">
@@ -136,7 +139,7 @@
                     <h3>Demo Artist</h3>
                 </li>
                 <li class="artistItem">
-                    <img src="images/CrimsonLogo.png" alt="artistImage">
+                    <img src="images/demoSongBanner.jpg" alt="artistImage">
                     <h3>Demo Artist</h3>
                 </li>
                 <li class="artistItem">
@@ -150,7 +153,7 @@
             <h2 class="catTitle">Playlists curated just for <span class="highlightSpan">YOU</span></h2>
             <ul class="recPlaylists">
                 <li class="playlistItem">
-                    <img src="images/CrimsonLogo.png" alt="playlistBanner">
+                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
                     <h3>Demo Playlist</h3>
                     <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
                 </li>
@@ -160,7 +163,7 @@
                     <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
                 </li>
                 <li class="playlistItem">
-                    <img src="images/CrimsonLogo.png" alt="playlistBanner">
+                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
                     <h3>Demo Playlist</h3>
                     <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
                 </li>
@@ -170,7 +173,7 @@
                     <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
                 </li>
                 <li class="playlistItem">
-                    <img src="images/CrimsonLogo.png" alt="playlistBanner">
+                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
                     <h3>Demo Playlist</h3>
                     <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
                 </li>
@@ -180,7 +183,7 @@
                     <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
                 </li>
                 <li class="playlistItem">
-                    <img src="images/CrimsonLogo.png" alt="playlistBanner">
+                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
                     <h3>Demo Playlist</h3>
                     <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
                 </li>
@@ -191,20 +194,20 @@
     <div class="loginScreen">
         <div class="pageBar">
             <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-circle-left"></i></button>
-            <h2>Register</h2>
+            <h2 name="regLogTitle">Register</h2>
         </div>
         <form class="loginForm">
-            <h2>Sign Up</h2>
+            <h2 name="regLogTitle">Sign Up</h2>
 
             <input type="text" id="username" aria-describedby="usernameHelp" placeholder="Username">
             <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email">
             <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password">
 
-            <h5>Already have an account? <span class="highlightSpan">Log in!</span></h5>
+            <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" onclick="RegToLog()">Log in!</span></h5>
 
             <div class="buttonField">
-                <input type="submit" value="Register">
-                <button type="submit"><i class="fa-brands fa-google"></i>&nbsp;Login with Google</button>
+                <button type="button" id="registerBtn">Register</button>
+                <button type="button" id="regGoogleBtn"><i class="fa-brands fa-google"></i>&nbsp;Register with Google</button>
             </div>
         </form>
     </div>
