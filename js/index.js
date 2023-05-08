@@ -44,6 +44,21 @@ function setScreen(screenToSet, clickedBtn){
     clickedBtn.classList.add("activeScreen");
 }
 
+/* ----- Button clicks ----- */
+
+document.querySelectorAll("button").forEach((button) => {
+    button.addEventListener('click', () => {
+        buttonClickAnim(button);
+    });
+});
+
+function buttonClickAnim(button){
+    button.classList.add("buttonClicked");
+    setTimeout(() => {
+        button.classList.remove("buttonClicked");
+    }, 100);
+}
+
 /* ----- LOGIN SCREEN ----- */
 
 function openLoginScreen(){
