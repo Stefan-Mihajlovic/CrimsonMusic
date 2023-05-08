@@ -10,7 +10,7 @@
 :root{
     --mainColor: #242027;
     --mainColorLighter: rgb(45, 43, 49);
-    --mainColorLighter2:rgb(103, 98, 110);
+    --mainColorLighter2:rgb(139, 135, 146);
     --secondaryColor: rgba(19, 19, 19, 0.45);
     --offWhite: #DCD6F7;
     --offWhiteDark: #8a85a1;
@@ -449,6 +449,7 @@ main{
     min-width: 275px;
     transition: all .4s ease-in-out;
     transform: translateX(100%);
+    display: none;
 }
 
 .loginScreenOpen .loginForm{
@@ -464,7 +465,7 @@ main{
 .loginForm input{
     width: 100%;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 13px;
     border: none;
     font-size: 13px;
     border: 1px solid var(--mainColorLighter);
@@ -502,7 +503,7 @@ main{
 }
 
 .buttonField input, .buttonField button{
-    border-radius: 8px;
+    border-radius: 13px;
     background-color: var(--offWhite);
     color: black;
     border: none;
@@ -515,6 +516,50 @@ main{
     background-color: var(--secondaryColor);
     border: 1px solid var(--offWhite);
     color: var(--offWhite);
+}
+
+.loggedInScreen{
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 275px;
+    transition: all .4s ease-in-out;
+    transform: translateX(100%);
+}
+
+.loginScreenOpen .loggedInScreen{
+    transform: translateX(0%);
+}
+
+.loggedInScreen img{
+    width: 50%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 2px solid var(--offWhite);
+}
+
+.loggedInScreen h2{
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.loggedInScreen h5{
+    text-align: center;
+    color: var(--offWhiteDark);
+    line-height: 0px;
+    margin-bottom: 10px;
+}
+
+.loggedInScreen button{
+    width: 100%;
+    background-color: var(--offWhite);
+    color: black;
+    padding: 15px;
+    border: none;
+    border-radius: 13px;
 }
 
 /* ----- NAV ----- */

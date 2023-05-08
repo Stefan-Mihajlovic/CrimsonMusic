@@ -23,14 +23,23 @@ const auth = getAuth(app);
 
 const realdb = getDatabase();
 
-/* ----- Register / Login ----- */
+/* ----- Register User ----- */
 
 const username = document.getElementById('username');
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const registerBtn = document.getElementById('registerBtn');
+const loginBtn = document.getElementById('loginBtn');
 
-var currentUser;
+let accountNames = document.getElementsByName('accountName');
+let accountEmails = document.getElementsByName('accountEmail');
+let accountUsername;
+let accountEmail;
+let accountPhoto;
+
+let loggedIn = false;
+
+let currentUser;
 
 function isEmptyOrSpaces(str){
     return str == null || str.match(/^ *$/) !== null;
@@ -97,16 +106,105 @@ function encPass(){
 
 // Call the register user on click
 registerBtn.addEventListener('click', RegisterUser);
+loginBtn.addEventListener('click', AuthenticateUser);
 
-/* ----- SET ACCOUNT INFO ----- */
+/* ----- Login User ----- */
 
-// let loggedIn = false;
+function AuthenticateUser(){
+    const dbRef = ref(realdb);
 
-// let accountNames = document.getElementsByName("accountName");
-// accountNames.forEach((accountName) => {
-//     if(!loggedIn){
-//         accountName.innerHTML = "Guest";
-//     }else{
-//         accountName.innerHTML = "Guest";
-//     }
-// })
+    get(child(dbRef, "Users/"+username.value)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let dbpass = decPass(snapshot.val().Password);
+            if(dbpass == password.value){
+                loginUser(snapshot.val());
+            }
+        }
+        else{
+            set(ref(realdb, "Users/"+username.value),
+            {
+                Username: username.value,
+                Email: email.value,
+                Password: encPass()
+            })
+            .then(()=>{
+                alert('User registered sexesfuli');
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            })
+        }
+    })
+}
+
+// Dekriptuj sifru
+
+function decPass(dbpass){
+    var pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
+    return pass12.toString(CryptoJS.enc.Utf8);
+}
+
+// Login user
+
+function loginUser(user){
+    localStorage.setItem('keepLoggedIn', 'yes');
+    localStorage.setItem('user', JSON.stringify(user));
+    getUsername();
+    accountUsername = currentUser.Username;
+    accountEmail = currentUser.Email;
+    accountNames.forEach((name) => {
+        name.innerHTML = accountUsername;
+    });
+    accountEmails.forEach((email) => {
+        email.innerHTML = accountEmail;
+    });
+    setLoggedInScreen();
+}
+
+function getUsername(){
+    let keepLoggedIn = localStorage.getItem('keepLoggedIn');
+
+    if(keepLoggedIn === 'yes'){
+        currentUser = JSON.parse(localStorage.getItem('user'));
+    }
+}
+
+function SignOutUser(){
+    localStorage.removeItem('user');
+    localStorage.removeItem('keepLoggedIn');
+    accountUsername ="Guest";
+    accountEmail ="";
+    accountNames.forEach((name) => {
+        name.innerHTML = accountUsername;
+    });
+    accountEmails.forEach((email) => {
+        email.innerHTML = accountEmail;
+    });
+    setLoggedOutScreen();
+}
+
+let logoutBtn = document.getElementById('logoutBtn');
+logoutBtn.addEventListener('click', ()=>{
+    signOut(auth).then(() => {
+        SignOutUser();
+    }).catch((error) => {
+        // An error happened.
+    });
+})
+
+getUsername();
+
+// See if user was signed in
+if(currentUser == null){
+    setLoggedOutScreen();
+}
+else{
+    accountUsername = currentUser.Username;
+    accountEmail = currentUser.Email;
+    accountNames.forEach((name) => {
+        name.innerHTML = accountUsername;
+    });
+    accountEmails.forEach((email) => {
+        email.innerHTML = accountEmail;
+    });
+}

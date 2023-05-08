@@ -23,7 +23,7 @@
         <div class="greeting">
             <i class="fa-solid fa-sun moodImage"></i>
             <h2 id="timeOfDay">Good Afternoon</h2>
-            <h2 class="accountName" name="accountName">STEFAN</h2>
+            <h2 class="accountName" name="accountName">Guest</h2>
         </div>
         <button name="accountImage" type="button" onclick="openLoginScreen()"><img src="images/noUserImg.svg" alt="userButtonImage"></button>
     </header>
@@ -207,9 +207,16 @@
 
             <div class="buttonField">
                 <button type="button" id="registerBtn">Register</button>
+                <button type="button" id="loginBtn" style="display: none;">Login</button>
                 <button type="button" id="regGoogleBtn"><i class="fa-brands fa-google"></i>&nbsp;Register with Google</button>
             </div>
         </form>
+        <div class="loggedInScreen">
+            <img name="accountPhoto" src="images/noUserImg.svg" alt="userBanner">
+            <h2 name="accountName">Guest</h2>
+            <h5 name="accountEmail">youarenotsuppsedtoseethis</h5>
+            <button type="button" id="logoutBtn">Log Out</button>
+        </div>
     </div>
 
     <nav>

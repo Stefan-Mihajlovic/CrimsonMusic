@@ -48,14 +48,12 @@ function setScreen(screenToSet, clickedBtn){
 
 function openLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
-    window.location.href = "index.html#login";
 
     loginScreen.classList.add("loginScreenOpen");
 }
 
 function closeLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
-    window.location.href = "index.html#home";
 
     loginScreen.classList.remove("loginScreenOpen");
 }
@@ -65,14 +63,16 @@ function RegToLog(){
     let titles = document.getElementsByName("regLogTitle");
     let emailInput = document.getElementById("email");
     let alreadyAcc = document.getElementById("alreadtAcc");
-    let registerGoogleBtn = document.getElementById("regGoogleBtn");
+    let registerBtn = document.getElementById("registerBtn");
+    let loginBtn = document.getElementById("loginBtn");
 
     titles.forEach((title) => {
         title.innerHTML = "Login";
     });
     email.style.display = "none";
     alreadyAcc.innerHTML = `Don't have an account? <span class="highlightSpan" onclick="LogToReg()">Register here!</span>`;
-    registerGoogleBtn.innerHTML = `<i class="fa-brands fa-google"></i>&nbsp;Register with Google`;
+    registerBtn.style.display = "none";
+    loginBtn.style.display = "block";
 }
 
 function LogToReg(){
@@ -86,5 +86,18 @@ function LogToReg(){
     });
     email.style.display = "block";
     alreadyAcc.innerHTML = `Already have an account? <span class="highlightSpan" onclick="RegToLog()">Log in!</span>`;
-    registerGoogleBtn.innerHTML = `<i class="fa-brands fa-google"></i>&nbsp;Login with Google`;
+    registerBtn.style.display = "block";
+    loginBtn.style.display = "none";
+}
+
+/* ----- Set logged in screen ----- */
+
+function setLoggedInScreen(){
+    document.getElementsByClassName("loginForm")[0].style.display = "none";
+    document.getElementsByClassName("loggedInScreen")[0].style.display = "flex";
+}
+
+function setLoggedOutScreen(){
+    document.getElementsByClassName("loginForm")[0].style.display = "flex";
+    document.getElementsByClassName("loggedInScreen")[0].style.display = "none";
 }
