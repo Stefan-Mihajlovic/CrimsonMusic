@@ -145,7 +145,6 @@ header button{
 main{
     width: 100%;
     height: calc(100vh - 70px);
-    border-radius: 10px;
     z-index: 10;
     padding: 15px;
     padding-bottom: 140px;
