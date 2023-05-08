@@ -81,6 +81,13 @@ header{
     padding-inline: 15px;
     flex-shrink: 0;
     overflow: hidden;
+    position: fixed;
+    backdrop-filter: blur(20px) brightness(0.9);
+    -webkit-backdrop-filter: blur(20px) brightness(0.9);
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
 }
 
 header h2{
@@ -142,6 +149,7 @@ main{
     z-index: 10;
     padding: 15px;
     padding-bottom: 140px;
+    padding-top: 70px;
     overflow-x: hidden;
     overflow-y: scroll;
     position: relative;
