@@ -601,7 +601,7 @@ main{
 
 .playerOpen{
     bottom: 0;
-    height: calc(100vh + 70px);
+    height: calc(100vh + 70px - env(safe-area-inset-bottom));
     background-color: var(--playerColor);
     padding-inline: 0px;
 }
