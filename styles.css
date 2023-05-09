@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+html {
+    height: -webkit-fill-available;
+}
+
 *{
     scroll-behavior: smooth;
     box-sizing: border-box;
@@ -23,7 +27,6 @@
 body{
     background-color: black;
     font-family: 'Outfit', sans-serif;
-    height: 100vh;
     min-height: 100vh; 
     min-height: -webkit-fill-available;
     color: var(--offWhite);
