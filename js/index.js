@@ -1,6 +1,6 @@
 // If on iphone give some padding
 if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    document.querySelector(":root").style.setProperty('--iphoneBottomBar', '10%');
+    document.querySelector(":root").style.setProperty('--iphoneBottomBar', '100px');
 }
 
 /* ----- GET THE TIME ----- */

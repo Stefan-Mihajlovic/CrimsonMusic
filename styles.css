@@ -604,7 +604,7 @@ main{
 
 .playerOpen{
     bottom: 0;
-    height: calc(100vh + 70px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    height: calc(100vh + 70px - var(--iphoneBottomBar) - env(safe-area-inset-bottom) - env(safe-area-inset-top));
     background-color: var(--playerColor);
     padding-inline: 0px;
 }
