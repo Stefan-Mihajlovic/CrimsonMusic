@@ -616,7 +616,7 @@ main{
     box-shadow: none;
     border: none;
     transform: translateY(100%);
-    transition: all .4s ease-in-out;
+    transition: all .5s ease-in-out;
 }
 
 .playerOpen .pageBar{
@@ -705,6 +705,7 @@ main{
 
 .bigPlayer{
     display: flex;
+    flex-direction: column;
     align-items: center;
     background-color: var(--playerColor);
 }
@@ -714,7 +715,8 @@ main{
     align-items: center;
     flex-direction: column;
     padding: 35px;
-    transition: all .4s ease-in-out;
+    padding-bottom: 0px;
+    transition: all .5s ease-in-out;
     transform: translateY(70%);
 }
 
@@ -731,15 +733,109 @@ main{
 
 .bigSongInfo .playerSongText{
     text-align: left;
-    width: 99%;
-    padding: 5px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bigSongInfo .playerSongText h2{
+    font-size: 22px;
 }
 
 .bigSongInfo .playerSongText h3{
     line-height: 10px;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 1px;
+}
+
+.bigSongInfo .playerSongText button{
+    border: none;
+    background: none;
+}
+
+.bigSongInfo .playerSongText button i{
+    color: var(--offWhite);
+    font-size: 24px;
+}
+
+.bigControls{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(150%);
+    transition: all .47s linear;
+}
+
+.playerOpen .bigPlayer .bigControls{
+    transform: translateY(0%);
+}
+
+.bigControls .bipCC{
+    width: 100%;
+    padding: 35px;
+    padding-top: 0px;
+    position: relative;
+}
+
+.bigControls .bipCC input{
+    width: 100%;
+    height: 5px;
+}
+
+.bigControls .bipCC span{
+    position: absolute;
+    font-size: 10px;
+    color: var(--offWhiteDark);
+}
+
+#currentSongTime{
+    left: 37px;
+    top: 30%;
+}
+
+#currentSongTimeLeft{
+    right: 37px;
+    top: 30%;
+}
+
+.bpCC{
+    display: flex;
+    gap: 15px;
+}
+
+.bpCC button{
+    background: none;
+    border: none;
+}
+
+.bpCC button i{
+    color: var(--offWhite);
+    font-size: 1.45rem;
+    width: 50px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bigPlayButton{
+    background-color: var(--offWhite) !important;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+}
+
+.bigPlayButton i{
+    color: #242027 !important;
+    margin-left: 3.3px;
+}
+
+.rewindButton i{
+    font-size: 30px !important;
 }
 
 /* ----- NAV ----- */

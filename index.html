@@ -214,12 +214,26 @@
             <div class="bigSongInfo">
                 <img src="images/demoSongBanner.jpg" alt="songBanner">
                 <div class="playerSongText">
-                    <h2>Demo Song</h2>
-                    <h3>Demo artist</h3>
+                    <div class="playerSongNames">
+                        <h2>Demo Song</h2>
+                        <h3>Demo artist</h3>
+                    </div>
+                    <button name="songLiked"><i class="fa-regular fa-heart"></i></button>
                 </div>
             </div>
             <div class="bigControls">
-
+                <div class="bipCC">
+                    <span id="currentSongTime">0:00</span>
+                    <input type="range" name="currentSongInput" id="currentSongInput">
+                    <span id="currentSongTimeLeft">2:00</span>
+                </div>
+                <div class="bpCC">
+                    <button><i class="fa-solid fa-repeat"></i></button>
+                    <button class="rewindButton"><i class="fa-solid fa-backward-step"></i></button>
+                    <button class="bigPlayButton"><i class="fa-solid fa-play"></i></but>
+                    <button class="rewindButton"><i class="fa-solid fa-forward-step"></i></button>
+                    <button><i class="fa-solid fa-shuffle"></i></button>
+                </div>
             </div>
         </div>
     </div>
