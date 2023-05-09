@@ -587,7 +587,7 @@ main{
     position: fixed;
     left: 0;
     right: 0;
-    top: 80px;
+    bottom: 80px;
     padding-inline: 10px;
     z-index: 999;
     display: flex;
@@ -599,7 +599,6 @@ main{
 
 .playerOpen{
     bottom: 0;
-    top: -70px;
     height: calc(100vh + 70px);
     background-color: var(--playerColor);
     padding-inline: 0px;
