@@ -22,6 +22,8 @@ body{
     background-color: black;
     font-family: 'Outfit', sans-serif;
     height: 100vh;
+    min-height: 100vh; 
+    min-height: -webkit-fill-available;
     color: var(--offWhite);
     overflow: hidden !important;
 }
@@ -585,7 +587,7 @@ main{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 80px;
+    top: 80px;
     padding-inline: 10px;
     z-index: 999;
     display: flex;
@@ -597,6 +599,7 @@ main{
 
 .playerOpen{
     bottom: 0;
+    top: -70px;
     height: calc(100vh + 70px);
     background-color: var(--playerColor);
     padding-inline: 0px;
