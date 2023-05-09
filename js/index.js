@@ -110,9 +110,24 @@ function LogToReg(){
 function setLoggedInScreen(){
     document.getElementsByClassName("loginForm")[0].style.display = "none";
     document.getElementsByClassName("loggedInScreen")[0].style.display = "flex";
+    document.getElementsByName("regLogTitle")[0].innerHTML = "Account";
+
 }
 
 function setLoggedOutScreen(){
     document.getElementsByClassName("loginForm")[0].style.display = "flex";
     document.getElementsByClassName("loggedInScreen")[0].style.display = "none";
+    document.getElementsByName("regLogTitle")[0].innerHTML = "Register";
+}
+
+/* ----- PLAYER ----- */
+
+function openBigPlayer(){
+    let player = document.getElementsByClassName("player")[0];
+    player.classList.add("playerOpen");
+}
+
+function closeBigPlayer(){
+    let player = document.getElementsByClassName("player")[0];
+    player.classList.remove("playerOpen");
 }

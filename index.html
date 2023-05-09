@@ -191,6 +191,39 @@
         </section>
     </main>
 
+    <div class="player">
+        <div class="miniPlayer">
+            <div class="playerSongInfo">
+                <img src="images/demoSongBanner.jpg" alt="songBanner">
+                <div class="playerSongText">
+                    <h2>Demo Song</h2>
+                    <h3>Demo artist</h3>
+                </div>
+            </div>
+            <div class="playerClickDiv" onclick="openBigPlayer()"></div>
+            <div class="playerSongBtns">
+                <button><i class="fa-regular fa-heart"></i></button>
+                <button><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+        <div class="pageBar">
+            <button type="button" onclick="closeBigPlayer()"><i class="fa-solid fa-circle-left"></i></button>
+            <h2>Playing from <span id="playingFromSpan">Home</span></h2>
+        </div>
+        <div class="bigPlayer">
+            <div class="bigSongInfo">
+                <img src="images/demoSongBanner.jpg" alt="songBanner">
+                <div class="playerSongText">
+                    <h2>Demo Song</h2>
+                    <h3>Demo artist</h3>
+                </div>
+            </div>
+            <div class="bigControls">
+
+            </div>
+        </div>
+    </div>
+
     <div class="loginScreen">
         <div class="pageBar">
             <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-circle-left"></i></button>

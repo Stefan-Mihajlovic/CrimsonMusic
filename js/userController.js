@@ -119,20 +119,8 @@ function AuthenticateUser(){
             if(dbpass == password.value){
                 loginUser(snapshot.val());
             }
-        }
-        else{
-            set(ref(realdb, "Users/"+username.value),
-            {
-                Username: username.value,
-                Email: email.value,
-                Password: encPass()
-            })
-            .then(()=>{
-                alert('User registered sexesfuli');
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            })
+        }else{
+            alert("Account not found!");
         }
     })
 }
@@ -199,6 +187,7 @@ if(currentUser == null){
     setLoggedOutScreen();
 }
 else{
+    setLoggedInScreen();
     accountUsername = currentUser.Username;
     accountEmail = currentUser.Email;
     accountNames.forEach((name) => {
