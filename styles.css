@@ -658,8 +658,9 @@ main{
 .playerSongInfo{
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     line-height: 18px;
+    margin-left: 3px;
 }
 
 .playerSongText h2{
@@ -681,7 +682,7 @@ main{
 .playerSongBtns{
     display: flex;
     gap: 15px;
-    padding-right: 5px;
+    padding-right: 10px;
     z-index: 2;
 }
 
@@ -691,7 +692,7 @@ main{
 }
 
 .playerSongBtns i{
-    font-size: 20px;
+    font-size: 25px;
     color: var(--offWhite);
 }
 
@@ -700,7 +701,7 @@ main{
     top: 0;
     bottom: 0;
     left: 0;
-    width: 77.5%;
+    width: 75%;
 }
 
 /* BIGPLAYER */
