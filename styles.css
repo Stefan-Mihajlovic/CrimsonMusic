@@ -25,8 +25,8 @@ html {
 body{
     background-color: black;
     font-family: 'Outfit', sans-serif;
-    min-height: 100vh; 
     min-height: -webkit-fill-available;
+    min-height: 100vh; 
     color: var(--offWhite);
     overflow: hidden !important;
 }
@@ -598,6 +598,8 @@ main{
     height: 50px;
     overflow: hidden;
     transition: all .4s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .playerOpen{

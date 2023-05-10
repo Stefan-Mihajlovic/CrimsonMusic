@@ -197,3 +197,53 @@ else{
         email.innerHTML = accountEmail;
     });
 }
+
+// Generate a song based on the input number ( SongID )
+
+let brojPesama = 18;
+
+let songToBePlayed,songTitle,songCreator,imageURL;
+
+let recSongs = document.getElementById("recSongs");
+
+function GenerateOneSong(songName){
+    var name = songName;
+
+    var dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            songToBePlayed = snapshot.val().SongURL;
+            songTitle  = snapshot.val().SongName;
+            songCreator = snapshot.val().Creator;
+            imageURL = snapshot.val().ImgURL;
+            let currentLI =  `<li class="songItem">
+                <div class="songInfo">
+                    <img src="`+imageURL+`" alt="songBanner">
+                    <div class="songText">
+                        <h2>`+ songTitle +`</h2>
+                        <h3>`+ songCreator +`</h3>
+                    </div>
+                </div>
+                <div class="songClickDiv"></div>
+                <div class="songBtns">
+                    <button><i class="fa-regular fa-heart"></i></button>
+                    <button><i class="fa-solid fa-bars"></i></button>
+                </div>
+                <audio src="`+ songToBePlayed +`"></audio>
+                </li>`;
+            recSongs.innerHTML += currentLI;
+        }
+    })
+}
+
+let niz = [];
+
+function generateSongs(){
+    for (let i = 0; i < 5; i++) {
+        let g = Math.floor(Math.random() * brojPesama) + 1;
+        GenerateOneSong(g);
+    }
+}
+
+generateSongs();
