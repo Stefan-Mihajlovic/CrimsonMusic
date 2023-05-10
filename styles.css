@@ -20,8 +20,6 @@ html {
     --offWhiteDark: #8a85a1;
     --accentColor: #8d6ffc;
     --playerColor: #242027;
-
-    --iphoneBottomBar: 0px;
 }
 
 body{
@@ -604,9 +602,13 @@ main{
 
 .playerOpen{
     bottom: 0;
-    height: calc(100vh + 70px - var(--iphoneBottomBar) - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    height: calc(100vh + 70px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
     background-color: var(--playerColor);
     padding-inline: 0px;
+}
+
+.playerOpenTop{
+    top: -70px;
 }
 
 .player .pageBar{

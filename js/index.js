@@ -1,8 +1,3 @@
-// If on iphone give some padding
-if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    document.querySelector(":root").style.setProperty('--iphoneBottomBar', '80px');
-}
-
 /* ----- GET THE TIME ----- */
 
 window.onload = getTime();
@@ -130,9 +125,13 @@ function setLoggedOutScreen(){
 function openBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.add("playerOpen");
+    setTimeout(() => {
+        player.classList.add("playerOpenTop");
+    }, 400);
 }
 
 function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
+    player.classList.remove("playerOpenTop");
     player.classList.remove("playerOpen");
 }
