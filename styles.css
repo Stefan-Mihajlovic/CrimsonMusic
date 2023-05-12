@@ -166,6 +166,11 @@ main{
     font-size: 20px;
 }
 
+.catTitleAlone{
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
 .catDesc{
     font-size: 10px;
     margin: 2px;
