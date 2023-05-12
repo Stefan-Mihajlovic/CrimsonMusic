@@ -201,6 +201,7 @@ else{
 // Generate a song based on the input number ( SongID )
 
 let brojPesama = 18;
+let brojArtista = 9;
 
 let songToBePlayed,songTitle,songCreator,imageURL;
 
@@ -254,4 +255,43 @@ function generateSongs(){
     }
 }
 
+/* ----- GENERATE ARTISTS ----- */
+let artistImage;
+let recArtists = document.getElementsByClassName("recArtists")[0];
+
+function GetArtists(artistName){
+    var name = artistName;
+
+    var dbRef = ref(realdb);
+
+    get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            artistName = snapshot.val().Artist;
+            artistImage = snapshot.val().ImageURL;
+            let currentImg =  `<li class="artistItem" onclick="openArtistPage(`+ name +`)">
+            <img src="`+ artistImage +`" alt="artistImage">
+            <h3>`+ artistName +`</h3>
+            </li>`;
+            recArtists.innerHTML += currentImg;
+        }
+    })
+}
+
+function generateArtists(){
+
+    let randomList = [];
+
+    for (let i = 0; i < 7; i++) {
+        while(true){
+            let g = Math.floor(Math.random() * brojArtista) + 1;
+            if(!randomList.includes(g)){
+                GetArtists(g);
+                randomList.push(g);
+                break;
+            }
+        }
+    }
+}
+
 generateSongs();
+generateArtists();

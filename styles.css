@@ -272,17 +272,23 @@ main{
     display: flex;
     align-items: center;
     gap: 10px;
-    line-height: 18px;
 }
 
 .songText h2{
-    font-size: 18px;
-    margin-top: 2px;
+    font-size: 15px;
+    width: 50vw;
+    margin-top: 0px;
+    margin-inline: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .songText h3{
-    font-size: 14px;
+    font-size: 12px;
     color: var(--offWhiteDark);
+    line-height: 10px;
+    margin-bottom: 3px;
 }
 
 .songInfo img{
@@ -690,6 +696,10 @@ main{
 .playerSongText h2{
     font-size: 18px;
     margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 55vw;
 }
 
 .playerSongText h3{
@@ -707,7 +717,7 @@ main{
 .playerSongBtns{
     display: flex;
     gap: 15px;
-    padding-right: 10px;
+    padding-right: 5px;
     z-index: 2;
 }
 
@@ -717,7 +727,7 @@ main{
 }
 
 .playerSongBtns i{
-    font-size: 25px;
+    font-size: 27.5px;
     color: var(--offWhite);
 }
 
