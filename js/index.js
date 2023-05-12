@@ -122,6 +122,9 @@ function setLoggedOutScreen(){
 
 /* ----- PLAYER ----- */
 
+let isPlayerOpen = false;
+let isSongPaused = false;
+
 function openBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.add("playerOpen");
@@ -135,3 +138,109 @@ function closeBigPlayer(){
     player.classList.remove("playerOpenTop");
     player.classList.remove("playerOpen");
 }
+
+const currentSongAudio = document.getElementById("currentSong");
+
+// PLAY THE SELECTED SONG
+function playerSelectedSong(songURL,songTitle,songCreator,imageURL){
+    openMiniPlayer();
+
+    currentSongAudio.src = songURL;
+    currentSongAudio.play();
+
+    let songBanners = document.getElementsByName("songBanner");
+    let songTitles = document.getElementsByName("songTitle");
+    let songArtists = document.getElementsByName("songArtist");
+
+    songBanners.forEach((banner) => {
+        banner.src = imageURL;
+    });
+    songTitles.forEach((title) => {
+        title.innerHTML = songTitle;
+    });
+    songArtists.forEach((artist) => {
+        artist.innerHTML = songCreator;
+    });
+
+}
+
+// Open MINI PLAYER
+function openMiniPlayer(){
+    if(!isPlayerOpen){
+        let player = document.getElementsByClassName("player")[0];
+        player.style.opacity = "1";
+        player.style.pointerEvents = "all";
+    }
+}
+
+// PAUSE / PLAY THE CURRENT SONG
+function pausePlayCurrentSong(){
+
+    let songPlayBtns = document.getElementsByName("songPlayButton");
+
+    if(isSongPaused){
+        currentSongAudio.play();
+
+        songPlayBtns.forEach((button) => {
+            button.children[0].classList.remove("fa-circle-play");
+            button.children[0].classList.add("fa-circle-pause");
+        });
+
+        isSongPaused = false;
+    }else{
+        currentSongAudio.pause();
+
+        songPlayBtns.forEach((button) => {
+            button.children[0].classList.remove("fa-circle-pause");
+            button.children[0].classList.add("fa-circle-play");
+        });
+
+        isSongPaused = true;
+    }
+}
+
+let songTime = document.getElementById("currentSongInput");
+
+currentSongAudio.addEventListener('ended', () => {
+    let songPlayBtns = document.getElementsByName("songPlayButton");
+
+    songPlayBtns.forEach((button) => {
+        button.children[0].classList.remove("fa-circle-pause");
+        button.children[0].classList.add("fa-circle-play");
+    });
+});
+
+// Set the seekbar and times relative to the songs current time
+currentSongAudio.addEventListener('timeupdate', () =>{
+    let musicCurr = currentSongAudio.currentTime;
+    let musicDur = currentSongAudio.duration;
+
+    // End Time
+    let min = Math.floor(musicDur / 60);
+    let sec = Math.floor(musicDur % 60);
+
+    if(sec<10){
+        sec = `0${sec}`;
+    }
+    
+    document.getElementById("currentSongTimeLeft").innerHTML = `${min}:${sec}`;
+
+    //Curr Time
+    let min2 = Math.floor(musicCurr / 60);
+    let sec2 = Math.floor(musicCurr % 60);
+
+    if(sec2<10){
+        sec2 = `0${sec2}`;
+    }
+
+    document.getElementById("currentSongTime").innerHTML = `${min2}:${sec2}`;
+
+    let progressBar = parseInt((currentSongAudio.currentTime/currentSongAudio.duration)*100);
+    songTime.value = progressBar;
+
+});
+
+songTime.addEventListener('change', ()=>{
+    var seekto = currentSongAudio.duration * (songTime.value / 100);
+    currentSongAudio.currentTime = seekto;
+})

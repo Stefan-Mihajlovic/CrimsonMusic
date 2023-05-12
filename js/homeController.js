@@ -225,12 +225,11 @@ function GenerateOneSong(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`');"></div>
                 <div class="songBtns">
                     <button><i class="fa-regular fa-heart"></i></button>
                     <button><i class="fa-solid fa-bars"></i></button>
                 </div>
-                <audio src="`+ songToBePlayed +`"></audio>
                 </li>`;
             recSongs.innerHTML += currentLI;
         }
