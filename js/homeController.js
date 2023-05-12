@@ -239,9 +239,18 @@ function GenerateOneSong(songName){
 let niz = [];
 
 function generateSongs(){
+
+    let randomList = [];
+
     for (let i = 0; i < 5; i++) {
-        let g = Math.floor(Math.random() * brojPesama) + 1;
-        GenerateOneSong(g);
+        while(true){
+            let g = Math.floor(Math.random() * brojPesama) + 1;
+            if(!randomList.includes(g)){
+                GenerateOneSong(g);
+                randomList.push(g);
+                break;
+            }
+        }
     }
 }
 

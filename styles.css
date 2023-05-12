@@ -164,6 +164,12 @@ main{
 
 .catTitle{
     font-size: 20px;
+}
+
+.catDesc{
+    font-size: 10px;
+    margin: 2px;
+    color: var(--offWhiteDark);
     margin-bottom: 15px;
 }
 
@@ -283,6 +289,7 @@ main{
     border-radius: 5px;
     width: 35px;
     aspect-ratio: 1 / 1;
+    object-fit: cover;
 }
 
 .songBtns{
