@@ -142,7 +142,7 @@ function closeBigPlayer(){
 const currentSongAudio = document.getElementById("currentSong");
 
 // PLAY THE SELECTED SONG
-function playerSelectedSong(songURL,songTitle,songCreator,imageURL){
+function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
     openMiniPlayer();
 
     currentSongAudio.src = songURL;
@@ -157,6 +157,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL){
         button.children[0].classList.remove("fa-circle-play");
         button.children[0].classList.add("fa-circle-pause");
     });
+    isSongPaused = false;
 
     songBanners.forEach((banner) => {
         banner.src = imageURL;
@@ -167,6 +168,8 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL){
     songArtists.forEach((artist) => {
         artist.innerHTML = songCreator;
     });
+
+    document.getElementById("playingFromSpan").innerHTML = playedFrom;
 
 }
 
