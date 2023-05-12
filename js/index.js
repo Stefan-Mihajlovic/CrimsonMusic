@@ -152,6 +152,12 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL){
     let songTitles = document.getElementsByName("songTitle");
     let songArtists = document.getElementsByName("songArtist");
 
+    let songPlayBtns = document.getElementsByName("songPlayButton");
+    songPlayBtns.forEach((button) => {
+        button.children[0].classList.remove("fa-circle-play");
+        button.children[0].classList.add("fa-circle-pause");
+    });
+
     songBanners.forEach((banner) => {
         banner.src = imageURL;
     });
