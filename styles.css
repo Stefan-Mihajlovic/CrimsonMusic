@@ -605,8 +605,8 @@ main{
     height: 50px;
     overflow: hidden;
     transition: all .4s ease-in-out;
-    /* opacity: 0;
-    pointer-events: none; */
+    opacity: 0;
+    pointer-events: none;
 }
 
 .songBackdrop{
