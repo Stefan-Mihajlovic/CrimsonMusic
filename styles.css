@@ -679,6 +679,7 @@ main{
     border-radius: 5px;
     width: 35px;
     aspect-ratio: 1 / 1;
+    object-fit: cover;
 }
 
 .playerSongBtns{
