@@ -610,15 +610,30 @@ main{
     height: 50px;
     overflow: hidden;
     transition: all .4s ease-in-out;
+    /* opacity: 0;
+    pointer-events: none; */
+}
+
+.songBackdrop{
+    position: absolute;
+    height: 175vh;
+    top: -175px;
+    left: -175px;
+    right: -175px;
+    z-index: -1;
+    filter: blur(40px) brightness(0.3);
     opacity: 0;
-    pointer-events: none;
+    transition: all .3s ease-in-out;
 }
 
 .playerOpen{
     bottom: 0;
     height: calc(100vh + 70px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
-    background-color: var(--playerColor);
     padding-inline: 0px;
+}
+
+.playerOpen .bigPlayer .songBackdrop{
+    opacity: 1;
 }
 
 .playerOpenTop{
@@ -626,7 +641,6 @@ main{
 }
 
 .player .pageBar{
-    background-color: var(--playerColor);
     display: flex;
     justify-content: flex-start;
     box-shadow: none;
@@ -725,7 +739,6 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--playerColor);
 }
 
 .bigSongInfo{
