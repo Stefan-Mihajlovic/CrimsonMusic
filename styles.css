@@ -71,6 +71,10 @@ button{
     transform: scale(0.8) rotate(2deg) !important;
 }
 
+li{
+    transition: all .4s ease-in-out;
+}
+
 /* ----- HEADER ----- */
 
 header{

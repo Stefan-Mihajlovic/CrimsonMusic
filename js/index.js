@@ -59,6 +59,13 @@ function buttonClickAnim(button){
     }, 100);
 }
 
+function clickEffect(button){
+    button.classList.add("buttonClicked");
+    setTimeout(() => {
+        button.classList.remove("buttonClicked");
+    }, 100);
+}
+
 /* ----- LOGIN SCREEN ----- */
 
 function openLoginScreen(){

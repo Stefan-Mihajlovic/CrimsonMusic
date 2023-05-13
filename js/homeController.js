@@ -219,7 +219,7 @@ function GenerateOneSong(songName){
             songTitle  = snapshot.val().SongName;
             songCreator = snapshot.val().Creator;
             imageURL = snapshot.val().ImgURL;
-            let currentLI =  `<li class="songItem">
+            let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
                 <div class="songInfo">
                     <img src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
@@ -229,8 +229,8 @@ function GenerateOneSong(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
                 <div class="songBtns">
-                    <button><i class="fa-regular fa-heart"></i></button>
-                    <button><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
+                    <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
                 </div>
                 </li>`;
             recSongs.innerHTML += currentLI;
@@ -269,7 +269,7 @@ function GetArtists(artistName){
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
             artistImage = snapshot.val().ImageURL;
-            let currentImg =  `<li class="artistItem" onclick="openArtistPage(`+ name +`)">
+            let currentImg =  `<li class="artistItem" onclick="openArtistPage(`+ name +`); clickEffect(this);">
             <img src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
@@ -310,7 +310,7 @@ function GetPlaylists(playlistName){
             playlistLikes = snapshot.val().Likes;
             playlistSongs = snapshot.val().Songs;
             playlistArtists = snapshot.val().Artists;
-            let currentLi =  `<li class="playlistItem">
+            let currentLi =  `<li class="playlistItem" onclick="clickEffect(this)">
             <img src="`+ playlistBanner +`" alt="playlistBanner">
             <h3>`+ playlistName +`</h3>
             <h5>`+ playlistArtists +`</h5>
