@@ -294,7 +294,7 @@ function generateArtists(){
     }
 }
 
-/* ----- GENERATE ARTISTS ----- */
+/* ----- GENERATE PLAYLISTS ----- */
 let playlistBanner,playlistLikes,playlistSongs,playlistArtists;
 let recPlaylists = document.getElementsByClassName("recPlaylists")[0];
 
@@ -353,12 +353,18 @@ searchBtn.addEventListener('click', () => {
 
     searchList.innerHTML = "";
 
-    for (let i = 1; i <= brojPesama; i++) {
-        findSearchedSong(i,searchedTextLower);
-    }
+    if(searchedTextLower !== ""){
+        for (let i = 1; i <= brojPesama; i++) {
+            findSearchedSong(i,searchedTextLower);
+        }
+    
+        for (let i = 1; i <= brojArtista; i++) {
+            findSearchedArtist(i,searchedTextLower);
+        }
 
-    for (let i = 1; i <= brojArtista; i++) {
-        findSearchedArtist(i,searchedTextLower);
+        for (let i = 1; i <= brojPlejlista; i++) {
+            findSearchedPlaylist(i,searchedTextLower);
+        }
     }
 });
 
@@ -370,11 +376,11 @@ function findSearchedSong(songName, inputText){
     get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             songTitle  = snapshot.val().SongName;
-            if(songTitle.toLowerCase() === inputText){
+            if(songTitle.toLowerCase().includes(inputText)){
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
                 imageURL = snapshot.val().ImgURL;
-                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                let currentLI =  `<li class="songItem songItemSearch" onclick="clickEffect(this)">
                     <div class="songInfo">
                         <img src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
@@ -382,7 +388,7 @@ function findSearchedSong(songName, inputText){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                         <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
@@ -402,11 +408,43 @@ function findSearchedArtist(artistName, inputText){
     get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
-            if(artistName.toLowerCase() === inputText){
+            if(artistName.toLowerCase().includes(inputText)){
                 artistImage = snapshot.val().ImageURL;
-                let currentLi =  `<li class="artistItem" onclick="openArtistPage(`+ name +`); clickEffect(this);">
-                <img src="`+ artistImage +`" alt="artistImage">
-                <h3>`+ artistName +`</h3>
+                let currentLi = `<li class="artistItemSearch" onclick="openArtistPage(`+ name +`); clickEffect(this);">
+                                    <div>
+                                        <img src="`+ artistImage +`" alt="artistImage">
+                                        <h3>`+ artistName +`</h3>
+                                    </div>
+                                    <i class="fa-solid fa-circle-right"></i>
+                                </li>`;
+                searchList.innerHTML += currentLi;
+            }
+        }
+    })
+}
+
+function findSearchedPlaylist(playlistName, inputText){
+    var name = playlistName;
+
+    var dbRef = ref(realdb);
+
+    get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            playlistName = snapshot.val().Title;
+            if(playlistName.toLowerCase().includes(inputText)){
+                playlistBanner = snapshot.val().Banner;
+                playlistLikes = snapshot.val().Likes;
+                playlistSongs = snapshot.val().Songs;
+                playlistArtists = snapshot.val().Artists;
+                let currentLi =  `<li class="playlistItemSearch" onclick="clickEffect(this)">
+                    <div class="playlistItemHolder">
+                        <img src="`+ playlistBanner +`" alt="playlistBanner">
+                        <div>
+                            <h3>`+ playlistName +`</h3>
+                            <h5>`+ playlistArtists +`</h5>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-circle-right"></i>
                 </li>`;
                 searchList.innerHTML += currentLi;
             }

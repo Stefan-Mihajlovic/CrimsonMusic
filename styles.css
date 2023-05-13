@@ -16,6 +16,10 @@
     --offWhiteDark: #8a85a1;
     --accentColor: #8d6ffc;
     --playerColor: #242027;
+
+    --artistSearch: rgba(0, 128, 0, 0.3);
+    --songSearch: rgba(255, 0, 0, 0.2);
+    --playlistSearch: rgba(141, 111, 252, 0.5);
 }
 
 body{
@@ -268,13 +272,13 @@ main{
 .songItem{
     width: 100%;
     height: 50px;
-    background-color: var(--secondaryColor);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
     border-radius: 7px;
     position: relative;
+    background-color: var(--secondaryColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
     border: 1px solid var(--mainColorLighter);
 }
@@ -442,7 +446,7 @@ main{
 
 .searchScreen input{
     padding: 12px;
-    width: 75%;
+    width: 80%;
     border-radius: 10px;
     border: none;
     background-color: var(--mainColorLighter);
@@ -451,7 +455,7 @@ main{
 }
 
 #submitSearch{
-    width: 25%;
+    width: 20%;
     background-color: var(--mainColorLighter);
     border: 1px solid var(--mainColor);
 }
@@ -461,6 +465,106 @@ main{
     flex-direction: column;
     gap: 5px;
     width: 100%;
+}
+
+.songItemSearch{
+    border-bottom: 1px solid var(--songSearch);
+}
+
+.artistItemSearch{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: space-between;
+    flex-shrink: 0;
+    padding-block: 5px;
+    padding-right: 15px;
+    padding-left: 5px;
+    background-color: var(--secondaryColor);
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--mainColorLighter);
+    border-bottom: 1px solid var(--artistSearch);
+    border-radius: 30px;
+}
+
+.artistItemSearch div{
+    width: 80%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.artistItemSearch img{
+    width: 40px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--mainColorLighter);
+}
+
+.artistItemSearch h3{
+    font-size: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--offWhite);
+}
+
+.artistItemSearch i{
+    font-size: 20px;
+}
+
+.playlistItemSearch{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: space-between;
+    flex-shrink: 0;
+    padding-block: 5px;
+    padding-right: 15px;
+    padding-left: 5px;
+    background-color: var(--secondaryColor);
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--mainColorLighter);
+    border-bottom: 1px solid var(--playlistSearch);
+    border-radius: 10px;
+}
+
+.playlistItemHolder{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.playlistItemHolder img{
+    width: 40px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid var(--mainColorLighter);
+}
+
+.playlistItemHolder div h3{
+    font-size: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--offWhite);
+}
+
+.playlistItemHolder div h5{
+    font-size: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--offWhiteDark);
+}
+
+.playlistItemSearch i{
+    font-size: 20px;
 }
 
 /* ----- LOGIN SCREEN ----- */
