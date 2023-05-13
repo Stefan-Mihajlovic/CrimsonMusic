@@ -58,6 +58,15 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
 
     let activeMain = document.getElementsByClassName(activeScreen)[0];
     activeMain.classList.add("activeMain");
+
+    if(activeScreen === "searchScreen"){
+        let searchList = document.getElementsByClassName("searchList")[0];
+        let searchInput = document.getElementById("searchInput");
+
+        searchList.innerHTML = "";
+        searchInput.value = "";
+        searchInput.focus();
+    }
 }
 
 function setHomeScreen(){

@@ -157,7 +157,7 @@ main{
     height: calc(100vh - 70px);
     z-index: 10;
     padding: 15px;
-    padding-bottom: 140px;
+    padding-bottom: 150px;
     padding-top: 80px;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -461,6 +461,7 @@ main{
     background-color: var(--offWhite);
     color: var(--mainColor);
     border: 1px solid var(--mainColor);
+    transition: all .3s ease-in-out;
 }
 
 .searchList{
