@@ -1,3 +1,5 @@
+setHomeScreen();
+
 /* ----- GET THE TIME ----- */
 
 window.onload = getTime();
@@ -36,12 +38,30 @@ function getTime(){
 
 /* ----- SET SCREEN ----- */
 
-function setScreen(screenToSet, clickedBtn){
-    let buttons = document.querySelectorAll("nav > button");
-    buttons.forEach((button) => {
-        button.classList.remove("activeScreen");
-    });
-    clickedBtn.classList.add("activeScreen");
+let currentScreen = "Home";
+
+function setScreen(screenToSet, clickedBtn, activeScreen){
+    if (activeScreen !== currentScreen) {
+        let buttons = document.querySelectorAll("nav > button");
+        buttons.forEach((button) => {
+            button.classList.remove("activeScreen");
+        });
+        clickedBtn.classList.add("activeScreen");
+
+        let mains = document.querySelectorAll("main");
+        mains.forEach((main) => {
+            main.classList.remove("activeMain");
+        });
+
+        currentScreen = activeScreen;
+    }
+
+    let activeMain = document.getElementsByClassName(activeScreen)[0];
+    activeMain.classList.add("activeMain");
+}
+
+function setHomeScreen(){
+    document.getElementsByClassName("homeScreen")[0].classList.add("activeMain");
 }
 
 /* ----- Button clicks ----- */

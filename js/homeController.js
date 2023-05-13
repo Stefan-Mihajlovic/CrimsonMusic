@@ -339,3 +339,77 @@ function generatePlaylists(){
 generateSongs();
 generateArtists();
 generatePlaylists();
+
+// ----- SEARCH
+
+let searchList = document.getElementsByClassName("searchList")[0];
+
+let searchBtn = document.getElementById("submitSearch");
+searchBtn.addEventListener('click', () => {
+    
+    let searchInput = document.getElementById("searchInput");
+    let searchedText = searchInput.value;
+    let searchedTextLower = searchedText.toLowerCase();
+
+    searchList.innerHTML = "";
+
+    for (let i = 1; i <= brojPesama; i++) {
+        findSearchedSong(i,searchedTextLower);
+    }
+
+    for (let i = 1; i <= brojArtista; i++) {
+        findSearchedArtist(i,searchedTextLower);
+    }
+});
+
+function findSearchedSong(songName, inputText){
+    let name = songName;
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            songTitle  = snapshot.val().SongName;
+            if(songTitle.toLowerCase() === inputText){
+                songToBePlayed = snapshot.val().SongURL;
+                songCreator = snapshot.val().Creator;
+                imageURL = snapshot.val().ImgURL;
+                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                    <div class="songInfo">
+                        <img src="`+imageURL+`" alt="songBanner">
+                        <div class="songText">
+                            <h2>`+ songTitle +`</h2>
+                            <h3>`+ songCreator +`</h3>
+                        </div>
+                    </div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                    <div class="songBtns">
+                        <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
+                        <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                    </div>
+                    </li>`;
+                searchList.innerHTML += currentLI;
+            }
+        }
+    })
+}
+
+function findSearchedArtist(artistName, inputText){
+    var name = artistName;
+
+    var dbRef = ref(realdb);
+
+    get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            artistName = snapshot.val().Artist;
+            if(artistName.toLowerCase() === inputText){
+                artistImage = snapshot.val().ImageURL;
+                let currentLi =  `<li class="artistItem" onclick="openArtistPage(`+ name +`); clickEffect(this);">
+                <img src="`+ artistImage +`" alt="artistImage">
+                <h3>`+ artistName +`</h3>
+                </li>`;
+                searchList.innerHTML += currentLi;
+            }
+        }
+    })
+}

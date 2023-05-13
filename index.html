@@ -28,7 +28,7 @@
         <button name="accountImage" type="button" onclick="openLoginScreen()"><img src="images/noUserImg.svg" alt="userButtonImage"></button>
     </header>
 
-    <main>
+    <main class="homeScreen">
         <section class="vaultSection">
             <h2 class="catTitle">TheVault</h2>
             <h5 class="catDesc">Unlock the perfect soundtrack to your emotions with TheVault - the ultimate musical treasure chest that tunes in to your every mood and vibe!</h5>
@@ -56,6 +56,18 @@
             <h2 class="catTitleAlone">Playlists curated just for <span class="highlightSpan">YOU</span></h2>
             <ul class="recPlaylists"></ul>
         </section>
+    </main>
+
+    <main class="searchScreen">
+        <form onsubmit="event.preventDefault()">
+            <input type="search" name="searchInput" id="searchInput" placeholder="Search away...">
+            <input id="submitSearch" type="submit" value="Search">
+        </form>
+        <ul class="searchList"></ul>
+    </main>
+
+    <main class="yoursScreen">
+        <h1>Yours</h1>
     </main>
 
     <div class="player">
@@ -150,9 +162,9 @@
     </div>
 
     <nav>
-        <button class="activeScreen" type="button" onclick="setScreen('Home', this)"><i class="fa-solid fa-house"></i></button>
-        <button type="button" onclick="setScreen('Search', this)"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button type="button" onclick="setScreen('Playlists', this)"><i class="fa-solid fa-border-all"></i></button>
+        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen')"><i class="fa-solid fa-house"></i></button>
+        <button type="button" onclick="setScreen('Search', this, 'searchScreen')"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen')"><i class="fa-solid fa-border-all"></i></button>
     </nav>
     </div>
 

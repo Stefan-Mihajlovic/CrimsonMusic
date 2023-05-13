@@ -69,6 +69,7 @@ button{
 
 .buttonClicked{
     transform: scale(0.8) rotate(2deg) !important;
+    filter: brightness(0.5);
 }
 
 li{
@@ -157,9 +158,13 @@ main{
     overflow-x: hidden;
     overflow-y: scroll;
     position: relative;
-    display: flex;
     flex-direction: column;
     gap: 25px;
+    display: none;
+}
+
+.activeMain{
+    display: flex;
 }
 
 .catTitle{
@@ -425,6 +430,37 @@ main{
     white-space: nowrap;
     text-overflow: ellipsis;
     color: var(--offWhiteDark);
+}
+
+/* ----- SEARCH SCREEN ----- */
+
+.searchScreen form{
+    width: 100%;
+    display: flex;
+    gap: 5px;
+}
+
+.searchScreen input{
+    padding: 12px;
+    width: 75%;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--mainColorLighter);
+    border: 1px solid var(--mainColor);
+    color: var(--offWhite);
+}
+
+#submitSearch{
+    width: 25%;
+    background-color: var(--mainColorLighter);
+    border: 1px solid var(--mainColor);
+}
+
+.searchList{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
 }
 
 /* ----- LOGIN SCREEN ----- */
