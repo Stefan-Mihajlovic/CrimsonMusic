@@ -63,6 +63,7 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
         let searchList = document.getElementsByClassName("searchList")[0];
         let searchInput = document.getElementById("searchInput");
 
+        searchList.classList.remove("searchListOpen");
         searchList.innerHTML = "";
         searchInput.value = "";
     }
@@ -293,4 +294,13 @@ songTime.addEventListener('change', ()=>{
 // HANDLING ARTIST PAGE
 function openArtistPage(){
 
+}
+
+// CHECK THE CHIPS ON SEARCH
+function checkTheChip(clickedOn, chipName){
+    if(clickedOn.checked){
+        clickedOn.classList.add(chipName+"chipCh");
+    }else{
+        clickedOn.classList.remove(chipName+"chipCh");
+    }
 }

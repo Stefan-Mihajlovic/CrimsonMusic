@@ -351,20 +351,47 @@ searchBtn.addEventListener('click', () => {
     let searchedText = searchInput.value;
     let searchedTextLower = searchedText.toLowerCase();
 
+    let isAllCh = document.getElementById("allInput").checked;
+    let isSongsCh = document.getElementById("songsInput").checked;
+    let isArtistsCh = document.getElementById("artistsInput").checked;
+    let isPlaylistsCh = document.getElementById("playlistsInput").checked;
+    let isProfilesCh = document.getElementById("profilesInput").checked;
+
     searchList.innerHTML = "";
+    searchList.classList.add("searchListOpen");
 
     if(searchedTextLower !== ""){
-        for (let i = 1; i <= brojPesama; i++) {
-            findSearchedSong(i,searchedTextLower);
-        }
+        if(isAllCh){
+            for (let i = 1; i <= brojPesama; i++) {
+                findSearchedSong(i,searchedTextLower);
+            }
+        
+            for (let i = 1; i <= brojArtista; i++) {
+                findSearchedArtist(i,searchedTextLower);
+            }
     
-        for (let i = 1; i <= brojArtista; i++) {
-            findSearchedArtist(i,searchedTextLower);
+            for (let i = 1; i <= brojPlejlista; i++) {
+                findSearchedPlaylist(i,searchedTextLower);
+            }
+        }else{
+            if(isSongsCh){
+                for (let i = 1; i <= brojPesama; i++) {
+                    findSearchedSong(i,searchedTextLower);
+                }
+            }
+            if(isArtistsCh){
+                for (let i = 1; i <= brojArtista; i++) {
+                    findSearchedArtist(i,searchedTextLower);
+                }
+            }
+            if(isPlaylistsCh){
+                for (let i = 1; i <= brojPlejlista; i++) {
+                    findSearchedPlaylist(i,searchedTextLower);
+                }
+            }
         }
-
-        for (let i = 1; i <= brojPlejlista; i++) {
-            findSearchedPlaylist(i,searchedTextLower);
-        }
+    }else{
+        searchList.classList.remove("searchListOpen");
     }
 });
 

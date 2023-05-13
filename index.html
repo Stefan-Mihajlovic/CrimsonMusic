@@ -59,11 +59,88 @@
     </main>
 
     <main class="searchScreen">
-        <form onsubmit="event.preventDefault()">
-            <input type="search" name="search" id="searchInput" placeholder="Search away...">
-            <input onclick="clickEffect(this)" style="font-family: FontAwesome" id="submitSearch" type="submit" value="&#xf002;">
-        </form>
+        <div class="searchBar">
+            <form onsubmit="event.preventDefault()">
+                <input type="search" name="search" id="searchInput" placeholder="Search away...">
+                <input onclick="clickEffect(this)" style="font-family: FontAwesome" id="submitSearch" type="submit" value="&#xf002;">
+            </form>
+            <div class="SearchTypeChips">
+                <div class="searchChip">
+                    <input type="checkbox" name="allChip" id="allInput" onchange="checkTheChip(this, 'all')" class="allchipCh" checked>
+                    <label for="allChip">All</label>
+                </div>
+                <div class="searchChip">
+                    <input type="checkbox" name="songs" id="songsInput" onchange="checkTheChip(this, 'songs')">
+                    <label for="songs">Songs</label>
+                </div>
+                <div class="searchChip">
+                    <input type="checkbox" name="artists" id="artistsInput" onchange="checkTheChip(this, 'artists')">
+                    <label for="artists">Artists</label>
+                </div>
+                <div class="searchChip">
+                    <input type="checkbox" name="playlists" id="playlistsInput" onchange="checkTheChip(this, 'playlists')">
+                    <label for="playlists">Playlists</label>
+                </div>
+                <div class="searchChip">
+                    <input type="checkbox" name="profiles" id="profilesInput" onchange="checkTheChip(this, 'profiles')">
+                    <label for="profiles">Profiles</label>
+                </div>
+            </div>
+        </div>
         <ul class="searchList"></ul>
+        <h1 class="catTitle">Categories</h1>
+        <ul class="categories">
+            <li class="catItems">
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/CrimsonLogo.png" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/demoSongBanner.jpg" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+            </li>
+            <li class="catItems">
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/CrimsonLogo.png" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/demoSongBanner.jpg" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+            </li>
+            <li class="catItems">
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/CrimsonLogo.png" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/demoSongBanner.jpg" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+            </li>
+            <li class="catItems">
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/CrimsonLogo.png" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/demoSongBanner.jpg" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+            </li>
+            <li class="catItems">
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/CrimsonLogo.png" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+                <div class="catItem" onclick="clickEffect(this)">
+                    <img src="images/demoSongBanner.jpg" alt="categoryBanner">
+                    <h3>Demo Cat</h3>
+                </div>
+            </li>
+        </ul>
     </main>
 
     <main class="yoursScreen">

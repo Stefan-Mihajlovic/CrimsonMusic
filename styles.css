@@ -465,10 +465,14 @@ main{
 }
 
 .searchList{
-    display: flex;
     flex-direction: column;
     gap: 5px;
     width: 100%;
+    display: none;
+}
+
+.searchListOpen{
+    display: flex;
 }
 
 .songItemSearch{
@@ -569,6 +573,135 @@ main{
 
 .playlistItemSearch i{
     font-size: 20px;
+}
+
+.searchBar{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.3));
+}
+
+.SearchTypeChips{
+    display: flex;
+    width: 100%;
+    overflow-y: scroll;
+    align-items: center;
+    gap: 5px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.SearchTypeChips::-webkit-scrollbar{
+    display: none;
+}
+
+.searchChip{
+    width: 75px;
+    height: 35px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.searchChip input{
+    appearance: none !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 4px) !important;
+    border: none;
+    margin-block: 2px;
+    position: absolute;
+    border-radius: 40px !important;
+    background-color: var(--mainColorLighter);
+    z-index: 1;
+    transition: all .1s ease-in-out;
+}
+
+.allchipCh{
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.songschipCh{
+    background-color: rgba(168, 81, 81, 0.2) !important;
+}
+
+.artistschipCh{
+    background-color: rgba(81, 168, 93, 0.2) !important;
+}
+
+.playlistschipCh{
+    background-color: rgba(140, 81, 168, 0.2) !important;
+}
+
+.profileschipCh{
+    background-color: rgba(90, 101, 204, 0.2) !important;
+}
+
+.searchChip label{
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+    font-size: 13px;
+    top: 0;
+    left: 0;
+    height: calc(100% - 2px);
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ----- CATEGORIES ----- */
+
+.categories{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.catItems{
+    width: 100%;
+    height: 75px;
+    gap: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.catItem{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--mainColor);
+    border: 1px solid var(--mainColorLighter);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+    transition: all .2s ease-in-out;
+}
+
+.catItem img{
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    filter: brightness(0.6);
+}
+
+.catItem h3{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0px 0px 15px black;
+    text-transform: uppercase;
 }
 
 /* ----- LOGIN SCREEN ----- */
@@ -787,7 +920,7 @@ hr{
     line-height: 10px;
 }
 
-input[type="checkbox"]{
+.loginScreen input[type="checkbox"]{
     /* Add if not using autoprefixer */
     -webkit-appearance: none;
     /* Remove most all native input styles */
@@ -811,7 +944,7 @@ input[type="checkbox"]{
     margin-right: 10px;
 }
 
-input[type="checkbox"]::before{
+.loginScreen input[type="checkbox"]::before{
     content: "";
     width: 1em;
     height: 1em;
@@ -824,7 +957,7 @@ input[type="checkbox"]::before{
     background-color: var(--offWhite);
 }
   
-input[type="checkbox"]:checked::before{
+.loginScreen input[type="checkbox"]:checked::before{
     transform: scale(1);
 }
 
