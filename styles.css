@@ -217,7 +217,7 @@ main{
     margin-right: auto;
     top: 50%;
     width: 100px;
-    border: 2px solid var(--offWhite);
+    border: 1px solid var(--offWhite);
     background-color: transparent;
     backdrop-filter: blur(10px) brightness(1.2);
     -webkit-backdrop-filter: blur(10px) brightness(1.2);
