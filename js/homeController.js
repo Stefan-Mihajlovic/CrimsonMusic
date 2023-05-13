@@ -202,6 +202,7 @@ else{
 
 let brojPesama = 18;
 let brojArtista = 9;
+let brojPlejlista = 2;
 
 let songToBePlayed,songTitle,songCreator,imageURL;
 
@@ -293,5 +294,48 @@ function generateArtists(){
     }
 }
 
+/* ----- GENERATE ARTISTS ----- */
+let playlistBanner,playlistLikes,playlistSongs,playlistArtists;
+let recPlaylists = document.getElementsByClassName("recPlaylists")[0];
+
+function GetPlaylists(playlistName){
+    var name = playlistName;
+
+    var dbRef = ref(realdb);
+
+    get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            playlistName = snapshot.val().Title;
+            playlistBanner = snapshot.val().Banner;
+            playlistLikes = snapshot.val().Likes;
+            playlistSongs = snapshot.val().Songs;
+            playlistArtists = snapshot.val().Artists;
+            let currentLi =  `<li class="playlistItem">
+            <img src="`+ playlistBanner +`" alt="playlistBanner">
+            <h3>`+ playlistName +`</h3>
+            <h5>`+ playlistArtists +`</h5>
+            </li>`;
+            recPlaylists.innerHTML += currentLi;
+        }
+    })
+}
+
+function generatePlaylists(){
+
+    let randomList = [];
+
+    for (let i = 0; i < 2; i++) {
+        while(true){
+            let g = Math.floor(Math.random() * brojPlejlista) + 1;
+            if(!randomList.includes(g)){
+                GetPlaylists(g);
+                randomList.push(g);
+                break;
+            }
+        }
+    }
+}
+
 generateSongs();
 generateArtists();
+generatePlaylists();

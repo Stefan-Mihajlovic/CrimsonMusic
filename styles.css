@@ -64,6 +64,7 @@ ul{
 
 button{
     transition: all .1s ease-in-out !important;
+    cursor: pointer;
 }
 
 .buttonClicked{
@@ -463,7 +464,6 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10vh;
     overflow: hidden !important;
 }
 
@@ -486,6 +486,7 @@ main{
     transition: all .4s ease-in-out;
     transform: translateX(100%);
     display: none;
+    margin-top: 10vh;
 }
 
 .loginScreenOpen .loginForm{
@@ -556,14 +557,29 @@ main{
 
 .loggedInScreen{
     padding: 15px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 5px;
+    width: 100%;
     min-width: 275px;
     transition: all .4s ease-in-out;
     transform: translateX(100%);
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}
+
+hr{
+    width: 100%;
+    height: 3px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--mainColorLighter);
+}
+
+.logOutSection{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 275px;
+    align-items: center;
 }
 
 .loginScreenOpen .loggedInScreen{
@@ -571,31 +587,92 @@ main{
 }
 
 .loggedInScreen img{
-    width: 50%;
+    width: 40px;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     border: 2px solid var(--offWhite);
 }
 
+.accountInfo{
+    display: flex;
+    gap: 15px;
+}
+
 .loggedInScreen h2{
     text-transform: uppercase;
-    text-align: center;
 }
 
 .loggedInScreen h5{
-    text-align: center;
     color: var(--offWhiteDark);
     line-height: 0px;
     margin-bottom: 10px;
 }
 
 .loggedInScreen button{
-    width: 100%;
+    width: 100px;
     background-color: var(--offWhite);
     color: black;
     padding: 15px;
     border: none;
     border-radius: 13px;
+}
+
+/* ----- TOGGLES IN SETTINGS ----- */
+
+.toggleSection{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggleSection .toggleText{
+    width: 75%;
+}
+
+.toggleSection .toggleText h5{
+    font-size: 10px;
+    line-height: 10px;
+}
+
+input[type="checkbox"]{
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    /* Remove most all native input styles */
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: var(--mainColor);
+    /* Not removed via appearance */
+  
+    font: inherit;
+    color: currentColor;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    border: 0.15em solid currentColor;
+    border-radius: 50%;
+
+    display: grid;
+    place-content: center;
+
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+input[type="checkbox"]::before{
+    content: "";
+    width: 1em;
+    height: 1em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--offWhite);
+    /* Windows High Contrast Mode */
+    background-color: var(--offWhite);
+}
+  
+input[type="checkbox"]:checked::before{
+    transform: scale(1);
 }
 
 /* ----- PLAYER ----- */
@@ -614,6 +691,7 @@ main{
     transition: all .4s ease-in-out;
     opacity: 0;
     pointer-events: none;
+    transform: translateY(300%);
 }
 
 .songBackdrop{

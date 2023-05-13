@@ -179,6 +179,7 @@ function openMiniPlayer(){
         let player = document.getElementsByClassName("player")[0];
         player.style.opacity = "1";
         player.style.pointerEvents = "all";
+        player.style.transform = "translateY(0%)";
     }
 }
 
@@ -253,3 +254,8 @@ songTime.addEventListener('change', ()=>{
     var seekto = currentSongAudio.duration * (songTime.value / 100);
     currentSongAudio.currentTime = seekto;
 })
+
+// HANDLING ARTIST PAGE
+function openArtistPage(){
+
+}

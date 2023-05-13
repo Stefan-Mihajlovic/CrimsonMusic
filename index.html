@@ -53,43 +53,7 @@
 
         <section class="recPlaylistsSection">
             <h2 class="catTitleAlone">Playlists curated just for <span class="highlightSpan">YOU</span></h2>
-            <ul class="recPlaylists">
-                <li class="playlistItem">
-                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
-                    <h3>Demo Playlist</h3>
-                    <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
-                </li>
-                <li class="playlistItem">
-                    <img src="images/CrimsonLogo.png" alt="playlistBanner">
-                    <h3>Demo Playlist</h3>
-                    <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
-                </li>
-                <li class="playlistItem">
-                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
-                    <h3>Demo Playlist</h3>
-                    <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
-                </li>
-                <li class="playlistItem">
-                    <img src="images/CrimsonLogo.png" alt="playlistBanner">
-                    <h3>Demo Playlist</h3>
-                    <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
-                </li>
-                <li class="playlistItem">
-                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
-                    <h3>Demo Playlist</h3>
-                    <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
-                </li>
-                <li class="playlistItem">
-                    <img src="images/CrimsonLogo.png" alt="playlistBanner">
-                    <h3>Demo Playlist</h3>
-                    <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
-                </li>
-                <li class="playlistItem">
-                    <img src="images/demoSongBanner.jpg" alt="playlistBanner">
-                    <h3>Demo Playlist</h3>
-                    <h5>Quni, Kordhell, KSLV, SXMPRA, Remmus</h5>
-                </li>
-            </ul>
+            <ul class="recPlaylists"></ul>
         </section>
     </main>
 
@@ -162,10 +126,25 @@
             </div>
         </form>
         <div class="loggedInScreen">
-            <img name="accountPhoto" src="images/noUserImg.svg" alt="userBanner">
-            <h2 name="accountName">Guest</h2>
-            <h5 name="accountEmail">youarenotsuppsedtoseethis</h5>
-            <button type="button" id="logoutBtn">Log Out</button>
+            <section class="logOutSection">
+                <div class="accountInfo">
+                    <img name="accountPhoto" src="images/noUserImg.svg" alt="userBanner">
+                    <div class="accountText">
+                        <h2 name="accountName">Guest</h2>
+                        <h5 name="accountEmail">youarenotsuppsedtoseethis</h5>
+                    </div>
+                </div>
+                <button type="button" id="logoutBtn">Log Out</button>
+            </section>
+            <hr>
+            <section class="toggleSection">
+                <div class="toggleText">
+                    <h2>Data Saver</h2>
+                    <h5>Sets the audio quality to low and turns off image previews for songs</h5>
+                </div>
+                <input id="dataSaverToggle" type="checkbox" name="dataSaverToggle" placeholder="Data Saver Toggle">
+            </section>
+            <hr>
         </div>
     </div>
 
