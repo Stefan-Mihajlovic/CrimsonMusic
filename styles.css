@@ -457,8 +457,9 @@ main{
 
 #submitSearch{
     width: 20%;
-    max-width: 50px;
-    background-color: var(--mainColorLighter);
+    max-width: 60px;
+    background-color: var(--offWhite);
+    color: var(--mainColor);
     border: 1px solid var(--mainColor);
 }
 
