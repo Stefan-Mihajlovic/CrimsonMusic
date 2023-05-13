@@ -447,6 +447,7 @@ main{
 .searchScreen input{
     padding: 12px;
     width: 80%;
+    flex-grow: 1;
     border-radius: 10px;
     border: none;
     background-color: var(--mainColorLighter);
@@ -456,6 +457,7 @@ main{
 
 #submitSearch{
     width: 20%;
+    max-width: 50px;
     background-color: var(--mainColorLighter);
     border: 1px solid var(--mainColor);
 }
