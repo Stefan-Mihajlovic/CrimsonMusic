@@ -65,7 +65,6 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
 
         searchList.innerHTML = "";
         searchInput.value = "";
-        searchInput.focus();
     }
 }
 
