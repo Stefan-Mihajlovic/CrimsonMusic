@@ -6,7 +6,7 @@ import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, si
 
 let brojPesama = 18;
 let brojArtista = 9;
-let brojPlejlista = 2;
+let brojPlejlista = 4;
 let brojKategorija = 12;
 
 // Firebase Config with all IDs
@@ -325,7 +325,7 @@ function generatePlaylists(){
 
     let randomList = [];
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 4; i++) {
         while(true){
             let g = Math.floor(Math.random() * brojPlejlista) + 1;
             if(!randomList.includes(g)){
@@ -557,8 +557,13 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
     });
 
     SetTheLatestRelease(artistName);
-    for (let i = 0; i <= brojPlejlista; i++) {
-        GetPlaylistsArtistAppearsOn(i,artistName);
+    for (let i = 1; i <= brojPlejlista; i++) {
+        GetPlaylistsArtistAppearsOn(i, artistName);
+    }
+
+    let randomList = [];
+    for (let i = 0; i <= brojPesama; i++) {
+        GenerateOneSongFromArtist(i, artistName);
     }
 }
 
@@ -625,6 +630,42 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
                 </li>`;
 
                 artistAppearsOnList.innerHTML += currentLi;
+            }
+        }
+    })
+}
+
+let artistTopTracksList = document.getElementsByClassName("artistTopTracks")[0];
+
+function GenerateOneSongFromArtist(songName,artist){
+    let name = songName;
+
+    artistTopTracksList.innerHTML = "";
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            songCreator = snapshot.val().Creator;
+            if(songCreator.toLowerCase().includes(artist.toLowerCase())){
+                songToBePlayed = snapshot.val().SongURL;
+                songTitle  = snapshot.val().SongName;
+                imageURL = snapshot.val().ImgURL;
+                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                    <div class="songInfo">
+                        <img src="`+imageURL+`" alt="songBanner">
+                        <div class="songText">
+                            <h2>`+ songTitle +`</h2>
+                            <h3>`+ songCreator +`</h3>
+                        </div>
+                    </div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                    <div class="songBtns">
+                        <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
+                        <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                    </div>
+                </li>`;
+                artistTopTracksList.innerHTML += currentLI;
             }
         }
     })

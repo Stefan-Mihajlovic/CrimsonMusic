@@ -301,3 +301,25 @@ function checkTheChip(clickedOn, chipName){
         clickedOn.classList.remove(chipName+"chipCh");
     }
 }
+
+// SCROLL ON ARTISTPAGE
+
+let artistScreenScrollable = document.getElementsByClassName("artistScreenScrollable")[0];
+let artistPageBar = document.getElementById("artistPageBar");
+
+artistScreenScrollable.addEventListener('scroll', ()=>{
+
+    if(artistScreenScrollable.scrollTop <= 150){
+        artistPageBar.classList.remove("pageBarOn");
+        artistPageBar.style.opacity = 1;
+    }else{
+        artistPageBar.style.opacity = artistScreenScrollable.scrollTop / 250;
+        artistPageBar.classList.add("pageBarOn");
+    }
+
+    // if(artistScreenScrollable.scrollTop >= 175){
+    //     artistPageBar.classList.add("pageBarOn");
+    // }else{
+    //     artistPageBar.classList.remove("pageBarOn");
+    // }
+})

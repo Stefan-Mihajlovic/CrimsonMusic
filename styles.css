@@ -982,7 +982,7 @@ hr{
     height: 100vh;
     overflow-y: scroll;
     display: flex;
-    padding-bottom: 200px;
+    padding-bottom: 225px;
     flex-direction: column;
 }
 
@@ -992,12 +992,28 @@ hr{
 }
 
 .artistScreen .pageBar{
-    z-index: 2;
+    z-index: 99;
     top: 0;
-    position: absolute;
-    background-color: transparent;
     border: none;
+    border-bottom: 2px solid transparent;
     box-shadow: none;
+    position: absolute;
+    opacity: 0;
+}
+
+.artistScreen .pageBar h2{
+    display: none;
+}
+
+.pageBarOn{
+    background-color: var(--secondaryColor);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-bottom: 2px solid var(--secondaryColor) !important;
+}
+
+.pageBarOn h2{
+    display: block !important;
 }
 
 .artistScreen .pageBar button i{
@@ -1027,7 +1043,7 @@ hr{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 187px;
+    padding-top: 187px;
     gap: 10px;
     padding-bottom: 14px;
 }
@@ -1131,6 +1147,20 @@ hr{
     left: -5px;
     border: 1px solid var(--sidePageback);
     transform: rotate(-5deg);
+}
+
+.artistAppearsOn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: scroll;
+}
+
+.artistTopTracks{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
 /* ----- PLAYER ----- */

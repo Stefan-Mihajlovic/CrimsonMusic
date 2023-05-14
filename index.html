@@ -146,14 +146,15 @@
 
     <div class="artistScreen">
         <div class="artistScreenScrollable">
-            <div class="pageBar">
+            <div class="pageBar" id="artistPageBar">
                 <button type="button" id="closeArtistPage"><i class="fa-solid fa-circle-left"></i></button>
+                <h2 name="artistName"></h2>
             </div>
             <div class="artistInfo">
-                <img name="artistBanner" src="images/demoSongBanner.jpg" alt="artistBanner">
+                <img name="artistBanner" src="" alt="artistBanner">
                 <div class="artistControls">
                     <div class="artistText">
-                        <h3 name="artistName">Demo Artist</h3>
+                        <h3 name="artistName"></h3>
                         <h5><span name="artistFollowers" id="artistFollowers">0</span>&nbsp;Followers</h5>
                     </div>
                     <div class="artistBtns">
@@ -167,6 +168,8 @@
                 <article class="latestRelease"></article>
                 <h2 class="catTitle">Appears On</h2>
                 <ul class="artistAppearsOn"></ul>
+                <h2 class="catTitle">Top tracks this month</h2>
+                <ul class="artistTopTracks"></ul>
             </section>
         </div>
     </div>
