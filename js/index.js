@@ -254,6 +254,8 @@ currentSongAudio.addEventListener('ended', () => {
         button.children[0].classList.remove("fa-circle-pause");
         button.children[0].classList.add("fa-circle-play");
     });
+
+    isSongPaused = true;
 });
 
 // Set the seekbar and times relative to the songs current time

@@ -133,7 +133,7 @@ function AuthenticateUser(){
 // Dekriptuj sifru
 
 function decPass(dbpass){
-    var pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
+    let pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
     return pass12.toString(CryptoJS.enc.Utf8);
 }
 
@@ -208,9 +208,9 @@ let songToBePlayed,songTitle,songCreator,imageURL;
 let recSongs = document.getElementById("recSongs");
 
 function GenerateOneSong(songName){
-    var name = songName;
+    let name = songName;
 
-    var dbRef = ref(realdb);
+    let dbRef = ref(realdb);
 
     get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -260,9 +260,9 @@ let artistImage,artistFollowers,artistListens;
 let recArtists = document.getElementsByClassName("recArtists")[0];
 
 function GetArtists(artistName){
-    var name = artistName;
+    let name = artistName;
 
-    var dbRef = ref(realdb);
+    let dbRef = ref(realdb);
 
     get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -270,7 +270,7 @@ function GetArtists(artistName){
             artistImage = snapshot.val().ImageURL;
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
-            let currentImg =  `<li class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`');">
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`');">
             <img src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
@@ -300,9 +300,9 @@ let playlistBanner,playlistLikes,playlistSongs,playlistArtists;
 let recPlaylists = document.getElementsByClassName("recPlaylists")[0];
 
 function GetPlaylists(playlistName){
-    var name = playlistName;
+    let name = playlistName;
 
-    var dbRef = ref(realdb);
+    let dbRef = ref(realdb);
 
     get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -425,9 +425,9 @@ function findSearchedSong(songName, inputText){
 }
 
 function findSearchedArtist(artistName, inputText){
-    var name = artistName;
+    let name = artistName;
 
-    var dbRef = ref(realdb);
+    let dbRef = ref(realdb);
 
     get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -448,9 +448,9 @@ function findSearchedArtist(artistName, inputText){
 }
 
 function findSearchedPlaylist(playlistName, inputText){
-    var name = playlistName;
+    let name = playlistName;
 
-    var dbRef = ref(realdb);
+    let dbRef = ref(realdb);
 
     get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -522,6 +522,11 @@ function GetCategories(name){
 let latestReleaseLi = "";
 let isArtistPageOpen = false;
 
+let closeArtistPageBtn = document.getElementById("closeArtistPage");
+closeArtistPageBtn.addEventListener('click', ()=>{
+    closeArtistPage();
+})
+
 export function closeArtistPage(){
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
     artistScreen.classList.remove("artistScreenOpen");
@@ -552,12 +557,16 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
     });
 
     SetTheLatestRelease(artistName);
+    for (let i = 0; i < brojPlejlista; i++) {
+        GetPlaylistsArtistAppearsOn(i,artistName);
+    }
 }
 
 function SetTheLatestRelease(artist){
+    latestReleaseLi = "";
     let dbRef = ref(realdb);
 
-    for (let i = brojPesama; i > 0; i++) {
+    for (let i = brojPesama; i > 0; i--) {
         while(latestReleaseLi === ""){
             get(child(dbRef, "Songs/"+i)).then((snapshot)=>{
                 if(snapshot.exists()){
@@ -581,14 +590,44 @@ function SetTheLatestRelease(artist){
                             </div>
                             <span class="latestPin">Latest</span>
                         </li>`;
+
+                        document.getElementsByClassName("latestRelease")[0].innerHTML = "";
+                        document.getElementsByClassName("latestRelease")[0].innerHTML = latestReleaseLi;
                     }
                 }
             })
             break;
         }    
     }
+}
 
-    return latestReleaseLi;
+let artistAppearsOnList = document.getElementsByClassName("artistAppearsOn")[0];
+
+function GetPlaylistsArtistAppearsOn(playlistName,artist){
+    let name = playlistName;
+
+    artistAppearsOnList.innerHTML = "";
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            playlistArtists = snapshot.val().Artists;
+            if(playlistArtists.toLowerCase().includes(artist.toLowerCase())){
+                playlistName = snapshot.val().Title;
+                playlistBanner = snapshot.val().Banner;
+                playlistLikes = snapshot.val().Likes;
+                playlistSongs = snapshot.val().Songs;
+                let currentLi =  `<li class="playlistItem" onclick="clickEffect(this)">
+                <img src="`+ playlistBanner +`" alt="playlistBanner">
+                <h3>`+ playlistName +`</h3>
+                <h5>`+ playlistArtists +`</h5>
+                </li>`;
+
+                artistAppearsOnList.innerHTML += currentLi;
+            }
+        }
+    })
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS

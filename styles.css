@@ -99,7 +99,7 @@ header{
     top: 0;
     left: 0;
     right: 0;
-    z-index: 999;
+    z-index: 80;
 }
 
 header h2{
@@ -282,7 +282,7 @@ main{
     position: relative;
     background-color: var(--secondaryColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--mainColorLighter);
+    border: 1px solid var(--playerColor);
 }
 
 .songInfo{
@@ -370,7 +370,7 @@ main{
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--mainColorLighter);
+    border: 1px solid var(--playerColor);
 }
 
 .artistItem h3{
@@ -410,7 +410,7 @@ main{
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border: 1px solid var(--mainColorLighter);
+    border: 1px solid var(--playerColor);
     border-bottom: 3px solid var(--accentColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
@@ -974,10 +974,16 @@ hr{
     pointer-events: none;
     transform: translateX(110%);
     transition: all .3s ease-in-out;
+    z-index: 99;
+}
+
+.artistScreenScrollable{
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
     display: flex;
+    padding-bottom: 110px;
     flex-direction: column;
-    align-items: center;
-    overflow: hidden !important;
 }
 
 .artistScreenOpen{
@@ -1017,8 +1023,7 @@ hr{
 .artistControls{
     padding-block: 5px;
     padding-inline: 15px;
-    position: sticky;
-    top: 0;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1027,10 +1032,19 @@ hr{
     padding-bottom: 14px;
 }
 
+.darken{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, black, transparent);
+    z-index: 1;
+}
+
 .artistText{
     display: flex;
     flex-direction: column;
     filter: drop-shadow(0px 0px 10px black);
+    z-index: 2;
 }
 
 .artistControls h3{
@@ -1050,6 +1064,7 @@ hr{
     align-items: center;
     justify-content: center;
     gap: 10px;
+    z-index: 2;
 }
 
 .artistBtns button{
@@ -1075,22 +1090,32 @@ hr{
 .artistWork{
     width: 100%;
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 2;
+    background-color: var(--sidePageback);
 }
 
 .latestRelease{
     width: 100%;
     padding: 10px;
-    background-color: var(--mainColorLighter);
+    background-color: var(--secondaryColor);
     border-radius: 10px;
-    border: 1px solid var(--playerColor);
+    box-shadow: 0px 0px 15px black;
+    border: 1px solid rgb(30, 27, 34);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.latestRelease li{
+    border: 1px solid var(--offWhite);
+}
+
 .latestRelease img{
-    width: 45px;
-    border-radius: 7px;
+    width: 35px;
+    border-radius: 5px;
     aspect-ratio: 1 / 1;
 }
 
@@ -1186,7 +1211,7 @@ hr{
     background-color: rgba(37, 37, 37, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--mainColorLighter);
+    border: 1px solid var(--playerColor);
     padding: 5px;
     border-radius: 7px;
     transition: all .4s ease-in-out;
@@ -1278,6 +1303,7 @@ hr{
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 5px;
+    border: 1px solid var(--playerColor);
 }
 
 .bigSongInfo .playerSongText{
@@ -1404,6 +1430,7 @@ nav{
     z-index: 99;
     backdrop-filter: blur(20px) brightness(0.9);
     -webkit-backdrop-filter: blur(20px) brightness(0.9);
+    border-top: 1px solid  var(--playerColor);
 }
 
 nav button{
