@@ -434,7 +434,7 @@ function findSearchedArtist(artistName, inputText){
             artistName = snapshot.val().Artist;
             if(artistName.toLowerCase().includes(inputText)){
                 artistImage = snapshot.val().ImageURL;
-                let currentLi = `<li class="artistItemSearch" onclick="openArtistPage(`+ name +`); clickEffect(this);">
+                let currentLi = `<li class="artistItemSearch" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`'); clickEffect(this);">
                                     <div>
                                         <img src="`+ artistImage +`" alt="artistImage">
                                         <h3>`+ artistName +`</h3>
@@ -521,6 +521,7 @@ function GetCategories(name){
 
 let latestReleaseLi = "";
 let isArtistPageOpen = false;
+let artistScreenScrollable = document.getElementsByClassName("artistScreenScrollable")[0];
 
 let closeArtistPageBtn = document.getElementById("closeArtistPage");
 closeArtistPageBtn.addEventListener('click', ()=>{
@@ -534,6 +535,9 @@ export function closeArtistPage(){
 }
 
 export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens){
+    
+    artistScreenScrollable.scrollTop = 0;
+    
     if(!isArtistPageOpen){
         let artistScreen = document.getElementsByClassName("artistScreen")[0];
         artistScreen.classList.add("artistScreenOpen");

@@ -41,6 +41,9 @@ function getTime(){
 let currentScreen = "Home";
 
 function setScreen(screenToSet, clickedBtn, activeScreen){
+
+    closeArtistPage();
+
     if (activeScreen !== currentScreen) {
         let buttons = document.querySelectorAll("nav > button");
         buttons.forEach((button) => {
@@ -294,13 +297,19 @@ songTime.addEventListener('change', ()=>{
 })
 
 // CHECK THE CHIPS ON SEARCH
-function checkTheChip(clickedOn, chipName){
-    if(clickedOn.checked){
-        clickedOn.classList.add(chipName+"chipCh");
-    }else{
-        clickedOn.classList.remove(chipName+"chipCh");
-    }
+
+let allChips = document.getElementsByName("allChip");
+
+function checkTheChip(){
+    allChips.forEach((chip) => {
+        if(chip.checked){
+            chip.classList.add("allchipCh");
+        }else{
+            chip.classList.remove("allchipCh");
+        }
+    })
 }
+
 
 // SCROLL ON ARTISTPAGE
 

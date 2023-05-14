@@ -66,23 +66,23 @@
             </form>
             <div class="SearchTypeChips">
                 <div class="searchChip">
-                    <input type="checkbox" name="allChip" id="allInput" onchange="checkTheChip(this, 'all')" class="allchipCh" checked>
+                    <input type="radio" name="allChip" id="allInput" class="allchipCh" checked onchange="checkTheChip()">
                     <label for="allChip">All</label>
                 </div>
                 <div class="searchChip">
-                    <input type="checkbox" name="songs" id="songsInput" onchange="checkTheChip(this, 'songs')">
+                    <input type="radio" name="allChip" id="songsInput" onchange="checkTheChip()">
                     <label for="songs">Songs</label>
                 </div>
                 <div class="searchChip">
-                    <input type="checkbox" name="artists" id="artistsInput" onchange="checkTheChip(this, 'artists')">
+                    <input type="radio" name="allChip" id="artistsInput" onchange="checkTheChip()">
                     <label for="artists">Artists</label>
                 </div>
                 <div class="searchChip">
-                    <input type="checkbox" name="playlists" id="playlistsInput" onchange="checkTheChip(this, 'playlists')">
+                    <input type="radio" name="allChip" id="playlistsInput" onchange="checkTheChip()">
                     <label for="playlists">Playlists</label>
                 </div>
                 <div class="searchChip">
-                    <input type="checkbox" name="profiles" id="profilesInput" onchange="checkTheChip(this, 'profiles')">
+                    <input type="radio" name="allChip" id="profilesInput" onchange="checkTheChip()">
                     <label for="profiles">Profiles</label>
                 </div>
             </div>
@@ -166,10 +166,10 @@
             </div>
             <section class="artistWork">
                 <article class="latestRelease"></article>
-                <h2 class="catTitle">Appears On</h2>
-                <ul class="artistAppearsOn"></ul>
                 <h2 class="catTitle">Top tracks this month</h2>
                 <ul class="artistTopTracks"></ul>
+                <h2 class="catTitle">Appears On</h2>
+                <ul class="artistAppearsOn"></ul>
             </section>
         </div>
     </div>
@@ -218,15 +218,16 @@
     </div>
 
     <nav>
-        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen')"><i class="fa-solid fa-house"></i></button>
-        <button type="button" onclick="setScreen('Search', this, 'searchScreen')"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen')"><i class="fa-solid fa-border-all"></i></button>
+        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i></button>
+        <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-solid fa-border-all"></i></button>
     </nav>
     </div>
 
     <script type="module">
-        import { openArtistPage } from './js/homeController.js';
+        import { openArtistPage,closeArtistPage } from './js/homeController.js';
         window.openArtistPage = openArtistPage;
+        window.closeArtistPage = closeArtistPage;
     </script>
 
     <audio src="" id="currentSong"></audio>
