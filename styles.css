@@ -20,6 +20,8 @@
     --artistSearch: rgba(0, 128, 0, 0.3);
     --songSearch: rgba(255, 0, 0, 0.2);
     --playlistSearch: rgba(141, 111, 252, 0.5);
+
+    --sidePageback: rgb(14, 14, 15);
 }
 
 body{
@@ -163,7 +165,7 @@ main{
     overflow-y: scroll;
     position: relative;
     flex-direction: column;
-    gap: 25px;
+    gap: 15px;
     display: none;
 }
 
@@ -406,11 +408,12 @@ main{
 
 .playlistItem img{
     width: 100%;
-    aspect-ratio: 2 / 1.5;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border: 1px solid var(--mainColorLighter);
     border-bottom: 3px solid var(--accentColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
 }
 
 .playlistItem h3{
@@ -679,6 +682,10 @@ main{
     overflow: hidden;
     position: relative;
     background-color: var(--mainColorLighter);
+    background:
+    radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,.2) 21%, rgba(255,255,255,.2) 34%, transparent 35%, transparent),
+    radial-gradient(circle at 0% 50%, transparent 20%, rgba(255,255,255,.2) 21%, rgba(255,255,255,.2) 34%, transparent 35%, transparent) 0 -50px;
+    background-size:75px 100px;
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
     transition: all .2s ease-in-out;
@@ -692,7 +699,7 @@ main{
     display: flex;
     align-items: center;
     justify-content: center;
-    text-shadow: 0px 0px 15px black;
+    text-shadow: 0px 0px 3px black;
     text-transform: uppercase;
     font-size: 15px;
 }
@@ -732,7 +739,7 @@ main{
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgb(22, 20, 27);
+    background-color: var(--sidePageback);
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
@@ -952,6 +959,153 @@ hr{
   
 .loginScreen input[type="checkbox"]:checked::before{
     transform: scale(1);
+}
+
+/* ----- ARTIST SCREEN ----- */
+
+.artistScreen{
+    position: absolute;
+    top: 0;
+    min-height: 100vh;
+    left: 0;
+    right: 0;
+    background-color: var(--sidePageback);
+    z-index: 999;
+    pointer-events: none;
+    transform: translateX(110%);
+    transition: all .3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden !important;
+}
+
+.artistScreenOpen{
+    transform: translateX(0%);
+    pointer-events: all;
+}
+
+.artistScreen .pageBar{
+    z-index: 2;
+    top: 0;
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.artistScreen .pageBar button i{
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+.artistScreenOpen .pageBar h2{
+    transform: translateX(0%);
+}
+
+.artistInfo{
+    width: 100%;
+}
+
+.artistInfo img{
+    position: absolute;
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+    border-bottom: 1px solid var(--playerColor);
+}
+
+.artistControls{
+    padding-block: 5px;
+    padding-inline: 15px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 187px;
+    gap: 10px;
+    padding-bottom: 14px;
+}
+
+.artistText{
+    display: flex;
+    flex-direction: column;
+    filter: drop-shadow(0px 0px 10px black);
+}
+
+.artistControls h3{
+    text-align: center;
+    color: var(--offWhite);
+    font-size: 30px;
+}
+
+.artistControls h5{
+    text-align: center;
+    color: var(--offWhite);
+    font-size: 13px;
+}
+
+.artistBtns{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.artistBtns button{
+    background: var(--offWhite);
+    color: var(--sidePageback);
+    border-radius: 40px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    gap: 10px;
+    padding-inline: 15px;
+    font-weight: 600;
+    min-width: 100px;
+}
+
+.artistBtns button i{
+    color: var(--sidePageback);
+    font-size: 20px;
+}
+
+.artistWork{
+    width: 100%;
+    padding: 15px;
+}
+
+.latestRelease{
+    width: 100%;
+    padding: 10px;
+    background-color: var(--mainColorLighter);
+    border-radius: 10px;
+    border: 1px solid var(--playerColor);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.latestRelease img{
+    width: 45px;
+    border-radius: 7px;
+    aspect-ratio: 1 / 1;
+}
+
+.latestPin{
+    position: absolute;
+    padding: 3px;
+    padding-inline: 10px;
+    background-color: var(--offWhite);
+    color: var(--sidePageback);
+    border-radius: 20px;
+    font-size: 12px;
+    top: -15px;
+    left: -5px;
+    border: 1px solid var(--sidePageback);
+    transform: rotate(-5deg);
 }
 
 /* ----- PLAYER ----- */

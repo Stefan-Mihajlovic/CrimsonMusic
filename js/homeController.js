@@ -4,6 +4,11 @@ import { } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 import { getDatabase, ref, set, child, get, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
+let brojPesama = 18;
+let brojArtista = 9;
+let brojPlejlista = 2;
+let brojKategorija = 12;
+
 // Firebase Config with all IDs
 const firebaseConfig = {
     apiKey: "AIzaSyBtHlJGvOX-dNiyWWUUzheaSl21fD3-WBA",
@@ -180,8 +185,6 @@ logoutBtn.addEventListener('click', ()=>{
     });
 })
 
-getUsername();
-
 // See if user was signed in
 if(currentUser == null){
     setLoggedOutScreen();
@@ -199,10 +202,6 @@ else{
 }
 
 // Generate a song based on the input number ( SongID )
-
-let brojPesama = 18;
-let brojArtista = 9;
-let brojPlejlista = 2;
 
 let songToBePlayed,songTitle,songCreator,imageURL;
 
@@ -257,7 +256,7 @@ function generateSongs(){
 }
 
 /* ----- GENERATE ARTISTS ----- */
-let artistImage;
+let artistImage,artistFollowers,artistListens;
 let recArtists = document.getElementsByClassName("recArtists")[0];
 
 function GetArtists(artistName){
@@ -269,7 +268,9 @@ function GetArtists(artistName){
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
             artistImage = snapshot.val().ImageURL;
-            let currentImg =  `<li class="artistItem" onclick="openArtistPage(`+ name +`); clickEffect(this);">
+            artistFollowers = snapshot.val().Followers;
+            artistListens = snapshot.val().Listens;
+            let currentImg =  `<li class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`');">
             <img src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
@@ -335,10 +336,6 @@ function generatePlaylists(){
         }
     }
 }
-
-generateSongs();
-generateArtists();
-generatePlaylists();
 
 // ----- SEARCH
 
@@ -478,3 +475,125 @@ function findSearchedPlaylist(playlistName, inputText){
         }
     })
 }
+
+// ----- GENERATE CATEGORIES
+
+let categoriesList = document.getElementsByClassName("categories")[0];
+
+function generateCategories(){
+    for (let i = 1; i < brojKategorija; i+=2) {
+        GetCategories(i);
+    }
+}
+
+function GetCategories(name){
+    let catName,catName2,catColor,catColor2;
+    let currentLi = "";
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Categories/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            catName = snapshot.val().Name;
+            catColor = snapshot.val().Color;
+
+            currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this)" style="background-color: `+ catColor +`">
+            <h3>`+ catName +`</h3>
+            </div>`;
+        }
+    })
+
+    get(child(dbRef, "Categories/"+(name+1))).then((snapshot)=>{
+        if(snapshot.exists()){
+            catName2 = snapshot.val().Name;
+            catColor2 = snapshot.val().Color;
+
+            currentLi += `<div class="catItem" onclick="clickEffect(this)" style="background-color: `+ catColor2 +`">
+            <h3>`+ catName2 +`</h3>
+            </div></li>`;
+
+            categoriesList.innerHTML += currentLi;
+        }
+    })
+}
+
+// ----- ARTIST PAGE SHANANIGANS
+
+let latestReleaseLi = "";
+let isArtistPageOpen = false;
+
+export function closeArtistPage(){
+    let artistScreen = document.getElementsByClassName("artistScreen")[0];
+    artistScreen.classList.remove("artistScreenOpen");
+    isArtistPageOpen = false;
+}
+
+export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens){
+    if(!isArtistPageOpen){
+        let artistScreen = document.getElementsByClassName("artistScreen")[0];
+        artistScreen.classList.add("artistScreenOpen");
+        isArtistPageOpen = true;
+    }
+
+    let artistBanners = document.getElementsByName("artistBanner");
+    let artistNames = document.getElementsByName("artistName");
+    let artistFollowersSpans = document.getElementsByName("artistFollowers");
+
+    artistBanners.forEach((banner) => {
+        banner.src = artistImage;
+    });
+
+    artistNames.forEach((name) => {
+        name.innerHTML = artistName;
+    });
+
+    artistFollowersSpans.forEach((followers) => {
+        followers.innerHTML = artistFollowers;
+    });
+
+    SetTheLatestRelease(artistName);
+}
+
+function SetTheLatestRelease(artist){
+    let dbRef = ref(realdb);
+
+    for (let i = brojPesama; i > 0; i++) {
+        while(latestReleaseLi === ""){
+            get(child(dbRef, "Songs/"+i)).then((snapshot)=>{
+                if(snapshot.exists()){
+                    songCreator = snapshot.val().Creator;
+                    if(songCreator.includes(artist)){
+                        songToBePlayed = snapshot.val().SongURL;
+                        songTitle  = snapshot.val().SongName;
+                        imageURL = snapshot.val().ImgURL;
+                        latestReleaseLi =  `<li class="songItem" onclick="clickEffect(this)">
+                            <div class="songInfo">
+                                <img src="`+imageURL+`" alt="songBanner">
+                                <div class="songText">
+                                    <h2>`+ songTitle +`</h2>
+                                    <h3>`+ songCreator +`</h3>
+                                </div>
+                            </div>
+                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                            <div class="songBtns">
+                                <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
+                                <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                            </div>
+                            <span class="latestPin">Latest</span>
+                        </li>`;
+                    }
+                }
+            })
+            break;
+        }    
+    }
+
+    return latestReleaseLi;
+}
+
+// ----- CALLING ALL NECESSARY FUNCTIONS
+getUsername();
+generateSongs();
+generateArtists();
+generatePlaylists();
+generateCategories();

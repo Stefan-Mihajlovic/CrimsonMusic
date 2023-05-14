@@ -13,6 +13,9 @@
     <script src="https://kit.fontawesome.com/1d408b5acd.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="module">
+        import { openArtistPage,closeArtistPage } from "./js/homeController.js";
+      </script>
     <title>Crimson Music</title>
 </head>
 <body>
@@ -89,48 +92,7 @@
         </div>
         <ul class="searchList"></ul>
         <h1 class="catTitle">Categories</h1>
-        <ul class="categories">
-            <li class="catItems">
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-            </li>
-            <li class="catItems">
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-            </li>
-            <li class="catItems">
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-            </li>
-            <li class="catItems">
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-            </li>
-            <li class="catItems">
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-                <div class="catItem" onclick="clickEffect(this)">
-                    <h3>Demo Cat</h3>
-                </div>
-            </li>
-        </ul>
+        <ul class="categories"></ul>
     </main>
 
     <main class="yoursScreen">
@@ -183,6 +145,28 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="artistScreen">
+        <div class="pageBar">
+            <button type="button" onclick="closeArtistPage()"><i class="fa-solid fa-circle-left"></i></button>
+        </div>
+        <div class="artistInfo">
+            <img name="artistBanner" src="images/demoSongBanner.jpg" alt="artistBanner">
+            <div class="artistControls">
+                <div class="artistText">
+                    <h3 name="artistName">Demo Artist</h3>
+                    <h5><span name="artistFollowers" id="artistFollowers">0</span>&nbsp;Followers</h5>
+                </div>
+                <div class="artistBtns">
+                    <button><i class="fa-solid fa-plus"></i> Follow</button>
+                    <button><i class="fa-solid fa-play"></i> Play</button>
+                </div>
+            </div>
+        </div>
+        <section class="artistWork">
+            <article class="latestRelease"></article>
+        </section>
     </div>
 
     <div class="loginScreen">

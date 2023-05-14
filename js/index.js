@@ -291,11 +291,6 @@ songTime.addEventListener('change', ()=>{
     currentSongAudio.currentTime = seekto;
 })
 
-// HANDLING ARTIST PAGE
-function openArtistPage(){
-
-}
-
 // CHECK THE CHIPS ON SEARCH
 function checkTheChip(clickedOn, chipName){
     if(clickedOn.checked){
