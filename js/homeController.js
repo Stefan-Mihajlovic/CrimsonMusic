@@ -557,7 +557,7 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
     });
 
     SetTheLatestRelease(artistName);
-    for (let i = 0; i < brojPlejlista; i++) {
+    for (let i = 0; i <= brojPlejlista; i++) {
         GetPlaylistsArtistAppearsOn(i,artistName);
     }
 }

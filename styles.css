@@ -982,7 +982,7 @@ hr{
     height: 100vh;
     overflow-y: scroll;
     display: flex;
-    padding-bottom: 110px;
+    padding-bottom: 200px;
     flex-direction: column;
 }
 
