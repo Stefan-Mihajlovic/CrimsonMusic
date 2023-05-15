@@ -42,6 +42,7 @@ let currentScreen = "Home";
 
 function setScreen(screenToSet, clickedBtn, activeScreen){
 
+    closePlaylistPage();
     closeArtistPage();
 
     if (activeScreen !== currentScreen) {
