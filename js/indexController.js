@@ -311,7 +311,7 @@ function GetPlaylists(playlistName){
             playlistLikes = snapshot.val().Likes;
             playlistSongs = snapshot.val().Songs;
             playlistArtists = snapshot.val().Artists;
-            let currentLi =  `<li class="playlistItem" onclick="clickEffect(this)">
+            let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
             <img src="`+ playlistBanner +`" alt="playlistBanner">
             <h3>`+ playlistName +`</h3>
             <h5>`+ playlistArtists +`</h5>
@@ -460,7 +460,7 @@ function findSearchedPlaylist(playlistName, inputText){
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
-                let currentLi =  `<li class="playlistItemSearch" onclick="clickEffect(this)">
+                let currentLi =  `<li class="playlistItemSearch" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div class="playlistItemHolder">
                         <img src="`+ playlistBanner +`" alt="playlistBanner">
                         <div>
@@ -521,7 +521,7 @@ function GetCategories(name){
 
 let latestReleaseLi = "";
 let isArtistPageOpen = false;
-let artistScreenScrollable = document.getElementsByClassName("artistScreenScrollable")[0];
+let screenScrollables = document.getElementsByClassName("screenScrollable");
 
 let closeArtistPageBtn = document.getElementById("closeArtistPage");
 closeArtistPageBtn.addEventListener('click', ()=>{
@@ -536,7 +536,9 @@ export function closeArtistPage(){
 
 export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens){
     
-    artistScreenScrollable.scrollTop = 0;
+    for (let i = 0; i < screenScrollables.length; i++) {
+        screenScrollables[i].scrollTop = 0;
+    }
     
     if(!isArtistPageOpen){
         let artistScreen = document.getElementsByClassName("artistScreen")[0];
@@ -627,7 +629,7 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
                 playlistBanner = snapshot.val().Banner;
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
-                let currentLi =  `<li class="playlistItem" onclick="clickEffect(this)">
+                let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                 <img src="`+ playlistBanner +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
@@ -674,6 +676,81 @@ function GenerateOneSongFromArtist(songName,artist){
         }
     })
 }
+
+// ----- PLAYLIST PAGE
+
+let playlistSongsList = document.getElementsByClassName("playlistSongsList")[0];
+
+let isPlaylistPageOpen = false;
+
+export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
+    let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+    playlistScreen.classList.add("playlistScreenOpen");
+    isPlaylistPageOpen = true;
+
+    let playlistBanners = document.getElementsByName("playlistBanner");
+    playlistBanners.forEach((banner) => {
+        banner.src = pBanner;
+    })
+
+    let playlistNamess = document.getElementsByName("playlistName");
+    playlistNamess.forEach((name) => {
+        name.innerHTML = pName;
+    })
+
+    let playlistLikess = document.getElementsByName("playlistLikes");
+    playlistLikess.forEach((like) => {
+        like.innerHTML = pLikes;
+    })
+
+    let playlistSongss = pSongs.split(',');
+    for (let i = 0; i < playlistSongss.length; i++) {
+        GenerateOneSongFromPlaylist(playlistSongss[i]);
+    }
+}
+
+function GenerateOneSongFromPlaylist(songName){
+    let name = songName;
+
+    playlistSongsList.innerHTML = "";
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            songCreator = snapshot.val().Creator;
+                songToBePlayed = snapshot.val().SongURL;
+                songTitle  = snapshot.val().SongName;
+                imageURL = snapshot.val().ImgURL;
+                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                <div class="songInfo">
+                    <img src="`+imageURL+`" alt="songBanner">
+                    <div class="songText">
+                        <h2>`+ songTitle +`</h2>
+                        <h3>`+ songCreator +`</h3>
+                    </div>
+                </div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                <div class="songBtns">
+                    <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
+                    <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                </div>
+            </li>`;
+            playlistSongsList.innerHTML += currentLI;
+        }
+    })
+}
+
+export function closePlaylistPage(){
+    let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+    playlistScreen.classList.remove("playlistScreenOpen");
+    isPlaylistPageOpen = false;
+}
+
+let closePlaylistBtn = document.getElementById("closePlaylistPage");
+closePlaylistBtn.addEventListener(('click'), () => {
+    closePlaylistPage();
+})
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
 getUsername();

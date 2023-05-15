@@ -146,10 +146,14 @@
     </div>
 
     <div class="artistScreen">
-        <div class="artistScreenScrollable">
-            <div class="pageBar" id="artistPageBar">
-                <button type="button" id="closeArtistPage"><i class="fa-solid fa-circle-left"></i></button>
+        <div class="screenScrollable" name="screenScrollable">
+            <div class="pageBar" name="showUpPageBar">
+                <button type="button"><i class="fa-solid fa-circle-left"></i></button>
                 <h2 name="artistName"></h2>
+            </div>
+            <div class="pageBar">
+                <button type="button" id="closeArtistPage"><i class="fa-solid fa-circle-left"></i></button>
+                <h2></h2>
             </div>
             <div class="artistInfo">
                 <img name="artistBanner" src="" alt="artistBanner">
@@ -171,6 +175,36 @@
                 <ul class="artistTopTracks"></ul>
                 <h2 class="catTitle">Appears On</h2>
                 <ul class="artistAppearsOn"></ul>
+            </section>
+        </div>
+    </div>
+
+    <div class="playlistScreen">
+        <div class="screenScrollable" name="screenScrollable">
+            <div class="pageBar" name="showUpPageBar">
+                <button type="button"><i class="fa-solid fa-circle-left"></i></button>
+                <h2 name="artistName"></h2>
+            </div>
+            <div class="pageBar">
+                <button type="button" id="closePlaylistPage"><i class="fa-solid fa-circle-left"></i></button>
+                <h2></h2>
+            </div>
+            <div class="artistInfo">
+                <img name="playlistBanner" src="" alt="playlistBanner">
+                <div class="artistControls">
+                    <div class="artistText">
+                        <h3 name="playlistName"></h3>
+                        <h5><span name="playlistLikes" id="playlistLikes">0</span>&nbsp;Likes</h5>
+                    </div>
+                    <div class="artistBtns">
+                        <button id="likePlaylist"><i class="fa-regular fa-heart"></i></button>
+                        <button><i class="fa-solid fa-play"></i> Play</button>
+                    </div>
+                    <div class="darken"></div>
+                </div>
+            </div>
+            <section class="playlistWork">
+                <ul class="playlistSongsList"></ul>
             </section>
         </div>
     </div>
@@ -226,9 +260,11 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
+        window.closePlaylistPage = closePlaylistPage;
+        window.openPlaylistPage = openPlaylistPage;
     </script>
 
     <audio src="" id="currentSong"></audio>

@@ -311,24 +311,13 @@ function checkTheChip(){
 }
 
 
-// SCROLL ON ARTISTPAGE
+// SCROLL ON PAGEBARS
 
-let artistScreenScrollable = document.getElementsByClassName("artistScreenScrollable")[0];
-let artistPageBar = document.getElementById("artistPageBar");
+let screenScrollables = document.getElementsByName("screenScrollable");
 
-artistScreenScrollable.addEventListener('scroll', ()=>{
-
-    if(artistScreenScrollable.scrollTop <= 150){
-        artistPageBar.classList.remove("pageBarOn");
-        artistPageBar.style.opacity = 1;
-    }else{
-        artistPageBar.style.opacity = artistScreenScrollable.scrollTop / 250;
-        artistPageBar.classList.add("pageBarOn");
-    }
-
-    // if(artistScreenScrollable.scrollTop >= 175){
-    //     artistPageBar.classList.add("pageBarOn");
-    // }else{
-    //     artistPageBar.classList.remove("pageBarOn");
-    // }
+screenScrollables.forEach((screen) => {
+    screen.addEventListener("scroll", ()=>{
+        screen.children[0].style.opacity = screen.scrollTop / 200 - 0.5;
+        screen.children[0].classList.add("pageBarOn");
+    })
 })
