@@ -68,6 +68,15 @@ ul{
     scrollbar-width: none;
 }
 
+h2::-webkit-scrollbar{
+    display: none;
+}
+
+h2{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 button{
     transition: all .1s ease-in-out !important;
     cursor: pointer;
@@ -1330,13 +1339,29 @@ hr{
 
 .bigSongInfo .playerSongText h2{
     font-size: 22px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: scroll;
+    overflow-y: visible;
+    text-overflow: clip;
+    white-space: nowrap;
 }
 
 .bigSongInfo .playerSongText h3{
-    line-height: 10px;
+    line-height: 14px;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 1px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: scroll;
+    overflow-y: visible;
+    text-overflow: clip;
+    white-space: nowrap;
 }
 
 .bigSongInfo .playerSongText button{
@@ -1357,6 +1382,7 @@ hr{
     justify-content: center;
     transform: translateY(150%);
     transition: all .47s linear;
+    margin-top: 15px;
 }
 
 .playerOpen .bigPlayer .bigControls{
@@ -1379,16 +1405,15 @@ hr{
     position: absolute;
     font-size: 10px;
     color: var(--offWhiteDark);
+    top: 40%;
 }
 
 #currentSongTime{
     left: 37px;
-    top: 30%;
 }
 
 #currentSongTimeLeft{
     right: 37px;
-    top: 30%;
 }
 
 .bpCC{
@@ -1403,7 +1428,7 @@ hr{
 
 .bpCC button i{
     color: var(--offWhite);
-    font-size: 1.45rem;
+    font-size: 1.7rem;
     width: 50px;
     aspect-ratio: 1 / 1;
     display: flex;
@@ -1412,13 +1437,13 @@ hr{
 }
 
 .bigPlayButton{
-    
     aspect-ratio: 1 / 1;
 }
 
 .bigPlayButton i{
     color: var(--mainColor);
-    font-size: 53px !important;
+    font-size: 60px !important;
+    margin-inline: 5px;
 }
 
 .rewindButton i{

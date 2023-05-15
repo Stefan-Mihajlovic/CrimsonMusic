@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
     <script src="js/index.js" defer></script>
-    <script src="js/homeController.js" type="module"></script>
+    <script src="js/indexController.js" type="module"></script>
     <script src="https://kit.fontawesome.com/1d408b5acd.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -120,6 +120,7 @@
             <div class="bigSongInfo">
                 <img src="images/CrimsonLogo.png" alt="songBanner" name="songBanner">
                 <div class="playerSongText">
+                    <button><i class="fa-solid fa-music"></i></button>
                     <div class="playerSongNames">
                         <h2 name="songTitle">Demo Song</h2>
                         <h3 name="songArtist">Demo artist</h3>
@@ -134,11 +135,11 @@
                     <span id="currentSongTimeLeft">2:00</span>
                 </div>
                 <div class="bpCC">
-                    <button><i class="fa-solid fa-repeat"></i></button>
+                    <button><i class="fa-solid fa-shuffle"></i></button>
                     <button class="rewindButton"><i class="fa-solid fa-backward-step"></i></button>
                     <button class="bigPlayButton" onclick="pausePlayCurrentSong()" name="songPlayButton"><i class="fa-solid fa-circle-pause"></i></but>
                     <button class="rewindButton"><i class="fa-solid fa-forward-step"></i></button>
-                    <button><i class="fa-solid fa-shuffle"></i></button>
+                    <button><i class="fa-solid fa-repeat"></i></button>
                 </div>
             </div>
         </div>
@@ -225,7 +226,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage } from './js/homeController.js';
+        import { openArtistPage,closeArtistPage } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
     </script>
