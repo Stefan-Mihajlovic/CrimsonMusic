@@ -294,6 +294,10 @@ main{
     border: 1px solid var(--playerColor);
 }
 
+.songPlayingLi{
+    background-color: var(--playerColor);
+}
+
 .songInfo{
     display: flex;
     align-items: center;

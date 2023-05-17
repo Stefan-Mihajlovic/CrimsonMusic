@@ -93,10 +93,12 @@ function buttonClickAnim(button){
 }
 
 function clickEffect(button){
-    button.classList.add("buttonClicked");
-    setTimeout(() => {
-        button.classList.remove("buttonClicked");
-    }, 100);
+    if(button !== undefined){
+        button.classList.add("buttonClicked");
+        setTimeout(() => {
+            button.classList.remove("buttonClicked");
+        }, 100);
+    }
 }
 
 /* ----- LOGIN SCREEN ----- */
@@ -163,7 +165,7 @@ function setLoggedOutScreen(){
 /* ----- PLAYER ----- */
 
 let isPlayerOpen = false;
-let isSongPaused = false;
+let isSongPaused = true;
 
 function openBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
@@ -180,6 +182,7 @@ function closeBigPlayer(){
 }
 
 const currentSongAudio = document.getElementById("currentSong");
+let playingFrom = document.getElementById("playingFromSpan");
 
 // PLAY THE SELECTED SONG
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
@@ -209,7 +212,16 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
         artist.innerHTML = songCreator;
     });
 
-    document.getElementById("playingFromSpan").innerHTML = playedFrom;
+    playingFrom.innerHTML = playedFrom;
+
+}
+
+// PLAY PLAYLIST FROM PLAY BUTTON
+
+function playPlaylist(){
+    
+    pausePlayCurrentSong("Playlist");
+
 
 }
 
@@ -224,17 +236,33 @@ function openMiniPlayer(){
 }
 
 // PAUSE / PLAY THE CURRENT SONG
-function pausePlayCurrentSong(){
+
+function pausePlayCurrentSong(from){
 
     let songPlayBtns = document.getElementsByName("songPlayButton");
+    let playPlaylistBtn = document.getElementById("playPlaylistBtn");
+    let playlistQueue = document.getElementsByClassName("playlistSongsList")[0].children;
+
+    if(from === "Playlist"){
+        playlistQueue[0].classList.add("songPlayingLi");
+    }
 
     if(isSongPaused){
-        currentSongAudio.play();
-
         songPlayBtns.forEach((button) => {
             button.children[0].classList.remove("fa-circle-play");
             button.children[0].classList.add("fa-circle-pause");
         });
+
+        if(from === "Playlist"){
+            playPlaylistBtn.innerHTML = `<i class="fa-solid fa-pause"></i> Pause`;
+            if(currentSongAudio.currentTime === 0){
+                playlistQueue[0].children[1].click();
+            }else{
+                currentSongAudio.play();
+            }
+        }else{
+            currentSongAudio.play();
+        }
 
         isSongPaused = false;
     }else{
@@ -245,6 +273,10 @@ function pausePlayCurrentSong(){
             button.children[0].classList.add("fa-circle-play");
         });
 
+        if(from === "Playlist"){
+            playPlaylistBtn.innerHTML = `<i class="fa-solid fa-play"></i> Play`;
+        }
+
         isSongPaused = true;
     }
 }
@@ -252,14 +284,18 @@ function pausePlayCurrentSong(){
 let songTime = document.getElementById("currentSongInput");
 
 currentSongAudio.addEventListener('ended', () => {
-    let songPlayBtns = document.getElementsByName("songPlayButton");
+    if(playingFrom.innerHTML === "Playlist"){
 
-    songPlayBtns.forEach((button) => {
-        button.children[0].classList.remove("fa-circle-pause");
-        button.children[0].classList.add("fa-circle-play");
-    });
+    }else{
+        let songPlayBtns = document.getElementsByName("songPlayButton");
 
-    isSongPaused = true;
+        songPlayBtns.forEach((button) => {
+            button.children[0].classList.remove("fa-circle-pause");
+            button.children[0].classList.add("fa-circle-play");
+        });
+
+        isSongPaused = true;
+    }
 });
 
 // Set the seekbar and times relative to the songs current time

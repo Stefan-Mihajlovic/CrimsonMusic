@@ -594,7 +594,7 @@ function SetTheLatestRelease(artist){
                                     <h3>`+ songCreator +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release');"></div>
                             <div class="songBtns">
                                 <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                                 <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
@@ -665,7 +665,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                         <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
@@ -684,28 +684,34 @@ let playlistSongsList = document.getElementsByClassName("playlistSongsList")[0];
 let isPlaylistPageOpen = false;
 
 export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
-    let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
-    playlistScreen.classList.add("playlistScreenOpen");
-    isPlaylistPageOpen = true;
+    if(document.getElementById("playlistChecker").innerHTML !== pName){
+        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+        playlistScreen.classList.add("playlistScreenOpen");
+        isPlaylistPageOpen = true;
 
-    let playlistBanners = document.getElementsByName("playlistBanner");
-    playlistBanners.forEach((banner) => {
-        banner.src = pBanner;
-    })
+        let playlistBanners = document.getElementsByName("playlistBanner");
+        playlistBanners.forEach((banner) => {
+            banner.src = pBanner;
+        })
 
-    let playlistNamess = document.getElementsByName("playlistName");
-    playlistNamess.forEach((name) => {
-        name.innerHTML = pName;
-    })
+        let playlistNamess = document.getElementsByName("playlistName");
+        playlistNamess.forEach((name) => {
+            name.innerHTML = pName;
+        })
 
-    let playlistLikess = document.getElementsByName("playlistLikes");
-    playlistLikess.forEach((like) => {
-        like.innerHTML = pLikes;
-    })
+        let playlistLikess = document.getElementsByName("playlistLikes");
+        playlistLikess.forEach((like) => {
+            like.innerHTML = pLikes;
+        })
 
-    let playlistSongss = pSongs.split(',');
-    for (let i = 0; i < playlistSongss.length; i++) {
-        GenerateOneSongFromPlaylist(playlistSongss[i]);
+        let playlistSongss = pSongs.split(',');
+        for (let i = 0; i < playlistSongss.length; i++) {
+            GenerateOneSongFromPlaylist(playlistSongss[i]);
+        }
+    }else{
+        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+        playlistScreen.classList.add("playlistScreenOpen");
+        isPlaylistPageOpen = true;
     }
 }
 
@@ -730,7 +736,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists');"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                     <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
