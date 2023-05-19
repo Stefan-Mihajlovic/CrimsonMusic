@@ -1002,14 +1002,15 @@ hr{
 }
 
 .pageBarOn{
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    border-bottom: 2px solid var(--secondaryColor) !important;
+    border-bottom: 1px solid var(--playerColor) !important;
 }
 
 .pageBarOn h2{
     display: block !important;
+    transition: none;
 }
 
 .artistScreen .pageBar button i, .playlistScreen .pageBar button i{
@@ -1194,7 +1195,7 @@ hr{
     left: -175px;
     right: -175px;
     z-index: -1;
-    filter: blur(40px) brightness(0.3);
+    filter: blur(40px) brightness(0.4);
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s ease-out;

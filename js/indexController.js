@@ -4,8 +4,8 @@ import { } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 import { getDatabase, ref, set, child, get, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
-let brojPesama = 18;
-let brojArtista = 9;
+let brojPesama = 21;
+let brojArtista = 12;
 let brojPlejlista = 4;
 let brojKategorija = 12;
 
@@ -228,7 +228,6 @@ function GenerateOneSong(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                     <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
                 </div>
                 </li>`;
@@ -414,7 +413,6 @@ function findSearchedSong(songName, inputText){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                         <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
                     </div>
                     </li>`;
@@ -596,7 +594,6 @@ function SetTheLatestRelease(artist){
                             </div>
                             <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release');"></div>
                             <div class="songBtns">
-                                <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                                 <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
                             </div>
                             <span class="latestPin">Latest</span>
@@ -667,7 +664,6 @@ function GenerateOneSongFromArtist(songName,artist){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                         <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
@@ -738,7 +734,6 @@ function GenerateOneSongFromPlaylist(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this)"><i class="fa-regular fa-heart"></i></button>
                     <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </li>`;

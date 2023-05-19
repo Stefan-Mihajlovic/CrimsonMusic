@@ -351,10 +351,15 @@ function checkTheChip(){
 // SCROLL ON PAGEBARS
 
 let screenScrollables = document.getElementsByName("screenScrollable");
+let sideBanner1 = document.getElementsByName("artistBanner")[0];
+let sideBanner2 = document.getElementsByName("playlistBanner")[0];
 
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
         screen.children[0].style.opacity = screen.scrollTop / 200 - 0.5;
         screen.children[0].classList.add("pageBarOn");
+
+        sideBanner1.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
+        sideBanner2.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
     })
 })
