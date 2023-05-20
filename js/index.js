@@ -356,8 +356,11 @@ let sideBanner2 = document.getElementsByName("playlistBanner")[0];
 
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
-        screen.children[0].style.opacity = screen.scrollTop / 200 - 0.5;
-        screen.children[0].classList.add("pageBarOn");
+        if(screen.scrollTop > 175){
+            screen.children[0].classList.add("pageBarOn");
+        }else{
+            screen.children[0].classList.remove("pageBarOn");
+        }
 
         sideBanner1.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
         sideBanner2.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";

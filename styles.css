@@ -82,6 +82,11 @@ button{
     cursor: pointer;
 }
 
+button:hover{
+    transform: scale(0.95);
+    filter: brightness(0.9);
+}
+
 .buttonClicked{
     transform: scale(0.8) rotate(2deg) !important;
     filter: brightness(0.5);
@@ -89,6 +94,20 @@ button{
 
 li{
     transition: all .4s ease-in-out;
+    cursor: pointer;
+}
+
+li:hover{
+    transform: scale(0.95);
+    filter: brightness(0.9);
+}
+
+#changeLoginScreenBtn{
+    cursor: pointer;
+}
+
+#changeLoginScreenBtn:hover{
+    filter: brightness(1.5);
 }
 
 /* ----- HEADER ----- */
@@ -670,6 +689,10 @@ main{
     align-items: center;
 }
 
+.catItems:hover{
+    transform: scale(1) !important;
+}
+
 .catItem{
     width: 100%;
     height: 100%;
@@ -960,7 +983,7 @@ hr{
 
 /* ----- ARTIST SCREEN ----- */
 
-.artistScreen, .playlistScreen{
+.artistScreen, .playlistScreen, .categoryScreen{
     position: absolute;
     top: 0;
     min-height: 100vh;
@@ -972,6 +995,7 @@ hr{
     transform: translateX(150%);
     transition: all .4s ease-in-out;
     z-index: 99;
+    overflow: hidden;
 }
 
 .screenScrollable{
@@ -983,22 +1007,23 @@ hr{
     flex-direction: column;
 }
 
-.artistScreenOpen, .playlistScreenOpen{
+.artistScreenOpen, .playlistScreenOpen, .categoryPageOpen{
     transform: translateX(0%);
     pointer-events: all;
 }
 
-.artistScreen .pageBar, .playlistScreen .pageBar{
+.artistScreen .pageBar, .playlistScreen .pageBar, .categoryScreen .pageBar{
     z-index: 99;
     top: 0;
     border: none;
     border-bottom: 2px solid transparent;
     box-shadow: none;
     position: fixed;
+    transition: all 0.3s ease-in-out;
 }
 
-.artistScreen .pageBar h2, .playlistScreen .pageBar h2{
-    display: none;
+.artistScreen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
+    opacity: 0;
 }
 
 .pageBarOn{
@@ -1009,15 +1034,14 @@ hr{
 }
 
 .pageBarOn h2{
-    display: block !important;
-    transition: none;
+    opacity: 1 !important;
 }
 
-.artistScreen .pageBar button i, .playlistScreen .pageBar button i{
+.artistScreen .pageBar button i, .playlistScreen .pageBar button i, .categoryScreen .pageBar button i{
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 }
 
-.artistScreenOpen .pageBar h2, .playlistScreen .pageBar h2{
+.artistScreenOpen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
     transform: translateX(0%);
 }
 
@@ -1168,6 +1192,33 @@ hr{
     padding-top: 6px;
     padding-left: 5px !important;
 }
+
+.categoryAccentBubble{
+    position: absolute;
+    background: radial-gradient(closest-side, red, transparent);
+    width: 200vw;
+    top: -40vh;
+    left: -50vw;
+    height: 90vh;
+    filter: blur(50px);
+    transition: all 0.2s ease-in-out;
+    animation: blink 4s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateY(-7.5%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
 
 /* ----- PLAYER ----- */
 

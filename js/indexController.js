@@ -5,7 +5,7 @@ import { getDatabase, ref, set, child, get, update, remove } from 'https://www.g
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
 let brojPesama = 21;
-let brojArtista = 12;
+let brojArtista = 13;
 let brojPlejlista = 4;
 let brojKategorija = 12;
 
@@ -430,7 +430,8 @@ function findSearchedArtist(artistName, inputText){
     get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
-            if(artistName.toLowerCase().includes(inputText)){
+            let artistTerms = snapshot.val().ArtistSearchTerms || "";
+            if(artistName.toLowerCase().includes(inputText) || artistTerms.toLowerCase().includes(inputText)){
                 artistImage = snapshot.val().ImageURL;
                 let currentLi = `<li class="artistItemSearch" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`'); clickEffect(this);">
                                     <div>
@@ -495,7 +496,7 @@ function GetCategories(name){
             catName = snapshot.val().Name;
             catColor = snapshot.val().Color;
 
-            currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this)" style="background-color: `+ catColor +`">
+            currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`')" style="background-color: `+ catColor +`">
             <h3>`+ catName +`</h3>
             </div>`;
         }
@@ -506,7 +507,7 @@ function GetCategories(name){
             catName2 = snapshot.val().Name;
             catColor2 = snapshot.val().Color;
 
-            currentLi += `<div class="catItem" onclick="clickEffect(this)" style="background-color: `+ catColor2 +`">
+            currentLi += `<div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName2 +`', '`+ catColor2 +`')" style="background-color: `+ catColor2 +`">
             <h3>`+ catName2 +`</h3>
             </div></li>`;
 
@@ -514,6 +515,35 @@ function GetCategories(name){
         }
     })
 }
+
+// CATEGORY PAGE
+
+let categoryPage = document.getElementsByClassName("categoryScreen")[0];
+let isCategoryPageOpen = false;
+
+export function openCategoryPage(category, color){
+    if(!isCategoryPageOpen){
+        categoryPage.classList.add("categoryPageOpen");
+        categoryPage.children[0].children[0].style.background = `radial-gradient(closest-side, `+ color +`, transparent)`;
+        let categoryNames = document.getElementsByName("categoryName");
+        categoryNames.forEach((name) => {
+            name.innerHTML = category.toUpperCase();
+        })
+    }else{
+
+    }
+    isCategoryPageOpen = true;
+}
+
+function closeCategoryPage(){
+    categoryPage.classList.remove("categoryPageOpen");
+    isCategoryPageOpen = false;
+}
+
+let closeCategoryPageBtn = document.getElementById("closeCategoryPage");
+closeCategoryPageBtn.addEventListener('click', () => {
+    closeCategoryPage();
+});
 
 // ----- ARTIST PAGE SHANANIGANS
 

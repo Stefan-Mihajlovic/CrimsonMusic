@@ -209,6 +209,30 @@
         </div>
     </div>
 
+    <div class="categoryScreen">
+        <div class="screenScrollable" name="screenScrollable">
+            <div class="categoryAccentBubble"></div>
+            <div class="pageBar" name="showUpPageBar">
+                <button type="button"><i class="fa-solid fa-circle-left"></i></button>
+                <h2 name="categoryName"></h2>
+            </div>
+            <div class="pageBar">
+                <button type="button" id="closeCategoryPage"><i class="fa-solid fa-circle-left"></i></button>
+                <h2></h2>
+            </div>
+            <div class="artistInfo">
+                <div class="artistControls">
+                    <div class="artistText">
+                        <h3 name="categoryName">?</h3>
+                    </div>
+                </div>
+            </div>
+            <section class="catWork">
+                <ul class="categoryRecommended"></ul>
+            </section>
+        </div>
+    </div>
+
     <div class="loginScreen">
         <div class="pageBar">
             <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-circle-left"></i></button>
@@ -221,7 +245,7 @@
             <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email">
             <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password">
 
-            <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" onclick="RegToLog()">Log in!</span></h5>
+            <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" id="changeLoginScreenBtn" onclick="RegToLog()">Log in!</span></h5>
 
             <div class="buttonField">
                 <button type="button" id="registerBtn">Register</button>
@@ -260,11 +284,12 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
         window.openPlaylistPage = openPlaylistPage;
+        window.openCategoryPage = openCategoryPage;
     </script>
 
     <audio src="" id="currentSong"></audio>
