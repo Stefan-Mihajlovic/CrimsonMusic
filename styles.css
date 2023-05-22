@@ -27,7 +27,7 @@
 body{
     background-color: black;
     font-family: 'Outfit', sans-serif;
-    min-height: 100vh; 
+    min-height: 100vh;
     color: var(--offWhite);
     overflow: hidden !important;
 }
@@ -77,7 +77,7 @@ h2{
 }
 
 button{
-    transition: all .1s ease-in-out !important;
+    transition: all .15s ease-in-out !important;
     cursor: pointer;
 }
 
@@ -91,7 +91,7 @@ button{
 }
 
 li{
-    transition: all .4s ease-in-out;
+    transition: all .15s ease-in-out;
     cursor: pointer;
 }
 
