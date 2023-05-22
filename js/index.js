@@ -107,6 +107,7 @@ document.querySelectorAll("button").forEach((button) => {
 
 function buttonClickAnim(button){
     button.classList.add("buttonClicked");
+    navigator.vibrate(150);
     setTimeout(() => {
         button.classList.remove("buttonClicked");
     }, 100);
@@ -115,7 +116,7 @@ function buttonClickAnim(button){
 function clickEffect(button){
     if(button !== undefined){
         button.classList.add("buttonClicked");
-        navigator.vibrate(50);
+        navigator.vibrate(150);
         setTimeout(() => {
             button.classList.remove("buttonClicked");
         }, 100);

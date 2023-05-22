@@ -85,11 +85,6 @@ button{
     color: var(--accentColor) !important;
 }
 
-button:hover{
-    transform: scale(0.95);
-    filter: brightness(0.9);
-}
-
 .buttonClicked{
     transform: scale(0.8) rotate(2deg) !important;
     filter: brightness(0.5);
@@ -100,17 +95,8 @@ li{
     cursor: pointer;
 }
 
-/* li:hover{
-    transform: scale(0.95);
-    filter: brightness(0.9);
-} */
-
 #changeLoginScreenBtn{
     cursor: pointer;
-}
-
-#changeLoginScreenBtn:hover{
-    filter: brightness(1.5);
 }
 
 /* ----- HEADER ----- */
