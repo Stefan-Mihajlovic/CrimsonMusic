@@ -38,22 +38,22 @@ function getTime(){
 
 /* ----- HIDE / SHOW HEADER ----- */
 
-let header = document.getElementsByTagName("header")[0];
-let currentScrollMain = 0;
+// let header = document.getElementsByTagName("header")[0];
+// let currentScrollMain = 0;
 
-let main = document.getElementsByClassName("homeScreen")[0];
-main.addEventListener('scroll', () => {
-    if(currentScrollMain > main.scrollTop){
-        header.classList.remove("headerHidden");
-    }else{
-        header.classList.add("headerHidden");
-    }
-    currentScrollMain = main.scrollTop;
-})
+// let main = document.getElementsByClassName("homeScreen")[0];
+// main.addEventListener('scroll', () => {
+//     if(currentScrollMain > main.scrollTop){
+//         header.classList.remove("headerHidden");
+//     }else{
+//         header.classList.add("headerHidden");
+//     }
+//     currentScrollMain = main.scrollTop;
+// })
 
-function showHideHeader(){
-    header.classList.add("headerHidden");
-}
+// function showHideHeader(){
+//     header.classList.add("headerHidden");
+// }
 
 /* ----- SET SCREEN ----- */
 
