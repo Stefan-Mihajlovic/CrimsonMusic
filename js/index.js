@@ -101,6 +101,7 @@ function setHomeScreen(){
 document.querySelectorAll("button").forEach((button) => {
     button.addEventListener('click', () => {
         buttonClickAnim(button);
+        navigator.vibrate(50);
     });
 });
 
@@ -114,6 +115,7 @@ function buttonClickAnim(button){
 function clickEffect(button){
     if(button !== undefined){
         button.classList.add("buttonClicked");
+        navigator.vibrate(50);
         setTimeout(() => {
             button.classList.remove("buttonClicked");
         }, 100);
