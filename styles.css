@@ -113,6 +113,16 @@ li{
     }
 }
 
+@media (pointer:coarse) {
+    button:hover,  li:hover, #changeLoginScreenBtn:hover{
+        -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        transform: none;
+    }
+
+}
+
 /* ----- HEADER ----- */
 
 header{
