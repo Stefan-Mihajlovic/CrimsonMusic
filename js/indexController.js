@@ -269,7 +269,7 @@ function GetArtists(artistName){
             artistImage = snapshot.val().ImageURL;
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
-            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`');">
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`');">
             <img src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
@@ -310,7 +310,7 @@ function GetPlaylists(playlistName){
             playlistLikes = snapshot.val().Likes;
             playlistSongs = snapshot.val().Songs;
             playlistArtists = snapshot.val().Artists;
-            let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+            let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
             <img src="`+ playlistBanner +`" alt="playlistBanner">
             <h3>`+ playlistName +`</h3>
             <h5>`+ playlistArtists +`</h5>
@@ -433,7 +433,7 @@ function findSearchedArtist(artistName, inputText){
             let artistTerms = snapshot.val().ArtistSearchTerms || "";
             if(artistName.toLowerCase().includes(inputText) || artistTerms.toLowerCase().includes(inputText)){
                 artistImage = snapshot.val().ImageURL;
-                let currentLi = `<li class="artistItemSearch" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`'); clickEffect(this);">
+                let currentLi = `<li class="artistItemSearch" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`'); clickEffect(this);">
                                     <div>
                                         <img src="`+ artistImage +`" alt="artistImage">
                                         <h3>`+ artistName +`</h3>
@@ -459,7 +459,7 @@ function findSearchedPlaylist(playlistName, inputText){
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
-                let currentLi =  `<li class="playlistItemSearch" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                let currentLi =  `<li class="playlistItemSearch" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div class="playlistItemHolder">
                         <img src="`+ playlistBanner +`" alt="playlistBanner">
                         <div>
@@ -496,7 +496,7 @@ function GetCategories(name){
             catName = snapshot.val().Name;
             catColor = snapshot.val().Color;
 
-            currentLi += `<li class="catItems"><div class="catItem" onclick="openCategoryPage('`+ catName +`', '`+ catColor +`')" style="background-color: `+ catColor +`">
+            currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`')" style="background-color: `+ catColor +`">
             <h3>`+ catName +`</h3>
             </div>`;
         }
@@ -507,7 +507,7 @@ function GetCategories(name){
             catName2 = snapshot.val().Name;
             catColor2 = snapshot.val().Color;
 
-            currentLi += `<div class="catItem" onclick="openCategoryPage('`+ catName2 +`', '`+ catColor2 +`')" style="background-color: `+ catColor2 +`">
+            currentLi += `<div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName2 +`', '`+ catColor2 +`')" style="background-color: `+ catColor2 +`">
             <h3>`+ catName2 +`</h3>
             </div></li>`;
 
@@ -656,7 +656,7 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
                 playlistBanner = snapshot.val().Banner;
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
-                let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                 <img src="`+ playlistBanner +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>

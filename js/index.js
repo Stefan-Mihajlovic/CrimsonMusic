@@ -106,17 +106,19 @@ document.querySelectorAll("button").forEach((button) => {
 
 function buttonClickAnim(button){
     button.classList.add("buttonClicked");
+    window.navigator.vibrate(200);
     setTimeout(() => {
         button.classList.remove("buttonClicked");
-    }, 100);
+    }, 150);
 }
 
 function clickEffect(button){
     if(button !== undefined){
         button.classList.add("buttonClicked");
+        window.navigator.vibrate(200);
         setTimeout(() => {
             button.classList.remove("buttonClicked");
-        }, 100);
+        }, 150);
     }
 }
 
