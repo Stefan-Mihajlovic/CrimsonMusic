@@ -1230,7 +1230,7 @@ hr{
     z-index: 999;
     display: flex;
     flex-direction: column;
-    height: 50px;
+    height: 55px;
     overflow: hidden;
     transition: all .4s ease-in-out;
     opacity: 0;
@@ -1313,7 +1313,7 @@ hr{
     align-items: center;
     gap: 8px;
     line-height: 18px;
-    margin-left: 3px;
+    margin-left: 1px;
 }
 
 .playerSongText h2{
@@ -1323,16 +1323,20 @@ hr{
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 55vw;
+    font-weight: 500;
 }
 
 .playerSongText h3{
     font-size: 14px;
     color: var(--offWhiteDark);
+    font-weight: 300;
+    line-height: 14px;
+    margin-bottom: 5px;
 }
 
 .playerSongInfo img{
     border-radius: 5px;
-    width: 35px;
+    width: 40px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
