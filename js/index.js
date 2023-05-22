@@ -63,6 +63,7 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
 
     closePlaylistPage();
     closeArtistPage();
+    closeCategoryPage();
 
     if (activeScreen !== currentScreen) {
         let buttons = document.querySelectorAll("nav > button");

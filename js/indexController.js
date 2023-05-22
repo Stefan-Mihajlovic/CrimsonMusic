@@ -535,7 +535,7 @@ export function openCategoryPage(category, color){
     isCategoryPageOpen = true;
 }
 
-function closeCategoryPage(){
+export function closeCategoryPage(){
     categoryPage.classList.remove("categoryPageOpen");
     isCategoryPageOpen = false;
 }
