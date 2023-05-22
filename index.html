@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="styles.css">
@@ -37,7 +37,7 @@
                 <i class="fa-solid fa-face-smile-wink"></i>
                 <h2>Embrace the rhythm of your feelings!</h2>
                 <i class="fa-solid fa-face-sad-cry"></i>
-                <button><i class="fa-solid fa-play"></i></button>
+                <button id="openTheVaultBtn"><i class="fa-solid fa-play"></i></button>
             </div>
         </section>
 
@@ -139,7 +139,7 @@
                     <button class="rewindButton"><i class="fa-solid fa-backward-step"></i></button>
                     <button class="bigPlayButton" onclick="pausePlayCurrentSong()" name="songPlayButton"><i class="fa-solid fa-circle-pause"></i></but>
                     <button class="rewindButton"><i class="fa-solid fa-forward-step"></i></button>
-                    <button><i class="fa-solid fa-repeat"></i></button>
+                    <button id="repeatBtn"><i class="fa-solid fa-repeat"></i></button>
                 </div>
             </div>
         </div>
@@ -284,12 +284,13 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
         window.openPlaylistPage = openPlaylistPage;
         window.openCategoryPage = openCategoryPage;
+        window.playRandomSongForTheVault = playRandomSongForTheVault;
     </script>
 
     <audio src="" id="currentSong"></audio>

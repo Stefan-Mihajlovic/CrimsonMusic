@@ -40,7 +40,6 @@ body{
     height: 100vh;
     overflow: hidden;
     position: relative;
-    padding: 10px;
     gap: 10px;
 }
 
@@ -80,6 +79,10 @@ h2{
 button{
     transition: all .1s ease-in-out !important;
     cursor: pointer;
+}
+
+.buttonTurnedOn i{
+    color: var(--accentColor) !important;
 }
 
 button:hover{
@@ -128,6 +131,11 @@ header{
     left: 0;
     right: 0;
     z-index: 80;
+    transition: all .4s ease-in-out;
+}
+
+.headerHidden{
+    transform: translateY(-75px);
 }
 
 header h2{
@@ -186,7 +194,7 @@ main{
     width: 100%;
     height: calc(100vh - 70px);
     z-index: 10;
-    padding: 15px;
+    padding: 20px;
     padding-bottom: 150px;
     padding-top: 80px;
     overflow-x: hidden;
@@ -233,6 +241,11 @@ main{
     box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2), 0px 0px 15px 5px rgba(0, 0, 0, 0.2);;
     gap: 10px;
     border: 1px solid var(--mainColorLighter);
+    transition: all .4s ease-in-out;
+}
+
+.vaultSectionOn{
+    height: 250px;
 }
 
 .vibeVaultItem video{

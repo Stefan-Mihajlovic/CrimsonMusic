@@ -783,6 +783,46 @@ closePlaylistBtn.addEventListener(('click'), () => {
     closePlaylistPage();
 })
 
+// ----- THE VAULT
+
+let isTheVaultOn = false;
+
+let openTheVaultBtn = document.getElementById("openTheVaultBtn");
+openTheVaultBtn.addEventListener('click', () => {
+    if(!isTheVaultOn){
+        let g = Math.floor(Math.random() * brojPesama) + 1;
+        playerSelectedSongVault(g);
+
+        let vaultSection = document.getElementsByClassName("vaultSection")[0];
+        vaultSection.children[2].classList.add("vaultSectionOn");
+        openTheVaultBtn.style.opacity = 0;
+
+        isTheVaultOn = true;
+    }
+});
+
+function playerSelectedSongVault(songName){
+    let name = songName;
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            songCreator = snapshot.val().Creator;
+            songToBePlayed = snapshot.val().SongURL;
+            songTitle  = snapshot.val().SongName;
+            imageURL = snapshot.val().ImgURL;
+
+            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,"TheVault");
+        }
+    })
+}
+
+export function playRandomSongForTheVault(){
+    let g = Math.floor(Math.random() * brojPesama) + 1;
+    playerSelectedSongVault(g);
+}
+
 // ----- CALLING ALL NECESSARY FUNCTIONS
 getUsername();
 generateSongs();

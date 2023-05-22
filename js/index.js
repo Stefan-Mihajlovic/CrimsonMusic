@@ -36,6 +36,25 @@ function getTime(){
     }
 }
 
+/* ----- HIDE / SHOW HEADER ----- */
+
+let header = document.getElementsByTagName("header")[0];
+let currentScrollMain = 0;
+
+let main = document.getElementsByClassName("homeScreen")[0];
+main.addEventListener('scroll', () => {
+    if(currentScrollMain > main.scrollTop){
+        header.classList.remove("headerHidden");
+    }else{
+        header.classList.add("headerHidden");
+    }
+    currentScrollMain = main.scrollTop;
+})
+
+function showHideHeader(){
+    header.classList.add("headerHidden");
+}
+
 /* ----- SET SCREEN ----- */
 
 let currentScreen = "Home";
@@ -172,7 +191,7 @@ function openBigPlayer(){
     player.classList.add("playerOpen");
     setTimeout(() => {
         player.classList.add("playerOpenTop");
-    }, 350);
+    }, 380);
 }
 
 function closeBigPlayer(){
@@ -185,6 +204,9 @@ const currentSongAudio = document.getElementById("currentSong");
 let playingFrom = document.getElementById("playingFromSpan");
 
 // PLAY THE SELECTED SONG
+
+let isTheVaultOn = false;
+
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
     openMiniPlayer();
 
@@ -213,6 +235,12 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
     });
 
     playingFrom.innerHTML = playedFrom;
+
+    if(playedFrom === "TheVault"){
+        isTheVaultOn = true;
+    }else{
+        isTheVaultOn = false;
+    }
 
 }
 
@@ -283,19 +311,36 @@ function pausePlayCurrentSong(from){
 
 let songTime = document.getElementById("currentSongInput");
 
+let isRepeatOn = false;
+
 currentSongAudio.addEventListener('ended', () => {
-    if(playingFrom.innerHTML === "Playlist"){
-
+    if(isRepeatOn){
+        currentSongAudio.currentTime = 0;
+        currentSongAudio.play();
     }else{
-        let songPlayBtns = document.getElementsByName("songPlayButton");
+        if(playingFrom.innerHTML === "Playlist"){
 
-        songPlayBtns.forEach((button) => {
-            button.children[0].classList.remove("fa-circle-pause");
-            button.children[0].classList.add("fa-circle-play");
-        });
-
-        isSongPaused = true;
+        }
+        if(isTheVaultOn){
+            playRandomSongForTheVault();
+        }
+        else{
+            let songPlayBtns = document.getElementsByName("songPlayButton");
+    
+            songPlayBtns.forEach((button) => {
+                button.children[0].classList.remove("fa-circle-pause");
+                button.children[0].classList.add("fa-circle-play");
+            });
+    
+            isSongPaused = true;
+        }
     }
+});
+
+let repeatBtn = document.getElementById("repeatBtn");
+repeatBtn.addEventListener('click', () => {
+    isRepeatOn = !isRepeatOn;
+    repeatBtn.classList.toggle("buttonTurnedOn");
 });
 
 // Set the seekbar and times relative to the songs current time
@@ -366,3 +411,29 @@ screenScrollables.forEach((screen) => {
         sideBanner2.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
     })
 })
+
+// THE VAULT
+
+function pausePlayCurrentSongVault(){
+
+    let songPlayBtns = document.getElementsByName("songPlayButton");
+
+    if(isSongPaused){
+        songPlayBtns.forEach((button) => {
+            button.children[0].classList.remove("fa-circle-play");
+            button.children[0].classList.add("fa-circle-pause");
+        });
+        
+        currentSongAudio.play();
+        isSongPaused = false;
+    }else{
+        currentSongAudio.pause();
+
+        songPlayBtns.forEach((button) => {
+            button.children[0].classList.remove("fa-circle-pause");
+            button.children[0].classList.add("fa-circle-play");
+        });
+
+        isSongPaused = true;
+    }
+}
