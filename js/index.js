@@ -212,7 +212,6 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
     openMiniPlayer();
 
     currentSongAudio.src = songURL;
-    currentSongAudio.play();
 
     let songBanners = document.getElementsByName("songBanner");
     let songTitles = document.getElementsByName("songTitle");
@@ -242,6 +241,9 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
     }else{
         isTheVaultOn = false;
     }
+
+    currentSongAudio.currentTime = 0;
+    currentSongAudio.play();
 
 }
 
