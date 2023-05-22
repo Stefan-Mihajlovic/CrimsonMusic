@@ -100,10 +100,10 @@ li{
     cursor: pointer;
 }
 
-li:hover{
+/* li:hover{
     transform: scale(0.95);
     filter: brightness(0.9);
-}
+} */
 
 #changeLoginScreenBtn{
     cursor: pointer;
