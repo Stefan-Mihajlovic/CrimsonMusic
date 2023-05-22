@@ -1239,7 +1239,7 @@ hr{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 80px;
+    bottom: 85px;
     padding-inline: 10px;
     z-index: 999;
     display: flex;
