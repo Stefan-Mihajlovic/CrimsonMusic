@@ -290,7 +290,7 @@ main{
 
 /* ----- Recommended songs Section ----- */
 
-.recSongs{
+.recSongs, .categoryRecommendedSongs{
     list-style: none;
     width: 100%;
     position: relative;
@@ -417,7 +417,7 @@ main{
 
 /* ----- Recommended playlists Section ----- */
 
-.recPlaylists{
+.recPlaylists, .categoryRecommendedPlaylists{
     width: 100%;
     height: fit-content;
     display: flex;
@@ -1129,7 +1129,7 @@ hr{
     font-size: 20px;
 }
 
-.artistWork, .playlistWork{
+.artistWork, .playlistWork, .catWork{
     width: 100%;
     padding: 15px;
     display: flex;
@@ -1137,6 +1137,11 @@ hr{
     gap: 15px;
     z-index: 2;
     background-color: var(--sidePageback);
+}
+
+.catWork{
+    padding-top: 0px !important;
+    background-color: transparent !important;
 }
 
 .latestRelease{
@@ -1227,13 +1232,18 @@ hr{
     }
 }
 
+.center{
+    text-align: center;
+}
+
 .categoryScreen .screenScrollable .artistInfo .artistControls{
     padding-top: 160px;
+    padding-bottom: 0px !important;
 }
 
 .catBanner{
     height: 200px !important;
-    clip-path: ellipse(72% 52% at 50% 38%);
+    clip-path: ellipse(100% 52% at 50% 38%);
 }
 
 /* ----- PLAYER ----- */
@@ -1277,7 +1287,7 @@ hr{
 }
 
 .playerOpenTop{
-    top: -70px;
+    top: -75px;
 }
 
 .player .pageBar{

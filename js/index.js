@@ -418,6 +418,7 @@ function checkTheChip(){
 let screenScrollables = document.getElementsByName("screenScrollable");
 let sideBanner1 = document.getElementsByName("artistBanner")[0];
 let sideBanner2 = document.getElementsByName("playlistBanner")[0];
+let sideBanner3 = document.getElementsByName("catBanner")[0];
 
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
@@ -429,6 +430,7 @@ screenScrollables.forEach((screen) => {
 
         sideBanner1.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
         sideBanner2.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
+        sideBanner3.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
     })
 })
 

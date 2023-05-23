@@ -399,7 +399,7 @@ function findSearchedSong(songName, inputText){
     get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             songTitle  = snapshot.val().SongName;
-            if(songTitle.toLowerCase().includes(inputText)){
+            if(songTitle.toLowerCase().includes(inputText.toLowerCase())){
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
                 imageURL = snapshot.val().ImgURL;
@@ -454,7 +454,7 @@ function findSearchedPlaylist(playlistName, inputText){
     get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             playlistName = snapshot.val().Title;
-            if(playlistName.toLowerCase().includes(inputText)){
+            if(playlistName.toLowerCase().includes(inputText.toLowerCase())){
                 playlistBanner = snapshot.val().Banner;
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
@@ -522,6 +522,9 @@ function GetCategories(name){
 // CATEGORY PAGE
 
 let categoryPage = document.getElementsByClassName("categoryScreen")[0];
+let categoryRecommendedPlaylistsList = document.getElementsByClassName("categoryRecommendedPlaylists")[0];
+let categoryRecommendedSongsList = document.getElementsByClassName("categoryRecommendedSongs")[0];
+
 let isCategoryPageOpen = false;
 
 export function openCategoryPage(category, color, banner){
@@ -537,11 +540,22 @@ export function openCategoryPage(category, color, banner){
         let categoryNames = document.getElementsByName("categoryName");
         categoryNames.forEach((name) => {
             name.innerHTML = category.toUpperCase();
-        })
-    }else{
+        });
 
+        categoryRecommendedPlaylistsList.innerHTML = "";
+        for (let i = 1; i <= brojPlejlista; i++) {
+            findPlaylistOfCategory(i, category);
+        }
+
+        categoryRecommendedSongsList.innerHTML = "";
+        for (let i = 1; i <= brojPesama; i++) {
+            findSongOfCategory(i, category);
+        }
+
+        isCategoryPageOpen = true;
+    }else{
+        isCategoryPageOpen = false;
     }
-    isCategoryPageOpen = true;
 }
 
 export function closeCategoryPage(){
@@ -553,6 +567,63 @@ let closeCategoryPageBtn = document.getElementById("closeCategoryPage");
 closeCategoryPageBtn.addEventListener('click', () => {
     closeCategoryPage();
 });
+
+function findPlaylistOfCategory(playlistName, inputText){
+    let name = playlistName;
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            playlistName = snapshot.val().Title;
+            let playlistCategory = snapshot.val().Category;
+            if(playlistCategory.toLowerCase().includes(inputText.toLowerCase())){
+                playlistBanner = snapshot.val().Banner;
+                playlistLikes = snapshot.val().Likes;
+                playlistSongs = snapshot.val().Songs;
+                playlistArtists = snapshot.val().Artists;
+                let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                <img src="`+ playlistBanner +`" alt="playlistBanner">
+                <h3>`+ playlistName +`</h3>
+                <h5>`+ playlistArtists +`</h5>
+                </li>`;
+                categoryRecommendedPlaylistsList.innerHTML += currentLi;
+            }
+        }
+    })
+}
+
+function findSongOfCategory(songName, inputText){
+    let name = songName;
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let songCat  = snapshot.val().Categories;
+            if(songCat.toLowerCase().includes(inputText.toLowerCase())){
+                songTitle  = snapshot.val().SongName;
+                songToBePlayed = snapshot.val().SongURL;
+                songCreator = snapshot.val().Creator;
+                imageURL = snapshot.val().ImgURL;
+                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                    <div class="songInfo">
+                        <img src="`+imageURL+`" alt="songBanner">
+                        <div class="songText">
+                            <h2>`+ songTitle +`</h2>
+                            <h3>`+ songCreator +`</h3>
+                        </div>
+                    </div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
+                    <div class="songBtns">
+                        <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                    </div>
+                    </li>`;
+                categoryRecommendedSongsList.innerHTML += currentLI;
+            }
+        }
+    })
+}
 
 // ----- ARTIST PAGE SHANANIGANS
 
