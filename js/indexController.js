@@ -487,6 +487,7 @@ function generateCategories(){
 
 function GetCategories(name){
     let catName,catName2,catColor,catColor2;
+    let catBanner,catBanner2;
     let currentLi = "";
 
     let dbRef = ref(realdb);
@@ -495,8 +496,9 @@ function GetCategories(name){
         if(snapshot.exists()){
             catName = snapshot.val().Name;
             catColor = snapshot.val().Color;
+            catBanner = snapshot.val().Banner;
 
-            currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`')" style="background-color: `+ catColor +`">
+            currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`', '`+ catBanner +`')" style="background-color: `+ catColor +`">
             <h3>`+ catName +`</h3>
             </div>`;
         }
@@ -506,8 +508,9 @@ function GetCategories(name){
         if(snapshot.exists()){
             catName2 = snapshot.val().Name;
             catColor2 = snapshot.val().Color;
+            catBanner2 = snapshot.val().Banner;
 
-            currentLi += `<div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName2 +`', '`+ catColor2 +`')" style="background-color: `+ catColor2 +`">
+            currentLi += `<div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName2 +`', '`+ catColor2 +`', '`+ catBanner2 +`')" style="background-color: `+ catColor2 +`">
             <h3>`+ catName2 +`</h3>
             </div></li>`;
 
@@ -521,7 +524,13 @@ function GetCategories(name){
 let categoryPage = document.getElementsByClassName("categoryScreen")[0];
 let isCategoryPageOpen = false;
 
-export function openCategoryPage(category, color){
+export function openCategoryPage(category, color, banner){
+
+    let catBanners = document.getElementsByName("catBanner");
+    catBanners.forEach((cat) => {
+        cat.src = banner;
+    })
+
     if(!isCategoryPageOpen){
         categoryPage.classList.add("categoryPageOpen");
         categoryPage.children[0].children[0].style.background = `radial-gradient(closest-side, `+ color +`, transparent)`;

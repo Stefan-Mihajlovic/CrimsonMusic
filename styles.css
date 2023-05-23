@@ -1208,22 +1208,33 @@ hr{
     filter: blur(50px);
     transition: all 0.2s ease-in-out;
     animation: blink 4s ease-in-out infinite;
+    z-index: -1;
+    opacity: 0.8;
 }
 
 @keyframes blink {
     0% {
-      opacity: 1;
+      opacity: 0.8;
       transform: translateY(0%);
     }
     50% {
-      opacity: 0.8;
-      transform: translateY(-7.5%);
+      opacity: 0.6;
+      transform: translateY(-5%);
     }
     100% {
-      opacity: 1;
+      opacity: 0.8;
       transform: translateY(0%);
     }
-  }
+}
+
+.categoryScreen .screenScrollable .artistInfo .artistControls{
+    padding-top: 160px;
+}
+
+.catBanner{
+    height: 200px !important;
+    clip-path: ellipse(72% 52% at 50% 38%);
+}
 
 /* ----- PLAYER ----- */
 
