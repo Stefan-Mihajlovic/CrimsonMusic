@@ -38,22 +38,38 @@ function getTime(){
 
 /* ----- HIDE / SHOW HEADER ----- */
 
-// let header = document.getElementsByTagName("header")[0];
-// let currentScrollMain = 0;
+let header = document.getElementsByTagName("header")[0];
 
-// let main = document.getElementsByClassName("homeScreen")[0];
-// main.addEventListener('scroll', () => {
-//     if(currentScrollMain > main.scrollTop){
-//         header.classList.remove("headerHidden");
-//     }else{
-//         header.classList.add("headerHidden");
-//     }
-//     currentScrollMain = main.scrollTop;
-// })
+let main = document.getElementsByClassName("homeScreen")[0];
+main.addEventListener('scroll', () => {
+    if(main.scrollTop <= 50){
+        header.classList.remove("headerHidden");
+    }else{
+        header.classList.add("headerHidden");
+    }
+})
 
-// function showHideHeader(){
-//     header.classList.add("headerHidden");
-// }
+let main2 = document.getElementsByClassName("searchScreen")[0];
+main2.addEventListener('scroll', () => {
+    if(main2.scrollTop <= 50){
+        header.classList.remove("headerHidden");
+    }else{
+        header.classList.add("headerHidden");
+    }
+})
+
+let main3 = document.getElementsByClassName("yoursScreen")[0];
+main3.addEventListener('scroll', () => {
+    if(main3.scrollTop <= 50){
+        header.classList.remove("headerHidden");
+    }else{
+        header.classList.add("headerHidden");
+    }
+})
+
+function showHeader(){
+    header.classList.remove("headerHidden");
+}
 
 /* ----- SET SCREEN ----- */
 
@@ -64,6 +80,7 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
     closePlaylistPage();
     closeArtistPage();
     closeCategoryPage();
+    showHeader();
 
     if (activeScreen !== currentScreen) {
         let buttons = document.querySelectorAll("nav > button");

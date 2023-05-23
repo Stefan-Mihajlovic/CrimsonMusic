@@ -113,6 +113,7 @@ header{
     position: fixed;
     backdrop-filter: blur(20px) brightness(0.9);
     -webkit-backdrop-filter: blur(20px) brightness(0.9);
+    border-bottom: 1px solid  var(--playerColor);
     top: 0;
     left: 0;
     right: 0;
@@ -472,6 +473,10 @@ main{
 
 /* ----- SEARCH SCREEN ----- */
 
+.searchScreen{
+    padding-top: 90px;
+}
+
 .searchScreen form{
     width: 100%;
     display: flex;
@@ -479,7 +484,7 @@ main{
 }
 
 .searchScreen input{
-    padding: 12px;
+    padding: 15px;
     width: 80%;
     flex-grow: 1;
     border-radius: 10px;
@@ -496,6 +501,7 @@ main{
     color: var(--mainColor);
     border: 1px solid var(--mainColor);
     transition: all .3s ease-in-out;
+    font-size: 15px;
 }
 
 .searchList{
@@ -632,8 +638,8 @@ main{
 }
 
 .searchChip{
-    width: 75px;
-    height: 35px;
+    width: 90px;
+    height: 37.5px;
     position: relative;
     flex-shrink: 0;
 }
@@ -1225,8 +1231,7 @@ hr{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 85px;
-    padding-inline: 10px;
+    bottom: 70px;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -1254,7 +1259,6 @@ hr{
 .playerOpen{
     bottom: 0;
     height: calc(100vh + 70px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
-    padding-inline: 0px;
 }
 
 .playerOpen .bigPlayer .songBackdrop{
@@ -1298,9 +1302,8 @@ hr{
     background-color: rgba(37, 37, 37, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--playerColor);
+    border-top: 1px solid var(--playerColor);
     padding: 5px;
-    border-radius: 7px;
     transition: all .4s ease-in-out;
 }
 
@@ -1314,7 +1317,7 @@ hr{
     align-items: center;
     gap: 8px;
     line-height: 18px;
-    margin-left: 1px;
+    margin-left: 3px;
 }
 
 .playerSongText h2{

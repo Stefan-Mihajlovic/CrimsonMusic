@@ -795,7 +795,11 @@ openTheVaultBtn.addEventListener('click', () => {
 
         let vaultSection = document.getElementsByClassName("vaultSection")[0];
         vaultSection.children[2].classList.add("vaultSectionOn");
-        openTheVaultBtn.style.opacity = 0;
+        vaultSection.innerHTML = `<h2 class="catTitle">TheVault</h2>
+        <h5 class="catDesc">Unlock the perfect soundtrack to your emotions with TheVault - the ultimate musical treasure chest that tunes in to your every mood and vibe!</h5>
+        <div class="vibeVaultItem">
+            <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>
+        </div>`;
 
         isTheVaultOn = true;
     }
