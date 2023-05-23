@@ -1279,7 +1279,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
-    height: calc(100vh + 70px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    height: calc(100vh + 75px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
 }
 
 .playerOpen .bigPlayer .songBackdrop{
