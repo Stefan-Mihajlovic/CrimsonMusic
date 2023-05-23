@@ -1231,7 +1231,7 @@ hr{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 70px;
+    bottom: 75px;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -1303,7 +1303,7 @@ hr{
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid var(--playerColor);
-    padding: 5px;
+    padding: 7px;
     transition: all .4s ease-in-out;
 }
 
