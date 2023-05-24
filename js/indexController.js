@@ -4,7 +4,7 @@ import { } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 import { getDatabase, ref, set, child, get, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
-let brojPesama = 21;
+let brojPesama = 23;
 let brojArtista = 13;
 let brojPlejlista = 4;
 let brojKategorija = 12;
