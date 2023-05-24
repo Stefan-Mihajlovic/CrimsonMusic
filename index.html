@@ -147,7 +147,6 @@
 
     <div class="categoryScreen">
         <div class="screenScrollable" name="screenScrollable">
-            <div class="categoryAccentBubble"></div>
             <div class="pageBar" name="showUpPageBar">
                 <button type="button"><i class="fa-solid fa-circle-left"></i></button>
                 <h2 name="categoryName"></h2>
@@ -156,6 +155,7 @@
                 <button type="button" id="closeCategoryPage"><i class="fa-solid fa-circle-left"></i></button>
                 <h2></h2>
             </div>
+            <div class="categoryAccentBubble"></div>
             <div class="artistInfo">
                 <img name="catBanner" src="" alt="categoryBanner" class="sideBanner catBanner">
                 <div class="artistControls">
@@ -284,6 +284,13 @@
         <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i></button>
         <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-solid fa-border-all"></i></button>
+    </nav>
+
+    <nav class="navBig">
+        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i>Home</button>
+        <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-solid fa-border-all"></i>Playlists</button>
+        <button type="button" onclick="openLoginScreen();"><i class="fa-solid fa-circle-user"></i>Account</button>
     </nav>
     </div>
 

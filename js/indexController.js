@@ -524,6 +524,7 @@ function GetCategories(name){
 let categoryPage = document.getElementsByClassName("categoryScreen")[0];
 let categoryRecommendedPlaylistsList = document.getElementsByClassName("categoryRecommendedPlaylists")[0];
 let categoryRecommendedSongsList = document.getElementsByClassName("categoryRecommendedSongs")[0];
+let categoryAccentBubble = document.getElementsByClassName("categoryAccentBubble")[0];
 
 let isCategoryPageOpen = false;
 
@@ -536,7 +537,7 @@ export function openCategoryPage(category, color, banner){
 
     if(!isCategoryPageOpen){
         categoryPage.classList.add("categoryPageOpen");
-        categoryPage.children[0].children[0].style.background = `radial-gradient(closest-side, `+ color +`, transparent)`;
+        categoryAccentBubble.style.backgroundImage = `radial-gradient(closest-side, `+ color +`, transparent)`;
         let categoryNames = document.getElementsByName("categoryName");
         categoryNames.forEach((name) => {
             name.innerHTML = category.toUpperCase();
