@@ -1288,7 +1288,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
-    height: 100svh;
+    height: calc(100svh + 75px);
 }
 
 .playerOpen .bigPlayer .songBackdrop{
