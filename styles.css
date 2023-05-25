@@ -76,6 +76,15 @@ h2{
     scrollbar-width: none;
 }
 
+h3::-webkit-scrollbar{
+    display: none;
+}
+
+h3{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 button{
     transition: all .15s ease-in-out !important;
     cursor: pointer;
@@ -657,6 +666,7 @@ main{
     background-color: var(--mainColorLighter);
     z-index: 1;
     transition: all .1s ease-in-out;
+    cursor: pointer;
 }
 
 .allchipCh{
@@ -1268,8 +1278,7 @@ hr{
     position: absolute;
     height: 175vh;
     top: -175px;
-    left: -175px;
-    right: -175px;
+    width: 200vw;
     z-index: -1;
     filter: blur(40px) brightness(0.4);
     opacity: 0;
@@ -1348,6 +1357,7 @@ hr{
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 55vw;
+    max-width: 200px;
     font-weight: 500;
 }
 
@@ -1357,6 +1367,7 @@ hr{
     font-weight: 300;
     line-height: 14px;
     margin-bottom: 5px;
+    max-width: 200px;
 }
 
 .playerSongInfo img{
@@ -1403,7 +1414,9 @@ hr{
     display: flex;
     align-items: center;
     flex-direction: column;
+    justify-content: center;
     padding: 35px;
+    gap: 10px;
     padding-bottom: 0px;
     transition: all .5s ease-in-out;
     transform: translateY(70%);
@@ -1415,6 +1428,7 @@ hr{
 
 .bigSongInfo img{
     width: 100%;
+    max-width: 325px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 5px;
@@ -1425,6 +1439,7 @@ hr{
 .bigSongInfo .playerSongText{
     text-align: left;
     width: 100%;
+    max-width: 300px;
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -1470,7 +1485,11 @@ hr{
 }
 
 .bigControls{
+    position: absolute;
+    bottom: 0px;
+    padding-bottom: 30px;
     width: 100%;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1479,6 +1498,7 @@ hr{
     transition: all .47s linear;
     margin-top: 15px;
     filter: drop-shadow(0px 0px 20px black);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), transparent);
 }
 
 .playerOpen .bigPlayer .bigControls{
@@ -1570,9 +1590,26 @@ nav{
 .navBig{
     display: none;
     top: 0;
-    height: 50px;
+    align-items: center;
+    height: 60px;
     border-top: none;
     border-bottom: 1px solid  var(--playerColor);
+}
+
+.navBig img{
+    width: 40px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.navBig div{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    pointer-events: none;
 }
 
 nav button{
@@ -1594,6 +1631,13 @@ nav button{
     color: var(--offWhite);
     font-weight: 600;
     gap: 10px;
+    transition: all 0.2s ease-in-out;
+    font-size: 17px;
+}
+
+.navBig button:hover{
+    filter: brightness(1.2);
+    transform: scale(1.05);
 }
 
 .activeScreen{
@@ -1622,6 +1666,79 @@ nav button i{
     color: var(--accentColor) !important;
 }
 
+/* ----- MAX WIDTH 370px ----- */
+
+@media (max-width: 370px) {
+    .bpCC{
+        gap: 3vw;
+    }
+    .bpCC button i{
+        font-size: 1.5rem;
+    }
+    .bigPlayButton i{
+        font-size: 3.2rem !important;
+    }
+    .rewindButton i{
+        font-size: 1.7rem !important;
+    }
+}
+
+/* ----- LANDSCAPE ORIENTATION ----- */
+@media screen and (orientation: landscape) {
+
+}
+
+/* ----- MAX WIDTH 335px ----- */
+
+@media (max-width: 335px) {
+    .bpCC{
+        gap: 1vw;
+    }
+    .bigPlayButton i{
+        font-size: 3rem !important;
+    }
+}
+
+/* ----- MAX WIDTH 300px ----- */
+
+@media (max-width: 300px) {
+    .bpCC{
+        gap: 0vw;
+    }
+    .bigPlayButton i{
+        font-size: 2.5rem !important;
+    }
+    .bpCC button i{
+        font-size: 1.2rem;
+    }
+    .rewindButton i{
+        font-size: 1.4rem !important;
+    }
+}
+
+/* ----- MIN WIDTH 400px ----- */
+
+@media (min-width: 400px) {
+    .bpCC{
+        gap: 5vw;
+    }
+    .bpCC button i{
+        font-size: 2rem;
+    }
+    .bigPlayButton i{
+        color: var(--mainColor);
+        font-size: 3.6rem !important;
+        margin-inline: 5px;
+    }
+    .rewindButton i{
+        font-size: 2.3rem !important;
+    }
+    .bigControls img{
+        width: 100% !important;
+        max-width: 500px !important;
+    }
+}
+
 /* ----- MIN WIDTH 500px ----- */
 
 @media (min-width: 500px){
@@ -1641,7 +1758,15 @@ nav button i{
         bottom: -1px;
     }
     .artistScreen, .playlistScreen, .categoryScreen{
-        top: 51px;
+        top: 61px;
         border-top: 1px solid var(--playerColor);
+    }
+}
+
+/* ----- MIN WIDTH 900px ----- */
+
+@media (min-width: 900px){
+    .navBig div{
+        display: flex;
     }
 }
