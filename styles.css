@@ -1288,7 +1288,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
-    height: calc(100vh + 75px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    height: 100svh;
 }
 
 .playerOpen .bigPlayer .songBackdrop{
@@ -1486,7 +1486,7 @@ hr{
 
 .bigControls{
     position: absolute;
-    bottom: env(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom, 0px);
     padding-bottom: 30px;
     width: 100%;
     max-width: 700px;
