@@ -1286,6 +1286,23 @@ hr{
     transition: all 0.3s ease-out;
 }
 
+.playerSongInfo img{
+    border-radius: 5px;
+    width: 40px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* ----- LANDSCAPE ORIENTATION ----- */
+@media screen and (orientation: landscape) {
+    .player{
+        height: 70px;
+    }
+    .playerSongInfo img{
+        width: 55px;
+    }
+}
+
 .playerOpen{
     bottom: 0;
     height: calc(100svh + 75px);
@@ -1368,13 +1385,6 @@ hr{
     line-height: 14px;
     margin-bottom: 5px;
     max-width: 200px;
-}
-
-.playerSongInfo img{
-    border-radius: 5px;
-    width: 40px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
 }
 
 .playerSongBtns{
@@ -1683,10 +1693,7 @@ nav button i{
     }
 }
 
-/* ----- LANDSCAPE ORIENTATION ----- */
-@media screen and (orientation: landscape) {
 
-}
 
 /* ----- MAX WIDTH 335px ----- */
 
