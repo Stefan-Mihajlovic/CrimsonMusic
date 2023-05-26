@@ -257,12 +257,6 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
 
     playingFrom.innerHTML = playedFrom;
 
-    if(playedFrom === "TheVault"){
-        isTheVaultOn = true;
-    }else{
-        isTheVaultOn = false;
-    }
-
     currentSongAudio.currentTime = 0;
     currentSongAudio.play();
 
@@ -336,6 +330,10 @@ function pausePlayCurrentSong(from){
 let songTime = document.getElementById("currentSongInput");
 
 let isRepeatOn = false;
+
+function setTheVault(){
+    isTheVaultOn = true;
+}
 
 currentSongAudio.addEventListener('ended', () => {
     if(isRepeatOn){

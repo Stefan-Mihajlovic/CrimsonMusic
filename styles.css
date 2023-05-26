@@ -1293,6 +1293,14 @@ hr{
     object-fit: cover;
 }
 
+.playerOpen .bigPlayer .songBackdrop{
+    opacity: 1;
+}
+
+.playerOpenTop{
+    top: -75px;
+}
+
 /* ----- LANDSCAPE ORIENTATION ----- */
 @media screen and (orientation: landscape) {
     .player{
@@ -1301,6 +1309,9 @@ hr{
     .playerSongInfo img{
         width: 55px;
     }
+    .playerOpenTop{
+        top: -90px;
+    }
 }
 
 .playerOpen{
@@ -1308,12 +1319,10 @@ hr{
     height: calc(100svh + 75px);
 }
 
-.playerOpen .bigPlayer .songBackdrop{
-    opacity: 1;
-}
-
-.playerOpenTop{
-    top: -75px;
+@media screen and (orientation: landscape) {
+    .playerOpen{
+        height: calc(100svh + 90px);
+    }
 }
 
 .player .pageBar{
@@ -1775,5 +1784,14 @@ nav button i{
 @media (min-width: 900px){
     .navBig div{
         display: flex;
+    }
+}
+
+/* ----- MIN HEIGHT 570px ----- */
+
+@media (max-height: 570px){
+    .bigSongInfo img{
+        width: 60%;
+        aspect-ratio: 1 / 1;
     }
 }
