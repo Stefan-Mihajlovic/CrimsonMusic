@@ -1269,7 +1269,7 @@ hr{
     flex-direction: column;
     height: 55px;
     overflow: hidden;
-    transition: all .5s ease;
+    transition: all .3s linear;
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%);
@@ -1283,7 +1283,7 @@ hr{
     z-index: -1;
     object-fit: cover;
     pointer-events: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s linear;
     filter: blur(40px) brightness(0.5);
 }
 
