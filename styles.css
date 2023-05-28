@@ -1284,7 +1284,7 @@ hr{
     filter: blur(40px);
     pointer-events: none;
     transition: all 0.3s ease-out;
-    opacity: 0.5;
+    filter: blur(40px) brightness(0.5);
 }
 
 .playerSongInfo img{
@@ -1358,8 +1358,6 @@ hr{
     display: flex;
     justify-content: space-between;
     background-color: rgba(37, 37, 37, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid var(--playerColor);
     padding: 7px;
     transition: all .4s ease-in-out;
