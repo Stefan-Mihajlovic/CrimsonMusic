@@ -213,7 +213,7 @@ function openBigPlayer(){
     player.classList.add("playerOpen");
     setTimeout(() => {
         player.classList.add("playerOpenTop");
-    }, 380);
+    }, 600);
 }
 
 function closeBigPlayer(){
