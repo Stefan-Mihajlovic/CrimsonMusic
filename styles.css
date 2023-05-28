@@ -1282,6 +1282,7 @@ hr{
     width: 200vw;
     z-index: -1;
     filter: blur(40px);
+    object-fit: cover;
     pointer-events: none;
     transition: all 0.3s ease-out;
     filter: blur(40px) brightness(0.5);
