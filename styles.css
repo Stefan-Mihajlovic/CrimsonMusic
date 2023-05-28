@@ -310,11 +310,11 @@ main{
 
 .songItem{
     width: 100%;
-    height: 50px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px;
+    padding: 6px;
     border-radius: 7px;
     position: relative;
     background-color: var(--secondaryColor);
@@ -396,7 +396,7 @@ main{
 }
 
 .artistItem{
-    width: 100px;
+    width: 115px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -749,7 +749,7 @@ main{
     padding-inline: 15px;
     justify-content: flex-start;
     gap: 15px;
-    border-bottom: 2px solid var(--playerColor);
+    border-bottom: 1px solid var(--playerColor);
     box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
 }
 
@@ -1281,10 +1281,10 @@ hr{
     top: -175px;
     width: 200vw;
     z-index: -1;
-    filter: blur(40px) brightness(0.4);
-    opacity: 0;
+    filter: blur(40px);
     pointer-events: none;
     transition: all 0.3s ease-out;
+    opacity: 0.5;
 }
 
 .playerSongInfo img{
@@ -1294,12 +1294,13 @@ hr{
     object-fit: cover;
 }
 
-.playerOpen .bigPlayer .songBackdrop{
+.playerOpen .songBackdrop{
     opacity: 1;
+    filter: blur(40px) brightness(0.5);
 }
 
 .playerOpenTop{
-    top: -75px;
+    top: -55px;
 }
 
 /* ----- LANDSCAPE ORIENTATION ----- */
@@ -1311,18 +1312,18 @@ hr{
         width: 55px;
     }
     .playerOpenTop{
-        top: -90px;
+        top: -70px;
     }
 }
 
 .playerOpen{
     bottom: 0;
-    height: calc(100svh + 75px);
+    height: calc(100svh + 55px);
 }
 
 @media screen and (orientation: landscape) {
     .playerOpen{
-        height: calc(100svh + 90px);
+        height: calc(100svh + 70px);
     }
 }
 
@@ -1362,11 +1363,6 @@ hr{
     border-top: 1px solid var(--playerColor);
     padding: 7px;
     transition: all .4s ease-in-out;
-}
-
-.playerOpen .miniPlayer{
-    background-color: var(--playerColor);
-    margin: 10px;
 }
 
 .playerSongInfo{
@@ -1436,6 +1432,7 @@ hr{
     flex-direction: column;
     justify-content: center;
     padding: 35px;
+    padding-top: 15px;
     gap: 10px;
     padding-bottom: 0px;
     transition: all .5s ease-in-out;
@@ -1454,6 +1451,17 @@ hr{
     border-radius: 5px;
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 65px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- ORIENT - LANDSCAPE PLAYER */
+
+@media screen and (orientation: landscape) {
+    .bigSongInfo{
+        flex-direction: row;
+    }
+    .bigSongInfo img{
+        width: 20% !important;
+    }
 }
 
 .bigSongInfo .playerSongText{
