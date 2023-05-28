@@ -1281,10 +1281,9 @@ hr{
     top: -175px;
     width: 200vw;
     z-index: -1;
-    filter: blur(40px);
     object-fit: cover;
     pointer-events: none;
-    transition: all 0.3s ease-out;
+    transition: all 0.3s ease;
     filter: blur(40px) brightness(0.5);
 }
 
@@ -1293,11 +1292,6 @@ hr{
     width: 40px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-}
-
-.playerOpen .songBackdrop{
-    opacity: 1;
-    filter: blur(40px) brightness(0.5);
 }
 
 .playerOpenTop{
