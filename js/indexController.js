@@ -594,14 +594,15 @@ function findPlaylistOfCategory(playlistName, inputText){
     })
 }
 
+let songCat = "";
+
 function findSongOfCategory(songName, inputText){
     let name = songName;
-
     let dbRef = ref(realdb);
 
     get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
-            let songCat  = snapshot.val().Categories;
+            songCat  = snapshot.val().Categories;
             if(songCat.toLowerCase().includes(inputText.toLowerCase())){
                 songTitle  = snapshot.val().SongName;
                 songToBePlayed = snapshot.val().SongURL;

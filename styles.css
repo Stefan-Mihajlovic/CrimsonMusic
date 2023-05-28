@@ -713,13 +713,13 @@ main{
     height: 100%;
     border-radius: 10px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     overflow: hidden;
     position: relative;
     background-color: var(--mainColorLighter);
     background:
-    radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,.2) 21%, rgba(255,255,255,.2) 34%, transparent 35%, transparent),
-    radial-gradient(circle at 0% 50%, transparent 20%, rgba(255,255,255,.2) 21%, rgba(255,255,255,.2) 34%, transparent 35%, transparent) 0 -50px;
+        radial-gradient(circle at 100% 60%, transparent 0%, rgba(255,255,255,.2) 21%, rgba(255,255,255,.2) 34%, transparent 0%),
+        radial-gradient(circle at 0% 60%, transparent 0%, rgba(255,255,255,.2) 21%, rgba(255,255,255,.2) 34%, transparent 0%) 0 -50px;
     background-size:75px 100px;
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
@@ -729,14 +729,14 @@ main{
 .catItem h3{
     position: absolute;
     width: 100%;
-    height: 100%;
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-shadow: 0px 0px 3px black;
+    text-shadow: 0px 0px 10px black;
     text-transform: uppercase;
-    font-size: 15px;
+    font-size: 20px;
+    padding: 10px;
 }
 
 /* ----- LOGIN SCREEN ----- */
@@ -1070,6 +1070,7 @@ hr{
     object-fit: cover;
     height: 300px;
     border-bottom: 1px solid var(--playerColor);
+    transition: all 0.03s ease-in-out;
 }
 
 .artistControls{
