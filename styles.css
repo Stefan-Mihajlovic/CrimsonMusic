@@ -314,7 +314,7 @@ main{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px;
     border-radius: 7px;
     position: relative;
     background-color: var(--secondaryColor);
@@ -347,11 +347,12 @@ main{
     color: var(--offWhiteDark);
     line-height: 10px;
     margin-bottom: 3px;
+    font-weight: 400;
 }
 
 .songInfo img{
     border-radius: 5px;
-    width: 35px;
+    width: 40px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
@@ -359,7 +360,7 @@ main{
 .songBtns{
     display: flex;
     gap: 15px;
-    padding-right: 5px;
+    padding-right: 10px;
     z-index: 2;
 }
 

@@ -52,7 +52,7 @@ function isEmptyOrSpaces(str){
 
 function Validation(){
     let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook)\.com$/;
-    let userregex = /^[a-zA-Z0-9]{5,}$/;
+    let userregex = /^[a-zA-Z0-9]{4,}$/;
 
     if(isEmptyOrSpaces(username.value) || isEmptyOrSpaces(email.value) ||
     isEmptyOrSpaces(password.value)){
@@ -89,7 +89,8 @@ function RegisterUser(){
             {
                 Username: username.value,
                 Email: email.value,
-                Password: encPass()
+                Password: encPass(),
+                Playlists: ""
             })
             .then(()=>{
                 alert('User registered successfuly!');
@@ -279,6 +280,8 @@ function GetArtists(artistName){
 }
 
 function generateArtists(){
+
+console.log();
 
     let randomList = [];
 
@@ -908,6 +911,37 @@ export function playRandomSongForTheVault(){
     setTheVault();
     let g = Math.floor(Math.random() * brojPesama) + 1;
     playerSelectedSongVault(g);
+}
+
+// Make a playlist
+
+
+
+export function MakeAPlaylist(){
+    const dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            set(ref(realdb, "Users/"+currentUser.Username),
+            {
+                Username: setUsername,
+                Email: setEmail,
+                Password: setPassword,
+                Playlists: (setPlaylists + ",1")
+            })
+            .then(()=>{
+                alert("Playlist made");
+
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            })
+        }
+    })
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS

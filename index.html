@@ -93,7 +93,8 @@
     </main>
 
     <main class="yoursScreen">
-        <h1>Yours</h1>
+        <h1>Library</h1>
+        <button onclick="MakeAPlaylist()">Make A Playlist</button>
     </main>
 
     <div class="player">
@@ -299,7 +300,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -307,6 +308,7 @@
         window.openCategoryPage = openCategoryPage;
         window.closeCategoryPage = closeCategoryPage;
         window.playRandomSongForTheVault = playRandomSongForTheVault;
+        window.MakeAPlaylist = MakeAPlaylist;
     </script>
 
     <audio src="" id="currentSong"></audio>
