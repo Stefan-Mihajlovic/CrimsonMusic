@@ -728,7 +728,6 @@ main{
 
 .catItem h3{
     position: absolute;
-    width: 100%;
     z-index: 2;
     display: flex;
     align-items: center;
