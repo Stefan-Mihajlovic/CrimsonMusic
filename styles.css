@@ -1269,7 +1269,7 @@ hr{
     flex-direction: column;
     height: 55px;
     overflow: hidden;
-    transition: all .3s linear;
+    transition: all .5s ease;
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%);
