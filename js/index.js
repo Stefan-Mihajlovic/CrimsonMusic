@@ -9,34 +9,18 @@ function getTime(){
 
     todEl = document.getElementById('timeOfDay');
     todEl2 = document.getElementById('timeOfDayNav');
-    todImg = document.getElementsByClassName("moodImage")[0];
 
     if (time < 12) {
         todEl.innerHTML = 'Good Morning';
         todEl2.innerHTML = 'Good Morning';
-        todImg.classList.remove("fa-sun");
-        todImg.classList.remove("fa-moon");
-        todImg.classList.remove("rotatingII");
-        todImg.classList.remove("rotatingI");
-        todImg.classList.add("fa-spa");
     }
     if (time >= 12 && time < 18) {
         todEl.innerHTML = 'Good Afternoon';
         todEl2.innerHTML = 'Good Afternoon';
-        todImg.classList.remove("fa-spa");
-        todImg.classList.remove("fa-moon");
-        todImg.classList.remove("rotatingII");
-        todImg.classList.add("rotatingI");
-        todImg.classList.add("fa-sun");
     }
     if (time >= 18) {
         todEl.innerHTML = 'Good Evening';
         todEl2.innerHTML = 'Good Evening';
-        todImg.classList.remove("fa-sun");
-        todImg.classList.remove("fa-spa");
-        todImg.classList.remove("rotatingI");
-        todImg.classList.add("rotatingII");
-        todImg.classList.add("fa-moon");
     }
 }
 

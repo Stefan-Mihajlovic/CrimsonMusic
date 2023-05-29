@@ -153,35 +153,13 @@ header button{
     border: none;
 }
 
+header button img{
+    width: 35px;
+    aspect-ratio: 1 / 1;
+}
+
 .greeting{
     position: relative;
-}
-
-.moodImage{
-    position: absolute;
-    left: 110%;
-    top: -10%;
-    font-size: 30px;
-    color: var(--accentColor);
-    opacity: 0.2;
-}
-
-.rotatingI{
-    animation: rotatingAnim 15s linear infinite;
-    left: 110%;
-    top: 0%;
-}
-
-.rotatingII{
-    top: 1%;
-    left: 110%;
-    transform: rotate(220deg);
-}
-
-@keyframes rotatingAnim {
-    0%{ transform: rotate(0deg) scale(1); }
-    50%{ transform: rotate(180deg) scale(1.2); }
-    100%{ transform: rotate(360deg) scale(1); }
 }
 
 /* ----- MAIN ----- */
