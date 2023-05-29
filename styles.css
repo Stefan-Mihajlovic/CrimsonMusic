@@ -1269,7 +1269,7 @@ hr{
     flex-direction: column;
     height: 55px;
     overflow: hidden;
-    transition: all .5s ease;
+    transition: all .4s ease-in-out;
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%);
@@ -1283,7 +1283,7 @@ hr{
     z-index: -1;
     pointer-events: none;
     transition: all 0.3s linear;
-    filter: brightness(0.5);
+    filter: brightness(0.4) blur(5px);
 }
 
 .playerSongInfo img{
@@ -1521,7 +1521,7 @@ hr{
     justify-content: center;
     z-index: 1;
     transform: translateY(50%);
-    transition: all .47s linear;
+    transition: all .1s linear;
     margin-top: 15px;
     filter: drop-shadow(0px 0px 20px black);
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), transparent);
