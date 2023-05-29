@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-analytics.js";
 import { } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
+import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-storage.js';
 import { getDatabase, ref, set, child, get, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
@@ -90,7 +91,8 @@ function RegisterUser(){
                 Username: username.value,
                 Email: email.value,
                 Password: encPass(),
-                Playlists: ""
+                Playlists: "",
+                LikedSongs: ""
             })
             .then(()=>{
                 alert('User registered successfuly!');
@@ -124,6 +126,7 @@ function AuthenticateUser(){
             let dbpass = decPass(snapshot.val().Password);
             if(dbpass == password.value){
                 loginUser(snapshot.val());
+                LoadUserPlaylists();
             }
         }else{
             alert("Account not found!");
@@ -790,7 +793,15 @@ let playlistSongsList = document.getElementsByClassName("playlistSongsList")[0];
 let isPlaylistPageOpen = false;
 
 export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
+
+    playlistSongsList.innerHTML = "";
+
     if(document.getElementById("playlistChecker").innerHTML !== pName){
+
+        document.getElementById("addToPlaylistBtn").style.display = "none";
+        document.getElementById("playlistLikesH5").style.display = "block";
+        document.getElementById("likePlaylist").style.display = "block";
+
         let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
         playlistScreen.classList.add("playlistScreenOpen");
         isPlaylistPageOpen = true;
@@ -910,34 +921,40 @@ export function playRandomSongForTheVault(){
 
 // Make a playlist
 
-
+let numberOfPlaylists = 0;
 
 export function MakeAPlaylist(){
     OpenMakePlaylistScreen();
-    // const dbRef = ref(realdb);
+}
 
-    // get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-    //     if(snapshot.exists()){
-    //         let setUsername = snapshot.val().Username;
-    //         let setEmail = snapshot.val().Email;
-    //         let setPassword = snapshot.val().Password;
-    //         let setPlaylists = snapshot.val().Playlists;
-    //         set(ref(realdb, "Users/"+currentUser.Username),
-    //         {
-    //             Username: setUsername,
-    //             Email: setEmail,
-    //             Password: setPassword,
-    //             Playlists: (setPlaylists + ",1")
-    //         })
-    //         .then(()=>{
-    //             alert("Playlist made");
+export function SubmitAPlaylist(){
+    const dbRef = ref(realdb);
 
-    //         })
-    //         .catch((error)=>{
-    //             alert("error "+error);
-    //         })
-    //     }
-    // })
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+
+            let currentMakePlaylistName = document.getElementsByClassName("currentMakePlaylistName")[0];
+
+            set(ref(realdb, "Users/"+currentUser.Username),
+            {
+                Username: setUsername,
+                Email: setEmail,
+                Password: setPassword,
+                Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}")
+            })
+            .then(()=>{
+                alert("Playlist made");
+                LoadUserPlaylists();
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            })
+        }
+    })
 }
 
 // ----- GENERATING YOURS PAGE
@@ -953,7 +970,7 @@ function LoadUserPlaylists(){
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
-            let numberOfPlaylists = usersPlaylists.length;
+            numberOfPlaylists = usersPlaylists.length;
 
             for (let i = numberOfPlaylists-1; i >= 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
@@ -964,7 +981,7 @@ function LoadUserPlaylists(){
                             <h3>`+ "by " + currentUser.Username +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="clickEffect(this); openPlaylistPage();"></div>
+                    <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this);"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -974,6 +991,126 @@ function LoadUserPlaylists(){
         }
     })
 }
+
+export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
+
+    if(document.getElementById("playlistChecker").innerHTML !== pName){
+
+        document.getElementById("addToPlaylistBtn").style.display = "block";
+        document.getElementById("playlistLikesH5").style.display = "none";
+        document.getElementById("likePlaylist").style.display = "none";
+
+        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+        playlistScreen.classList.add("playlistScreenOpen");
+        isPlaylistPageOpen = true;
+
+        let playlistBanners = document.getElementsByName("playlistBanner");
+        playlistBanners.forEach((banner) => {
+            banner.src = pBanner;
+        })
+
+        let playlistNamess = document.getElementsByName("playlistName");
+        playlistNamess.forEach((name) => {
+            name.innerHTML = pName;
+        })
+
+        let playlistLikess = document.getElementsByName("playlistLikes");
+        playlistLikess.forEach((like) => {
+            like.innerHTML = pLikes;
+        })
+
+        if(pSongs != ""){
+            let playlistSongss = pSongs.split(',');
+            for (let i = 0; i < playlistSongss.length; i++) {
+                GenerateOneSongFromPlaylist(playlistSongss[i]);
+            }
+        }else{
+            playlistSongsList.innerHTML = "";
+        }
+    }else{
+        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+        playlistScreen.classList.add("playlistScreenOpen");
+        isPlaylistPageOpen = true;
+    }
+}
+
+// ----- MAKING A PLAYLIST
+
+let reader = new FileReader();
+let files = [];
+let imageDownload;
+let imageFileName = "";
+let imageInput = document.getElementById("imageInput");
+
+imageInput.onchange = e => {
+    files = e.target.files;
+
+    let extension = GetFileExt(files[0]);
+    let name = GetFileName(files[0]);
+
+    imageFileName = name + extension;
+
+    reader.readAsDataURL(files[0]);
+
+    UploadProcess();
+}
+
+function GetFileExt(file){
+    var temp = file.name.split('.');
+    var ext = temp.slice(temp.length-1,temp.length);
+    return '.'+ext[0];
+}
+
+function GetFileName(file){
+    var temp = file.name.split('.');
+    var fname = temp.slice(0,-1).join('.');
+    return fname;
+}
+
+async function UploadProcess(){
+    var ImgToUpload = files[0];
+
+    var ImgName = imageFileName;
+
+    const metaData = {
+        contentType: ImgToUpload.type
+    }
+
+    const storage = getStorage();
+
+    const storageRef = sRef(storage, "Songs/"+ImgName);
+
+    const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+    
+    UploadTask.on('state-changed', (snapshot)=>{
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    },
+    (error) =>{
+        alert("Image failed to upload!");
+    },
+    ()=>{
+        getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
+            imageDownload = downloadURL;
+            document.getElementById("imageUploadView").style.backgroundImage = `url("`+ imageDownload +`")`;
+            document.getElementById("imageUploadView").innerHTML = "";
+        });
+    }
+    );
+}
+
+export function openLikedSongs(){
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let userLiked = snapshot.val().LikedSongs;
+
+            openMyPlaylistPage(0, "Favourites", "images/favourites.jpg", "0", userLiked);
+        }
+    })
+}
+
 // ----- CALLING ALL NECESSARY FUNCTIONS
 getUsername();
 seeIfUserIsSignedIn();

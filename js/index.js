@@ -82,6 +82,12 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
             main.classList.remove("activeMain");
         });
 
+        let bubble = document.getElementsByClassName("bubble")[0];
+        bubble.classList.remove("yoursScreenBubble");
+        bubble.classList.remove("searchScreenBubble");
+        bubble.classList.remove("homeScreenBubble");
+        bubble.classList.add(activeScreen+"Bubble");
+
         currentScreen = activeScreen;
     }
 
@@ -465,6 +471,6 @@ function changeMakePlaylistName(text){
     if(text != ""){
         document.getElementsByClassName("currentMakePlaylistName")[0].innerHTML = text;
     }else{
-        document.getElementsByClassName("currentMakePlaylistName")[0].innerHTML = "Enter the name";
+        document.getElementsByClassName("currentMakePlaylistName")[0].innerHTML = "My Playlist";
     }
 }

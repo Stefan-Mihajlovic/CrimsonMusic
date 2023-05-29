@@ -51,6 +51,19 @@ body{
     aspect-ratio: 1 / 1;
     z-index: -1;
     background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
+    transition: all .2s ease-in-out;
+}
+
+.homeScreenBubble{
+    background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
+}
+
+.searchScreenBubble{
+    background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
+}
+
+.yoursScreenBubble{
+    background-image: radial-gradient(closest-side, rgba(255, 69, 125, 0.15), transparent);
 }
 
 .highlightSpan{
@@ -1105,7 +1118,7 @@ hr{
 .artistBtns button{
     background: var(--offWhite);
     color: var(--sidePageback);
-    border-radius: 40px;
+    border-radius: 10px;
     border: none;
     display: flex;
     align-items: center;
@@ -1192,8 +1205,18 @@ hr{
     width: auto !important;
     aspect-ratio: 1 / 1 !important;
     padding-inline: 5px !important;
-    padding-top: 6px;
+    padding-top: 6px !important;
     padding-left: 5px !important;
+}
+
+#addToPlaylistBtn{
+    min-width: 0px !important;
+    width: 30px !important;
+    aspect-ratio: 1 / 1 !important;
+    padding-inline: 8px !important;
+    padding-left: 7px !important;
+    padding-block: 0px !important;
+    display: none;
 }
 
 .categoryAccentBubble{
@@ -1276,12 +1299,13 @@ hr{
 .favouritesItem{
     transition: all .1s ease-in-out;
     height: 70px;
-    background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 0, 0.5));
+    background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 40, 0.5));
 }
 
 .favouritesItem .songInfo img{
     width: 60px;
     border-radius: 6px;
+    filter: hue-rotate(-20deg) saturate(0.6) brightness(0.7);
 }
 
 .favouritesItem .songInfo .songText h2{
@@ -1314,7 +1338,7 @@ hr{
 }
 
 .formImageInput div{
-    background-color: rgb(19, 18, 31);
+    background-color: rgb(26, 14, 20);
     width: 250px;
     aspect-ratio: 1 / 1;
     display: flex;
@@ -1324,6 +1348,7 @@ hr{
     border-radius: 10px;
     color: var(--playerColor);
     box-shadow: 0px 0px 20px black;
+    background-size: cover;
 }
 
 .formImageInput div i{

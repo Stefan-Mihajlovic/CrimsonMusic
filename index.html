@@ -98,7 +98,7 @@
                 <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>
             </div>
         </h1>
-        <div class="songItem favouritesItem" onclick="clickEffect(this)">
+        <div class="songItem favouritesItem" onclick="clickEffect(this); openLikedSongs()">
             <div class="songInfo">
                 <img src="images/favourites.jpg" alt="playlistBanner">
                 <div class="songText">
@@ -236,9 +236,10 @@
                 <div class="artistControls">
                     <div class="artistText">
                         <h3 name="playlistName"></h3>
-                        <h5><span name="playlistLikes" id="playlistLikes">0</span>&nbsp;Likes</h5>
+                        <h5 id="playlistLikesH5"><span name="playlistLikes" id="playlistLikes">0</span>&nbsp;Likes</h5>
                     </div>
                     <div class="artistBtns">
+                        <button id="addToPlaylistBtn"><i class="fa-solid fa-plus"></i></button>
                         <button id="likePlaylist"><i class="fa-regular fa-heart"></i></button>
                         <button id="playPlaylistBtn" onclick="clickEffect(); playPlaylist();"><i class="fa-solid fa-play"></i> Play</button>
                     </div>
@@ -257,14 +258,14 @@
                 <button type="button" onclick="CloseMakePlaylistScreen()"><i class="fa-solid fa-circle-left"></i></button>
                 <h2>Make a Playlist</h2>
             </div>
-            <form class="makePlaylistForm">
+            <form class="makePlaylistForm" onsubmit="event.preventDefault()">
                 <div class="formImageInput">
-                    <div onclick="document.getElementById('imageInput').click()"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                    <div id="imageUploadView" onclick="document.getElementById('imageInput').click()"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
                     <input type="file" name="imageInput" id="imageInput">
                 </div>
-                <h2 class="currentMakePlaylistName">Enter the name</h2>
+                <h2 class="currentMakePlaylistName">My Playlist</h2>
                 <input onkeyup="changeMakePlaylistName(this.value)" onkeydown="changeMakePlaylistName(this.value)" type="text" name="nameInput" id="nameInput" placeholder="Enter the name">
-                <input type="submit" value="FINISH" id="submitMakePlaylist">
+                <input type="submit" value="Finish" id="submitMakePlaylist" onclick="SubmitAPlaylist()">
             </form>
         </div>
     </div>
@@ -331,7 +332,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -340,6 +341,9 @@
         window.closeCategoryPage = closeCategoryPage;
         window.playRandomSongForTheVault = playRandomSongForTheVault;
         window.MakeAPlaylist = MakeAPlaylist;
+        window.openMyPlaylistPage = openMyPlaylistPage;
+        window.SubmitAPlaylist = SubmitAPlaylist;
+        window.openLikedSongs = openLikedSongs;
     </script>
 
     <audio src="" id="currentSong"></audio>
