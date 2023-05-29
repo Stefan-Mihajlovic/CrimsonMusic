@@ -144,8 +144,8 @@ function loginUser(user){
     localStorage.setItem('keepLoggedIn', 'yes');
     localStorage.setItem('user', JSON.stringify(user));
     getUsername();
-    accountUsername = currentUser.Username;
-    accountEmail = currentUser.Email;
+    accountUsername = user.Username;
+    accountEmail = user.Email;
     accountNames.forEach((name) => {
         name.innerHTML = accountUsername;
     });
@@ -187,19 +187,14 @@ logoutBtn.addEventListener('click', ()=>{
 })
 
 // See if user was signed in
-if(currentUser == null){
-    setLoggedOutScreen();
-}
-else{
-    setLoggedInScreen();
-    accountUsername = currentUser.Username;
-    accountEmail = currentUser.Email;
-    accountNames.forEach((name) => {
-        name.innerHTML = accountUsername;
-    });
-    accountEmails.forEach((email) => {
-        email.innerHTML = accountEmail;
-    });
+function seeIfUserIsSignedIn(){
+    if(currentUser == null){
+        setLoggedOutScreen();
+    }
+    else{
+        loginUser(currentUser);
+        LoadUserPlaylists();
+    }
 }
 
 // Generate a song based on the input number ( SongID )
@@ -918,34 +913,70 @@ export function playRandomSongForTheVault(){
 
 
 export function MakeAPlaylist(){
-    const dbRef = ref(realdb);
+    OpenMakePlaylistScreen();
+    // const dbRef = ref(realdb);
+
+    // get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+    //     if(snapshot.exists()){
+    //         let setUsername = snapshot.val().Username;
+    //         let setEmail = snapshot.val().Email;
+    //         let setPassword = snapshot.val().Password;
+    //         let setPlaylists = snapshot.val().Playlists;
+    //         set(ref(realdb, "Users/"+currentUser.Username),
+    //         {
+    //             Username: setUsername,
+    //             Email: setEmail,
+    //             Password: setPassword,
+    //             Playlists: (setPlaylists + ",1")
+    //         })
+    //         .then(()=>{
+    //             alert("Playlist made");
+
+    //         })
+    //         .catch((error)=>{
+    //             alert("error "+error);
+    //         })
+    //     }
+    // })
+}
+
+// ----- GENERATING YOURS PAGE
+
+let yoursPage = document.getElementsByClassName("yoursScreen")[0];
+let yourPlaylists = document.getElementsByClassName("yourPlaylists")[0];
+
+function LoadUserPlaylists(){
+    yourPlaylists.innerHTML = "";
+
+    let dbRef = ref(realdb);
 
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
-            let setUsername = snapshot.val().Username;
-            let setEmail = snapshot.val().Email;
-            let setPassword = snapshot.val().Password;
-            let setPlaylists = snapshot.val().Playlists;
-            set(ref(realdb, "Users/"+currentUser.Username),
-            {
-                Username: setUsername,
-                Email: setEmail,
-                Password: setPassword,
-                Playlists: (setPlaylists + ",1")
-            })
-            .then(()=>{
-                alert("Playlist made");
+            let usersPlaylists = (snapshot.val().Playlists).split('{');
+            let numberOfPlaylists = usersPlaylists.length;
 
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            })
+            for (let i = numberOfPlaylists-1; i >= 0; i--) {
+                let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                    <div class="songInfo">
+                        <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                        <div class="songText">
+                            <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                            <h3>`+ "by " + currentUser.Username +`</h3>
+                        </div>
+                    </div>
+                    <div class="songClickDiv" onclick="clickEffect(this); openPlaylistPage();"></div>
+                    <div class="songBtns">
+                        <button onclick="clickEffect(this);"><i class="fa-solid fa-bars"></i></button>
+                    </div>
+                </li>`;
+                yourPlaylists.innerHTML += currentLi;
+            }
         }
     })
 }
-
 // ----- CALLING ALL NECESSARY FUNCTIONS
 getUsername();
+seeIfUserIsSignedIn();
 generateSongs();
 generateArtists();
 generatePlaylists();

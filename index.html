@@ -93,8 +93,22 @@
     </main>
 
     <main class="yoursScreen">
-        <h1>Library</h1>
-        <button onclick="MakeAPlaylist()">Make A Playlist</button>
+        <h1>Library
+            <div>
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </h1>
+        <div class="songItem favouritesItem" onclick="clickEffect(this)">
+            <div class="songInfo">
+                <img src="images/favourites.jpg" alt="playlistBanner">
+                <div class="songText">
+                    <h2>Favourites</h2>
+                    <h3>Yours and Yours only</h3>
+                </div>
+            </div>
+        </div>
+        <ul class="yourPlaylists"></ul>
     </main>
 
     <div class="player">
@@ -235,6 +249,24 @@
             <section class="playlistWork">
                 <ul class="playlistSongsList"></ul>
             </section>
+        </div>
+    </div>
+
+    <div class="makePlaylistScreen">
+        <div class="screenScrollable" name="screenScrollable">
+            <div class="pageBar">
+                <button type="button" onclick="CloseMakePlaylistScreen()"><i class="fa-solid fa-circle-left"></i></button>
+                <h2>Make a Playlists</h2>
+            </div>
+            <form class="makePlaylistForm">
+                <div class="formImageInput">
+                    <div onclick="document.getElementById('imageInput').click()"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                    <input type="file" name="imageInput" id="imageInput">
+                </div>
+                <h2 class="currentMakePlaylistName">Enter the name</h2>
+                <input onkeyup="changeMakePlaylistName(this.value)" onkeydown="changeMakePlaylistName(this.value)" type="text" name="nameInput" id="nameInput" placeholder="Enter the name">
+                <input type="submit" value="Finish" id="submitMakePlaylist">
+            </form>
         </div>
     </div>
 

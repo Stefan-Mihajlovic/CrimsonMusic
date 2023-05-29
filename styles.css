@@ -95,7 +95,7 @@ button{
 }
 
 .buttonClicked{
-    transform: scale(0.8) rotate(2deg) !important;
+    transform: scale(0.9) rotate(2deg) !important;
     filter: brightness(0.5);
 }
 
@@ -299,7 +299,7 @@ main{
 
 /* ----- Recommended songs Section ----- */
 
-.recSongs, .categoryRecommendedSongs{
+.recSongs, .categoryRecommendedSongs, .yourPlaylists{
     list-style: none;
     width: 100%;
     position: relative;
@@ -998,7 +998,7 @@ hr{
 
 /* ----- ARTIST SCREEN ----- */
 
-.artistScreen, .playlistScreen, .categoryScreen{
+.artistScreen, .playlistScreen, .categoryScreen, .makePlaylistScreen{
     position: absolute;
     top: 0;
     min-height: 100vh;
@@ -1022,12 +1022,12 @@ hr{
     flex-direction: column;
 }
 
-.artistScreenOpen, .playlistScreenOpen, .categoryPageOpen{
+.artistScreenOpen, .playlistScreenOpen, .categoryPageOpen, .makePlaylistScreenOpen{
     transform: translateX(0%);
     pointer-events: all;
 }
 
-.artistScreen .pageBar, .playlistScreen .pageBar, .categoryScreen .pageBar{
+.artistScreen .pageBar, .playlistScreen .pageBar, .categoryScreen .pageBar, .makePlaylistScreen .pageBar{
     z-index: 99;
     top: 0;
     border: none;
@@ -1052,11 +1052,11 @@ hr{
     opacity: 1 !important;
 }
 
-.artistScreen .pageBar button i, .playlistScreen .pageBar button i, .categoryScreen .pageBar button i{
+.artistScreen .pageBar button i, .playlistScreen .pageBar button i, .categoryScreen .pageBar button i, .makePlaylistScreen .pageBar button i{
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 }
 
-.artistScreenOpen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
+.artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryScreenOpen .pageBar h2, .makePlaylistScreenOpen .pageBar h2{
     transform: translateX(0%);
 }
 
@@ -1255,6 +1255,104 @@ hr{
 .catBanner{
     height: 200px !important;
     clip-path: ellipse(100% 52% at 50% 38%);
+}
+
+/* ----- LIBRARY / YOURS SCREEN ----- */
+
+.yoursScreen h1{
+    display: flex;
+    justify-content: space-between;
+}
+
+.yoursScreen h1 div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7.5px;
+}
+
+.yoursScreen h1 button{
+    width: 40px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+}
+
+.yoursScreen h1 button i{
+    font-size: 26px;
+    color: var(--offWhite);
+}
+
+.yoursScreen h1 button:nth-child(1) i{
+    font-size: 22px;
+    margin-top: 2px;
+}
+
+.favouritesItem{
+    transition: all .1s ease-in-out;
+    background: linear-gradient(45deg,rgba(0, 0, 0, 0.5), rgba(97, 0, 0, 0.5));
+}
+
+/* ----- MAKE A PLAYLIST ----- */
+
+.makePlaylistForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    padding-top: 75px;
+    width: 100%;
+    gap: 15px;
+}
+
+.formImageInput{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formImageInput div{
+    background-color: rgb(19, 18, 31);
+    width: 250px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--playerColor);
+    border-radius: 10px;
+    color: var(--playerColor);
+    box-shadow: 0px 0px 20px black;
+}
+
+.formImageInput div i{
+    font-size: 50px;
+    color: var(--playerColor);
+    text-shadow: 0px 0px 20px black;
+}
+
+.formImageInput input{
+    display: none;
+}
+
+#nameInput{
+    padding: 10px;
+    width: 250px;
+    border-radius: 10px;
+    border: 1px solid var(--playerColor);
+    background-color: var(--mainColorLighter);
+    color: var(--offWhite);
+}
+
+#submitMakePlaylist{
+    width: 250px;
+    background-color: var(--offWhite);
+    border: 1px solid var(--playerColor);
+    padding: 15px;
+    width: 250px;
+    border-radius: 10px;
 }
 
 /* ----- PLAYER ----- */

@@ -463,3 +463,24 @@ function pausePlayCurrentSongVault(){
         isSongPaused = true;
     }
 }
+
+// Make a Playlist
+
+let makePlScreen = document.getElementsByClassName("makePlaylistScreen")[0];
+let isMakePlOpen = false;
+
+function OpenMakePlaylistScreen(){
+    makePlScreen.classList.add("makePlaylistScreenOpen");
+}
+
+function CloseMakePlaylistScreen(){
+    makePlScreen.classList.remove("makePlaylistScreenOpen");
+}
+
+function changeMakePlaylistName(text){
+    if(text != ""){
+        document.getElementsByClassName("currentMakePlaylistName")[0].innerHTML = text;
+    }else{
+        document.getElementsByClassName("currentMakePlaylistName")[0].innerHTML = "Enter the name";
+    }
+}
