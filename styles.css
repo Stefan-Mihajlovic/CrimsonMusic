@@ -1263,11 +1263,11 @@ hr{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 75px;
+    bottom: calc(-100svh + 75px);
     z-index: 999;
     display: flex;
     flex-direction: column;
-    height: 55px;
+    height: calc(100svh + 55px);
     overflow: hidden;
     transition: all .4s ease-in-out;
     opacity: 0;
@@ -1277,14 +1277,14 @@ hr{
 
 .songBackdrop{
     position: absolute;
-    height: 150vh;
+    height: 175vh;
     top: -175px;
-    width: 100vw;
+    width: 200vw;
     object-fit: cover;
     z-index: -1;
     pointer-events: none;
     transition: all 0.3s linear;
-    filter: brightness(0.4) blur(5px);
+    filter: brightness(0.4) blur(40px);
 }
 
 .playerSongInfo img{
@@ -1307,18 +1307,17 @@ hr{
         width: 55px;
     }
     .playerOpenTop{
-        top: -70px;
+        top: -10px;
     }
 }
 
 .playerOpen{
     bottom: 0;
-    height: calc(100svh + 55px);
 }
 
 @media screen and (orientation: landscape) {
     .playerOpen{
-        height: calc(100svh + 70px);
+        height: calc(100svh + 10px);
     }
 }
 
@@ -1605,6 +1604,8 @@ nav{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: black;
+    background-image: linear-gradient(45deg, black, rgb(22, 20, 29));
     width: 100%;
     height: 75px;
     gap: 10px;
@@ -1613,9 +1614,7 @@ nav{
     left: 0;
     right: 0;
     padding: 10px;
-    z-index: 99;
-    backdrop-filter: blur(20px) brightness(0.9);
-    -webkit-backdrop-filter: blur(20px) brightness(0.9);
+    z-index: 1000;
     border-top: 1px solid  var(--playerColor);
     transition: all 0.4s ease-in-out;
 }
