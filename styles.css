@@ -1285,6 +1285,7 @@ hr{
     pointer-events: none;
     transition: all 0.3s linear;
     filter: brightness(0.4) blur(40px);
+    display: none;
 }
 
 .playerSongInfo img{
