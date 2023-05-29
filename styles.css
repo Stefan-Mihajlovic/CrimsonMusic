@@ -1276,7 +1276,7 @@ hr{
 .favouritesItem{
     transition: all .1s ease-in-out;
     height: 70px;
-    background: linear-gradient(45deg,rgba(0, 0, 0, 0.5), rgba(97, 0, 0, 0.5));
+    background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 0, 0.5));
 }
 
 .favouritesItem .songInfo img{
