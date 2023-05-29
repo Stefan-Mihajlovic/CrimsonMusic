@@ -1277,7 +1277,7 @@ hr{
 
 .songBackdrop{
     position: absolute;
-    height: 175vh;
+    height: 150vh;
     top: -175px;
     width: 100vw;
     object-fit: cover;
