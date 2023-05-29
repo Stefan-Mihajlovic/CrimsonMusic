@@ -1808,9 +1808,36 @@ nav button i{
 
 /* ----- MIN HEIGHT 570px ----- */
 
-@media (max-height: 570px){
+@media screen and (max-height: 570px){
     .bigSongInfo img{
         width: 60%;
         aspect-ratio: 1 / 1;
+    }
+    .loginForm{
+        margin-top: 10px;
+    }
+}
+
+/* ----- MIN HEIGHT 515px ----- */
+
+@media screen and (max-height: 515px){
+    .loginForm input{
+        padding: 13px;
+        padding-inline: 15px;
+    }
+    .loginForm button{
+        padding: 13px;
+    }
+}
+
+/* ----- MIN HEIGHT 500px ----- */
+
+@media screen and (max-height: 500px){
+    .loginForm input{
+        padding: 10px;
+        padding-inline: 15px;
+    }
+    .loginForm button{
+        padding: 10px;
     }
 }
