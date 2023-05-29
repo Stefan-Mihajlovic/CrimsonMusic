@@ -1279,7 +1279,8 @@ hr{
     position: absolute;
     height: 175vh;
     top: -175px;
-    width: 200vw;
+    width: 100vw;
+    object-fit: cover;
     z-index: -1;
     pointer-events: none;
     transition: all 0.3s linear;
