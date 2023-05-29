@@ -1616,6 +1616,11 @@ nav{
     backdrop-filter: blur(20px) brightness(0.9);
     -webkit-backdrop-filter: blur(20px) brightness(0.9);
     border-top: 1px solid  var(--playerColor);
+    transition: all 0.4s ease-in-out;
+}
+
+.navClosed{
+    transform: translateY(76px);
 }
 
 .navBig{

@@ -214,12 +214,14 @@ function openBigPlayer(){
     setTimeout(() => {
         player.classList.add("playerOpenTop");
     }, 600);
+    document.getElementsByTagName("nav")[0].classList.add("navClosed");
 }
 
 function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
     player.classList.remove("playerOpen");
+    document.getElementsByTagName("nav")[0].classList.remove("navClosed");
 }
 
 const currentSongAudio = document.getElementById("currentSong");
