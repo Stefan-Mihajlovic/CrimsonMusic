@@ -1283,7 +1283,7 @@ hr{
     z-index: -1;
     pointer-events: none;
     transition: all 0.3s linear;
-    filter: blur(40px) brightness(0.5);
+    filter: brightness(0.5);
 }
 
 .playerSongInfo img{
