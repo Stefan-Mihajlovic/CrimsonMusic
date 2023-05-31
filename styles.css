@@ -1517,6 +1517,10 @@ hr{
     transition: none;
 }
 
+.popupItem i{
+    font-size: 20px;
+}
+
 /* ----- PLAYER ----- */
 
 .player{
