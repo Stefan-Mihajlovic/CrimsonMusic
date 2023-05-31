@@ -2068,8 +2068,14 @@ nav button i{
         bottom: -1px;
     }
     .artistScreen, .playlistScreen, .categoryScreen{
-        top: 61px;
+        top: 60px;
         border-top: 1px solid var(--playerColor);
+    }
+    .loginScreen{
+        top: 60px;
+    }
+    .makePlaylistScreen{
+        top: 60px
     }
 }
 

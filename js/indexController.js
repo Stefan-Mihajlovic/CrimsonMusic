@@ -184,6 +184,7 @@ let logoutBtn = document.getElementById('logoutBtn');
 logoutBtn.addEventListener('click', ()=>{
     signOut(auth).then(() => {
         SignOutUser();
+        DeLoadUserPlaylists();
     }).catch((error) => {
         // An error happened.
     });
@@ -1001,6 +1002,10 @@ function LoadUserPlaylists(){
             }
         }
     })
+}
+
+function DeLoadUserPlaylists(){
+    yourPlaylists.innerHTML = "";
 }
 
 export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
