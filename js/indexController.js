@@ -604,7 +604,7 @@ function findSongOfCategory(songName, inputText){
     get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             songCat  = snapshot.val().Categories;
-            if(songCat.toLowerCase().includes(inputText.toLowerCase())){
+            if(songCat === inputText){
                 songTitle  = snapshot.val().SongName;
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
