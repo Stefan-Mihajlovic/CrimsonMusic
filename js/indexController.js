@@ -927,10 +927,21 @@ export function MakeAPlaylist(){
     OpenMakePlaylistScreen();
 }
 
-export function SubmitAPlaylist(){
-    const dbRef = ref(realdb);
+export async function SubmitAPlaylist(){
+    let result = await UploadProcess();
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+    if(result){
+        DBMakePl();
+    }else{
+        setTimeout(() => {
+            DBMakePl();
+        }, 1500);
+    }
+}
+
+function DBMakePl(){
+    const dbRef = ref(realdb);
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
             let setUsername = snapshot.val().Username;
             let setEmail = snapshot.val().Email;
@@ -1052,7 +1063,9 @@ imageInput.onchange = e => {
 
     reader.readAsDataURL(files[0]);
 
-    UploadProcess();
+    reader.addEventListener('load', function () {
+        document.getElementById("imageUploadView").style.backgroundImage = `url('`+ this.result +`')`;
+    });
 }
 
 function GetFileExt(file){
@@ -1067,35 +1080,40 @@ function GetFileName(file){
     return fname;
 }
 
-async function UploadProcess(){
-    var ImgToUpload = files[0];
+function UploadProcess(){
+    return new Promise(resolve => {
+        setTimeout(() => {
+            var ImgToUpload = files[0];
 
-    var ImgName = imageFileName;
+            var ImgName = imageFileName;
 
-    const metaData = {
-        contentType: ImgToUpload.type
-    }
+            const metaData = {
+                contentType: ImgToUpload.type
+            }
 
-    const storage = getStorage();
+            const storage = getStorage();
 
-    const storageRef = sRef(storage, "Songs/"+ImgName);
+            const storageRef = sRef(storage, "Songs/"+ImgName);
 
-    const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+            const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
     
-    UploadTask.on('state-changed', (snapshot)=>{
-        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    },
-    (error) =>{
-        alert("Image failed to upload!");
-    },
-    ()=>{
-        getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
-            imageDownload = downloadURL;
-            document.getElementById("imageUploadView").style.backgroundImage = `url("`+ imageDownload +`")`;
-            document.getElementById("imageUploadView").innerHTML = "";
-        });
-    }
-    );
+            UploadTask.on('state-changed', (snapshot)=>{
+                let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            },
+            (error) =>{
+                alert("Image failed to upload!" + "<br>" + error);
+                resolve(false);
+            },
+            ()=>{
+                getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
+                    imageDownload = downloadURL;
+                    document.getElementById("imageUploadView").innerHTML = "";
+                    resolve(true);
+                });
+            }
+            );
+        }, 1000);
+    })
 }
 
 export function openLikedSongs(){
