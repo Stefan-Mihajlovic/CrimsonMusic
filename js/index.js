@@ -474,3 +474,45 @@ function changeMakePlaylistName(text){
         document.getElementsByClassName("currentMakePlaylistName")[0].innerHTML = "My Playlist";
     }
 }
+
+// ----- Close Popup
+
+function openPopup(type,src,art,nam){
+    let popupWrapper = document.getElementById("popupWrapper");
+    popupWrapper.classList.add("popupOpen");
+
+    let songPopupBody = document.getElementsByClassName("songPopupBody")[0];
+    let playlistPopupBody = document.getElementsByClassName("playlistPopupBody")[0];
+
+    let popupImages = document.getElementsByName("popupImage");
+    let popupSongTitle = document.getElementsByName("popupSongTitle");
+    let popupArtist = document.getElementsByName("popupArtist");
+
+    popupImages.forEach((image) => {
+        image.src = src;
+    })
+
+    popupSongTitle.forEach((title) => {
+        title.innerHTML = nam;
+    })
+
+    popupArtist.forEach((artist) => {
+        artist.innerHTML = art;
+    })
+
+    let blurDiv = document.getElementsByClassName("blurDiv")[0];
+    blurDiv.style.backgroundImage = `url('`+ src +`')`;
+
+    if(type === 'song'){
+        songPopupBody.style.display = "block";
+        playlistPopupBody.style.display = "none";
+    }else{
+        songPopupBody.style.display = "none";
+        playlistPopupBody.style.display = "block";
+    }
+}
+
+function closePopup(){
+    let popupWrapper = document.getElementById("popupWrapper");
+    popupWrapper.classList.remove("popupOpen");
+}

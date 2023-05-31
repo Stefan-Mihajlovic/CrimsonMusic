@@ -71,11 +71,11 @@ body{
     font-weight: 900;
 }
 
-ul::-webkit-scrollbar{
+ul::-webkit-scrollbar, div::-webkit-scrollbar{
     display: none;
 }
 
-ul{
+ul, div{
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -370,7 +370,7 @@ main{
     top: 0;
     bottom: 0;
     left: 0;
-    width: 77.5%;
+    width: calc(100% - 50px);
 }
 
 /* ----- Recommended artists Section ----- */
@@ -899,7 +899,6 @@ hr{
     width: 40px;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
-    border: 2px solid var(--offWhite);
 }
 
 .accountInfo{
@@ -926,7 +925,7 @@ hr{
     border: none;
     font-size: 13px;
     font-weight: 600;
-    border-radius: 13px;
+    border-radius: 10px;
 }
 
 /* ----- TOGGLES IN SETTINGS ----- */
@@ -1198,6 +1197,7 @@ hr{
     flex-direction: column;
     align-items: center;
     gap: 5px;
+    min-height: 50px;
 }
 
 #likePlaylist{
@@ -1382,6 +1382,141 @@ hr{
     font-size: 15px;
 }
 
+/* ----- POPUP ----- */
+
+#popupWrapper{
+    top: 0;
+    height: 100svh;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: fixed;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease-in-out;
+}
+
+.popupOpen{
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+.blurDiv{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: blur(10px);
+    opacity: 0.2;
+    background-size: cover;
+}
+
+#popupWrapper button{
+    color: var(--offWhite);
+    font-weight: 500;
+    padding-inline: 15px;
+    padding-block: 5px;
+    border-radius: 7px;
+    background-color: rgba(74, 56, 110, 0.1);
+    border: none;
+    border: 2px solid var(--offWhite);
+    z-index: -2;
+    text-transform: uppercase;
+    transform: translateY(70vh);
+    transition: all 0.6s ease-in-out !important;
+}
+
+.popupOpen button{
+    transform: translateY(0%) !important;
+}
+
+.closePopup{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.popupScreen{
+    width: 100%;
+    height: 60%;
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 0px 30px rgb(0, 0, 0);
+    border-radius: 20px;
+    border: 1px solid var(--playerColor);
+    position: relative;
+    transform: translateY(350%);
+    transition: all 0.6s ease-in-out;
+    overflow: scroll;
+}
+
+.popupOpen .popupScreen{
+    transform: translateY(0%);
+}
+
+.popupInfo{
+    align-items: center;
+    padding-bottom: 10px;
+    justify-content: center;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid var(--playerColor);
+    padding: 10px;
+}
+
+.popupInfo img{
+    width: 75px;
+    border-radius: 10px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.popupText{
+    flex-grow: 1;
+}
+
+.popupText h2{
+    font-size: 25px;
+    line-height: 25px;
+    font-weight: 500;
+}
+
+.popupText h3{
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 300;
+    color: var(--offWhiteDark);
+}
+
+.popupInfo i{
+    font-size: 25px;
+    margin-right: 10px;
+}
+
+.popupItem{
+    display: flex;
+    gap: 15px;
+    font-size: 22px;
+    padding: 15px;
+    border-bottom: 1px solid var(--playerColor);
+    font-weight: 100;
+    padding: 20px;
+}
+
+.popupItem h5{
+    font-weight: 500;
+    transition: none;
+}
+
 /* ----- PLAYER ----- */
 
 .player{
@@ -1539,7 +1674,7 @@ hr{
     top: 0;
     bottom: 0;
     left: 0;
-    width: 75%;
+    width: calc(100% - 95px);
 }
 
 /* BIGPLAYER */
@@ -1874,6 +2009,15 @@ nav button i{
     .rewindButton i{
         font-size: 1.4rem !important;
     }
+    .popupItem h5{
+        font-size: 15px;
+    }
+    .popupInfo i{
+        display: none;
+    }
+    .popupInfo img{
+        width: 50px;
+    }
 }
 
 /* ----- MIN WIDTH 400px ----- */
@@ -1964,5 +2108,8 @@ nav button i{
     }
     .loginForm button{
         padding: 10px;
+    }
+    .popupScreen{
+        height: 80%;
     }
 }

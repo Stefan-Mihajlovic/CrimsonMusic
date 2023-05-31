@@ -217,7 +217,7 @@ function GenerateOneSong(songName){
             songTitle  = snapshot.val().SongName;
             songCreator = snapshot.val().Creator;
             imageURL = snapshot.val().ImgURL;
-            let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+            let currentLI =  `<li class="songItem">
                 <div class="songInfo">
                     <img src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
@@ -227,7 +227,7 @@ function GenerateOneSong(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
                 </li>`;
             recSongs.innerHTML += currentLI;
@@ -414,7 +414,7 @@ function findSearchedSong(songName, inputText){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                     </li>`;
                 searchList.innerHTML += currentLI;
@@ -609,7 +609,7 @@ function findSongOfCategory(songName, inputText){
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
                 imageURL = snapshot.val().ImgURL;
-                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                let currentLI =  `<li class="songItem">
                     <div class="songInfo">
                         <img src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
@@ -619,7 +619,7 @@ function findSongOfCategory(songName, inputText){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                     </li>`;
                 categoryRecommendedSongsList.innerHTML += currentLI;
@@ -697,7 +697,7 @@ function SetTheLatestRelease(artist){
                         songToBePlayed = snapshot.val().SongURL;
                         songTitle  = snapshot.val().SongName;
                         imageURL = snapshot.val().ImgURL;
-                        latestReleaseLi =  `<li class="songItem" onclick="clickEffect(this)">
+                        latestReleaseLi =  `<li class="songItem">
                             <div class="songInfo">
                                 <img src="`+imageURL+`" alt="songBanner">
                                 <div class="songText">
@@ -707,7 +707,7 @@ function SetTheLatestRelease(artist){
                             </div>
                             <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release');"></div>
                             <div class="songBtns">
-                                <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                                <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
                             <span class="latestPin">Latest</span>
                         </li>`;
@@ -767,7 +767,7 @@ function GenerateOneSongFromArtist(songName,artist){
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
                 imageURL = snapshot.val().ImgURL;
-                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                let currentLI =  `<li class="songItem">
                     <div class="songInfo">
                         <img src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
@@ -777,7 +777,7 @@ function GenerateOneSongFromArtist(songName,artist){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 artistTopTracksList.innerHTML += currentLI;
@@ -845,7 +845,7 @@ function GenerateOneSongFromPlaylist(songName){
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
                 imageURL = snapshot.val().ImgURL;
-                let currentLI =  `<li class="songItem" onclick="clickEffect(this)">
+                let currentLI =  `<li class="songItem">
                 <div class="songInfo">
                     <img src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
@@ -855,7 +855,7 @@ function GenerateOneSongFromPlaylist(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this)"><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </li>`;
             playlistSongsList.innerHTML += currentLI;
@@ -994,7 +994,7 @@ function LoadUserPlaylists(){
                     </div>
                     <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this);"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 yourPlaylists.innerHTML += currentLi;
@@ -1124,7 +1124,11 @@ export function openLikedSongs(){
         if(snapshot.exists()){
             let userLiked = snapshot.val().LikedSongs;
 
-            openMyPlaylistPage(0, "Favourites", "images/favourites.jpg", "0", userLiked);
+            if(userLiked != undefined){
+                openMyPlaylistPage(0, "Favourites", "images/favourites.jpg", "0", userLiked);
+            }else{
+                openMyPlaylistPage(0, "Favourites", "images/favourites.jpg", "0", "");
+            }
         }
     })
 }
