@@ -1047,6 +1047,7 @@ hr{
 
 .artistScreen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
     opacity: 0;
+    transition: all 0.45s ease-in-out;
 }
 
 .pageBarOn{
@@ -1058,7 +1059,7 @@ hr{
 
 .pageBarOn h2{
     opacity: 1 !important;
-    transform: translateX(0%);
+    transform: translateX(0%) !important;
 }
 
 .artistScreen .pageBar button i, .playlistScreen .pageBar button i, .categoryScreen .pageBar button i, .makePlaylistScreen .pageBar button i{
@@ -1066,7 +1067,7 @@ hr{
 }
 
 .artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryScreenOpen .pageBar h2, .makePlaylistScreenOpen .pageBar h2{
-    transform: translateX(0%);
+    transform: translateX(100%);
 }
 
 .artistInfo{
