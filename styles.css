@@ -1604,7 +1604,6 @@ hr{
     border: none;
     transform: translateY(100%);
     transition: all .5s ease-in-out;
-    padding-top: 0px !important;
 }
 
 .playerOpen .pageBar{
@@ -2139,4 +2138,8 @@ nav button i{
     .popupScreen{
         height: 80%;
     }
+}
+
+.player .pageBar{
+    padding-top: 0px !important;
 }
