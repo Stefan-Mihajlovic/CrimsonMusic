@@ -1886,19 +1886,18 @@ hr{
 nav{
     position: fixed;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     background-color: black;
     background-image: linear-gradient(45deg, black, rgb(22, 20, 29));
     width: 100%;
-    height: 160px;
+    height: 70px;
     gap: 10px;
     flex-shrink: 0;
     top: calc(100svh - 70px + env(safe-area-inset-bottom));
     left: 0;
     right: 0;
     padding: 10px;
-    padding-bottom: 100px;
     z-index: 1000;
     border-top: 1px solid  var(--playerColor);
     transition: all 0.4s ease-in-out;
@@ -1950,7 +1949,6 @@ nav button{
     gap: 7px;
     color: var(--offWhite);
     font-weight: 700;
-    padding-block: 30px;
     font-size: 11px;
 }
 
