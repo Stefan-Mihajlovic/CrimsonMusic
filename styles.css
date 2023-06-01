@@ -1893,7 +1893,7 @@ nav{
 }
 
 .navClosed{
-    transform: translateY(76px);
+    transform: translateY(150%);
 }
 
 .navBig{
