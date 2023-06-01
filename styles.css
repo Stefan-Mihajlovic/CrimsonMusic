@@ -1022,7 +1022,8 @@ hr{
 
 .artistScreen .pageBar, .playlistScreen .pageBar, .categoryScreen .pageBar, .makePlaylistScreen .pageBar{
     z-index: 99;
-    top: env(safe-area-inset-top);
+    top: 0px;
+    padding-bottom: env(safe-area-inset-top);
     border: none;
     border-bottom: 2px solid transparent;
     box-shadow: none;
