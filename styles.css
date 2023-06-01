@@ -1563,7 +1563,7 @@ hr{
 }
 
 .playerOpenTop{
-    top: -55px;
+    top: env(safe-area-inset-top - 55px, -55px);
 }
 
 /* ----- LANDSCAPE ORIENTATION ----- */
