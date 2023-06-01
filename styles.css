@@ -1537,7 +1537,7 @@ hr{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(-100svh + 75px + env(safe-area-inset-bottom));
+    bottom: calc(-100svh + 85px + env(safe-area-inset-bottom));
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -1582,8 +1582,8 @@ hr{
     .playerSongInfo img{
         width: 55px;
     }
-    .playerOpenTop{
-        top: -10px;
+    .playerOpen{
+        top: -10px !important;
     }
 }
 
@@ -1593,7 +1593,7 @@ hr{
 
 @media screen and (orientation: landscape) {
     .playerOpen{
-        height: calc(100svh + 10px);
+        height: calc(100svh);
     }
 }
 
@@ -1630,7 +1630,6 @@ hr{
 .miniPlayer{
     display: flex;
     justify-content: space-between;
-    background-color: rgba(37, 37, 37, 0.4);
     border-top: 1px solid var(--playerColor);
     padding: 7px;
     transition: all .4s ease-in-out;
@@ -2085,6 +2084,10 @@ nav button i{
     }
     .player{
         bottom: -1px;
+    }
+    .playerOpen{
+        top: 0px;
+        height: calc(100svh);
     }
     .artistScreen, .playlistScreen, .categoryScreen{
         top: 60px;
