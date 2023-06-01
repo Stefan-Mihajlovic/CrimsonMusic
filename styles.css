@@ -1748,7 +1748,7 @@ hr{
     text-align: left;
     width: 100%;
     max-width: 300px;
-    padding: 10px;
+    padding: 2.5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1765,6 +1765,7 @@ hr{
     overflow-y: visible;
     text-overflow: clip;
     white-space: nowrap;
+    flex-grow: 1;
 }
 
 .bigSongInfo .playerSongText h3{
@@ -1780,6 +1781,7 @@ hr{
     overflow-y: visible;
     text-overflow: clip;
     white-space: nowrap;
+    flex-grow: 1;
 }
 
 .bigSongInfo .playerSongText button{
