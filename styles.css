@@ -1387,7 +1387,7 @@ hr{
 /* ----- POPUP ----- */
 
 #popupWrapper{
-    top: env(safe-area-inset-top, 0px);
+    top: 0px;
     height: 100svh;
     left: 0;
     right: 0;
