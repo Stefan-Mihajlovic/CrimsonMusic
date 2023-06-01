@@ -738,7 +738,8 @@ main{
     width: 100%;
     display: flex;
     height: calc(env(safe-area-inset-top) + 50px);
-    align-items: center;
+    align-items: flex-end;
+    padding-bottom: 10px;
     padding-inline: 15px;
     justify-content: flex-start;
     gap: 15px;
