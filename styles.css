@@ -1630,6 +1630,10 @@ hr{
     display: none;
 }
 
+.playerOpen .miniPlayer{
+    opacity: 0;
+}
+
 .playerSongInfo{
     display: flex;
     align-items: center;
