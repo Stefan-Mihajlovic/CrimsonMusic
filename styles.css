@@ -1004,7 +1004,6 @@ hr{
     transition: all .4s ease-in-out;
     z-index: 99;
     overflow: hidden;
-    padding-top: env(safe-area-inset-top);
 }
 
 .screenScrollable{
