@@ -1875,14 +1875,14 @@ nav{
     background-color: black;
     background-image: linear-gradient(45deg, black, rgb(22, 20, 29));
     width: 100%;
-    height: 95px;
+    height: 165px;
     gap: 10px;
     flex-shrink: 0;
     top: calc(100svh - 75px);
     left: 0;
     right: 0;
     padding: 10px;
-    padding-bottom: 30px;
+    padding-bottom: 100px;
     z-index: 1000;
     border-top: 1px solid  var(--playerColor);
     transition: all 0.4s ease-in-out;
