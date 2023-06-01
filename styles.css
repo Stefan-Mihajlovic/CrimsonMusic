@@ -1902,6 +1902,7 @@ nav{
     display: none;
     top: env(safe-area-inset-top, 0px);
     align-items: center;
+    padding-bottom: 10px !important;
     height: 60px;
     border-top: none;
     border-bottom: 1px solid  var(--playerColor);
