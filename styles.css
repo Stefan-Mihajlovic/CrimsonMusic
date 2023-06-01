@@ -1273,7 +1273,7 @@ hr{
 }
 
 .catBanner{
-    height: 200px !important;
+    height: calc(env(safe-area-inset-top) + 200px) !important;
     clip-path: ellipse(100% 52% at 50% 38%);
 }
 
