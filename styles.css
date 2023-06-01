@@ -1898,7 +1898,7 @@ nav{
     left: 0;
     right: 0;
     padding: 10px;
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
     z-index: 1000;
     border-top: 1px solid  var(--playerColor);
     transition: all 0.4s ease-in-out;
