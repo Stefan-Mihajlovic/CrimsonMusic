@@ -190,8 +190,8 @@ main{
     height: calc(100vh - 70px);
     z-index: 10;
     padding: 20px;
-    padding-bottom: 150px;
-    padding-top: calc(env(safe-area-inset-top) + 80px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
+    padding-top: calc(env(safe-area-inset-top) + 120px);
     overflow-x: hidden;
     overflow-y: scroll;
     position: relative;
