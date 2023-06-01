@@ -1537,7 +1537,7 @@ hr{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(-100svh + 65px);
+    bottom: calc(-100svh + 80px);
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -1566,13 +1566,13 @@ hr{
 
 .playerSongInfo img{
     border-radius: 5px;
-    width: 40px;
+    width: 45px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
 
 .playerOpenTop{
-    top: env(safe-area-inset-top - 55px, -55px);
+    top: env(safe-area-inset-top - 60px, -60px);
 }
 
 /* ----- LANDSCAPE ORIENTATION ----- */
@@ -1584,7 +1584,7 @@ hr{
         width: 55px;
     }
     .playerOpen{
-        top: -10px !important;
+        top: -15px !important;
     }
 }
 
@@ -1891,10 +1891,10 @@ nav{
     background-color: black;
     background-image: linear-gradient(45deg, black, rgb(22, 20, 29));
     width: 100%;
-    height: 150px;
+    height: 160px;
     gap: 10px;
     flex-shrink: 0;
-    top: calc(100svh - 60px + env(safe-area-inset-bottom));
+    top: calc(100svh - 70px + env(safe-area-inset-bottom));
     left: 0;
     right: 0;
     padding: 10px;
@@ -1957,6 +1957,7 @@ nav button{
 .navBig button{
     background-color: transparent;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     color: var(--offWhite);
@@ -2094,7 +2095,6 @@ nav button i{
         bottom: -1px;
     }
     .playerOpen{
-        top: 0px;
         height: calc(100svh);
     }
     .artistScreen, .playlistScreen, .categoryScreen{
