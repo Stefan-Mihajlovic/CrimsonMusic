@@ -1065,6 +1065,7 @@ hr{
 .artistInfo img{
     position: absolute;
     width: 100%;
+    top: 0;
     object-fit: cover;
     height: 300px;
     border-bottom: 1px solid var(--playerColor);
