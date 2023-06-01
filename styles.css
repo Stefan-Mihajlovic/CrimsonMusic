@@ -136,7 +136,7 @@ header{
     backdrop-filter: blur(20px) brightness(0.9);
     -webkit-backdrop-filter: blur(20px) brightness(0.9);
     border-bottom: 1px solid  var(--playerColor);
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     left: 0;
     right: 0;
     z-index: 80;
@@ -761,7 +761,7 @@ main{
 
 .loginScreen{
     position: absolute;
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     bottom: 0;
     left: 0;
     right: 0;
@@ -990,7 +990,7 @@ hr{
 
 .artistScreen, .playlistScreen, .categoryScreen, .makePlaylistScreen{
     position: absolute;
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     min-height: 100vh;
     left: 0;
     right: 0;
@@ -1385,7 +1385,7 @@ hr{
 /* ----- POPUP ----- */
 
 #popupWrapper{
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     height: 100svh;
     left: 0;
     right: 0;
@@ -1878,7 +1878,7 @@ nav{
     height: 75px;
     gap: 10px;
     flex-shrink: 0;
-    bottom: 0;
+    top: calc(100svh - 75px);
     left: 0;
     right: 0;
     padding: 10px;
@@ -1893,7 +1893,7 @@ nav{
 
 .navBig{
     display: none;
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     align-items: center;
     height: 60px;
     border-top: none;
