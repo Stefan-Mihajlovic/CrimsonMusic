@@ -1537,7 +1537,7 @@ hr{
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(-100svh + 80px);
+    bottom: calc(-100svh + 85px);
     z-index: 999;
     display: flex;
     flex-direction: column;
