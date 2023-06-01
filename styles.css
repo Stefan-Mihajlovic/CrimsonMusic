@@ -1903,7 +1903,7 @@ nav{
     left: 0;
     right: 0;
     padding: 15px;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
+    padding-bottom: calc(calc(env(safe-area-inset-bottom) * 0.8) + 15px);
     z-index: 1000;
     border-top: 1px solid  var(--playerColor);
     transition: all 0.4s ease-in-out;
