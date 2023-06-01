@@ -1891,10 +1891,10 @@ nav{
     background-color: black;
     background-image: linear-gradient(45deg, black, rgb(22, 20, 29));
     width: 100%;
-    height: 165px;
+    height: 150px;
     gap: 10px;
     flex-shrink: 0;
-    top: calc(100svh - 75px + env(safe-area-inset-bottom));
+    top: calc(100svh - 60px + env(safe-area-inset-bottom));
     left: 0;
     right: 0;
     padding: 10px;
@@ -1937,12 +1937,21 @@ nav{
 nav button{
     height: 100%;
     border-radius: 10px;
-    background-color: var(--mainColor);
+    background-color: transparent;
     outline: none;
     border: none;
     flex-grow: 1;
     flex-shrink: 0;
     transition: all .2s linear;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 7px;
+    color: var(--offWhite);
+    font-weight: 700;
+    padding-block: 30px;
+    font-size: 11px;
 }
 
 .navBig button{
@@ -1963,8 +1972,7 @@ nav button{
 }
 
 .activeScreen{
-    background-color: var(--accentColor);
-    color: var(--accentColor) !important;
+    color: var(--accentColor);
 }
 
 .navBig .activeScreen{
@@ -1972,7 +1980,7 @@ nav button{
 }
 
 .activeScreen i{
-    color: black !important;
+    color: var(--accentColor) !important;
 }
 
 .navBig button i{
@@ -1980,7 +1988,7 @@ nav button{
 }
 
 nav button i{
-    font-size: 25px;
+    font-size: 18px;
     color: var(--offWhite);
 }
 
