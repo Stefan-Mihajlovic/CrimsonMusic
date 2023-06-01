@@ -1783,8 +1783,8 @@ hr{
 
 .bigControls{
     position: absolute;
-    bottom: env(safe-area-inset-bottom, 0px);
-    padding-bottom: 30px;
+    bottom: 0px;
+    padding-bottom: env(safe-area-inset-bottom + 30px, 30px);
     width: 100%;
     max-width: 700px;
     display: flex;
