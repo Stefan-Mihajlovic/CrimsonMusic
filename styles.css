@@ -992,7 +992,7 @@ hr{
 
 .artistScreen, .playlistScreen, .categoryScreen, .makePlaylistScreen{
     position: absolute;
-    top: env(safe-area-inset-top, 0px);
+    top: 0px;
     min-height: 100vh;
     left: 0;
     right: 0;
@@ -1003,6 +1003,7 @@ hr{
     transition: all .4s ease-in-out;
     z-index: 99;
     overflow: hidden;
+    padding-top: env(safe-area-inset-top);
 }
 
 .screenScrollable{
