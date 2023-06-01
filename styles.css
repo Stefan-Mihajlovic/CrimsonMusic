@@ -1067,7 +1067,7 @@ hr{
     width: 100%;
     top: 0;
     object-fit: cover;
-    height: 300px;
+    height: calc(env(safe-area-inset-top) + 300px);
     border-bottom: 1px solid var(--playerColor);
     transition: all 0.03s ease-in-out;
 }
