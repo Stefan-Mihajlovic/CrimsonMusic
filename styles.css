@@ -1388,7 +1388,7 @@ hr{
 
 #popupWrapper{
     top: 0px;
-    height: 100svh;
+    height: 100vh;
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.6);
