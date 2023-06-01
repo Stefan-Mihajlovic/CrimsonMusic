@@ -764,7 +764,7 @@ main{
 
 .loginScreen{
     position: absolute;
-    top: env(safe-area-inset-top, 0px);
+    top: 0px;
     bottom: 0;
     left: 0;
     right: 0;
