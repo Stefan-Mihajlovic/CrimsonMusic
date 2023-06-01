@@ -1058,6 +1058,7 @@ hr{
 
 .pageBarOn h2{
     opacity: 1 !important;
+    transform: translateX(0%);
 }
 
 .artistScreen .pageBar button i, .playlistScreen .pageBar button i, .categoryScreen .pageBar button i, .makePlaylistScreen .pageBar button i{
