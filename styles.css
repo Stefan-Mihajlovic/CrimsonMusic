@@ -903,7 +903,7 @@ hr{
 }
 
 .loggedInScreen img{
-    width: 40px;
+    width: 33px;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
 }
@@ -924,11 +924,11 @@ hr{
 }
 
 .loggedInScreen button{
-    width: 100px;
+    width: 110px;
     background-color: var(--offWhite);
     color: var(--mainColor);
     color: black;
-    padding: 15px;
+    padding: 11px;
     border: none;
     font-size: 13px;
     font-weight: 600;
