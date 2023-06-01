@@ -1548,6 +1548,7 @@ hr{
     pointer-events: none;
     transform: translateY(300%);
     border-top: 1px solid var(--playerColor);
+    background-color: black;
 }
 
 .songBackdrop{
