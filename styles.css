@@ -1884,7 +1884,7 @@ nav{
     height: 165px;
     gap: 10px;
     flex-shrink: 0;
-    top: calc(100svh - 75px + env(safe-area-inset-top));
+    top: calc(100svh - 75px + env(safe-area-inset-bottom));
     left: 0;
     right: 0;
     padding: 10px;
