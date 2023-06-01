@@ -1674,7 +1674,7 @@ hr{
 
 .playerSongBtns{
     display: flex;
-    gap: 15px;
+    gap: 20px;
     padding-right: 5px;
     z-index: 2;
 }
