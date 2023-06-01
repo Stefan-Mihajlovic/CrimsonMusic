@@ -38,7 +38,7 @@ body{
     justify-content: flex-start;
     /* width: 100%; */
     height: 100vh;
-    overflow: hidden;
+    overflow: hidden !important;
     position: relative;
     gap: 10px;
 }
@@ -185,7 +185,7 @@ main{
     z-index: 10;
     padding: 20px;
     padding-bottom: 150px;
-    padding-top: 80px;
+    padding-top: calc(env(safe-area-inset-top) + 80px);
     overflow-x: hidden;
     overflow-y: scroll;
     position: relative;
