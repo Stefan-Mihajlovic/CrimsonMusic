@@ -1591,9 +1591,6 @@ hr{
     .playerSongInfo img{
         width: 55px;
     }
-    .playerOpen{
-        top: -15px !important;
-    }
 }
 
 .playerOpen{
@@ -1614,6 +1611,7 @@ hr{
     transform: translateY(100%);
     transition: all .5s ease-in-out;
     padding-top: 0px !important;
+    padding-bottom: 20px !important;
     height: 50px !important;
 }
 
@@ -1813,7 +1811,6 @@ hr{
     z-index: 1;
     transform: translateY(50%);
     transition: all .1s linear;
-    margin-top: 15px;
     filter: drop-shadow(0px 0px 20px black);
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), transparent);
     opacity: 0;
@@ -1828,9 +1825,9 @@ hr{
 }
 
 .bigControls .bipCC{
-    width: 100%;
-    padding: 35px;
-    padding-top: 0px;
+    width: 85vw;
+    padding: 0px;
+    padding-bottom: 25px;
     position: relative;
 }
 
@@ -1843,15 +1840,15 @@ hr{
     position: absolute;
     font-size: 10px;
     color: var(--offWhiteDark);
-    top: 40%;
+    top: 50%;
 }
 
 #currentSongTime{
-    left: 37px;
+    left: 0px;
 }
 
 #currentSongTimeLeft{
-    right: 37px;
+    right: 0px;
 }
 
 .bpCC{
@@ -1867,7 +1864,7 @@ hr{
 .bpCC button i{
     color: var(--offWhite);
     font-size: 1.7rem;
-    width: 50px;
+    width: 55px;
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
@@ -2101,6 +2098,9 @@ nav button i{
     }
     .playerOpen{
         height: calc(100svh);
+    }
+    .bigSongInfo img{
+        width: 57.5vw;
     }
     .artistScreen, .playlistScreen, .categoryScreen{
         top: 60px;
