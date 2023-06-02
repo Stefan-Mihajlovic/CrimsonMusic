@@ -135,14 +135,14 @@ header{
     height: 70px;
     padding-inline: 15px;
     padding-top: 120px;
-    padding-bottom: 30px;
+    padding-bottom: 35px;
     flex-shrink: 0;
     overflow: hidden;
     position: fixed;
     backdrop-filter: blur(20px) brightness(0.9);
     -webkit-backdrop-filter: blur(20px) brightness(0.9);
     border-bottom: 1px solid  var(--playerColor);
-    top: calc(env(safe-area-inset-top) - 90px);
+    top: calc(env(safe-area-inset-top) - 85px);
     left: 0;
     right: 0;
     z-index: 80;
@@ -191,7 +191,7 @@ main{
     z-index: 10;
     padding: 20px;
     padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
-    padding-top: calc(env(safe-area-inset-top) + 80px);
+    padding-top: calc(env(safe-area-inset-top) + 90px);
     overflow-x: hidden;
     overflow-y: scroll;
     position: relative;
@@ -484,7 +484,7 @@ main{
 /* ----- SEARCH SCREEN ----- */
 
 .searchScreen{
-    padding-top: calc(env(safe-area-inset-top) + 80px);
+    padding-top: calc(env(safe-area-inset-top) + 90px);
 }
 
 .searchScreen form{
