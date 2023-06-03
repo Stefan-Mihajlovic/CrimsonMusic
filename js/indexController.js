@@ -532,6 +532,10 @@ let isCategoryPageOpen = false;
 
 export function openCategoryPage(category, color, banner){
 
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+
     let catBanners = document.getElementsByName("catBanner");
     catBanners.forEach((cat) => {
         cat.src = banner;
@@ -562,6 +566,7 @@ export function openCategoryPage(category, color, banner){
 }
 
 export function closeCategoryPage(){
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     categoryPage.classList.remove("categoryPageOpen");
     isCategoryPageOpen = false;
 }
@@ -641,13 +646,16 @@ closeArtistPageBtn.addEventListener('click', ()=>{
 })
 
 export function closeArtistPage(){
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
     artistScreen.classList.remove("artistScreenOpen");
     isArtistPageOpen = false;
 }
 
 export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens){
-    
+
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+
     for (let i = 0; i < screenScrollables.length; i++) {
         screenScrollables[i].scrollTop = 0;
     }
@@ -795,6 +803,8 @@ let isPlaylistPageOpen = false;
 
 export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+
     playlistSongsList.innerHTML = "";
 
     if(document.getElementById("playlistChecker").innerHTML !== pName){
@@ -865,6 +875,9 @@ function GenerateOneSongFromPlaylist(songName){
 }
 
 export function closePlaylistPage(){
+
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+
     let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
     playlistScreen.classList.remove("playlistScreenOpen");
     isPlaylistPageOpen = false;
@@ -1009,6 +1022,8 @@ function DeLoadUserPlaylists(){
 }
 
 export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
+
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     if(document.getElementById("playlistChecker").innerHTML !== pName){
 

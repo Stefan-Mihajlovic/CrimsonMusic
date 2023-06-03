@@ -61,7 +61,7 @@ function showHeader(){
 
 /* ----- SET SCREEN ----- */
 
-let currentScreen = "Home";
+let currentScreen = "homeScreen";
 
 function setScreen(screenToSet, clickedBtn, activeScreen){
 
@@ -136,12 +136,14 @@ function clickEffect(button){
 
 function openLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     loginScreen.classList.add("loginScreenOpen");
 }
 
 function closeLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 
     loginScreen.classList.remove("loginScreenOpen");
 }
@@ -465,10 +467,12 @@ let isMakePlOpen = false;
 
 function OpenMakePlaylistScreen(){
     makePlScreen.classList.add("makePlaylistScreenOpen");
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 }
 
 function CloseMakePlaylistScreen(){
     makePlScreen.classList.remove("makePlaylistScreenOpen");
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 }
 
 function changeMakePlaylistName(text){
