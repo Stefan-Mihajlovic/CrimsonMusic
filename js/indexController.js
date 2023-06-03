@@ -1141,7 +1141,7 @@ export function openLikedSongs(){
 // ----- CALLING ALL NECESSARY FUNCTIONS
 getUsername();
 seeIfUserIsSignedIn();
-// generateSongs();
-// generateArtists();
-// generatePlaylists();
-// generateCategories();
+generateSongs();
+generateArtists();
+generatePlaylists();
+generateCategories();
