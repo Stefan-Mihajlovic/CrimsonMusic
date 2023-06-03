@@ -1927,7 +1927,10 @@ hr{
 
 .bpCC{
     display: flex;
-    gap: 15px;
+    justify-content: space-between;
+    width: 90vw;
+    max-width: 650px;
+    align-items: center;
 }
 
 .bpCC button{
@@ -1957,6 +1960,31 @@ hr{
 
 .rewindButton i{
     font-size: 30px !important;
+}
+
+.bCC{
+    display: flex;
+    width: 90vw;
+    max-width: 650px;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.bCC button{
+    background: none;
+    border: none;
+}
+
+.bCC button i{
+    color: var(--offWhite);
+    font-size: 1.2rem;
+    width: 25px;
+    margin-inline: 15px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ----- NAV ----- */
