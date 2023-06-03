@@ -385,6 +385,10 @@ currentSongAudio.addEventListener('timeupdate', () =>{
     let progressBar = parseInt((currentSongAudio.currentTime/currentSongAudio.duration)*100);
     songTime.value = progressBar;
 
+    let miniSeekBar = document.getElementById("miniSeekBar");
+    miniSeekBar.style.width = progressBar + "%";
+
+
 });
 
 songTime.addEventListener('change', ()=>{
