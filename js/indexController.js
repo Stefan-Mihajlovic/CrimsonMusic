@@ -805,9 +805,9 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
-    playlistSongsList.innerHTML = "";
-
     if(document.getElementById("playlistChecker").innerHTML !== pName){
+
+        playlistSongsList.innerHTML = "";
 
         document.getElementById("addToPlaylistBtn").style.display = "none";
         document.getElementById("playlistLikesH5").style.display = "block";
