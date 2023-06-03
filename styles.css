@@ -189,7 +189,6 @@ main{
     width: 100%;
     height: calc(100vh - 70px);
     z-index: 10;
-    padding: 20px;
     padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
     padding-top: calc(env(safe-area-inset-top) + 90px);
     overflow-x: hidden;
@@ -206,11 +205,13 @@ main{
 
 .catTitle{
     font-size: 20px;
+    margin-left: 20px;
 }
 
 .catTitleAlone{
     font-size: 20px;
     margin-bottom: 15px;
+    margin-left: 20px;
 }
 
 .catDesc{
@@ -219,16 +220,18 @@ main{
     margin: 2px;
     color: var(--offWhiteDark);
     margin-bottom: 15px;
+    margin-left: 20px;
 }
 
 /* ----- VibeVault Section ----- */
 
 .vibeVaultItem{
-    width: 100%;
+    width: calc(100% - 40px);
     height: 125px;
     background-color: var(--secondaryColor);
     border-radius: 15px;
     margin-bottom: 15px;
+    margin-left: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -306,6 +309,12 @@ main{
     display: flex;
     flex-direction: column;
     gap: 5px;
+    padding: 20px;
+    padding-block: 0px;
+}
+
+.categoryRecommendedSongs, .yourPlaylists{
+    padding: 0px;
 }
 
 .songItem{
@@ -393,6 +402,7 @@ main{
     overflow-x: scroll;
     overflow-y: hidden;
     padding-bottom: 10px;
+    padding-inline: 20px;
 }
 
 .artistItem{
@@ -436,6 +446,7 @@ main{
     overflow-x: scroll;
     overflow-y: hidden;
     padding-bottom: 10px;
+    padding-inline: 20px;
 }
 
 .playlistItem{
@@ -484,7 +495,12 @@ main{
 /* ----- SEARCH SCREEN ----- */
 
 .searchScreen{
+    padding-inline: 20px;
     padding-top: calc(env(safe-area-inset-top) + 90px);
+}
+
+.searchScreen .catTitle{
+    margin-left: 0px;
 }
 
 .searchScreen form{
@@ -1067,8 +1083,16 @@ hr{
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 }
 
-.artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryScreenOpen .pageBar h2, .makePlaylistScreenOpen .pageBar h2{
+.artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryScreenOpen .pageBar h2{
     transform: translateX(100%);
+}
+
+.makePlaylistScreen .pageBar h2{
+    line-height: 26px;
+}
+
+.makePlaylistScreenOpen .pageBar h2{
+    transform: translateX(0%);
 }
 
 .artistInfo{
@@ -1281,6 +1305,10 @@ hr{
 }
 
 /* ----- LIBRARY / YOURS SCREEN ----- */
+
+.yoursScreen{
+    padding-inline: 20px;
+}
 
 .yoursScreen h1{
     display: flex;
