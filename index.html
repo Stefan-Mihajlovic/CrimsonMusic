@@ -333,7 +333,7 @@
                 <i class="fa-solid fa-circle-info"></i>
             </div>
             <ul class="songPopupBody">
-                <li class="popupItem" onclick="clickEffect(this)">
+                <li class="popupItem" onclick="clickEffect(this)" id="likeSongBtn">
                     <i class="fa-regular fa-heart"></i>
                     <h5>Add to favourites</h5>
                 </li>
@@ -380,7 +380,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -392,6 +392,8 @@
         window.openMyPlaylistPage = openMyPlaylistPage;
         window.SubmitAPlaylist = SubmitAPlaylist;
         window.openLikedSongs = openLikedSongs;
+        window.addSongToLiked = addSongToLiked;
+        window.seeIfSongIsLiked = seeIfSongIsLiked;
     </script>
 
     <audio src="" id="currentSong"></audio>

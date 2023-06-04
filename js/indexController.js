@@ -228,7 +228,7 @@ function GenerateOneSong(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
                 </li>`;
             recSongs.innerHTML += currentLI;
@@ -415,7 +415,7 @@ function findSearchedSong(songName, inputText){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                     </li>`;
                 searchList.innerHTML += currentLI;
@@ -625,7 +625,7 @@ function findSongOfCategory(songName, inputText){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                     </li>`;
                 categoryRecommendedSongsList.innerHTML += currentLI;
@@ -716,7 +716,7 @@ function SetTheLatestRelease(artist){
                             </div>
                             <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release');"></div>
                             <div class="songBtns">
-                                <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
+                                <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
                             <span class="latestPin">Latest</span>
                         </li>`;
@@ -786,7 +786,7 @@ function GenerateOneSongFromArtist(songName,artist){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 artistTopTracksList.innerHTML += currentLI;
@@ -866,7 +866,7 @@ function GenerateOneSongFromPlaylist(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`')"><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </li>`;
             playlistSongsList.innerHTML += currentLI;
@@ -899,12 +899,8 @@ openTheVaultBtn.addEventListener('click', () => {
         playRandomSongForTheVault();
 
         let vaultSection = document.getElementsByClassName("vaultSection")[0];
-        vaultSection.children[2].classList.add("vaultSectionOn");
-        vaultSection.innerHTML = `<h2 class="catTitle">TheVault</h2>
-        <h5 class="catDesc">Unlock the perfect soundtrack to your emotions with TheVault - the ultimate musical treasure chest that tunes in to your every mood and vibe!</h5>
-        <div class="vibeVaultItem">
-            <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>
-        </div>`;
+        openTheVaultBtn.classList.add("openedVaultBtn");
+        openTheVaultBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
 
         isTheVaultOn = true;
     }
@@ -1008,7 +1004,7 @@ function LoadUserPlaylists(){
                     </div>
                     <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this); openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="clickEffect(this); openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`','')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 yourPlaylists.innerHTML += currentLi;
@@ -1148,6 +1144,93 @@ export function openLikedSongs(){
                 openMyPlaylistPage(0, "Favourites", "images/favourites.jpg", "0", userLiked);
             }else{
                 openMyPlaylistPage(0, "Favourites", "images/favourites.jpg", "0", "");
+            }
+        }
+    })
+}
+
+// ----- LIKE SONGS
+
+export function seeIfSongIsLiked(id){
+
+    const dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            let setLikedSongs = snapshot.val().LikedSongs;
+
+            if(setLikedSongs === undefined){
+                setLikedSongs = "";
+            }
+            let likedSongsArray = setLikedSongs.split(',');
+
+            if(likedSongsArray.includes(id)){
+                let likeSongBtn = document.getElementById("likeSongBtn");
+                likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
+            }else{
+                let likeSongBtn = document.getElementById("likeSongBtn");
+                likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+            }
+        }
+    })
+
+    return true;
+}
+
+export function addSongToLiked(id){
+    const dbRef = ref(realdb);
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            let setLikedSongs = snapshot.val().LikedSongs;
+
+            if(setLikedSongs === undefined){
+                setLikedSongs = "";
+            }
+            let likedSongsArray = setLikedSongs.split(',');
+            if(!likedSongsArray.includes(id)){
+                set(ref(realdb, "Users/"+currentUser.Username),
+                {
+                    Username: setUsername,
+                    Email: setEmail,
+                    Password: setPassword,
+                    Playlists: setPlaylists,
+                    LikedSongs: setLikedSongs + id + ","
+                })
+                .then(()=>{
+                    let likeSongBtn = document.getElementById("likeSongBtn");
+                    likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
+                })
+                .catch((error)=>{
+                    alert("error "+error);
+                })
+            }else{
+                likedSongsArray = likedSongsArray.filter(function(item) {
+                    return item !== id;
+                });
+
+                set(ref(realdb, "Users/"+currentUser.Username),
+                {
+                    Username: setUsername,
+                    Email: setEmail,
+                    Password: setPassword,
+                    Playlists: setPlaylists,
+                    LikedSongs: likedSongsArray.toString()
+                })
+                .then(()=>{
+                    let likeSongBtn = document.getElementById("likeSongBtn");
+                    likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+                })
+                .catch((error)=>{
+                    alert("error "+error);
+                })
             }
         }
     })
