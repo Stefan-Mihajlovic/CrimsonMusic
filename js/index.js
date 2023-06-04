@@ -422,15 +422,15 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
-        if(screen.scrollTop > 175){
+        if(screen.scrollTop > 165){
             screen.children[0].classList.add("pageBarOn");
         }else{
             screen.children[0].classList.remove("pageBarOn");
         }
 
-        sideBanner1.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
-        sideBanner2.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
-        sideBanner3.style.transform = "translateY(-"+ screen.scrollTop / 5 +"px)";
+        sideBanner1.style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
+        sideBanner2.style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
+        sideBanner3.style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
     })
 })
 
