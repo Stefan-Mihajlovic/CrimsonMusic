@@ -524,8 +524,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     let likeSongBtn = document.getElementById("likeSongBtn");
     if(isLikedPage){
         likeSongBtn.addEventListener('click', () => {
-            addSongToLiked(id);
-            reloadLikedSongs();
+            addSongToLiked(id,true);
         })
     }else{
         likeSongBtn.addEventListener('click', () => {

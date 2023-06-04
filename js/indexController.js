@@ -1166,23 +1166,23 @@ export function reloadLikedSongs(){
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
             userLiked = snapshot.val().LikedSongs;
-        }
-    })
-
-    if(userLiked == undefined){
-        userLiked = "";
-    }
-
-    if(userLiked != ""){
-        let playlistSongss = userLiked.split(',');
-        for (let i = (playlistSongss.length-1); i > 0; i--) {
-            if(playlistSongss[i] !== ""){
-                GenerateOneSongFromLiked(playlistSongss[i]);
+            
+            if(userLiked === undefined){
+                userLiked = "";
+            }
+        
+            if(userLiked !== ""){
+                let playlistSongss = userLiked.split(',');
+                for (let i = (playlistSongss.length-1); i > 0; i--) {
+                    if(playlistSongss[i] !== ""){
+                        GenerateOneSongFromLiked(playlistSongss[i]);
+                    }
+                }
+            }else{
+                playlistSongsList.innerHTML = "";
             }
         }
-    }else{
-        playlistSongsList.innerHTML = "";
-    }
+    })
 }
 
 export function openLikedSongs(){
@@ -1234,7 +1234,7 @@ export function seeIfSongIsLiked(id){
     return true;
 }
 
-export function addSongToLiked(id){
+export function addSongToLiked(id,isFromLiked){
     const dbRef = ref(realdb);
         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -1280,6 +1280,7 @@ export function addSongToLiked(id){
                 .then(()=>{
                     let likeSongBtn = document.getElementById("likeSongBtn");
                     likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+                    reloadLikedSongs();
                 })
                 .catch((error)=>{
                     alert("error "+error);
