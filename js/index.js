@@ -528,7 +528,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
             likeSongBtn.classList.add("likeBtnAnim");
             setTimeout(() => {
                 likeSongBtn.classList.remove("likeBtnAnim");
-            }, 750);
+            }, 500);
         })
     }else{
         likeSongBtn.addEventListener('click', () => {
@@ -536,7 +536,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
             likeSongBtn.classList.add("likeBtnAnim");
             setTimeout(() => {
                 likeSongBtn.classList.remove("likeBtnAnim");
-            }, 750);
+            }, 500);
         })
     }
 }
