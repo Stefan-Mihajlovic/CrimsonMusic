@@ -525,10 +525,18 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     if(isLikedPage){
         likeSongBtn.addEventListener('click', () => {
             addSongToLiked(id,true);
+            likeSongBtn.classList.add("likeBtnAnim");
+            setTimeout(() => {
+                likeSongBtn.classList.remove("likeBtnAnim");
+            }, 750);
         })
     }else{
         likeSongBtn.addEventListener('click', () => {
             addSongToLiked(id);
+            likeSongBtn.classList.add("likeBtnAnim");
+            setTimeout(() => {
+                likeSongBtn.classList.remove("likeBtnAnim");
+            }, 750);
         })
     }
 }

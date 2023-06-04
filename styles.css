@@ -1589,6 +1589,7 @@ hr{
     border-bottom: 1px solid var(--playerColor);
     font-weight: 100;
     padding: 20px;
+    transition: all .3s ease-in-out;
 }
 
 .popupItem h5{
@@ -1598,6 +1599,23 @@ hr{
 
 .popupItem i{
     font-size: 20px;
+}
+
+.likeBtnAnim{
+    background-color: rgba(255, 0, 0, 0.2);
+    animation: danceBtn 0.2s;
+}
+
+@keyframes danceBtn {
+    0%{
+        filter: blur(0px);
+    }
+    50%{
+        filter: blur(5px);
+    }
+    100%{
+        filter: blur(0px);
+    }
 }
 
 /* ----- PLAYER ----- */
