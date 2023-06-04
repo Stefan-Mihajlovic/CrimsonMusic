@@ -1055,8 +1055,8 @@ hr{
     background-color: var(--sidePageback);
     z-index: 999;
     pointer-events: none;
-    transform: translateX(150%);
-    transition: all .4s ease-in-out;
+    transform: translateX(110%);
+    transition: all .3s ease-in-out;
     z-index: 99;
     overflow: hidden;
 }
