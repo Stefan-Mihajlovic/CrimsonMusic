@@ -1049,7 +1049,9 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
         if(pSongs != ""){
             let playlistSongss = pSongs.split(',');
             for (let i = 0; i < playlistSongss.length; i++) {
-                GenerateOneSongFromPlaylist(playlistSongss[i]);
+                if(playlistSongss[i] !== ""){
+                    GenerateOneSongFromPlaylist(playlistSongss[i]);
+                }
             }
         }else{
             playlistSongsList.innerHTML = "";
