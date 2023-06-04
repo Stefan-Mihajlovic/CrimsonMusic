@@ -822,7 +822,7 @@ main{
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
-    transition: all .3s ease-in-out;
+    transition: all .35s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1056,7 +1056,7 @@ hr{
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
-    transition: all .3s ease-in-out;
+    transition: all .35s ease-in-out;
     z-index: 99;
     overflow: hidden;
 }
