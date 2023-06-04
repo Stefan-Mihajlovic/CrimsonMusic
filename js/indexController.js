@@ -1021,8 +1021,6 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
-    if(document.getElementById("playlistChecker").innerHTML !== pName){
-
         document.getElementById("addToPlaylistBtn").style.display = "block";
         document.getElementById("playlistLikesH5").style.display = "none";
         document.getElementById("likePlaylist").style.display = "none";
@@ -1050,17 +1048,12 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
             let playlistSongss = pSongs.split(',');
             for (let i = 0; i < playlistSongss.length; i++) {
                 if(playlistSongss[i] !== ""){
-                    GenerateOneSongFromPlaylist(playlistSongss[i]);
+                    GenerateOneSongFromLiked(playlistSongss[i]);
                 }
             }
         }else{
             playlistSongsList.innerHTML = "";
         }
-    }else{
-        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
-        playlistScreen.classList.add("playlistScreenOpen");
-        isPlaylistPageOpen = true;
-    }
 }
 
 // ----- MAKING A PLAYLIST
@@ -1132,6 +1125,64 @@ function UploadProcess(){
             );
         }, 1000);
     })
+}
+
+function GenerateOneSongFromLiked(songName){
+    let name = songName;
+
+    playlistSongsList.innerHTML = "";
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            songCreator = snapshot.val().Creator;
+                songToBePlayed = snapshot.val().SongURL;
+                songTitle  = snapshot.val().SongName;
+                imageURL = snapshot.val().ImgURL;
+                let currentLI =  `<li class="songItem">
+                <div class="songInfo">
+                    <img src="`+imageURL+`" alt="songBanner">
+                    <div class="songText">
+                        <h2>`+ songTitle +`</h2>
+                        <h3>`+ songCreator +`</h3>
+                    </div>
+                </div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists');"></div>
+                <div class="songBtns">
+                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`',true)"><i class="fa-solid fa-bars"></i></button>
+                </div>
+            </li>`;
+            playlistSongsList.innerHTML += currentLI;
+        }
+    })
+}
+
+export function reloadLikedSongs(){
+
+    let dbRef = ref(realdb);
+    let userLiked;
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            userLiked = snapshot.val().LikedSongs;
+        }
+    })
+
+    if(userLiked == undefined){
+        userLiked = "";
+    }
+
+    if(userLiked != ""){
+        let playlistSongss = userLiked.split(',');
+        for (let i = 0; i < playlistSongss.length; i++) {
+            if(playlistSongss[i] !== ""){
+                GenerateOneSongFromLiked(playlistSongss[i]);
+            }
+        }
+    }else{
+        playlistSongsList.innerHTML = "";
+    }
 }
 
 export function openLikedSongs(){

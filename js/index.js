@@ -485,7 +485,7 @@ function changeMakePlaylistName(text){
 
 // ----- Close Popup
 
-function openPopup(type,src,art,nam,id){
+function openPopup(type,src,art,nam,id,isLikedPage){
     let popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
 
@@ -522,9 +522,16 @@ function openPopup(type,src,art,nam,id){
     seeIfSongIsLiked(id);
 
     let likeSongBtn = document.getElementById("likeSongBtn");
-    likeSongBtn.addEventListener('click', () => {
-        addSongToLiked(id);
-    })
+    if(isLikedPage){
+        likeSongBtn.addEventListener('click', () => {
+            addSongToLiked(id);
+            reloadLikedSongs();
+        })
+    }else{
+        likeSongBtn.addEventListener('click', () => {
+            addSongToLiked(id);
+        })
+    }
 }
 
 function closePopup(){
