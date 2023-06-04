@@ -1046,7 +1046,7 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
         if(pSongs != ""){
             let playlistSongss = pSongs.split(',');
-            for (let i = 0; i < playlistSongss.length; i++) {
+            for (let i = (playlistSongss.length-1); i > 0; i--) {
                 if(playlistSongss[i] !== ""){
                     GenerateOneSongFromLiked(playlistSongss[i]);
                 }
@@ -1175,7 +1175,7 @@ export function reloadLikedSongs(){
 
     if(userLiked != ""){
         let playlistSongss = userLiked.split(',');
-        for (let i = 0; i < playlistSongss.length; i++) {
+        for (let i = (playlistSongss.length-1); i > 0; i--) {
             if(playlistSongss[i] !== ""){
                 GenerateOneSongFromLiked(playlistSongss[i]);
             }
