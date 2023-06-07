@@ -8,6 +8,7 @@
 }
 
 :root{
+    --bodyBg: black;
     --mainColor: #242027;
     --mainColorLighter: rgba(36, 34, 39, 0.6);
     --mainColorLighter2:rgb(139, 135, 146);
@@ -25,7 +26,7 @@
 }
 
 body{
-    background-color: black;
+    background-color: var(--bodyBg);
     font-family: 'Outfit', sans-serif;
     min-height: 100vh;
     color: var(--offWhite);
@@ -213,12 +214,14 @@ main{
 .catTitle{
     font-size: 20px;
     margin-left: 20px;
+    width: calc(100% - 40px);
 }
 
 .catTitleAlone{
     font-size: 20px;
     margin-bottom: 15px;
     margin-left: 20px;
+    width: calc(100% - 40px);
 }
 
 .catDesc{
@@ -228,6 +231,7 @@ main{
     color: var(--offWhiteDark);
     margin-bottom: 15px;
     margin-left: 20px;
+    width: calc(100% - 40px);
 }
 
 /* ----- VibeVault Section ----- */
@@ -984,6 +988,47 @@ hr{
     font-size: 13px;
     font-weight: 600;
     border-radius: 10px;
+}
+
+/* ----- THEME IN SETTINGS ----- */
+
+.themeSection{
+    width: 100%;
+}
+
+.themeSection div{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.themeItem{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.themeItem img{
+    border-radius: 0px !important;
+    width: 80%;
+}
+
+.themeSection div input{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
 }
 
 /* ----- TOGGLES IN SETTINGS ----- */

@@ -42,6 +42,7 @@ let accountEmails = document.getElementsByName('accountEmail');
 let accountUsername;
 let accountEmail;
 let accountPhoto;
+export let accountTheme = "Dark";
 
 let loggedIn = false;
 
@@ -92,7 +93,8 @@ function RegisterUser(){
                 Email: email.value,
                 Password: encPass(),
                 Playlists: "",
-                LikedSongs: ""
+                LikedSongs: "",
+                AppTheme: "Dark"
             })
             .then(()=>{
                 alert('User registered successfuly!');

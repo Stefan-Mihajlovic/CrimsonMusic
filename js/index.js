@@ -545,3 +545,17 @@ function closePopup(){
     let popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.remove("popupOpen");
 }
+
+// ----- SET APP THEME
+
+function setAppTheme(){
+
+    let lightThemeInput = document.getElementById("lightThemeInput");
+    let darkThemeInput = document.getElementById("darkThemeInput");
+
+    if(darkThemeInput.checked){
+        accountTheme = "Dark";
+    }else{
+        accountTheme = "Light";
+    }
+}
