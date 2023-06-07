@@ -24,7 +24,7 @@
             <h2 id="timeOfDay">Good Afternoon</h2>
             <h2 class="accountName" name="accountName">Guest</h2>
         </div>
-        <button name="accountImage" type="button" onclick="openLoginScreen()"><img src="images/noUserImg.svg" alt="userButtonImage"></button>
+        <button name="accountImage" type="button" onclick="openLoginScreen()"><img name="accountPhoto" src="images/noUserImg.svg" alt="userButtonImage"></button>
     </header>
 
     <main class="homeScreen">
@@ -283,57 +283,61 @@
             <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-circle-left"></i></button>
             <h2 name="regLogTitle">Register</h2>
         </div>
-        <form class="loginForm">
-            <h2 name="regLogTitle">Sign Up</h2>
-
-            <input type="text" id="username" aria-describedby="usernameHelp" placeholder="Username">
-            <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email">
-            <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password">
-
-            <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" id="changeLoginScreenBtn" onclick="RegToLog()">Log in!</span></h5>
-
-            <div class="buttonField">
-                <button type="button" id="registerBtn">Register</button>
-                <button type="button" id="loginBtn" style="display: none;">Login</button>
-                <button type="button" id="regGoogleBtn"><i class="fa-brands fa-google"></i>&nbsp;Register with Google</button>
+        <div class="screenScrollable">
+            <form class="loginForm">
+                <h2 name="regLogTitle">Sign Up</h2>
+    
+                <input type="text" id="username" aria-describedby="usernameHelp" placeholder="Username">
+                <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email">
+                <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password">
+    
+                <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" id="changeLoginScreenBtn" onclick="RegToLog()">Log in!</span></h5>
+    
+                <div class="buttonField">
+                    <button type="button" id="registerBtn">Register</button>
+                    <button type="button" id="loginBtn" style="display: none;">Login</button>
+                    <button type="button" id="regGoogleBtn"><i class="fa-brands fa-google"></i>&nbsp;Register with Google</button>
+                </div>
+            </form>
+            <div class="loggedInScreen">
+                <section class="logOutSection">
+                    <div class="accountInfo">
+                        <img name="accountPhoto" src="images/noUserImg.svg" alt="userBanner">
+                        <div class="accountText">
+                            <h2 name="accountName">Guest</h2>
+                            <h5 name="accountEmail">youarenotsuppsedtoseethis</h5>
+                        </div>
+                    </div>
+                    <button type="button" id="logoutBtn">Log Out</button>
+                </section>
+                <hr>
+                <section class="themeSection">
+                    <h2>Theme</h2>
+                    <div>
+                        <div class="themeItem">
+                            <img src="images/DarkModeBanner.png" alt="themeImage">
+                            <h3>Light</h3>
+                            <input type="radio" class="fullInput" name="appTheme" id="lightThemeInput" onchange="setAppTheme()">
+                            <input type="checkbox" name="appTheme2" id="lightThemeInput2">
+                        </div>
+                        <div class="themeItem">
+                            <img src="images/DarkModeBanner.png" alt="themeImage">
+                            <h3>Dark</h3>
+                            <input type="radio" class="fullInput" name="appTheme" id="darkThemeInput" checked onchange="setAppTheme()">
+                            <input type="checkbox" name="appTheme2" id="darkThemeInput2" checked>
+                        </div>
+                    </div>
+                </section>
+                <hr>
+                <section class="toggleSection">
+                    <div class="toggleText">
+                        <h2>Data Saver</h2>
+                        <h5>Sets the audio quality to low and turns off image previews for songs</h5>
+                    </div>
+                    <input id="dataSaverToggle" type="checkbox" name="dataSaverToggle" placeholder="Data Saver Toggle">
+                </section>
+                <hr>
             </div>
-        </form>
-        <div class="loggedInScreen">
-            <section class="logOutSection">
-                <div class="accountInfo">
-                    <img name="accountPhoto" src="images/noUserImg.svg" alt="userBanner">
-                    <div class="accountText">
-                        <h2 name="accountName">Guest</h2>
-                        <h5 name="accountEmail">youarenotsuppsedtoseethis</h5>
-                    </div>
-                </div>
-                <button type="button" id="logoutBtn">Log Out</button>
-            </section>
-            <hr>
-            <section class="themeSection">
-                <h2>Theme</h2>
-                <div>
-                    <div class="themeItem">
-                        <img src="images/CrimsonLogo.png" alt="themeImage">
-                        <h3>Light</h3>
-                        <input type="radio" name="appTheme" id="lightThemeInput" onchange="setAppTheme()">
-                    </div>
-                    <div class="themeItem">
-                        <img src="images/CrimsonLogo.png" alt="themeImage">
-                        <h3>Dark</h3>
-                        <input type="radio" name="appTheme" id="darkThemeInput" checked onchange="setAppTheme()">
-                    </div>
-                </div>
-            </section>
-            <hr>
-            <section class="toggleSection">
-                <div class="toggleText">
-                    <h2>Data Saver</h2>
-                    <h5>Sets the audio quality to low and turns off image previews for songs</h5>
-                </div>
-                <input id="dataSaverToggle" type="checkbox" name="dataSaverToggle" placeholder="Data Saver Toggle">
-            </section>
-            <hr>
         </div>
     </div>
 

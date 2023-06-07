@@ -23,6 +23,8 @@
     --playlistSearch: rgba(141, 111, 252, 0.5);
 
     --sidePageback: rgb(14, 14, 15);
+
+    --footerBg: linear-gradient(45deg, black, rgb(22, 20, 29));
 }
 
 body{
@@ -88,6 +90,7 @@ h2::-webkit-scrollbar{
 h2{
     -ms-overflow-style: none;
     scrollbar-width: none;
+    font-weight: 500 !important; 
 }
 
 h3::-webkit-scrollbar{
@@ -521,6 +524,7 @@ main{
     white-space: nowrap;
     text-overflow: ellipsis;
     color: var(--offWhiteDark);
+    font-weight: 300;
 }
 
 /* ----- SEARCH SCREEN ----- */
@@ -804,6 +808,7 @@ main{
 .pageBar button{
     background: none;
     border: none;
+    margin-bottom: 2px;
 }
 
 .pageBar button i{
@@ -970,19 +975,21 @@ hr{
 
 .loggedInScreen h2{
     text-transform: uppercase;
+    font-weight: 500;
 }
 
 .loggedInScreen h5{
     color: var(--offWhiteDark);
     line-height: 0px;
     margin-bottom: 10px;
+    font-weight: 300;
 }
 
 .loggedInScreen button{
     width: 110px;
     background-color: var(--offWhite);
     color: var(--mainColor);
-    color: black;
+    color: var(--bodyBg);
     padding: 11px;
     border: none;
     font-size: 13px;
@@ -1001,7 +1008,8 @@ hr{
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 .themeItem{
@@ -1015,10 +1023,16 @@ hr{
 
 .themeItem img{
     border-radius: 0px !important;
-    width: 80%;
+    width: 60%;
+    aspect-ratio: 1 / 2;
 }
 
-.themeSection div input{
+.themeItem h3{
+    text-transform: uppercase;
+    font-weight: 200;
+}
+
+.themeSection div .fullInput{
     position: absolute;
     width: 100%;
     height: 100%;
@@ -1029,6 +1043,12 @@ hr{
     -ms-appearance: none;
     -o-appearance: none;
     appearance: none;
+}
+
+.themeSection div input[type="checkbox"]{
+    margin-right: 0px !important;
+    width: 30px;
+    height: 30px;
 }
 
 /* ----- TOGGLES IN SETTINGS ----- */
@@ -1046,6 +1066,7 @@ hr{
 .toggleSection .toggleText h5{
     font-size: 10px;
     line-height: 10px;
+    font-weight: 300;
 }
 
 .loginScreen input[type="checkbox"]{
@@ -1056,18 +1077,15 @@ hr{
     /* For iOS < 15 */
     background-color: var(--mainColor);
     /* Not removed via appearance */
-  
     font: inherit;
     color: currentColor;
     border-radius: 50%;
     width: 35px;
     height: 35px;
-    border: 0.15em solid currentColor;
+    border: 1px solid var(--offWhite);
     border-radius: 50%;
-
     display: grid;
     place-content: center;
-
     margin-bottom: 10px;
     margin-right: 10px;
 }
@@ -1107,7 +1125,7 @@ hr{
 }
 
 .artistScreen .catTitle, .playlistScreen .catTitle, .categoryScreen .catTitle{
-    margin-left: 0px;
+    /* margin-left: 0px; */
 }
 
 .screenScrollable{
@@ -1141,6 +1159,7 @@ hr{
 .artistScreen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
     opacity: 0;
     transition: all 0.45s ease-in-out;
+    font-weight: 500;
 }
 
 .pageBarOn{
@@ -1165,6 +1184,7 @@ hr{
 
 .makePlaylistScreen .pageBar h2{
     line-height: 26px;
+    font-weight: 500;
 }
 
 .makePlaylistScreenOpen .pageBar h2{
@@ -1753,6 +1773,7 @@ hr{
     font-size: 17.5px;
     text-shadow: 0px 0px 20px black;
     flex-grow: 1;
+    font-weight: 500;
 }
 
 .player .pageBar span{
@@ -1913,6 +1934,7 @@ hr{
     text-overflow: clip;
     white-space: nowrap;
     flex-grow: 1;
+    font-weight: 500;
 }
 
 .bigSongInfo .playerSongText h3{
@@ -2064,7 +2086,7 @@ nav{
     align-items: flex-start;
     justify-content: space-between;
     background-color: black;
-    background-image: linear-gradient(45deg, black, rgb(22, 20, 29));
+    background-image: var(--footerBg);
     width: 100%;
     gap: 10px;
     flex-shrink: 0;

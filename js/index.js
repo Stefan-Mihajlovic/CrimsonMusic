@@ -551,11 +551,47 @@ function closePopup(){
 function setAppTheme(){
 
     let lightThemeInput = document.getElementById("lightThemeInput");
+    let lightThemeInput2 = document.getElementById("lightThemeInput2");
     let darkThemeInput = document.getElementById("darkThemeInput");
+    let darkThemeInput2 = document.getElementById("darkThemeInput2");
 
     if(darkThemeInput.checked){
+        lightThemeInput2.checked = false;
+        darkThemeInput2.checked = true;
+
+        document.documentElement.style.setProperty('--bodyBg', 'black');
+        document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
+        document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
+        document.documentElement.style.setProperty('--sidePageback', 'rgb(14, 14, 15)');
+        document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
+        document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
+        document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, black, rgb(22, 20, 29))');
+
+        document.getElementsByName("accountPhoto").forEach((photo) => {
+            photo.style.filter = "invert(0) brightness(1)";
+        })
+
+        document.getElementsByClassName("songBackdrop")[0].style.filter = "brightness(0.4) blur(30px) saturate(2.5)";
+
         accountTheme = "Dark";
     }else{
+        lightThemeInput2.checked = true;
+        darkThemeInput2.checked = false;
+
+        document.documentElement.style.setProperty('--bodyBg', 'white');
+        document.documentElement.style.setProperty('--offWhite', 'black');
+        document.documentElement.style.setProperty('--offWhiteDark', 'black');
+        document.documentElement.style.setProperty('--sidePageback', 'white');
+        document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
+        document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
+        document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, white, rgb(225, 205, 229))');
+
+        document.getElementsByName("accountPhoto").forEach((photo) => {
+            photo.style.filter = "invert(1) brightness(0)";
+        })
+
+        document.getElementsByClassName("songBackdrop")[0].style.filter = "brightness(1.2) blur(35px) saturate(2)";
+
         accountTheme = "Light";
     }
 }

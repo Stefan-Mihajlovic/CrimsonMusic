@@ -897,7 +897,7 @@ let isTheVaultOn = false;
 let openTheVaultBtn = document.getElementById("openTheVaultBtn");
 openTheVaultBtn.addEventListener('click', () => {
     if(!isTheVaultOn){
-        let g = Math.floor(Math.random() * brojPesama) + 1;
+        playRandomSongForTheVault();
         playRandomSongForTheVault();
 
         let vaultSection = document.getElementsByClassName("vaultSection")[0];
