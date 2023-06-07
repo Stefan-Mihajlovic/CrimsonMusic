@@ -571,8 +571,6 @@ function setAppTheme(){
             photo.style.filter = "invert(0) brightness(1)";
         })
 
-        document.getElementsByClassName("songBackdrop")[0].style.filter = "brightness(0.4) blur(30px) saturate(2.5)";
-
         accountTheme = "Dark";
     }else{
         lightThemeInput2.checked = true;
@@ -589,8 +587,6 @@ function setAppTheme(){
         document.getElementsByName("accountPhoto").forEach((photo) => {
             photo.style.filter = "invert(1) brightness(0)";
         })
-
-        document.getElementsByClassName("songBackdrop")[0].style.filter = "brightness(1.2) blur(35px) saturate(2)";
 
         accountTheme = "Light";
     }
