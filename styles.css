@@ -1939,6 +1939,7 @@ hr{
     white-space: nowrap;
     flex-grow: 1;
     font-weight: 500;
+    color: #DCD6F7;
 }
 
 .bigSongInfo .playerSongText h3{
