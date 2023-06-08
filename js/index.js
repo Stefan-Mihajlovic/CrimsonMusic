@@ -425,8 +425,10 @@ screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
         if(screen.scrollTop > 165){
             screen.children[0].classList.add("pageBarOn");
+            screen.children[1].classList.add("pageBarOn2");
         }else{
             screen.children[0].classList.remove("pageBarOn");
+            screen.children[1].classList.remove("pageBarOn2");
         }
 
         sideBanner1.style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";

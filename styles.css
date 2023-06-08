@@ -224,6 +224,12 @@ main{
     width: calc(100% - 40px);
 }
 
+.catTitleNoMargin{
+    font-size: 20px;
+    margin-left: 0px;
+    width: calc(100% - 40px);
+}
+
 .catTitleAlone{
     font-size: 20px;
     margin-bottom: 15px;
@@ -1174,6 +1180,10 @@ hr{
     border-bottom: 1px solid var(--playerColor) !important;
 }
 
+.pageBarOn2{
+    opacity: 0;
+}
+
 .pageBarOn h2{
     opacity: 1 !important;
     transform: translateX(0%) !important;
@@ -1333,6 +1343,10 @@ hr{
     align-items: center;
     gap: 10px;
     overflow-x: scroll;
+}
+
+.artistAppearsOn .playlistItem img{
+    box-shadow: none !important;
 }
 
 .artistTopTracks, .playlistSongsList{
