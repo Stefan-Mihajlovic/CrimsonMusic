@@ -26,7 +26,7 @@
     --songSearch: rgba(255, 0, 0, 0.2);
     --playlistSearch: rgba(141, 111, 252, 0.5);
 
-    --sidePageback: rgb(14, 14, 15);
+    --sidePageback: linear-gradient(0deg, rgb(14, 14, 15), rgb(14, 14, 15));
 
     --footerBg: linear-gradient(45deg, black, rgb(22, 20, 29));
 }

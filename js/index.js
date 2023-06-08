@@ -569,7 +569,7 @@ function setAppTheme(){
         document.documentElement.style.setProperty('--yoursBubbleColor', 'rgb(90, 0, 27)');
         document.documentElement.style.setProperty('--pageBarColor', 'rgba(0, 0, 0, 0.8)');
         document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
-        document.documentElement.style.setProperty('--sidePageback', 'rgb(14, 14, 15)');
+        document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, rgb(14, 14, 15), rgb(14, 14, 15))');
         document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
         document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
         document.documentElement.style.setProperty('--latestReleaseBox', 'black');
