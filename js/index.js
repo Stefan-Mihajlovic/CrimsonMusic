@@ -563,6 +563,7 @@ function setAppTheme(){
         document.documentElement.style.setProperty('--playerColor', '#242027');
         document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
         document.documentElement.style.setProperty('--darken', 'black');
+        document.documentElement.style.setProperty('--yoursBubbleColor', 'rgb(90, 0, 27)');
         document.documentElement.style.setProperty('--pageBarColor', 'rgba(0, 0, 0, 0.8)');
         document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
         document.documentElement.style.setProperty('--sidePageback', 'rgb(14, 14, 15)');
@@ -584,6 +585,7 @@ function setAppTheme(){
         document.documentElement.style.setProperty('--offWhite', 'black');
         document.documentElement.style.setProperty('--offWhiteDark', 'black');
         document.documentElement.style.setProperty('--darken', 'white');
+        document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.25)');
         document.documentElement.style.setProperty('--pageBarColor', 'rgba(255, 255, 255, 0.7)');
         document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, white, rgb(225, 205, 229))');
         document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
