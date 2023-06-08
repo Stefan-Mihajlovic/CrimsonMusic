@@ -1708,7 +1708,7 @@ hr{
     flex-direction: column;
     height: calc(100svh + 55px);
     overflow: hidden;
-    transition: all .4s ease-in-out;
+    transition: all .32s ease-in-out;
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%);
@@ -1717,7 +1717,6 @@ hr{
 }
 
 .songBackdrop{
-    display: none;
     position: absolute;
     height: 175vh;
     top: -175px;
