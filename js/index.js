@@ -254,6 +254,9 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
 
     currentSongAudio.currentTime = 0;
     currentSongAudio.play();
+    if(currentSongAudio.paused){
+        currentSongAudio.play();
+    }
 
 }
 

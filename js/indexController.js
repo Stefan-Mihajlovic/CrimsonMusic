@@ -898,7 +898,6 @@ let openTheVaultBtn = document.getElementById("openTheVaultBtn");
 openTheVaultBtn.addEventListener('click', () => {
     if(!isTheVaultOn){
         playRandomSongForTheVault();
-        playRandomSongForTheVault();
 
         let vaultSection = document.getElementsByClassName("vaultSection")[0];
         openTheVaultBtn.classList.add("openedVaultBtn");
