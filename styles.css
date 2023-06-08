@@ -1236,7 +1236,8 @@ hr{
 .darken{
     position: absolute;
     width: 100%;
-    height: 50%;
+    height: 80%;
+    bottom: -2px;
     background: linear-gradient(0deg, var(--darken), transparent);
     z-index: 1;
 }
