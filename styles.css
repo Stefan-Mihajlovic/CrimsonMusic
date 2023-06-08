@@ -805,7 +805,7 @@ main{
     justify-content: flex-start;
     gap: 15px;
     border-bottom: 1px solid var(--playerColor);
-    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
 }
 
 .pageBar button{
