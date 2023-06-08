@@ -20,6 +20,7 @@
     --darken: black;
     --yoursBubbleColor: rgb(90, 0, 27);
     --pageBarColor: rgba(0, 0, 0, 0.8);
+    --latestReleaseBox: black;
 
     --artistSearch: rgba(0, 128, 0, 0.3);
     --songSearch: rgba(255, 0, 0, 0.2);
@@ -1307,7 +1308,7 @@ hr{
     padding: 10px;
     background-color: var(--secondaryColor);
     border-radius: 10px;
-    box-shadow: 0px 0px 15px black;
+    box-shadow: 0px 0px 15px var(--latestReleaseBox);
     border: 1px solid rgb(30, 27, 34);
     display: flex;
     justify-content: space-between;
@@ -1329,12 +1330,12 @@ hr{
     padding: 3px;
     padding-inline: 10px;
     background-color: var(--offWhite);
-    color: var(--sidePageback);
+    color: var(--bodyBg);
     border-radius: 20px;
     font-size: 12px;
     top: -15px;
     left: -5px;
-    border: 1px solid var(--sidePageback);
+    border: 1px solid var(--bodyBg);
     transform: rotate(-5deg);
 }
 

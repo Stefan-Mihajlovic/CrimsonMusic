@@ -572,6 +572,7 @@ function setAppTheme(){
         document.documentElement.style.setProperty('--sidePageback', 'rgb(14, 14, 15)');
         document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
         document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
+        document.documentElement.style.setProperty('--latestReleaseBox', 'black');
         document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, black, rgb(22, 20, 29))');
 
         document.getElementsByName("accountPhoto").forEach((photo) => {
@@ -592,6 +593,7 @@ function setAppTheme(){
         document.documentElement.style.setProperty('--pageBarColor', 'rgba(255, 255, 255, 0.7)');
         document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, white, rgb(225, 205, 229))');
         document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
+        document.documentElement.style.setProperty('--latestReleaseBox', 'rgb(0,0,0,0.2)');
         document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
         document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, white, rgb(225, 205, 229))');
 
