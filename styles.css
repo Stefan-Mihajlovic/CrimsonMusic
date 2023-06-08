@@ -21,6 +21,7 @@
     --yoursBubbleColor: rgb(90, 0, 27);
     --pageBarColor: rgba(0, 0, 0, 0.8);
     --latestReleaseBox: black;
+    --allChColor: rgba(255, 255, 255, 0.2);
 
     --artistSearch: rgba(0, 128, 0, 0.3);
     --songSearch: rgba(255, 0, 0, 0.2);
@@ -43,7 +44,6 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* width: 100%; */
     height: 100vh;
     overflow: hidden !important;
     position: relative;
@@ -170,6 +170,7 @@ header h2{
 .accountName{
     color: var(--accentColor);
     text-transform: uppercase;
+    font-weight: 700 !important;
 }
 
 .accountImage{
@@ -494,6 +495,10 @@ main{
     padding-left: 0px;
 }
 
+.categoryRecommendedPlaylists .playlistItem img{
+    box-shadow: none !important;
+}
+
 .playlistItem{
     width: 150px;
     display: flex;
@@ -734,7 +739,7 @@ main{
 }
 
 .allchipCh{
-    background-color: rgba(255, 255, 255, 0.2) !important;
+    background-color: var(--allChColor)  !important;
 }
 
 .searchChip label{
@@ -800,6 +805,7 @@ main{
     text-transform: uppercase;
     font-size: 20px;
     padding: 10px;
+    color: #DCD6F7;
 }
 
 /* ----- LOGIN SCREEN ----- */
@@ -839,7 +845,8 @@ main{
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--sidePageback);
+    background-color: white;
+    background-image: var(--sidePageback);
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
@@ -1128,7 +1135,7 @@ hr{
     min-height: 100vh;
     left: 0;
     right: 0;
-    background: var(--sidePageback);
+    background-color: var(--darken);
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
@@ -1145,6 +1152,7 @@ hr{
     width: 100%;
     height: 100vh;
     overflow-y: scroll;
+    overflow-x: hidden;
     display: flex;
     padding-bottom: 225px;
     flex-direction: column;
@@ -1238,7 +1246,7 @@ hr{
     position: absolute;
     width: 100%;
     height: 80%;
-    bottom: -2px;
+    bottom: -5px;
     background: linear-gradient(0deg, var(--darken), transparent);
     z-index: 1;
 }
@@ -1297,12 +1305,16 @@ hr{
     flex-direction: column;
     gap: 15px;
     z-index: 2;
-    background: var(--sidePageback);
+    background-color: var(--darken);
 }
 
 .catWork{
     padding-top: 0px !important;
     background-color: transparent !important;
+}
+
+#catH3Title{
+    text-shadow: 0px 0px 20px var(--darken);
 }
 
 .latestRelease{
@@ -1462,6 +1474,7 @@ hr{
 
 .favouritesItem{
     transition: all .1s ease-in-out;
+    border-radius: 10px !important;
     height: 70px;
     background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 40, 1));
 }
@@ -1638,6 +1651,7 @@ hr{
     gap: 10px;
     border-bottom: 1px solid var(--playerColor);
     padding: 10px;
+    color: #DCD6F7;
 }
 
 .popupInfo img{
@@ -2120,7 +2134,7 @@ nav{
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    background-color: black;
+    background-color: white;
     background-image: var(--footerBg);
     width: 100%;
     gap: 10px;

@@ -566,11 +566,13 @@ function setAppTheme(){
         document.documentElement.style.setProperty('--playerColor', '#242027');
         document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
         document.documentElement.style.setProperty('--darken', 'black');
+        document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
         document.documentElement.style.setProperty('--yoursBubbleColor', 'rgb(90, 0, 27)');
         document.documentElement.style.setProperty('--pageBarColor', 'rgba(0, 0, 0, 0.8)');
         document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
         document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, rgb(14, 14, 15), rgb(14, 14, 15))');
         document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
+        document.documentElement.style.setProperty('--mainColorLighter', 'rgba(36, 34, 39, 0.6)');
         document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
         document.documentElement.style.setProperty('--latestReleaseBox', 'black');
         document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, black, rgb(22, 20, 29))');
@@ -588,14 +590,16 @@ function setAppTheme(){
         document.documentElement.style.setProperty('--playerColor', '#c1bbc6');
         document.documentElement.style.setProperty('--offWhite', 'black');
         document.documentElement.style.setProperty('--offWhiteDark', 'black');
-        document.documentElement.style.setProperty('--darken', 'white');
+        document.documentElement.style.setProperty('--darken', '#ede7ff');
+        document.documentElement.style.setProperty('--allChColor', 'rgba(0, 0, 0, 0.2)');
         document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.25)');
-        document.documentElement.style.setProperty('--pageBarColor', 'rgba(255, 255, 255, 0.7)');
-        document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, white, rgb(225, 205, 229))');
+        document.documentElement.style.setProperty('--pageBarColor', 'rgba(222, 213, 255, 0.6)');
+        document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, white, rgba(134, 69, 255, 0.25))');
         document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
+        document.documentElement.style.setProperty('--mainColorLighter', 'rgba(255, 255, 255, 0.5)');
         document.documentElement.style.setProperty('--latestReleaseBox', 'rgb(0,0,0,0.2)');
         document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
-        document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, white, rgb(225, 205, 229))');
+        document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, white, rgba(134, 69, 255, 0.15))');
 
         document.getElementsByName("accountPhoto").forEach((photo) => {
             photo.style.filter = "invert(1) brightness(0)";
