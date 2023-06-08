@@ -560,7 +560,10 @@ function setAppTheme(){
         darkThemeInput2.checked = true;
 
         document.documentElement.style.setProperty('--bodyBg', 'black');
+        document.documentElement.style.setProperty('--playerColor', '#242027');
         document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
+        document.documentElement.style.setProperty('--darken', 'black');
+        document.documentElement.style.setProperty('--pageBarColor', 'rgba(0, 0, 0, 0.8)');
         document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
         document.documentElement.style.setProperty('--sidePageback', 'rgb(14, 14, 15)');
         document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
@@ -577,9 +580,12 @@ function setAppTheme(){
         darkThemeInput2.checked = false;
 
         document.documentElement.style.setProperty('--bodyBg', 'white');
+        document.documentElement.style.setProperty('--playerColor', '#c1bbc6');
         document.documentElement.style.setProperty('--offWhite', 'black');
         document.documentElement.style.setProperty('--offWhiteDark', 'black');
-        document.documentElement.style.setProperty('--sidePageback', 'white');
+        document.documentElement.style.setProperty('--darken', 'white');
+        document.documentElement.style.setProperty('--pageBarColor', 'rgba(255, 255, 255, 0.7)');
+        document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, white, rgb(225, 205, 229))');
         document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
         document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
         document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, white, rgb(225, 205, 229))');
