@@ -145,6 +145,34 @@ function decPass(dbpass){
 
 // Login user
 
+// export function setUserTheme(theme){
+//     const dbRef = ref(realdb);
+//         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+//         if(snapshot.exists()){
+//             let setUsername = snapshot.val().Username;
+//             let setEmail = snapshot.val().Email;
+//             let setPassword = snapshot.val().Password;
+//             let setPlaylists = snapshot.val().Playlists;
+//             let setTheme = snapshot.val().AppTheme;
+
+//             set(ref(realdb, "Users/"+currentUser.Username),
+//             {
+//                 Username: setUsername,
+//                 Email: setEmail,
+//                 Password: setPassword,
+//                 Playlists: setPlaylists,
+//                 AppTheme: theme
+//             })
+//             .then(()=>{
+                
+//             })
+//             .catch((error)=>{
+//                 alert("error "+error);
+//             })
+//         }
+//     })
+// }
+
 function loginUser(user){
     localStorage.setItem('keepLoggedIn', 'yes');
     localStorage.setItem('user', JSON.stringify(user));
@@ -157,7 +185,9 @@ function loginUser(user){
     accountEmails.forEach((email) => {
         email.innerHTML = accountEmail;
     });
+    accountTheme = user.AppTheme;
     setLoggedInScreen();
+    setAppTheme(accountTheme);
 }
 
 function getUsername(){
@@ -958,6 +988,7 @@ function DBMakePl(){
             let setEmail = snapshot.val().Email;
             let setPassword = snapshot.val().Password;
             let setPlaylists = snapshot.val().Playlists;
+            let setTheme = snapshot.val().AppTheme;
 
             let currentMakePlaylistName = document.getElementsByClassName("currentMakePlaylistName")[0];
 
@@ -966,7 +997,8 @@ function DBMakePl(){
                 Username: setUsername,
                 Email: setEmail,
                 Password: setPassword,
-                Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}")
+                Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}"),
+                AppTheme: setTheme
             })
             .then(()=>{
                 alert("Playlist made");
@@ -1244,6 +1276,7 @@ export function addSongToLiked(id,isFromLiked){
             let setPassword = snapshot.val().Password;
             let setPlaylists = snapshot.val().Playlists;
             let setLikedSongs = snapshot.val().LikedSongs;
+            let setTheme = snapshot.val().AppTheme;
 
             if(setLikedSongs === undefined){
                 setLikedSongs = "";
@@ -1256,7 +1289,8 @@ export function addSongToLiked(id,isFromLiked){
                     Email: setEmail,
                     Password: setPassword,
                     Playlists: setPlaylists,
-                    LikedSongs: setLikedSongs + id + ","
+                    LikedSongs: setLikedSongs + id + ",",
+                    AppTheme: setTheme
                 })
                 .then(()=>{
                     let likeSongBtn = document.getElementById("likeSongBtn");
@@ -1276,7 +1310,8 @@ export function addSongToLiked(id,isFromLiked){
                     Email: setEmail,
                     Password: setPassword,
                     Playlists: setPlaylists,
-                    LikedSongs: likedSongsArray.toString()
+                    LikedSongs: likedSongsArray.toString(),
+                    AppTheme: setTheme
                 })
                 .then(()=>{
                     let likeSongBtn = document.getElementById("likeSongBtn");
