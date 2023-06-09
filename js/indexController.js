@@ -5,7 +5,7 @@ import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from 'h
 import { getDatabase, ref, set, child, get, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
-let brojPesama = 26;
+let brojPesama = 27;
 let brojArtista = 15;
 let brojPlejlista = 4;
 let brojKategorija = 12;
