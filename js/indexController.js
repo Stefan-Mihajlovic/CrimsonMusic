@@ -145,34 +145,6 @@ function decPass(dbpass){
 
 // Login user
 
-// export function setUserTheme(theme){
-//     const dbRef = ref(realdb);
-//         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-//         if(snapshot.exists()){
-//             let setUsername = snapshot.val().Username;
-//             let setEmail = snapshot.val().Email;
-//             let setPassword = snapshot.val().Password;
-//             let setPlaylists = snapshot.val().Playlists;
-//             let setTheme = snapshot.val().AppTheme;
-
-//             set(ref(realdb, "Users/"+currentUser.Username),
-//             {
-//                 Username: setUsername,
-//                 Email: setEmail,
-//                 Password: setPassword,
-//                 Playlists: setPlaylists,
-//                 AppTheme: theme
-//             })
-//             .then(()=>{
-                
-//             })
-//             .catch((error)=>{
-//                 alert("error "+error);
-//             })
-//         }
-//     })
-// }
-
 function loginUser(user){
     localStorage.setItem('keepLoggedIn', 'yes');
     localStorage.setItem('user', JSON.stringify(user));
