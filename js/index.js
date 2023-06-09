@@ -427,11 +427,10 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
-        if(screen.scrollTop > 175){
-            screen.children[2].children[1].style.opacity = 1 - (screen.scrollTop/175 - 1);
-            console.log(screen.scrollTop/175 - 1)
+        if(screen.scrollTop > 170){
+            screen.children[2].children[1].children[0].style.opacity = 1 - (screen.scrollTop/124.5 - 1);
         }else{
-            screen.children[2].children[1].style.opacity = 1;
+            screen.children[2].children[1].children[0].style.opacity = 1;
         }
 
         if(screen.scrollTop > 250){
