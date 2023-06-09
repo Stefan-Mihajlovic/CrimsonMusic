@@ -426,7 +426,15 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
-        if(screen.scrollTop > 165){
+
+        if(screen.scrollTop > 175){
+            screen.children[2].children[1].style.opacity = 1 - (screen.scrollTop/175 - 1);
+            console.log(screen.scrollTop/175 - 1)
+        }else{
+            screen.children[2].children[1].style.opacity = 1;
+        }
+
+        if(screen.scrollTop > 250){
             screen.children[0].classList.add("pageBarOn");
             screen.children[1].classList.add("pageBarOn2");
         }else{
