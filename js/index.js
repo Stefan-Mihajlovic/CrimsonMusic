@@ -646,13 +646,14 @@ function setLightTheme(){
 const movablePlayer = document.getElementsByClassName("player")[0];
 const playerOpenDiv = document.getElementsByClassName("playerClickDiv")[0];
 let offsetY,currentTouchPos = 0;
-let playerTouchStarted = false;
+let playerTouchStarted = false, moveStarted = true;
 let lastTouchedPos;
 
 const move = (e) => {
     if(currentTouchPos < (-51)){
         return;
     }
+    moveStarted = true;
     // Update div pos based on new cursor pos
     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
     currentTouchPos = (e.touches[0].clientY - offsetY);
@@ -672,7 +673,8 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     }
     playerTouchStarted = true;
     lastTouchedPos = e.touches[0].clientY;
-    console.log(lastTouchedPos);
+    // console.log(lastTouchedPos);
+    moveStarted = false;
 })
 
 document.addEventListener("touchend", (e) => {
@@ -690,5 +692,10 @@ document.addEventListener("touchend", (e) => {
         }
         // console.log("touch ended");
         playerTouchStarted = false;
+        if(!moveStarted){
+            movablePlayer.classList.add("playerOpen");
+            movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
+            document.getElementsByTagName("nav")[0].classList.add("navClosed");
+        }
     }
 })
