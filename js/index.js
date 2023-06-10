@@ -645,8 +645,10 @@ function setLightTheme(){
 
 const movablePlayer = document.getElementsByClassName("player")[0];
 const playerOpenDiv = document.getElementsByClassName("playerClickDiv")[0];
+const playerOpenDiv2 = document.getElementsByClassName("playerClickDiv2")[0];
 let offsetY,currentTouchPos = 0;
-let playerTouchStarted = false, moveStarted = true;
+let playerTouchStarted = false, playerTouchStarted2 = false;
+let moveStarted = true;
 let lastTouchedPos;
 
 const move = (e) => {
@@ -675,7 +677,7 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     moveStarted = false;
 })
 
-document.addEventListener("touchend", (e) => {
+document.addEventListener("touchend", () => {
     if(playerTouchStarted){
         document.removeEventListener("touchmove", move);
         movablePlayer.classList.remove("playerMovable");
@@ -696,4 +698,36 @@ document.addEventListener("touchend", (e) => {
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
         }
     }
+    if(playerTouchStarted2){
+        movablePlayer.classList.remove("playerMovable");
+        movablePlayer.style.top = 'auto';
+        movablePlayer.classList.remove("playerOpen");
+        document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+        playerTouchStarted2 = false;
+    }
 })
+
+// playerDiv 2
+
+// const move2 = (e) => {
+//     currentTouchPos = (e.touches[0].clientY - offsetY);
+//     moveStarted = true;
+//     // Update div pos based on new cursor pos
+//     movablePlayer.classList.add("playerMovable");
+//     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+//     // console.log("moved " + (e.touches[0].clientY - offsetY));
+// }
+
+// playerOpenDiv2.addEventListener("touchstart", (e) => {
+//     // console.log("touched");
+//     movablePlayer.classList.add("playerOpen");
+//     // Calc the initial offset Values
+//     offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+//     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+//     movablePlayer.classList.add("playerMovable");
+//     document.addEventListener("touchmove", move2);
+//     playerTouchStarted2 = true;
+//     lastTouchedPos = e.touches[0].clientY;
+//     // console.log(lastTouchedPos);
+//     moveStarted = false;
+// })

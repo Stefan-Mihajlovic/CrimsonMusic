@@ -1806,6 +1806,7 @@ hr{
     padding-top: 0px !important;
     padding-bottom: 20px !important;
     height: 50px !important;
+    z-index: 2;
 }
 
 .playerOpen .pageBar{
@@ -1820,6 +1821,7 @@ hr{
     text-shadow: 0px 0px 20px black;
     flex-grow: 1;
     font-weight: 500;
+    pointer-events: none;
 }
 
 .player .pageBar span{
@@ -1829,6 +1831,10 @@ hr{
 
 .player .pageBar button i{
     color: #DCD6F7;
+}
+
+.player .pageBar button{
+    z-index: 2;
 }
 
 /* MINIPLAYER */
@@ -1843,6 +1849,10 @@ hr{
 
 .playerOpen .miniPlayer .playerClickDiv{
     display: none;
+}
+
+.playerOpen .playerClickDiv2{
+    display: block;
 }
 
 .playerOpen .miniPlayer{
@@ -1916,6 +1926,16 @@ hr{
     bottom: 0;
     left: 0;
     width: calc(100% - 95px);
+}
+
+.playerClickDiv2{
+    position: absolute;
+    top: 0px;
+    z-index: 1;
+    height: 25svh;
+    left: 0;
+    width: 100%;
+    display: none;
 }
 
 /* BIGPLAYER */
@@ -2148,6 +2168,7 @@ nav{
     z-index: 1000;
     border-top: 1px solid  var(--mainColor);
     transition: all 0.4s ease-in-out;
+    transition-delay: 0.15s;
 }
 
 .navClosed{
