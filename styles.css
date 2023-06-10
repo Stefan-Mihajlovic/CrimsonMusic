@@ -1764,7 +1764,6 @@ hr{
     object-fit: cover;
     z-index: -1;
     pointer-events: none;
-    transition: all 0.3s linear;
     filter: brightness(0.4) blur(20px) saturate(2.5);
     transform: translate3d(0, 0, 0);
     -ms-transform: translate3d(0, 0, 0);
@@ -1972,7 +1971,6 @@ hr{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    filter: drop-shadow(0px 0px 20px black);
 }
 
 .bigSongInfo .playerSongText h2{
