@@ -8,7 +8,7 @@
 }
 
 :root{
-    --bodyBg: black;
+    --bodyBg: #100e1c;
     --mainColor: #242027;
     --mainColorLighter: rgba(36, 34, 39, 0.6);
     --mainColorLighter2:rgb(139, 135, 146);
@@ -29,7 +29,7 @@
 
     --sidePageback: linear-gradient(0deg, rgb(14, 14, 15), rgb(14, 14, 15));
 
-    --footerBg: linear-gradient(45deg, black, rgb(22, 20, 29));
+    --footerBg: linear-gradient(45deg, #100e1c, rgb(22, 20, 29));
 }
 
 body{
@@ -2141,7 +2141,7 @@ nav{
     padding: 15px;
     padding-bottom: calc(calc(env(safe-area-inset-bottom) * 0.6) + 16px);
     z-index: 1000;
-    border-top: 1px solid  var(--playerColor);
+    border-top: 1px solid  var(--mainColor);
     transition: all 0.4s ease-in-out;
 }
 

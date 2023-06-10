@@ -427,10 +427,12 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
-        if(screen.scrollTop > 170){
-            screen.children[2].children[1].children[0].style.opacity = 1 - (screen.scrollTop/124.5 - 1);
-        }else{
-            screen.children[2].children[1].children[0].style.opacity = 1;
+        if(screen.id !== "screenScrollableCat"){
+            if(screen.scrollTop > 170){
+                screen.children[2].children[1].children[0].style.opacity = 1 - (screen.scrollTop/124.5 - 1);
+            }else{
+                screen.children[2].children[1].children[0].style.opacity = 1;
+            }
         }
 
         if(screen.scrollTop > 250){
@@ -586,20 +588,20 @@ function setDarkTheme(){
     lightThemeInput2.checked = false;
     darkThemeInput2.checked = true;
 
-    document.documentElement.style.setProperty('--bodyBg', 'black');
+    document.documentElement.style.setProperty('--bodyBg', '#100e1c');
     document.documentElement.style.setProperty('--playerColor', '#242027');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
-    document.documentElement.style.setProperty('--darken', 'black');
+    document.documentElement.style.setProperty('--darken', '#100e1c');
     document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgb(90, 0, 27)');
-    document.documentElement.style.setProperty('--pageBarColor', 'rgba(0, 0, 0, 0.8)');
+    document.documentElement.style.setProperty('--pageBarColor', 'rgba(16, 14, 28, 0.8)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
-    document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, rgb(14, 14, 15), rgb(14, 14, 15))');
+    document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #100e1c, #100e1c)');
     document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(36, 34, 39, 0.6)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
-    document.documentElement.style.setProperty('--latestReleaseBox', 'black');
-    document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, black, rgb(22, 20, 29))');
+    document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
+    document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, #100e1c, rgb(22, 20, 29))');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
         photo.style.filter = "invert(0) brightness(1)";
