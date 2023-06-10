@@ -1743,7 +1743,7 @@ hr{
     flex-direction: column;
     height: calc(100svh + 55px) !important;
     overflow: hidden;
-    transition: all .32s ease-in-out;
+    transition: all .3s ease-in-out;
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%);
