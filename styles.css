@@ -2337,7 +2337,7 @@ nav button i{
         display: flex;
     }
     .player{
-        bottom: calc(-100svh + 5px + calc(env(safe-area-inset-bottom) * 0.6));
+        bottom: calc(-100svh + 15px + calc(env(safe-area-inset-bottom) * 0.6));
     }
     .playerOpen{
         height: calc(100svh);
