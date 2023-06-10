@@ -1552,7 +1552,7 @@ hr{
     padding: 15px;
     width: 250px;
     border-radius: 10px;
-    color: var(--sidePageback) !important;
+    color: var(--bodyBg) !important;
     font-weight: 700;
     font-size: 15px;
 }

@@ -622,8 +622,8 @@ function setLightTheme(){
 
     document.documentElement.style.setProperty('--bodyBg', 'white');
     document.documentElement.style.setProperty('--playerColor', '#c1bbc6');
-    document.documentElement.style.setProperty('--offWhite', 'black');
-    document.documentElement.style.setProperty('--offWhiteDark', 'black');
+    document.documentElement.style.setProperty('--offWhite', '#100e1c');
+    document.documentElement.style.setProperty('--offWhiteDark', '#100e1c');
     document.documentElement.style.setProperty('--darken', '#ede7ff');
     document.documentElement.style.setProperty('--allChColor', 'rgba(0, 0, 0, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.25)');
