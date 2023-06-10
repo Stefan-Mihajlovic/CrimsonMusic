@@ -24,7 +24,7 @@
             <h2 id="timeOfDay">Good Afternoon</h2>
             <h2 class="accountName" name="accountName">Guest</h2>
         </div>
-        <button name="accountImage" type="button" onclick="openLoginScreen()"><img name="accountPhoto" src="images/noUserImg.svg" alt="userButtonImage"></button>
+        <button name="accountImage" type="button" onclick="openLoginScreen()"><img loading="lazy" name="accountPhoto" src="images/noUserImg.svg" alt="userButtonImage"></button>
     </header>
 
     <main class="homeScreen">
@@ -100,7 +100,7 @@
         </h1>
         <div class="songItem favouritesItem" onclick="clickEffect(this); openLikedSongs()">
             <div class="songInfo">
-                <img src="images/favourites.jpg" alt="playlistBanner">
+                <img loading="lazy" src="images/favourites.jpg" alt="playlistBanner">
                 <div class="songText">
                     <h2>FAVOURITES</h2>
                     <h3>SIMPLY YOURS</h3>
@@ -116,7 +116,7 @@
                 <div id="miniSeekBar"></div>
             </div>
             <div class="playerSongInfo">
-                <img src="images/demoSongBanner.jpg" alt="songBanner" name="songBanner">
+                <img loading="lazy" src="images/demoSongBanner.jpg" alt="songBanner" name="songBanner">
                 <div class="playerSongText">
                     <h2 name="songTitle">Demo Song</h2>
                     <h3 name="songArtist">Demo artist</h3>
@@ -134,9 +134,9 @@
             <button onclick="clickEffect(this);"><i class="fa-solid fa-bars"></i></button>
         </div>
         <div class="bigPlayer">
-            <img class="songBackdrop" src="images/CrimsonLogo.png" alt="playerBackdrop" name="songBanner">
+            <img loading="lazy" class="songBackdrop" src="images/CrimsonLogo.png" alt="playerBackdrop" name="songBanner">
             <div class="bigSongInfo">
-                <img src="images/CrimsonLogo.png" alt="songBanner" name="songBanner">
+                <img loading="lazy" src="images/CrimsonLogo.png" alt="songBanner" name="songBanner">
                 <div class="playerSongText">
                     <button><i class="fa-solid fa-compact-disc"></i></button>
                     <div class="playerSongNames">
@@ -179,7 +179,7 @@
             </div>
             <div class="categoryAccentBubble"></div>
             <div class="artistInfo">
-                <img name="catBanner" src="" alt="categoryBanner" class="sideBanner catBanner">
+                <img loading="lazy" name="catBanner" src="" alt="categoryBanner" class="sideBanner catBanner">
                 <div class="artistControls">
                     <div class="artistText">
                         <h3 name="categoryName" id="catH3Title">?</h3>
@@ -206,7 +206,7 @@
                 <h2></h2>
             </div>
             <div class="artistInfo">
-                <img name="artistBanner" src="" alt="artistBanner" class="sideBanner">
+                <img loading="lazy" name="artistBanner" src="" alt="artistBanner" class="sideBanner">
                 <div class="artistControls">
                     <div class="artistText">
                         <h3 name="artistName"></h3>
@@ -240,7 +240,7 @@
                 <h2></h2>
             </div>
             <div class="artistInfo">
-                <img name="playlistBanner" src="" alt="playlistBanner" class="sideBanner">
+                <img loading="lazy" name="playlistBanner" src="" alt="playlistBanner" class="sideBanner">
                 <div class="artistControls">
                     <div class="artistText">
                         <h3 name="playlistName"></h3>
@@ -302,7 +302,7 @@
             <div class="loggedInScreen">
                 <section class="logOutSection">
                     <div class="accountInfo">
-                        <img name="accountPhoto" src="images/noUserImg.svg" alt="userBanner">
+                        <img loading="lazy" name="accountPhoto" src="images/noUserImg.svg" alt="userBanner">
                         <div class="accountText">
                             <h2 name="accountName">Guest</h2>
                             <h5 name="accountEmail">youarenotsuppsedtoseethis</h5>
@@ -315,13 +315,13 @@
                     <h2>Theme</h2>
                     <div>
                         <div class="themeItem">
-                            <img src="images/LightModeBanner.png" alt="themeImage">
+                            <img loading="lazy" src="images/LightModeBanner.png" alt="themeImage">
                             <h3>Light</h3>
                             <input type="radio" class="fullInput" name="appTheme" id="lightThemeInput" onchange="setAppTheme()">
                             <input type="checkbox" name="appTheme2" id="lightThemeInput2">
                         </div>
                         <div class="themeItem">
-                            <img src="images/DarkModeBanner.png" alt="themeImage">
+                            <img loading="lazy" src="images/DarkModeBanner.png" alt="themeImage">
                             <h3>Dark</h3>
                             <input type="radio" class="fullInput" name="appTheme" id="darkThemeInput" checked onchange="setAppTheme()">
                             <input type="checkbox" name="appTheme2" id="darkThemeInput2" checked>
@@ -345,7 +345,7 @@
         <div class="popupScreen">
             <div class="blurDiv"></div>
             <div class="popupInfo">
-                <img name="popupImage" src="images/CrimsonLogo.png" alt="popupImage">
+                <img loading="lazy" name="popupImage" src="images/CrimsonLogo.png" alt="popupImage">
                 <div class="popupText">
                     <h2 name="popupSongTitle">SongTitle</h2>
                     <h3 name="popupArtist">SongArtist</h3>
@@ -389,7 +389,7 @@
 
     <nav class="navBig">
         <div>
-            <img src="images/CrimsonLogo.png" alt="logo">
+            <img loading="lazy" src="images/CrimsonLogo.png" alt="logo">
             <h2 id="timeOfDayNav"></h2>
         </div>
         <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i>Home</button>

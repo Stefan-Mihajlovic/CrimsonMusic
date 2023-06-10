@@ -224,7 +224,7 @@ function GenerateOneSong(songName){
             imageURL = snapshot.val().ImgURL;
             let currentLI =  `<li class="songItem">
                 <div class="songInfo">
-                    <img src="`+imageURL+`" alt="songBanner">
+                    <img loading="lazy" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -274,7 +274,7 @@ function GetArtists(artistName){
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
             let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`');">
-            <img src="`+ artistImage +`" alt="artistImage">
+            <img loading="lazy" src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
             recArtists.innerHTML += currentImg;
@@ -317,7 +317,7 @@ function GetPlaylists(playlistName){
             playlistSongs = snapshot.val().Songs;
             playlistArtists = snapshot.val().Artists;
             let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-            <img src="`+ playlistBanner +`" alt="playlistBanner">
+            <img loading="lazy" src="`+ playlistBanner +`" alt="playlistBanner">
             <h3>`+ playlistName +`</h3>
             <h5>`+ playlistArtists +`</h5>
             </li>`;
@@ -411,7 +411,7 @@ function findSearchedSong(songName, inputText){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem songItemSearch" onclick="clickEffect(this)">
                     <div class="songInfo">
-                        <img src="`+imageURL+`" alt="songBanner">
+                        <img loading="lazy" src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -441,7 +441,7 @@ function findSearchedArtist(artistName, inputText){
                 artistImage = snapshot.val().ImageURL;
                 let currentLi = `<li class="artistItemSearch" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`'); clickEffect(this);">
                                     <div>
-                                        <img src="`+ artistImage +`" alt="artistImage">
+                                        <img loading="lazy" src="`+ artistImage +`" alt="artistImage">
                                         <h3>`+ artistName +`</h3>
                                     </div>
                                     <i class="fa-solid fa-circle-right"></i>
@@ -467,7 +467,7 @@ function findSearchedPlaylist(playlistName, inputText){
                 playlistArtists = snapshot.val().Artists;
                 let currentLi =  `<li class="playlistItemSearch" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div class="playlistItemHolder">
-                        <img src="`+ playlistBanner +`" alt="playlistBanner">
+                        <img loading="lazy" src="`+ playlistBanner +`" alt="playlistBanner">
                         <div>
                             <h3>`+ playlistName +`</h3>
                             <h5>`+ playlistArtists +`</h5>
@@ -595,7 +595,7 @@ function findPlaylistOfCategory(playlistName, inputText){
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
                 let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                <img src="`+ playlistBanner +`" alt="playlistBanner">
+                <img loading="lazy" src="`+ playlistBanner +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
                 </li>`;
@@ -621,7 +621,7 @@ function findSongOfCategory(songName, inputText){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
-                        <img src="`+imageURL+`" alt="songBanner">
+                        <img loading="lazy" src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -712,7 +712,7 @@ function SetTheLatestRelease(artist){
                         imageURL = snapshot.val().ImgURL;
                         latestReleaseLi =  `<li class="songItem">
                             <div class="songInfo">
-                                <img src="`+imageURL+`" alt="songBanner">
+                                <img loading="lazy" src="`+imageURL+`" alt="songBanner">
                                 <div class="songText">
                                     <h2>`+ songTitle +`</h2>
                                     <h3>`+ songCreator +`</h3>
@@ -753,7 +753,7 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                <img src="`+ playlistBanner +`" alt="playlistBanner">
+                <img loading="lazy" src="`+ playlistBanner +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
                 </li>`;
@@ -782,7 +782,7 @@ function GenerateOneSongFromArtist(songName,artist){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
-                        <img src="`+imageURL+`" alt="songBanner">
+                        <img loading="lazy" src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -862,7 +862,7 @@ function GenerateOneSongFromPlaylist(songName){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
-                    <img src="`+imageURL+`" alt="songBanner">
+                    <img loading="lazy" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -1001,7 +1001,7 @@ function LoadUserPlaylists(){
             for (let i = numberOfPlaylists-1; i >= 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                     <div class="songInfo">
-                        <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                        <img loading="lazy" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
                         <div class="songText">
                             <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
                             <h3>`+ "by " + currentUser.Username +`</h3>
@@ -1147,7 +1147,7 @@ function GenerateOneSongFromLiked(songName){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
-                    <img src="`+imageURL+`" alt="songBanner">
+                    <img loading="lazy" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
