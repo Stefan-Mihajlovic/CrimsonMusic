@@ -1802,7 +1802,7 @@ hr{
     box-shadow: none;
     border: none;
     transform: translateY(100%);
-    transition: all .5s ease-in-out;
+    transition: all .2s ease-in-out;
     padding-top: 0px !important;
     padding-bottom: 20px !important;
     height: 50px !important;
