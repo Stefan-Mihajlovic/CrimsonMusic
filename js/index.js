@@ -650,13 +650,13 @@ let playerTouchStarted = false, moveStarted = true;
 let lastTouchedPos;
 
 const move = (e) => {
+    currentTouchPos = (e.touches[0].clientY - offsetY);
     if(currentTouchPos <= (-50)){
         return;
     }
     moveStarted = true;
     // Update div pos based on new cursor pos
     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
-    currentTouchPos = (e.touches[0].clientY - offsetY);
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
