@@ -672,13 +672,14 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     }
     playerTouchStarted = true;
     lastTouchedPos = e.touches[0].clientY;
+    console.log(lastTouchedPos);
 })
 
 document.addEventListener("touchend", (e) => {
     if(playerTouchStarted){
         document.removeEventListener("touchmove", move);
         movablePlayer.classList.remove("playerMovable");
-        if(currentTouchPos < 350){
+        if(currentTouchPos < lastTouchedPos - 125){
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             // console.log("less than 350!");
         }else{
