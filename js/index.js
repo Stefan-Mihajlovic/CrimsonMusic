@@ -650,7 +650,7 @@ let playerTouchStarted = false, moveStarted = true;
 let lastTouchedPos;
 
 const move = (e) => {
-    if(currentTouchPos < (-51)){
+    if(currentTouchPos <= (-50)){
         return;
     }
     moveStarted = true;
@@ -668,9 +668,7 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
     movablePlayer.classList.add("playerMovable");
-    if(currentTouchPos > (-51)){
-        document.addEventListener("touchmove", move);
-    }
+    document.addEventListener("touchmove", move);
     playerTouchStarted = true;
     lastTouchedPos = e.touches[0].clientY;
     // console.log(lastTouchedPos);
