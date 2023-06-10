@@ -214,6 +214,7 @@ function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
     player.classList.remove("playerOpen");
+    player.style.top = 'auto';
     document.getElementsByTagName("nav")[0].classList.remove("navClosed");
 }
 
@@ -641,3 +642,52 @@ function setLightTheme(){
 
     accountTheme = "Light";
 }
+
+const movablePlayer = document.getElementsByClassName("player")[0];
+const playerOpenDiv = document.getElementsByClassName("playerClickDiv")[0];
+let offsetY,currentTouchPos = 0;
+let playerTouchStarted = false;
+let lastTouchedPos;
+
+const move = (e) => {
+    if(currentTouchPos < (-51)){
+        return;
+    }
+    // Update div pos based on new cursor pos
+    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    currentTouchPos = (e.touches[0].clientY - offsetY);
+    // console.log("moved " + (e.touches[0].clientY - offsetY));
+}
+
+playerOpenDiv.addEventListener("touchstart", (e) => {
+    // console.log("touched");
+    movablePlayer.classList.add("playerOpen");
+    document.getElementsByTagName("nav")[0].classList.add("navClosed");
+    // Calc the initial offset Values
+    offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    movablePlayer.classList.add("playerMovable");
+    if(currentTouchPos > (-51)){
+        document.addEventListener("touchmove", move);
+    }
+    playerTouchStarted = true;
+    lastTouchedPos = e.touches[0].clientY;
+})
+
+document.addEventListener("touchend", (e) => {
+    if(playerTouchStarted){
+        document.removeEventListener("touchmove", move);
+        movablePlayer.classList.remove("playerMovable");
+        if(currentTouchPos < 350){
+            movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
+            // console.log("less than 350!");
+        }else{
+            movablePlayer.style.top = 'auto';
+            movablePlayer.style.top = `${lastTouchedPos - offsetY}px`;
+            movablePlayer.classList.remove("playerOpen");
+            document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+        }
+        // console.log("touch ended");
+        playerTouchStarted = false;
+    }
+})
