@@ -32,11 +32,17 @@
     --footerBg: linear-gradient(45deg, #100e1c, rgb(22, 20, 29));
 }
 
+html{
+    position: relative;
+    overflow: hidden !important;
+}
+
 body{
     background-color: var(--bodyBg);
     font-family: 'Outfit', sans-serif;
     min-height: 100vh;
     color: var(--offWhite);
+    position: relative;
     overflow: hidden !important;
 }
 
