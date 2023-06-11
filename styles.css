@@ -1957,6 +1957,7 @@ hr{
     left: 0;
     width: 100%;
     display: none;
+    background-color: red;
 }
 
 /* BIGPLAYER */
@@ -2065,7 +2066,7 @@ hr{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 2;
     transform: translateY(50%);
     transition: all .1s linear;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), transparent);
