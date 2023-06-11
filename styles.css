@@ -1592,9 +1592,7 @@ hr{
     height: 100vh;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0);
     position: fixed;
     z-index: 9999;
     display: flex;
@@ -1603,13 +1601,14 @@ hr{
     flex-direction: column;
     gap: 15px;
     padding: 15px;
-    opacity: 0;
     pointer-events: none;
-    transition: all 0.4s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .popupOpen{
-    opacity: 1 !important;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px) brightness(0.8);
+    -webkit-backdrop-filter: blur(5px) brightness(0.8);
     pointer-events: all !important;
 }
 
@@ -1659,7 +1658,7 @@ hr{
     border: 1px solid var(--playerColor);
     position: relative;
     transform: translateY(350%);
-    transition: all 0.6s ease-in-out;
+    transition: all 0.4s ease-in-out;
     overflow: scroll;
 }
 
