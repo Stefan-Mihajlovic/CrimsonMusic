@@ -716,6 +716,7 @@ const moveSide = (e) => {
 }
 
 closeLoginScreenBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     // console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - loginScreen.offsetLeft;
@@ -738,6 +739,7 @@ const categoryScreen = document.getElementsByClassName("categoryScreen")[0];
 // Playlist Close
 
 closePlaylistScreenBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     // console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - playlistScreen.offsetLeft;
@@ -762,6 +764,7 @@ const moveSide2 = (e) =>{
 // Artist Close
 
 closeArtistScreenBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     // console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - artistScreen.offsetLeft;
@@ -786,6 +789,7 @@ const moveSide3 = (e) =>{
 // Category Close
 
 closeCategoryScreenBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     // console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - categoryScreen.offsetLeft;
