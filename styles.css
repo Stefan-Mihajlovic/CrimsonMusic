@@ -857,7 +857,6 @@ main{
 .closeCurrentScreen{
     position: absolute;
     top: 45px;
-    background-color: red;
     bottom: 0;
     left: 0;
     width: 5vw;

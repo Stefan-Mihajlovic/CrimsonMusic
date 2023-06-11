@@ -716,7 +716,7 @@ const moveSide = (e) => {
 }
 
 closeLoginScreenBtn.addEventListener("touchstart", (e) => {
-    console.log("touched");
+    // console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - loginScreen.offsetLeft;
     loginScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
