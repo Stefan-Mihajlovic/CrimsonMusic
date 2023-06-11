@@ -646,7 +646,7 @@ const playerOpenDiv2 = document.getElementsByClassName("playerClickDiv2")[0];
 let offsetY,currentTouchPos = 0;
 let playerTouchStarted = false, playerTouchStarted2 = false;
 let moveStarted = true;
-let lastTouchedPos;
+let playerNormalPos = movablePlayer.offsetTop;
 
 const move = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
@@ -669,8 +669,6 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     movablePlayer.classList.add("playerMovable");
     document.addEventListener("touchmove", move);
     playerTouchStarted = true;
-    lastTouchedPos = e.touches[0].clientY;
-    // console.log(lastTouchedPos);
     moveStarted = false;
 })
 
@@ -694,8 +692,6 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
     movablePlayer.classList.add("playerMovable");
     document.addEventListener("touchmove", move2);
     playerTouchStarted2 = true;
-    lastTouchedPos = e.touches[0].clientY;
-    // console.log(lastTouchedPos);
     moveStarted = false;
 })
 
@@ -724,8 +720,6 @@ closeLoginScreenBtn.addEventListener("touchstart", (e) => {
     loginScreen.classList.add("playerMovable");
     document.addEventListener("touchmove", moveSide);
     touchSideStarted = true;
-    lastTouchedPos = e.touches[0].clientX;
-    // console.log(lastTouchedPos);
     moveStarted = false;
 })
 
@@ -747,8 +741,6 @@ closePlaylistScreenBtn.addEventListener("touchstart", (e) => {
     playlistScreen.classList.add("playerMovable");
     document.addEventListener("touchmove", moveSide2);
     touchSideStarted = true;
-    lastTouchedPos = e.touches[0].clientX - offsetX;
-    // console.log(lastTouchedPos);
     moveStarted = false;
 })
 
@@ -772,8 +764,6 @@ closeArtistScreenBtn.addEventListener("touchstart", (e) => {
     artistScreen.classList.add("playerMovable");
     document.addEventListener("touchmove", moveSide3);
     touchSideStarted = true;
-    lastTouchedPos = e.touches[0].clientX - offsetX;
-    // console.log(lastTouchedPos);
     moveStarted = false;
 })
 
@@ -797,8 +787,6 @@ closeCategoryScreenBtn.addEventListener("touchstart", (e) => {
     categoryScreen.classList.add("playerMovable");
     document.addEventListener("touchmove", moveSide4);
     touchSideStarted = true;
-    lastTouchedPos = e.touches[0].clientX - offsetX;
-    // console.log(lastTouchedPos);
     moveStarted = false;
 })
 
@@ -817,13 +805,13 @@ document.addEventListener("touchend", () => {
     if(playerTouchStarted){
         document.removeEventListener("touchmove", move);
         movablePlayer.classList.remove("playerMovable");
-        if(currentTouchPos < lastTouchedPos - 125){
+        if(currentTouchPos < playerNormalPos - 125){
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             isPlayerOpen = true;
             // console.log("less than 350!");
         }else{
             movablePlayer.style.top = 'auto';
-            movablePlayer.style.top = `${lastTouchedPos - offsetY}px`;
+            movablePlayer.style.top = `${playerNormalPos}px`;
             movablePlayer.classList.remove("playerOpen");
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             isPlayerOpen = false;
@@ -859,6 +847,7 @@ document.addEventListener("touchend", () => {
         movablePlayer.classList.remove("playerMovable");
         movablePlayer.classList.remove("playerOpen");
         movablePlayer.style.top = 'auto';
+        movablePlayer.style.top = `${playerNormalPos}px`;
         document.removeEventListener("touchmove", move2);
         document.getElementsByTagName("nav")[0].classList.remove("navClosed");
         isPlayerOpen = false;
