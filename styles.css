@@ -856,10 +856,11 @@ main{
 
 .closeCurrentScreen{
     position: absolute;
-    top: 0;
+    top: 45px;
+    background-color: red;
     bottom: 0;
     left: 0;
-    width: 5%;
+    width: 5vw;
     z-index: 1;
 }
 

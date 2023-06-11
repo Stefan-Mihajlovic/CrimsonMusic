@@ -716,7 +716,7 @@ const moveSide = (e) => {
 }
 
 closeLoginScreenBtn.addEventListener("touchstart", (e) => {
-    // console.log("touched");
+    console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - loginScreen.offsetLeft;
     loginScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
@@ -755,6 +755,7 @@ document.addEventListener("touchend", () => {
         }
     }
     if(playerTouchStarted2){
+        document.removeEventListener("touchmove", move);
         movablePlayer.classList.remove("playerMovable");
         movablePlayer.style.top = 'auto';
         movablePlayer.classList.remove("playerOpen");
@@ -763,6 +764,7 @@ document.addEventListener("touchend", () => {
     playerTouchStarted2 = false;
     playerTouchStarted = false;
     if(touchSideStarted && moveStarted){
+        document.removeEventListener("touchmove", moveSide);
         loginScreen.classList.remove("playerMovable");
         closeLoginScreen();
         touchSideStarted = false;
