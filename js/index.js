@@ -729,32 +729,82 @@ closeLoginScreenBtn.addEventListener("touchstart", (e) => {
 })
 
 const closePlaylistScreenBtn = document.getElementById("closePlaylistScreen");
+const closeArtistScreenBtn = document.getElementById("closeArtistScreen");
+const closeCategoryScreenBtn = document.getElementById("closeCategoryScreen");
 const playlistScreen = document.getElementsByClassName("playlistScreen")[0];
 const artistScreen = document.getElementsByClassName("artistScreen")[0];
 const categoryScreen = document.getElementsByClassName("categoryScreen")[0];
 
+// Playlist Close
+
 closePlaylistScreenBtn.addEventListener("touchstart", (e) => {
-    console.log("touched");
+    // console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - playlistScreen.offsetLeft;
-    playlistScreen.style.left = `${e.touches[0].clientX}px`;
+    playlistScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
     playlistScreen.classList.add("playerMovable");
-    document.addEventListener("touchmove", () => {
-        moveSide2((e.touches[0].clientX), playlistScreen);
-    });
+    document.addEventListener("touchmove", moveSide2);
     touchSideStarted = true;
-    lastTouchedPos = e.touches[0].clientX;
-    console.log(lastTouchedPos);
+    lastTouchedPos = e.touches[0].clientX - offsetX;
+    // console.log(lastTouchedPos);
     moveStarted = false;
 })
 
-function moveSide2(eventX, fromScreen){
-    currentTouchPos = eventX;
+const moveSide2 = (e) =>{
+    currentTouchPos = e.touches[0].clientX - offsetX;
     moveStarted = true;
     // Update div pos based on new cursor pos
-    fromScreen.style.left = `${eventX}px`;
+    playlistScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
-    console.log("moved " + eventX);
+    // console.log("moved " + e.touches[0].clientX - offsetX);
+}
+
+// Artist Close
+
+closeArtistScreenBtn.addEventListener("touchstart", (e) => {
+    // console.log("touched");
+    // Calc the initial offset Values
+    offsetX = e.touches[0].clientX - artistScreen.offsetLeft;
+    artistScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    artistScreen.classList.add("playerMovable");
+    document.addEventListener("touchmove", moveSide3);
+    touchSideStarted = true;
+    lastTouchedPos = e.touches[0].clientX - offsetX;
+    // console.log(lastTouchedPos);
+    moveStarted = false;
+})
+
+const moveSide3 = (e) =>{
+    currentTouchPos = e.touches[0].clientX - offsetX;
+    moveStarted = true;
+    // Update div pos based on new cursor pos
+    artistScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    // console.log("moved " + e.touches[0].clientX - offsetX);
+}
+
+// Category Close
+
+closeCategoryScreenBtn.addEventListener("touchstart", (e) => {
+    // console.log("touched");
+    // Calc the initial offset Values
+    offsetX = e.touches[0].clientX - categoryScreen.offsetLeft;
+    categoryScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    categoryScreen.classList.add("playerMovable");
+    document.addEventListener("touchmove", moveSide4);
+    touchSideStarted = true;
+    lastTouchedPos = e.touches[0].clientX - offsetX;
+    // console.log(lastTouchedPos);
+    moveStarted = false;
+})
+
+const moveSide4 = (e) =>{
+    currentTouchPos = e.touches[0].clientX - offsetX;
+    moveStarted = true;
+    // Update div pos based on new cursor pos
+    categoryScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    // console.log("moved " + e.touches[0].clientX - offsetX);
 }
 
 // ----- TOUCH END
@@ -795,8 +845,12 @@ document.addEventListener("touchend", () => {
     if(touchSideStarted && moveStarted){
         document.removeEventListener("touchmove", moveSide);
         document.removeEventListener("touchmove", moveSide2);
+        document.removeEventListener("touchmove", moveSide3);
+        document.removeEventListener("touchmove", moveSide4);
         loginScreen.classList.remove("playerMovable");
         playlistScreen.classList.remove("playerMovable");
+        artistScreen.classList.remove("playerMovable");
+        categoryScreen.classList.remove("playerMovable");
         playlistScreen.style.left = '0';
         artistScreen.style.left = '0';
         categoryScreen.style.left = '0';
@@ -805,6 +859,5 @@ document.addEventListener("touchend", () => {
         closeCategoryPage();
         closeLoginScreen();
         touchSideStarted = false;
-        moveStarted = false;
     }
 })
