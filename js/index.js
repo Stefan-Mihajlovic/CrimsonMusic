@@ -810,8 +810,7 @@ document.addEventListener("touchend", () => {
             isPlayerOpen = true;
             // console.log("less than 350!");
         }else{
-            movablePlayer.style.top = 'auto';
-            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-bottom))`;
+            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom))`;
             movablePlayer.classList.remove("playerOpen");
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             isPlayerOpen = false;
@@ -846,8 +845,7 @@ document.addEventListener("touchend", () => {
     if(playerTouchStarted2 && moveStarted){
         movablePlayer.classList.remove("playerMovable");
         movablePlayer.classList.remove("playerOpen");
-        movablePlayer.style.top = 'auto';
-        movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-bottom))`;
+        movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom))`;
         document.removeEventListener("touchmove", move2);
         document.getElementsByTagName("nav")[0].classList.remove("navClosed");
         isPlayerOpen = false;
