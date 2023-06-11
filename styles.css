@@ -868,7 +868,7 @@ main{
     top: 0px;
     bottom: 0;
     left: 0;
-    right: 0;
+    width: 100vw;
     background-color: white;
     background-image: var(--sidePageback);
     z-index: 999;
