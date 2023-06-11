@@ -16,7 +16,7 @@
 :root{
     --bodyBg: #100e1c;
     --mainColor: #242027;
-    --mainColorLighter: rgba(36, 34, 39, 0.6);
+    --mainColorLighter: rgba(21, 19, 23, 0.6);
     --mainColorLighter2:rgb(139, 135, 146);
     --secondaryColor: rgba(19, 19, 19, 0.45);
     --offWhite: #DCD6F7;
@@ -583,7 +583,7 @@ main{
     border-radius: 10px;
     border: none;
     background-color: var(--mainColorLighter);
-    border: 1px solid var(--mainColor);
+    border: 1px solid var(--playerColor);
     color: var(--offWhite);
 }
 
@@ -713,7 +713,6 @@ main{
     flex-direction: column;
     width: 100%;
     gap: 5px;
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.3));
 }
 
 .SearchTypeChips{
@@ -1069,7 +1068,6 @@ hr{
     border-radius: 0px !important;
     width: 60%;
     aspect-ratio: 1 / 2;
-    filter: drop-shadow(0px 0px 25px rgba(29, 26, 29, 0.4));
 }
 
 .themeItem h3{
@@ -1275,7 +1273,7 @@ hr{
 .artistText{
     display: flex;
     flex-direction: column;
-    filter: drop-shadow(0px 0px 10px black);
+    text-shadow: 0px 0px 10px black;
     z-index: 2;
 }
 

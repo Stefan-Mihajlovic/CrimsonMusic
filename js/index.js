@@ -594,7 +594,7 @@ function setDarkTheme(){
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
     document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #100e1c, #100e1c)');
     document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
-    document.documentElement.style.setProperty('--mainColorLighter', 'rgba(36, 34, 39, 0.6)');
+    document.documentElement.style.setProperty('--mainColorLighter', 'rgba(21, 19, 23, 0.6)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
     document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, #100e1c, rgb(22, 20, 29))');
