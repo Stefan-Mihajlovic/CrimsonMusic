@@ -711,11 +711,11 @@ const moveSide = (e) => {
     moveStarted = true;
     // Update div pos based on new cursor pos
     loginScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
-    console.log("moved " + (e.touches[0].clientX - offsetX));
+    // console.log("moved " + (e.touches[0].clientX - offsetX));
 }
 
 closeLoginScreenBtn.addEventListener("touchstart", (e) => {
-    console.log("touched");
+    // console.log("touched");
     // Calc the initial offset Values
     offsetX = e.touches[0].clientX - loginScreen.offsetLeft;
     loginScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
@@ -761,7 +761,7 @@ document.addEventListener("touchend", () => {
     }
     playerTouchStarted2 = false;
     playerTouchStarted = false;
-    if(touchSideStarted){
+    if(touchSideStarted && moveStarted){
         loginScreen.classList.remove("playerMovable");
         closeLoginScreen();
         touchSideStarted = false;
