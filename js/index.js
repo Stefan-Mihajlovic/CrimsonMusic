@@ -728,6 +728,35 @@ closeLoginScreenBtn.addEventListener("touchstart", (e) => {
     moveStarted = false;
 })
 
+const closePlaylistScreenBtn = document.getElementById("closePlaylistScreen");
+const playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+const artistScreen = document.getElementsByClassName("artistScreen")[0];
+const categoryScreen = document.getElementsByClassName("categoryScreen")[0];
+
+closePlaylistScreenBtn.addEventListener("touchstart", (e) => {
+    console.log("touched");
+    // Calc the initial offset Values
+    offsetX = e.touches[0].clientX - playlistScreen.offsetLeft;
+    playlistScreen.style.left = `${e.touches[0].clientX}px`;
+    playlistScreen.classList.add("playerMovable");
+    document.addEventListener("touchmove", () => {
+        moveSide2((e.touches[0].clientX), playlistScreen);
+    });
+    touchSideStarted = true;
+    lastTouchedPos = e.touches[0].clientX;
+    console.log(lastTouchedPos);
+    moveStarted = false;
+})
+
+function moveSide2(eventX, fromScreen){
+    currentTouchPos = eventX;
+    moveStarted = true;
+    // Update div pos based on new cursor pos
+    fromScreen.style.left = `${eventX}px`;
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    console.log("moved " + eventX);
+}
+
 // ----- TOUCH END
 
 document.addEventListener("touchend", () => {
@@ -765,8 +794,17 @@ document.addEventListener("touchend", () => {
     playerTouchStarted = false;
     if(touchSideStarted && moveStarted){
         document.removeEventListener("touchmove", moveSide);
+        document.removeEventListener("touchmove", moveSide2);
         loginScreen.classList.remove("playerMovable");
+        playlistScreen.classList.remove("playerMovable");
+        playlistScreen.style.left = '0';
+        artistScreen.style.left = '0';
+        categoryScreen.style.left = '0';
+        closePlaylistPage();
+        closeArtistPage();
+        closeCategoryPage();
         closeLoginScreen();
         touchSideStarted = false;
+        moveStarted = false;
     }
 })

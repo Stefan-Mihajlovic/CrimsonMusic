@@ -1157,7 +1157,7 @@ hr{
     top: 0px;
     min-height: 100vh;
     left: 0;
-    right: 0;
+    width: 100vw;
     background-color: var(--darken);
     z-index: 999;
     pointer-events: none;
@@ -1175,6 +1175,10 @@ hr{
     display: flex;
     padding-bottom: 225px;
     flex-direction: column;
+}
+
+.artistScreen .closeCurrentScreen, .playlistScreen .closeCurrentScreen, .categoryScreen .closeCurrentScreen, .makePlaylistScreen .closeCurrentScreen{
+    z-index: 3;
 }
 
 .artistScreenOpen, .playlistScreenOpen, .categoryPageOpen, .makePlaylistScreenOpen{
