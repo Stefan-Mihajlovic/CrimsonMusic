@@ -217,6 +217,7 @@ main{
     transform: translateX(0%);
     transition: all .35s ease-in-out;
     animation: showUp 0.2s ease-in-out;
+    pointer-events: all;
 }
 
 .activeMain{
@@ -225,6 +226,7 @@ main{
 
 .mainToSide{
     transform: translateX(-40%);
+    pointer-events: none;
 }
 
 .catTitle{
