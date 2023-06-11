@@ -711,6 +711,7 @@ const moveSide = (e) => {
     moveStarted = true;
     // Update div pos based on new cursor pos
     loginScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     // console.log("moved " + (e.touches[0].clientX - offsetX));
 }
 
