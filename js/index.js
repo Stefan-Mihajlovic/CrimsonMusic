@@ -811,7 +811,7 @@ document.addEventListener("touchend", () => {
             // console.log("less than 350!");
         }else{
             movablePlayer.style.top = 'auto';
-            movablePlayer.style.top = `${playerNormalPos}px`;
+            movablePlayer.style.top = `calc(${playerNormalPos} - env(safe-area-inset-bottom))`;
             movablePlayer.classList.remove("playerOpen");
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             isPlayerOpen = false;
@@ -847,7 +847,7 @@ document.addEventListener("touchend", () => {
         movablePlayer.classList.remove("playerMovable");
         movablePlayer.classList.remove("playerOpen");
         movablePlayer.style.top = 'auto';
-        movablePlayer.style.top = `${playerNormalPos}px`;
+        movablePlayer.style.top = `calc(${playerNormalPos} - env(safe-area-inset-bottom))`;
         document.removeEventListener("touchmove", move2);
         document.getElementsByTagName("nav")[0].classList.remove("navClosed");
         isPlayerOpen = false;
