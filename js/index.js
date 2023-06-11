@@ -676,28 +676,28 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
 
 // ----- playerDiv 2
 
-// const move2 = (e) => {
-//     currentTouchPos = (e.touches[0].clientY - offsetY);
-//     moveStarted = true;
-//     // Update div pos based on new cursor pos
-//     movablePlayer.classList.add("playerMovable");
-//     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
-//     // console.log("moved " + (e.touches[0].clientY - offsetY));
-// }
+const move2 = (e) => {
+    currentTouchPos = (e.touches[0].clientY - offsetY);
+    moveStarted = true;
+    // Update div pos based on new cursor pos
+    movablePlayer.classList.add("playerMovable");
+    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    // console.log("moved " + (e.touches[0].clientY - offsetY));
+}
 
-// playerOpenDiv2.addEventListener("touchstart", (e) => {
-//     // console.log("touched");
-//     movablePlayer.classList.add("playerOpen");
-//     // Calc the initial offset Values
-//     offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
-//     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
-//     movablePlayer.classList.add("playerMovable");
-//     document.addEventListener("touchmove", move2);
-//     playerTouchStarted2 = true;
-//     lastTouchedPos = e.touches[0].clientY;
-//     // console.log(lastTouchedPos);
-//     moveStarted = false;
-// })
+playerOpenDiv2.addEventListener("touchstart", (e) => {
+    // console.log("touched");
+    movablePlayer.classList.add("playerOpen");
+    // Calc the initial offset Values
+    offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    movablePlayer.classList.add("playerMovable");
+    document.addEventListener("touchmove", move2);
+    playerTouchStarted2 = true;
+    lastTouchedPos = e.touches[0].clientY;
+    // console.log(lastTouchedPos);
+    moveStarted = false;
+})
 
 // ----- SIDE PAGES CLOSE
 
@@ -837,15 +837,6 @@ document.addEventListener("touchend", () => {
             isPlayerOpen = true;
         }
     }
-    if(playerTouchStarted2){
-        document.removeEventListener("touchmove", move);
-        movablePlayer.classList.remove("playerMovable");
-        movablePlayer.style.top = 'auto';
-        movablePlayer.classList.remove("playerOpen");
-        document.getElementsByTagName("nav")[0].classList.remove("navClosed");
-    }
-    playerTouchStarted2 = false;
-    playerTouchStarted = false;
     if(touchSideStarted && moveStarted){
         document.removeEventListener("touchmove", moveSide);
         document.removeEventListener("touchmove", moveSide2);
@@ -864,4 +855,14 @@ document.addEventListener("touchend", () => {
         closeLoginScreen();
         touchSideStarted = false;
     }
+    if(playerTouchStarted2 && moveStarted){
+        movablePlayer.classList.remove("playerMovable");
+        movablePlayer.classList.remove("playerOpen");
+        movablePlayer.style.top = 'auto';
+        document.removeEventListener("touchmove", move2);
+        document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+        isPlayerOpen = false;
+    }
+    playerTouchStarted2 = false;
+    playerTouchStarted = false;
 })

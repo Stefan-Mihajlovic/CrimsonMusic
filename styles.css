@@ -1953,7 +1953,7 @@ hr{
     position: absolute;
     top: 0px;
     z-index: 1;
-    height: 25svh;
+    height: 100%;
     left: 0;
     width: 100%;
     display: none;
