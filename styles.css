@@ -895,7 +895,8 @@ main{
 }
 
 .loginForm{
-    padding: 15px;
+    padding: 10px;
+    margin: 15px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -923,8 +924,8 @@ main{
     border-radius: 13px;
     border: none;
     font-size: 13px;
-    border: 1px solid var(--mainColorLighter);
-    background-color: var(--secondaryColor);
+    border: 1px solid var(--mainColor);
+    background-color: var(--mainColorLighter);
     color: var(--offWhite);
 }
 
@@ -960,7 +961,7 @@ main{
 .buttonField input, .buttonField button{
     border-radius: 13px;
     background-color: var(--offWhite);
-    color: black;
+    color: var(--bodyBg);
     border: none;
     padding: 15px;
     font-size: 13px;
