@@ -1819,7 +1819,7 @@ hr{
 
 .player .pageBar{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     box-shadow: none;
     border: none;
     transform: translateY(100%);
@@ -1835,7 +1835,7 @@ hr{
 }
 
 .player .pageBar h2{
-    font-weight: 200;
+    font-weight: 200 !important;
     color: #8a85a1;
     transform: translateX(0%) !important;
     font-size: 17.5px;
@@ -1843,10 +1843,13 @@ hr{
     flex-grow: 1;
     font-weight: 500;
     pointer-events: none;
+    margin-bottom: 3px;
+    margin-right: 2px;
+    text-align: center;
 }
 
 .player .pageBar span{
-    font-weight: 700;
+    font-weight: 300;
     color: #DCD6F7;
 }
 
