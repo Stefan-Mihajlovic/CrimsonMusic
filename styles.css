@@ -846,6 +846,15 @@ main{
     transform: translateX(100%);
 }
 
+.closeCurrentScreen{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5%;
+    z-index: 1;
+}
+
 .loginScreen{
     position: absolute;
     top: 0px;
@@ -866,6 +875,7 @@ main{
 
 .loginScreen .pageBar{
     padding-top: 0px !important;
+    z-index: 2;
 }
 
 .loginScreenOpen{
