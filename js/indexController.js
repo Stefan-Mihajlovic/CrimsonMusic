@@ -8,7 +8,7 @@ import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, si
 let brojPesama = 27;
 let brojArtista = 15;
 let brojPlejlista = 4;
-let brojKategorija = 12;
+let brojKategorija = 14;
 
 // Firebase Config with all IDs
 const firebaseConfig = {
