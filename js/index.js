@@ -214,6 +214,7 @@ function closeBigPlayer(){
 }
 
 const currentSongAudio = document.getElementById("currentSong");
+const currentSongVideo = document.getElementById("currentSongVideo");
 let playingFrom = document.getElementById("playingFromSpan");
 
 // PLAY THE SELECTED SONG
@@ -224,6 +225,8 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
     openMiniPlayer();
 
     currentSongAudio.src = songURL;
+    currentSongVideo.poster = imageURL;
+    currentSongVideo.title = songTitle;
 
     let songBanners = document.getElementsByName("songBanner");
     let songTitles = document.getElementsByName("songTitle");
@@ -250,8 +253,10 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
 
     currentSongAudio.currentTime = 0;
     currentSongAudio.play();
+    currentSongVideo.play();
     if(currentSongAudio.paused){
         currentSongAudio.play();
+        currentSongVideo.play();
     }
 
 }
@@ -299,14 +304,17 @@ function pausePlayCurrentSong(from){
                 playlistQueue[0].children[1].click();
             }else{
                 currentSongAudio.play();
+                currentSongVideo.play();
             }
         }else{
             currentSongAudio.play();
+            currentSongVideo.play();
         }
 
         isSongPaused = false;
     }else{
         currentSongAudio.pause();
+        currentSongVideo.pause();
 
         songPlayBtns.forEach((button) => {
             button.children[0].classList.remove("fa-circle-pause");
@@ -333,6 +341,7 @@ currentSongAudio.addEventListener('ended', () => {
     if(isRepeatOn){
         currentSongAudio.currentTime = 0;
         currentSongAudio.play();
+        currentSongVideo.play();
     }else{
         if(playingFrom.innerHTML === "Playlist"){
 
@@ -458,9 +467,11 @@ function pausePlayCurrentSongVault(){
         });
         
         currentSongAudio.play();
+        currentSongVideo.play();
         isSongPaused = false;
     }else{
         currentSongAudio.pause();
+        currentSongVideo.pause();
 
         songPlayBtns.forEach((button) => {
             button.children[0].classList.remove("fa-circle-pause");
