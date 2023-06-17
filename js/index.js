@@ -254,8 +254,13 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
         currentSongAudio.play();
     }
     if(vft){
-        document.getElementById("openTheVaultBtn").click();
-        document.getElementById("openTheVaultBtn").click();
+        setTimeout(() => {
+            document.getElementById("openTheVaultBtn").click();
+            setTimeout(() => {
+                document.getElementById("openTheVaultBtn").click();
+                console.log("clicked");
+            }, 50);
+        }, 50);
     }
 
 }
