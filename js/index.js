@@ -220,7 +220,7 @@ let playingFrom = document.getElementById("playingFromSpan");
 
 let isTheVaultOn = false;
 
-function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
+function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vft){
     openMiniPlayer();
 
     currentSongAudio.src = songURL;
@@ -252,6 +252,10 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom){
     currentSongAudio.play();
     if(currentSongAudio.paused){
         currentSongAudio.play();
+    }
+    if(vft){
+        document.getElementById("openTheVaultBtn").click();
+        document.getElementById("openTheVaultBtn").click();
     }
 
 }
