@@ -647,6 +647,7 @@ let offsetY,currentTouchPos = 0;
 let playerTouchStarted = false, playerTouchStarted2 = false;
 let moveStarted = true;
 let playerNormalPos = movablePlayer.offsetTop;
+let sidePageNormalPos = document.getElementsByClassName("loginScreen")[0].offsetLeft;
 
 const move = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
@@ -825,22 +826,39 @@ document.addEventListener("touchend", () => {
         }
     }
     if(touchSideStarted && moveStarted){
-        document.removeEventListener("touchmove", moveSide);
-        document.removeEventListener("touchmove", moveSide2);
-        document.removeEventListener("touchmove", moveSide3);
-        document.removeEventListener("touchmove", moveSide4);
-        loginScreen.classList.remove("playerMovable");
-        playlistScreen.classList.remove("playerMovable");
-        artistScreen.classList.remove("playerMovable");
-        categoryScreen.classList.remove("playerMovable");
-        playlistScreen.style.left = '0';
-        artistScreen.style.left = '0';
-        categoryScreen.style.left = '0';
-        closePlaylistPage();
-        closeArtistPage();
-        closeCategoryPage();
-        closeLoginScreen();
-        touchSideStarted = false;
+        if(currentTouchPos < sidePageNormalPos + 75){
+            document.removeEventListener("touchmove", moveSide);
+            document.removeEventListener("touchmove", moveSide2);
+            document.removeEventListener("touchmove", moveSide3);
+            document.removeEventListener("touchmove", moveSide4);
+            loginScreen.classList.remove("playerMovable");
+            playlistScreen.classList.remove("playerMovable");
+            artistScreen.classList.remove("playerMovable");
+            categoryScreen.classList.remove("playerMovable");
+            playlistScreen.style.left = '0';
+            artistScreen.style.left = '0';
+            categoryScreen.style.left = '0';
+            loginScreen.style.left = '0';
+        }else{
+            document.removeEventListener("touchmove", moveSide);
+            document.removeEventListener("touchmove", moveSide2);
+            document.removeEventListener("touchmove", moveSide3);
+            document.removeEventListener("touchmove", moveSide4);
+            loginScreen.classList.remove("playerMovable");
+            playlistScreen.classList.remove("playerMovable");
+            artistScreen.classList.remove("playerMovable");
+            categoryScreen.classList.remove("playerMovable");
+            playlistScreen.style.left = '0';
+            artistScreen.style.left = '0';
+            categoryScreen.style.left = '0';
+            loginScreen.style.left = '0';
+            closePlaylistPage();
+            closeArtistPage();
+            closeCategoryPage();
+            closeLoginScreen();
+            touchSideStarted = false;
+            moveStarted = false;
+        }
     }
     if(playerTouchStarted2 && moveStarted){
         movablePlayer.classList.remove("playerMovable");
