@@ -896,15 +896,16 @@ main{
 
 .loginForm{
     padding: 10px;
-    margin: 15px;
+    margin: auto;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 5px;
-    min-width: 275px;
+    min-width: 375px;
+    max-width: 500px;
     transition: all .4s ease-in-out;
     transform: translateX(100%);
-    display: none;
     margin-top: 10vh;
 }
 
@@ -2286,6 +2287,14 @@ nav button i{
     color: var(--accentColor) !important;
 }
 
+/* ----- MAX WIDTH 450px ----- */
+
+@media (max-width: 450px) {
+    .loginForm{
+        min-width: 75% !important;
+    }
+}
+
 /* ----- MAX WIDTH 370px ----- */
 
 @media (max-width: 370px) {
@@ -2302,8 +2311,6 @@ nav button i{
         font-size: 1.7rem !important;
     }
 }
-
-
 
 /* ----- MAX WIDTH 335px ----- */
 
