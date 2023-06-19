@@ -593,10 +593,10 @@ function setDarkTheme(){
     lightThemeInput2.checked = false;
     darkThemeInput2.checked = true;
 
-    document.documentElement.style.setProperty('--bodyBg', '#100e1c');
+    document.documentElement.style.setProperty('--bodyBg', 'black');
     document.documentElement.style.setProperty('--playerColor', '#242027');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
-    document.documentElement.style.setProperty('--darken', '#100e1c');
+    document.documentElement.style.setProperty('--darken', 'black');
     document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgb(90, 0, 27)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(16, 14, 28, 0.8)');

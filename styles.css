@@ -14,7 +14,7 @@
 }
 
 :root{
-    --bodyBg: #100e1c;
+    --bodyBg: black;
     --mainColor: #242027;
     --mainColorLighter: rgba(21, 19, 23, 0.6);
     --mainColorLighter2:rgb(139, 135, 146);
