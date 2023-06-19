@@ -1279,7 +1279,6 @@ hr{
 .artistText{
     display: flex;
     flex-direction: column;
-    text-shadow: 0px 0px 10px black;
     z-index: 2;
 }
 
