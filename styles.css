@@ -1325,10 +1325,19 @@ hr{
 #aboutTheArtist{
     width: 100%;
     height: 200px;
-    background-color: rgba(130, 106, 224, 0.1);
-    border-radius: 15px;
+    border-radius: 10px;
     border: 1px solid var(--playerColor);
     position: relative;
+    overflow: hidden;
+}
+
+#aboutTheArtist img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+    z-index: -1;
 }
 
 #aboutTheArtist p{
@@ -1943,7 +1952,10 @@ hr{
     font-weight: 300;
     line-height: 14px;
     margin-bottom: 5px;
-    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 55vw;
 }
 
 .playerSongBtns{
