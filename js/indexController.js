@@ -259,7 +259,7 @@ function generateSongs(){
 }
 
 /* ----- GENERATE ARTISTS ----- */
-let artistImage,artistFollowers,artistListens;
+let artistImage,artistFollowers,artistListens,artistAboutImage;
 let recArtists = document.getElementsByClassName("recArtists")[0];
 
 function GetArtists(artistName){
@@ -273,7 +273,8 @@ function GetArtists(artistName){
             artistImage = snapshot.val().ImageURL;
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
-            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`');">
+            artistAboutImage = snapshot.val().AboutBanner;
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
             <img loading="lazy" src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
@@ -656,7 +657,7 @@ export function closeArtistPage(){
     isArtistPageOpen = false;
 }
 
-export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens){
+export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage){
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
@@ -694,6 +695,10 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
     let randomList = [];
     for (let i = 0; i <= brojPesama; i++) {
         GenerateOneSongFromArtist(i, artistName);
+    }
+
+    if(artistAImage != undefined){
+        document.getElementById("artistAboutBanner").src = artistAImage;
     }
 }
 
