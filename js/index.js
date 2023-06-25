@@ -516,6 +516,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     let popupSongTitle = document.getElementsByName("popupSongTitle");
     let popupArtist = document.getElementsByName("popupArtist");
 
+    document.getElementsByClassName("popupScreen")[0].classList.remove("playerMovable");
     document.getElementsByClassName("popupScreen")[0].focus();
     document.getElementsByClassName("popupScreen")[0].style.top = 'auto';
 
