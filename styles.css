@@ -280,7 +280,6 @@ main{
     position: relative;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);;
     gap: 10px;
-    transition: all .4s ease-in-out;
 }
 
 .vibeVaultItem video{
