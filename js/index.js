@@ -223,6 +223,7 @@ let isTheVaultOn = false;
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vft){
     openMiniPlayer();
 
+    currentSongAudio.autoplay = true;
     currentSongAudio.src = songURL;
 
     let songBanners = document.getElementsByName("songBanner");
@@ -250,18 +251,17 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
 
     currentSongAudio.currentTime = 0;
     currentSongAudio.play();
-    currentSongAudio.play();
     if(currentSongAudio.paused){
         currentSongAudio.play();
     }
-    if(vft){
-        setTimeout(() => {
-            document.getElementById("openTheVaultBtn").click();
-            setTimeout(() => {
-                document.getElementById("openTheVaultBtn").click();
-            }, 50);
-        }, 50);
-    }
+    // if(vft){
+    //     setTimeout(() => {
+    //         document.getElementById("openTheVaultBtn").click();
+    //         setTimeout(() => {
+    //             document.getElementById("openTheVaultBtn").click();
+    //         }, 50);
+    //     }, 50);
+    // }
 
 }
 
