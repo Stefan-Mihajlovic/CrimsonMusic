@@ -33,7 +33,7 @@
     --songSearch: rgba(255, 0, 0, 0.2);
     --playlistSearch: rgba(141, 111, 252, 0.5);
 
-    --sidePageback: linear-gradient(0deg, rgb(14, 14, 15), rgb(14, 14, 15));
+    --sidePageback: black;
 
     --footerBg: linear-gradient(45deg, #100e1c, rgb(22, 20, 29));
 }
@@ -477,7 +477,6 @@ main{
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--playerColor);
 }
 
 .artistItem h3{
@@ -527,7 +526,6 @@ main{
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border: 1px solid var(--playerColor);
     border-bottom: 3px solid var(--accentColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
@@ -866,7 +864,7 @@ main{
     bottom: 0;
     left: 0;
     width: 100vw;
-    background-color: white;
+    background-color: var(--bodyBg);
     background-image: var(--sidePageback);
     z-index: 999;
     pointer-events: none;

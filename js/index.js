@@ -605,7 +605,7 @@ function setDarkTheme(){
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgb(90, 0, 27)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(0, 0, 0, 0.8)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
-    document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #100e1c, #100e1c)');
+    document.documentElement.style.setProperty('--sidePageback', 'black');
     document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(21, 19, 23, 0.6)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
