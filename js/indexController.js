@@ -928,6 +928,8 @@ function playerSelectedSongVault(songName){
             imageURL = snapshot.val().ImgURL;
 
             playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,"TheVault",true);
+            document.getElementsByClassName("bigPlayButton")[0].click();
+            document.getElementsByClassName("bigPlayButton")[0].click();
         }
     })
 }
