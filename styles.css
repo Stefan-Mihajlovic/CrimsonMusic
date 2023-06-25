@@ -1097,6 +1097,26 @@ hr{
     height: 30px;
 }
 
+/* ----- VERSION IN SETTINGS ----- */
+
+.versionSection{
+    display: flex;
+    flex-direction: column;
+}
+
+.versionSection img{
+    width: 50px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid var(--playerColor);
+}
+
+.versionSection h5{
+    font-size: 10px;
+    line-height: 10px;
+    font-weight: 300;
+}
+
 /* ----- TOGGLES IN SETTINGS ----- */
 
 .toggleSection{
