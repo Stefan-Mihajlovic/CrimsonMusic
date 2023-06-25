@@ -268,7 +268,7 @@ main{
 
 .vibeVaultItem{
     width: calc(100% - 40px);
-    height: 125px;
+    height: 150px;
     background-color: rgba(19, 19, 19, 0.45);
     border-radius: 15px;
     margin-bottom: 15px;
@@ -278,9 +278,8 @@ main{
     justify-content: space-between;
     padding-inline: 25px;
     position: relative;
-    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2), 0px 0px 15px 5px rgba(0, 0, 0, 0.2);;
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);;
     gap: 10px;
-    border: 1px solid var(--mainColorLighter);
     transition: all .4s ease-in-out;
 }
 
@@ -296,9 +295,19 @@ main{
 }
 
 .vibeVaultItem i{
-    font-size: 40px;
+    font-size: 70px;
+    bottom: -20px;
+    position: absolute;
     color: #DCD6F7;
-    text-shadow: 0px 0px 5px black;
+    text-shadow: 0px 0px 15px black;
+}
+
+.leftSpeaker{
+    left: 5%;
+}
+
+.rightSpeaker{
+    right: 5%;
 }
 
 .vibeVaultItem button{
@@ -308,40 +317,39 @@ main{
     margin-left: auto;
     margin-right: auto;
     top: 50%;
-    width: 100px;
+    width: 130px;
+    aspect-ratio: 2 / 1 !important;
     border: 1px solid #DCD6F7;
     background-color: transparent;
     backdrop-filter: blur(10px) brightness(1.2);
     -webkit-backdrop-filter: blur(10px) brightness(1.2);
-    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.1);
-    aspect-ratio: 2 / 1;
-    border-radius: 15px;
-}
-
-.openedVaultBtn{
-    border-radius: 50% !important;
-    width: 65px !important;
-    padding-right: 1px;
-    aspect-ratio: 1 / 1 !important;
-    box-shadow: 0px 0px 15px 2px black !important;
+    box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 1);
+    border-radius: 20px;
 }
 
 .vibeVaultItem button i{
+    position: relative;
+    bottom: auto;
     color: #DCD6F7;
-    text-shadow: 3px 2px 0px rgba(0, 0, 0, 0.4);
     opacity: 1;
-    font-size: 23px;
-    margin-bottom: 1px;
-    margin-left: 1px;
+    font-size: 32px;
+    margin-top: 1px;
+    margin-left: 5px;
+    text-shadow: none;
+}
+
+.openedVaultBtn{
+    padding-right: 3px;
+    padding-left: 0px;
 }
 
 .vibeVaultItem h2{
-    font-size: 14px;
+    font-size: 20px;
     text-align: center;
     height: 80%;
     padding-top: 5px;
     flex-grow: 1;
-    text-shadow: 0px 0px 5px black;
+    text-shadow: 0px 0px 10px black, 0px 2px 0px black;
     text-transform:uppercase;
     color: #DCD6F7;
 }
