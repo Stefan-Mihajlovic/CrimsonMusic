@@ -904,6 +904,7 @@ let isTheVaultOn = false;
 let openTheVaultBtn = document.getElementById("openTheVaultBtn");
 openTheVaultBtn.addEventListener('click', () => {
     if(!isTheVaultOn){
+        document.getElementById("currentSong").focus();
         playRandomSongForTheVault();
 
         let vaultSection = document.getElementsByClassName("vaultSection")[0];
