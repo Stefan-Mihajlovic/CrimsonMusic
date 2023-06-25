@@ -516,6 +516,8 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     let popupSongTitle = document.getElementsByName("popupSongTitle");
     let popupArtist = document.getElementsByName("popupArtist");
 
+    document.getElementsByClassName("popupScreen")[0].style.top = 'auto';
+
     popupImages.forEach((image) => {
         image.src = src;
     })
@@ -809,6 +811,31 @@ const moveSide4 = (e) =>{
     // console.log("moved " + e.touches[0].clientX - offsetX);
 }
 
+// Popup Screen
+
+const popupScreen = document.getElementsByClassName("popupScreen")[0];
+let playerTouchStarted3 = false;
+
+const move3 = (e) => {
+    currentTouchPos = (e.touches[0].clientY - offsetY);
+    moveStarted = true;
+    // Update div pos based on new cursor pos
+    popupScreen.classList.add("playerMovable");
+    popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
+    // console.log("moved " + (e.touches[0].clientY - offsetY));
+}
+
+popupScreen.addEventListener("touchstart", (e) => {
+    // console.log("touched");
+    // Calc the initial offset Values
+    offsetY = e.touches[0].clientY - popupScreen.offsetTop;
+    popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
+    popupScreen.classList.add("playerMovable");
+    document.addEventListener("touchmove", move3);
+    playerTouchStarted3 = true;
+    moveStarted = false;
+})
+
 // ----- TOUCH END
 
 document.addEventListener("touchend", () => {
@@ -853,7 +880,7 @@ document.addEventListener("touchend", () => {
             document.removeEventListener("touchmove", moveSide2);
             document.removeEventListener("touchmove", moveSide3);
             document.removeEventListener("touchmove", moveSide4);
-            loginScreen.classList.remove("playerMovable");
+            loginScreen.classList.remove("playerMovable");playerTouchStarted2 = false;
             playlistScreen.classList.remove("playerMovable");
             artistScreen.classList.remove("playerMovable");
             categoryScreen.classList.remove("playerMovable");
@@ -877,6 +904,12 @@ document.addEventListener("touchend", () => {
         document.getElementsByTagName("nav")[0].classList.remove("navClosed");
         isPlayerOpen = false;
     }
+    if(playerTouchStarted3){
+        popupScreen.style.bottom = '0px';
+        popupScreen.classList.remove("playerMovable");
+        document.removeEventListener("touchmove", move2);
+    }
+    playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
 })
