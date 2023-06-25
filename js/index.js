@@ -1,9 +1,4 @@
 setHomeScreen();
-const currentSongAudio = document.getElementById("currentSong");
-currentSongAudio.play();
-setTimeout(() => {
-    currentSongAudio.pause();
-}, 5);
 
 /* ----- GET THE TIME ----- */
 
@@ -218,6 +213,7 @@ function closeBigPlayer(){
     isPlayerOpen = false;
 }
 
+const currentSongAudio = document.getElementById("currentSong");
 let playingFrom = document.getElementById("playingFromSpan");
 
 // PLAY THE SELECTED SONG
