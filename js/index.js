@@ -250,6 +250,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
 
     currentSongAudio.currentTime = 0;
     currentSongAudio.play();
+    currentSongAudio.play();
     if(currentSongAudio.paused){
         currentSongAudio.play();
     }
@@ -258,7 +259,6 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
             document.getElementById("openTheVaultBtn").click();
             setTimeout(() => {
                 document.getElementById("openTheVaultBtn").click();
-                console.log("clicked");
             }, 50);
         }, 50);
     }
