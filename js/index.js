@@ -909,7 +909,7 @@ document.addEventListener("touchend", () => {
     if(playerTouchStarted3){
         popupScreen.style.bottom = '0px';
         popupScreen.classList.remove("playerMovable");
-        document.removeEventListener("touchmove", move2);
+        document.removeEventListener("touchmove", move3);
     }
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
