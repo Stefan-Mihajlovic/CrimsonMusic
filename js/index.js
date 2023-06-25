@@ -224,6 +224,10 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
     openMiniPlayer();
 
     currentSongAudio.autoplay = true;
+    currentSongAudio.play();
+    setTimeout(() => {
+        currentSongAudio.pause();
+    }, 1);
     currentSongAudio.src = songURL;
 
     let songBanners = document.getElementsByName("songBanner");
@@ -250,7 +254,9 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
     playingFrom.innerHTML = playedFrom;
 
     currentSongAudio.currentTime = 0;
-    currentSongAudio.play();
+    setTimeout(() => {
+        currentSongAudio.play();
+    }, 1);
     if(currentSongAudio.paused){
         currentSongAudio.play();
     }
