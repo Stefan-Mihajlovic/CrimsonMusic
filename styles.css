@@ -348,14 +348,21 @@ main{
 }
 
 .vibeVaultItem h2{
-    font-size: 20px;
+    font-size: 25px;
     text-align: center;
     height: 80%;
     padding-top: 5px;
     flex-grow: 1;
-    text-shadow: 0px 0px 10px black, 0px 2px 0px black;
+    text-shadow: 0px 0px 10px black, 1px 3px 0px black;
     text-transform:uppercase;
     color: #DCD6F7;
+}
+
+.vibeVaultItem h2 i{
+    font-size: 15px;
+    position: relative;
+    bottom: auto;
+    text-shadow: 0px 0px 10px black, 1px 3px 0px black;
 }
 
 /* ----- Recommended songs Section ----- */
