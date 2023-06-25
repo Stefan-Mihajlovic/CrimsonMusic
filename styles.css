@@ -1653,26 +1653,6 @@ hr{
     background: linear-gradient(0deg, black, transparent);
 }
 
-#popupWrapper button{
-    color: #DCD6F7;
-    font-weight: 600;
-    font-size: 15px;
-    padding-inline: 18px;
-    padding-block: 7px;
-    border-radius: 10px;
-    background-color: rgba(74, 56, 110, 0.1);
-    border: none;
-    border: 2px solid #DCD6F7;
-    z-index: -2;
-    text-transform: uppercase;
-    transform: translateY(150vh);
-    transition: all 0.6s ease-in-out !important;
-}
-
-.popupOpen button{
-    transform: translateY(0%) !important;
-}
-
 .closePopup{
     position: fixed;
     width: 100%;
@@ -1690,7 +1670,7 @@ hr{
     position: absolute;
     bottom: 0px;
     left: 0px;
-    transform: translateY(350%);
+    transform: translateY(300%);
     transition: all 0.5s ease-in-out;
     overflow: scroll;
 }
