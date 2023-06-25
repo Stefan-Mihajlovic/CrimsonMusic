@@ -1,4 +1,9 @@
 setHomeScreen();
+const currentSongAudio = document.getElementById("currentSong");
+currentSongAudio.play();
+setTimeout(() => {
+    currentSongAudio.pause();
+}, 5);
 
 /* ----- GET THE TIME ----- */
 
@@ -213,7 +218,6 @@ function closeBigPlayer(){
     isPlayerOpen = false;
 }
 
-const currentSongAudio = document.getElementById("currentSong");
 let playingFrom = document.getElementById("playingFromSpan");
 
 // PLAY THE SELECTED SONG
@@ -225,9 +229,6 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
 
     currentSongAudio.autoplay = true;
     currentSongAudio.play();
-    setTimeout(() => {
-        currentSongAudio.pause();
-    }, 1);
     currentSongAudio.src = songURL;
 
     let songBanners = document.getElementsByName("songBanner");
@@ -254,9 +255,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
     playingFrom.innerHTML = playedFrom;
 
     currentSongAudio.currentTime = 0;
-    setTimeout(() => {
-        currentSongAudio.play();
-    }, 1);
+    currentSongAudio.play();
     if(currentSongAudio.paused){
         currentSongAudio.play();
     }
