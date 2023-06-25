@@ -1014,6 +1014,11 @@ hr{
     gap: 15px;
 }
 
+.accountInfo img{
+    width: 40px;
+    aspect-ratio: 1 / 1;
+}
+
 .loggedInScreen h2{
     text-transform: uppercase;
     font-weight: 500;
