@@ -1726,13 +1726,24 @@ hr{
     transform: translateY(0%);
 }
 
+.windowLine{
+    width: 10%;
+    height: 5px;
+    background-color: var(--offWhite);
+    border-radius: 30px;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
 .popupInfo{
     align-items: center;
     padding-bottom: 10px;
     justify-content: center;
     display: flex;
+    flex-direction: column;
     border-bottom: 1px solid #242027;
     padding: 20px;
+    padding-top: 10px;
     color: #DCD6F7;
 }
 
