@@ -332,8 +332,8 @@ main{
     right: 0;
     margin-left: auto;
     margin-right: auto;
-    top: 50%;
-    width: 130px;
+    top: 45%;
+    width: 120px;
     aspect-ratio: 2 / 1 !important;
     border: 1px solid #DCD6F7;
     background-color: transparent;
@@ -348,7 +348,7 @@ main{
     bottom: auto;
     color: #DCD6F7;
     opacity: 1;
-    font-size: 32px;
+    font-size: 24px;
     margin-top: 1px;
     margin-left: 5px;
     text-shadow: none;
