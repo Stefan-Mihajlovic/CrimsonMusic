@@ -911,7 +911,7 @@ document.addEventListener("touchend", () => {
         popupScreen.classList.remove("playerMovable");
         document.removeEventListener("touchmove", move3);
         if(currentTouchPos <= startPopupOffsetTop + 100){
-            popupScreen.style.top = startPopupOffsetTop + "px";
+            popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
         }else{
             popupWrapper.classList.remove("popupOpen");
         }
