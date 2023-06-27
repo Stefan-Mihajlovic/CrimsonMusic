@@ -304,6 +304,16 @@ main{
     position: absolute;
     color: #DCD6F7;
     text-shadow: 0px 0px 15px black;
+    animation: speakerPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes speakerPulse {
+    0%{ transform: scale(1) translateY(0px); }
+    5%{ transform: scale(1.03) translateY(2px); }
+    15%{ transform: scale(1) translateY(0px); }
+    30%{ transform: scale(1.01) translateY(1px); }
+    40%{ transform: scale(1) translateY(0px); }
+    100%{ transform: scale(1) translateY(0px); }
 }
 
 .leftSpeaker{
@@ -340,6 +350,7 @@ main{
     margin-top: 1px;
     margin-left: 5px;
     text-shadow: none;
+    animation: none !important;
 }
 
 .openedVaultBtn{
@@ -363,6 +374,7 @@ main{
     position: relative;
     bottom: auto;
     text-shadow: 0px 0px 10px black, 1px 3px 0px black;
+    animation: none !important;
 }
 
 /* ----- Recommended songs Section ----- */
@@ -1677,22 +1689,12 @@ hr{
     pointer-events: all !important;
 }
 
-.blurDiv{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    filter: blur(10px) saturate(2);
-    opacity: 0.3;
-    background-size: cover;
-}
-
 .blackoutDiv{
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: linear-gradient(0deg, black, transparent);
+    background: linear-gradient(0deg, rgba(54, 0, 112, 0.456), transparent);
 }
 
 .closePopup{
@@ -1705,10 +1707,11 @@ hr{
 .popupScreen{
     width: 100%;
     height: 55%;
-    background-color: rgba(0, 0, 0, 1);
+    background-color: var(--bodyBg);
     box-shadow: 0px 0px 30px rgb(0, 0, 0);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+    border-top: 1px solid #242027;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -1747,7 +1750,7 @@ hr{
     font-size: 22px;
     line-height: 22px;
     font-weight: 500;
-    color: #DCD6F7;
+    color: var(--offWhite);
     text-align: center;
 }
 
@@ -1779,12 +1782,12 @@ hr{
 .popupItem h5{
     font-weight: 500;
     transition: none;
-    color: #DCD6F7;
+    color: var(--offWhite);
 }
 
 .popupItem i{
     font-size: 20px;
-    color: #DCD6F7;
+    color: var(--offWhite);
 }
 
 .likeBtnAnim{

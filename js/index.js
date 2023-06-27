@@ -533,9 +533,6 @@ function openPopup(type,src,art,nam,id,isLikedPage){
         artist.innerHTML = art;
     })
 
-    let blurDiv = document.getElementsByClassName("blurDiv")[0];
-    blurDiv.style.backgroundImage = `url('`+ src +`')`;
-
     if(type === 'song'){
         songPopupBody.style.display = "block";
         playlistPopupBody.style.display = "none";
