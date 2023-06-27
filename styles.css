@@ -41,6 +41,7 @@
 html{
     touch-action: none;
     -ms-touch-action: none;
+    overscroll-behavior-y: none;
 }
 
 body{
@@ -51,6 +52,7 @@ body{
     touch-action: none;
     -ms-touch-action: none;
     overflow: hidden !important;
+    overscroll-behavior-y: none;
 }
 
 .bodyHolder{
