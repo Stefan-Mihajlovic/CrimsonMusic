@@ -815,13 +815,16 @@ const moveSide4 = (e) =>{
 
 const popupScreen = document.getElementsByClassName("popupScreen")[0];
 let playerTouchStarted3 = false;
+let startPopupOffsetTop = popupScreen.offsetTop;
 
 const move3 = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
     moveStarted = true;
     // Update div pos based on new cursor pos
-    popupScreen.classList.add("playerMovable");
-    popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
+    if(currentTouchPos > startPopupOffsetTop){
+        popupScreen.classList.add("playerMovable");
+        popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
+    }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -905,10 +908,14 @@ document.addEventListener("touchend", () => {
         isPlayerOpen = false;
     }
     if(playerTouchStarted3){
-        popupScreen.style.bottom = '0px';
+        popupScreen.classList.remove("playerMovable");
+        document.removeEventListener("touchmove", move3);
+        if(currentTouchPos <= startPopupOffsetTop + 100){
+            popupScreen.style.top = startPopupOffsetTop + "px";
+        }else{
+            popupWrapper.classList.remove("popupOpen");
+        }
     }
-    popupScreen.classList.remove("playerMovable");
-    document.removeEventListener("touchmove", move3);
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
