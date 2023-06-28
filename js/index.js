@@ -689,9 +689,12 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
 const move2 = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
     moveStarted = true;
+    // console.log(currentTouchPos);
     // Update div pos based on new cursor pos
-    movablePlayer.classList.add("playerMovable");
-    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    if(currentTouchPos > -50){
+        movablePlayer.classList.add("playerMovable");
+        movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -883,7 +886,8 @@ document.addEventListener("touchend", () => {
             document.removeEventListener("touchmove", moveSide2);
             document.removeEventListener("touchmove", moveSide3);
             document.removeEventListener("touchmove", moveSide4);
-            loginScreen.classList.remove("playerMovable");playerTouchStarted2 = false;
+            loginScreen.classList.remove("playerMovable");
+            playerTouchStarted2 = false;
             playlistScreen.classList.remove("playerMovable");
             artistScreen.classList.remove("playerMovable");
             categoryScreen.classList.remove("playerMovable");
@@ -900,12 +904,18 @@ document.addEventListener("touchend", () => {
         }
     }
     if(playerTouchStarted2 && moveStarted){
-        movablePlayer.classList.remove("playerMovable");
-        movablePlayer.classList.remove("playerOpen");
-        movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
-        document.removeEventListener("touchmove", move2);
-        document.getElementsByTagName("nav")[0].classList.remove("navClosed");
-        isPlayerOpen = false;
+        if(currentTouchPos > 50){
+            movablePlayer.classList.remove("playerMovable");
+            movablePlayer.classList.remove("playerOpen");
+            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
+            document.removeEventListener("touchmove", move2);
+            document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+            isPlayerOpen = false;
+        }else{
+            movablePlayer.classList.remove("playerMovable");
+            movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
+            isPlayerOpen = true;
+        }
     }
     if(playerTouchStarted3){
         popupScreen.classList.remove("playerMovable");
