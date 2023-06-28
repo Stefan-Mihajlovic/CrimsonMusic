@@ -930,3 +930,27 @@ document.addEventListener("touchend", () => {
     playerTouchStarted2 = false;
     playerTouchStarted = false;
 })
+
+// ----- TEXT SCROLL ON OVERFLOW
+
+const scrollTexts = document.getElementsByClassName("scrollText");
+
+function isOverflown(element) {
+    return element.scrollWidth > element.clientWidth;
+}
+
+// Create a new instance of 'MutationObserver' named 'observer', 
+// Passing it a callback function
+observer = new MutationObserver(function(mutationsList, observer) {
+    mutationsList[0].target.classList.remove("scrollTextCl");
+    if(isOverflown(mutationsList[0].target)){
+        console.log("overflown");
+        mutationsList[0].target.classList.add("scrollTextCl");
+    }
+});
+
+// Call 'observe' on that MutationObserver instance, 
+// Passing it the element to observe, and the options object
+for (let i = 0; i < scrollTexts.length; i++) {
+    observer.observe(scrollTexts[i].children[0], {characterData: false, childList: true, attributes: false});
+}

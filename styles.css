@@ -266,6 +266,16 @@ main{
     width: calc(100% - 40px);
 }
 
+.scrollTextCl{
+    display: inline-block;
+    animation: textScroll 2s infinite linear;
+}
+
+@keyframes textScroll {
+    0%{ transform: translateX(-105%); }
+    100%{ transform: translateX(105%); }
+}
+
 /* ----- VibeVault Section ----- */
 
 .vibeVaultItem{
@@ -340,7 +350,7 @@ main{
     backdrop-filter: blur(10px) brightness(1.2);
     -webkit-backdrop-filter: blur(10px) brightness(1.2);
     box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 1);
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 .vibeVaultItem button i{
@@ -1969,14 +1979,19 @@ hr{
 
 .playerSongText h2{
     font-size: 18px;
-    margin-top: 2px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 55vw;
-    max-width: 200px;
+    width: 57vw;
     font-weight: 500;
     color: #DCD6F7;
+    position: relative;
+}
+
+.playerSongText h2 div{
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
 }
 
 .playerSongText h3{
@@ -1988,7 +2003,7 @@ hr{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 55vw;
+    width: 57vw;
 }
 
 .playerSongBtns{
@@ -2081,12 +2096,15 @@ hr{
     align-items: center;
 }
 
-.bigSongInfo .playerSongText h2{
-    font-size: 22px;
-    text-align: center;
+.littleSongBtns{
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 20px;
+}
+
+.bigSongInfo .playerSongText h2{
+    font-size: 22px;
+    text-align: left;
     overflow: scroll;
     overflow-y: visible;
     text-overflow: clip;
@@ -2101,10 +2119,7 @@ hr{
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 1px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: left;
     overflow: scroll;
     overflow-y: visible;
     text-overflow: clip;
