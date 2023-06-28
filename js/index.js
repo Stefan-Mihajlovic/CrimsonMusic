@@ -904,7 +904,7 @@ document.addEventListener("touchend", () => {
         }
     }
     if(playerTouchStarted2 && moveStarted){
-        if(currentTouchPos > 50){
+        if(currentTouchPos > 100){
             movablePlayer.classList.remove("playerMovable");
             movablePlayer.classList.remove("playerOpen");
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
