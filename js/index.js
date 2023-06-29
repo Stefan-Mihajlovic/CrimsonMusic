@@ -920,10 +920,12 @@ document.addEventListener("touchend", () => {
     if(playerTouchStarted3){
         popupScreen.classList.remove("playerMovable");
         document.removeEventListener("touchmove", move3);
-        if(currentTouchPos <= startPopupOffsetTop + 100){
-            popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
-        }else{
-            popupWrapper.classList.remove("popupOpen");
+        if(moveStarted){
+            if(currentTouchPos <= startPopupOffsetTop + 100){
+                popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
+            }else{
+                popupWrapper.classList.remove("popupOpen");
+            }
         }
     }
     playerTouchStarted3 = false;
