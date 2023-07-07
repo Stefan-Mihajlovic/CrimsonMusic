@@ -1829,7 +1829,7 @@ hr{
     left: 0;
     right: 0;
     top: auto;
-    bottom: calc(-100svh + 75px + calc(env(safe-area-inset-bottom) * 0.6));
+    bottom: calc(-100svh + 90px + calc(env(safe-area-inset-bottom) * 0.6));
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -1839,12 +1839,15 @@ hr{
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%);
-    border-top: 1px solid var(--playerColor);
-    background-color: black;
+    background-color: transparent;
 }
 
 .playerMovable{
     transition: none;
+}
+
+.playerMovable .miniPlayer{
+    margin: 0;
 }
 
 .songBackdrop{
@@ -1859,6 +1862,11 @@ hr{
     filter: brightness(0.4) blur(20px) saturate(2.5);
     transform: translate3d(0, 0, 0);
     -ms-transform: translate3d(0, 0, 0);
+    opacity: 0;
+}
+
+.playerOpen .songBackdrop{
+    opacity: 1;
 }
 
 .playerSongInfo img{
@@ -1880,6 +1888,11 @@ hr{
 
 .playerOpen{
     bottom: 0;
+    background-color: black;
+}
+
+.playerOpen .miniPlayer{
+    margin: 0;
 }
 
 @media screen and (orientation: landscape) {
@@ -1940,6 +1953,11 @@ hr{
     transition: all .4s ease-in-out;
     z-index: 2;
     position: relative;
+    background-color: rgba(35, 29, 46, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin: 7.5px;
+    border-radius: 7px;
 }
 
 .playerOpen .miniPlayer .playerClickDiv{
@@ -1956,9 +1974,9 @@ hr{
 
 .miniSeek{
     position: absolute;
-    top: 0px;
-    left: 0;
-    width: 100%;
+    top: 1px;
+    left: 10px;
+    width: calc(100% - 20px);
     height: 1px;
     background-color: rgba(255, 255, 255, 0.2);
 }
@@ -1966,7 +1984,7 @@ hr{
 #miniSeekBar{
     width: 0%;
     height: 100%;
-    background-color: #DCD6F7;
+    background-color: var(--offWhite);
 }
 
 .playerSongInfo{

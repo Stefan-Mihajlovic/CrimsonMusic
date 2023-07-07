@@ -282,6 +282,7 @@ function openMiniPlayer(){
         player.style.opacity = "1";
         player.style.pointerEvents = "all";
         player.style.transform = "translateY(0%)";
+        isPlayerOpen = true;
     }
 }
 
