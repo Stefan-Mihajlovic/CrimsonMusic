@@ -1889,7 +1889,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
-    background-color: black;
+    background-color: rgba(35, 29, 46, 1);
 }
 
 .playerOpen .miniPlayer{

@@ -133,6 +133,15 @@ function clickEffect(button){
     }
 }
 
+const monopToggle = document.getElementById('monopToggle');
+monopToggle.addEventListener('click', () => {
+    if(monopToggle.checked){
+        document.getElementsByClassName('songBackdrop')[0].style.opacity = 0;
+    }else{
+        document.getElementsByClassName('songBackdrop')[0].style.opacity = 1;
+    }
+})
+
 /* ----- LOGIN SCREEN ----- */
 
 function openLoginScreen(){
