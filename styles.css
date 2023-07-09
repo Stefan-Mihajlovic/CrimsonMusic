@@ -235,6 +235,7 @@ main{
 .mainToSide{
     transform: translateX(-40%);
     pointer-events: none;
+    opacity: 0 !important;
 }
 
 .catTitle{
