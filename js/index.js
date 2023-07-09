@@ -136,9 +136,9 @@ function clickEffect(button){
 const monopToggle = document.getElementById('monopToggle');
 monopToggle.addEventListener('click', () => {
     if(monopToggle.checked){
-        document.getElementsByClassName('songBackdrop')[0].style.opacity = 0;
+        document.getElementsByClassName('songBackdrop')[0].style.display = 'none';
     }else{
-        document.getElementsByClassName('songBackdrop')[0].style.opacity = 1;
+        document.getElementsByClassName('songBackdrop')[0].style.display = 'block';
     }
 })
 
