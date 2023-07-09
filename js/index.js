@@ -210,6 +210,9 @@ function closeBigPlayer(){
     player.classList.remove("playerOpen");
     player.style.top = 'auto';
     document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+    // Setting the opacity to 1 on main and header
+    document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
+    document.querySelector('header').style.opacity = '1';
     isPlayerOpen = false;
 }
 
@@ -669,6 +672,15 @@ const move = (e) => {
     moveStarted = true;
     // Update div pos based on new cursor pos
     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    let opa = ((e.touches[0].clientY - offsetY) / window.outerWidth - 0.1);
+
+    // Setting the transition to none on main and header
+    document.getElementsByClassName(currentScreen)[0].classList.add("playerMovable");
+    document.querySelector('header').classList.add("playerMovable");
+
+    // Setting the opacity of main and header
+    document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
+    document.querySelector('header').style.opacity = opa;
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -680,6 +692,7 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
     movablePlayer.classList.add("playerMovable");
+
     document.addEventListener("touchmove", move);
     playerTouchStarted = true;
     moveStarted = false;
@@ -695,6 +708,16 @@ const move2 = (e) => {
     if(currentTouchPos > -50){
         movablePlayer.classList.add("playerMovable");
         movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+
+        let opa = ((e.touches[0].clientY - offsetY) / window.outerWidth - 0.1);
+
+        // Setting the transition to none on main and header
+        document.getElementsByClassName(currentScreen)[0].classList.add("playerMovable");
+        document.querySelector('header').classList.add("playerMovable");
+
+        // Setting the opacity of main and header
+        document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
+        document.querySelector('header').style.opacity = opa;
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
@@ -849,8 +872,12 @@ document.addEventListener("touchend", () => {
     if(playerTouchStarted){
         document.removeEventListener("touchmove", move);
         movablePlayer.classList.remove("playerMovable");
+        document.getElementsByClassName(currentScreen)[0].classList.remove("playerMovable");
+        document.querySelector('header').classList.remove("playerMovable");
         if(currentTouchPos < playerNormalPos - 125){
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
+            document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
+            document.querySelector('header').style.opacity = '0';
             isPlayerOpen = true;
             // console.log("less than 350!");
         }else{
@@ -865,6 +892,8 @@ document.addEventListener("touchend", () => {
             movablePlayer.classList.add("playerOpen");
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
+            document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
+            document.querySelector('header').style.opacity = '0';
             isPlayerOpen = true;
         }
     }
@@ -911,6 +940,10 @@ document.addEventListener("touchend", () => {
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
             document.removeEventListener("touchmove", move2);
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+            document.getElementsByClassName(currentScreen)[0].classList.remove("playerMovable");
+            document.querySelector('header').classList.remove("playerMovable");
+            document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
+            document.querySelector('header').style.opacity = '1';
             isPlayerOpen = false;
         }else{
             movablePlayer.classList.remove("playerMovable");
