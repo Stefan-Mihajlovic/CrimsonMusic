@@ -2107,9 +2107,9 @@ hr{
 
 .bigSongInfo .playerSongText{
     text-align: left;
-    width: 100%;
-    max-width: 80vw;
+    width: 98%;
     padding: 2.5px;
+    padding-block: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
