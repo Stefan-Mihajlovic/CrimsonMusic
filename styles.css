@@ -1912,7 +1912,7 @@ hr{
     padding-top: 0px !important;
     padding-bottom: 20px !important;
     height: 50px !important;
-    z-index: 2;
+    z-index: 4;
 }
 
 .playerOpen .pageBar{
@@ -2051,12 +2051,12 @@ hr{
 }
 
 .playerClickDiv2{
-    position: absolute;
-    top: 0px;
+    position: fixed;
+    top: -50vh;
     z-index: 1;
-    height: 100%;
-    left: 0;
-    width: 100%;
+    height: 200vh;
+    left: -5vw;
+    width: 120vw;
     display: none;
 }
 
@@ -2092,6 +2092,7 @@ hr{
     border-radius: 15px;
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 1);
+    z-index: 0;
 }
 
 /* ---- ORIENT - LANDSCAPE PLAYER */
@@ -2114,6 +2115,7 @@ hr{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 3;
 }
 
 .littleSongBtns{
@@ -2187,6 +2189,7 @@ hr{
     padding: 0px;
     padding-bottom: 25px;
     position: relative;
+    z-index: 3;
 }
 
 .bigControls .bipCC input{
@@ -2215,6 +2218,7 @@ hr{
     width: 90vw;
     max-width: 650px;
     align-items: center;
+    z-index: 3;
 }
 
 .bpCC button{
@@ -2253,6 +2257,7 @@ hr{
     justify-content: space-between;
     gap: 15px;
     margin-top: 10px;
+    z-index: 3;
 }
 
 .bCC button{
