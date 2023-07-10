@@ -2109,7 +2109,8 @@ hr{
     text-align: left;
     width: 98%;
     padding: 2.5px;
-    padding-block: 5px;
+    padding-top: 10px;
+    padding-bottom: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
