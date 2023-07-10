@@ -2228,7 +2228,7 @@ hr{
 
 .bpCC button i{
     color: #DCD6F7;
-    font-size: 1.7rem;
+    font-size: 1.9rem;
     width: 55px;
     aspect-ratio: 1 / 1;
     display: flex;
@@ -2242,12 +2242,12 @@ hr{
 
 .bigPlayButton i{
     color: var(--mainColor);
-    font-size: 60px !important;
+    font-size: 3.7rem !important;
     margin-inline: 5px;
 }
 
 .rewindButton i{
-    font-size: 30px !important;
+    font-size: 2.3rem !important;
 }
 
 .bCC{
@@ -2267,7 +2267,7 @@ hr{
 
 .bCC button i{
     color: #DCD6F7;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     width: 25px;
     margin-inline: 15px;
     aspect-ratio: 1 / 1;
