@@ -142,7 +142,7 @@ monopToggle.addEventListener('click', () => {
     }
 })
 
-let nextSongBtn = 0,prevSongBtn = 0;
+let nextSongBtn = 0,prevSongBtn = 0,currentSongBtn = 0;
 let isAutoPlayOn = true;
 const autoplayBtn = document.querySelector('#autoplayBtn');
 autoplayBtn.addEventListener('click', () => {
@@ -293,9 +293,15 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
 
     let songList = playedFromBtn.parentElement;
     for (let i = 0; i < songList.children.length; i++) {
+        songList.children[i].classList.remove("songPlayingLi");
         if(songList.children[i] == playedFromBtn){
+            currentSongBtn = playedFromBtn;
+            currentSongBtn.classList.add("songPlayingLi");
             nextSongBtn = songList.children[i+1] || 0;
             prevSongBtn = songList.children[i-1] || 0;
+            if(prevSongBtn != 0){
+                prevSongBtn.classList.remove("songPlayingLi");
+            }
         }
     }
 }
@@ -394,7 +400,9 @@ currentSongAudio.addEventListener('ended', () => {
                 button.children[0].classList.remove("fa-circle-pause");
                 button.children[0].classList.add("fa-circle-play");
             });
-    
+            
+            currentSongBtn.classList.remove("songPlayingLi");
+
             isSongPaused = true;
         }
     }
