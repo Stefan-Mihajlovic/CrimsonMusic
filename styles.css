@@ -2242,7 +2242,7 @@ hr{
 
 .bigPlayButton i{
     color: var(--mainColor);
-    font-size: 3.7rem !important;
+    font-size: 3.9rem !important;
     margin-inline: 5px;
 }
 
@@ -2267,9 +2267,9 @@ hr{
 
 .bCC button i{
     color: #DCD6F7;
-    font-size: 1.3rem;
+    font-size: 15px;
     width: 25px;
-    margin-inline: 15px;
+    margin-inline: 10px;
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
@@ -2557,4 +2557,28 @@ nav button i{
     .popupScreen{
         height: 80%;
     }
+}
+
+#autoplayBtn{
+    display: flex;
+    align-items: center;
+    font-size: 9px;
+    gap: 5px;
+    color: var(--accentColor);
+}
+
+#autoplayBtn i{
+    color: var(--accentColor);
+    margin: 0;
+    margin-right: 10px;
+}
+
+#autoplayBtn.activeBtn{
+    color: var(--offWhite);
+}
+
+#autoplayBtn.activeBtn i{
+    color: var(--offWhite);
+    margin: 0;
+    margin-right: 10px;
 }

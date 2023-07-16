@@ -134,7 +134,7 @@
             </div>
         </div>
         <div class="pageBar">
-            <button type="button" onclick="clickEffect(this); closeBigPlayer()"><i class="fa-solid fa-circle-down"></i></button>
+            <button type="button" onclick="clickEffect(this); closeBigPlayer()"><i class="fa-solid fa-angle-down"></i></button>
             <h2>Playing from <span id="playingFromSpan">Home</span></h2>
             <button onclick="clickEffect(this);"><i class="fa-solid fa-bars"></i></button>
         </div>
@@ -162,14 +162,14 @@
                 </div>
                 <div class="bpCC">
                     <button><i class="fa-solid fa-shuffle"></i></button>
-                    <button class="rewindButton"><i class="fa-solid fa-backward-step"></i></button>
+                    <button id="backward" class="rewindButton"><i class="fa-solid fa-backward-step"></i></button>
                     <button class="bigPlayButton" onclick="pausePlayCurrentSong()" name="songPlayButton"><i class="fa-solid fa-circle-pause"></i></but>
-                    <button class="rewindButton"><i class="fa-solid fa-forward-step"></i></button>
+                    <button id="forward" class="rewindButton"><i class="fa-solid fa-forward-step"></i></button>
                     <button id="repeatBtn"><i class="fa-solid fa-repeat"></i></button>
                 </div>
                 <div class="bCC">
                     <button><i class="fa-solid fa-chart-bar"></i></button>
-                    <button><i class="fa-solid fa-face-frown"></i></button>
+                    <button id="autoplayBtn">AUTOPLAY ON<i class="bi bi-collection-play-fill"></i></button>
                 </div>
             </div>
         </div>
@@ -178,11 +178,11 @@
     <div class="categoryScreen">
         <div class="screenScrollable" name="screenScrollable"  id="screenScrollableCat">
             <div class="pageBar" name="showUpPageBar">
-                <button type="button"><i class="fa-solid fa-circle-left"></i></button>
+                <button type="button"><i class="fa-solid fa-angle-left"></i></button>
                 <h2 name="categoryName"></h2>
             </div>
             <div class="pageBar">
-                <button type="button" id="closeCategoryPage"><i style="color: #DCD6F7 !important;" class="fa-solid fa-circle-left"></i></button>
+                <button type="button" id="closeCategoryPage"><i style="color: #DCD6F7 !important;" class="fa-solid fa-angle-left"></i></button>
                 <h2></h2>
             </div>
             <div class="categoryAccentBubble"></div>
@@ -207,11 +207,11 @@
     <div class="artistScreen">
         <div class="screenScrollable" name="screenScrollable">
             <div class="pageBar" name="showUpPageBar">
-                <button type="button"><i class="fa-solid fa-circle-left"></i></button>
+                <button type="button"><i class="fa-solid fa-angle-left"></i></button>
                 <h2 name="artistName"></h2>
             </div>
             <div class="pageBar">
-                <button type="button" id="closeArtistPage"><i style="color: #DCD6F7 !important;" class="fa-solid fa-circle-left"></i></button>
+                <button type="button" id="closeArtistPage"><i style="color: #DCD6F7 !important;" class="fa-solid fa-angle-left"></i></button>
                 <h2></h2>
             </div>
             <div class="artistInfo">
@@ -231,13 +231,13 @@
             <div class="closeCurrentScreen" id="closeArtistScreen"></div>
             <section class="artistWork">
                 <article class="latestRelease"></article>
+                <h2 class="catTitleNoMargin">Top tracks this month</h2>
+                <ul class="artistTopTracks"></ul>
                 <h2 class="catTitleNoMargin">About <span name="artistName"></span></h2>
                 <div id="aboutTheArtist">
                     <img id="artistAboutBanner" src="" alt="aboutArtistImage">
                     <p>Soon to be implemented... Stay tuned!</p>
                 </div>
-                <h2 class="catTitleNoMargin">Top tracks this month</h2>
-                <ul class="artistTopTracks"></ul>
                 <h2 class="catTitleNoMargin">Appears On</h2>
                 <ul class="artistAppearsOn"></ul>
             </section>
@@ -247,11 +247,11 @@
     <div class="playlistScreen">
         <div class="screenScrollable" name="screenScrollable">
             <div class="pageBar" name="showUpPageBar">
-                <button type="button"><i class="fa-solid fa-circle-left"></i></button>
+                <button type="button"><i class="fa-solid fa-angle-left"></i></button>
                 <h2 name="playlistName" id="playlistChecker"></h2>
             </div>
             <div class="pageBar">
-                <button type="button" id="closePlaylistPage"><i style="color: #DCD6F7 !important;" class="fa-solid fa-circle-left"></i></button>
+                <button type="button" id="closePlaylistPage"><i style="color: #DCD6F7 !important;" class="fa-solid fa-angle-left"></i></button>
                 <h2></h2>
             </div>
             <div class="artistInfo">
@@ -279,7 +279,7 @@
     <div class="makePlaylistScreen">
         <div class="screenScrollable" name="screenScrollable">
             <div class="pageBar">
-                <button type="button" onclick="CloseMakePlaylistScreen()"><i class="fa-solid fa-circle-left"></i></button>
+                <button type="button" onclick="CloseMakePlaylistScreen()"><i class="fa-solid fa-angle-left"></i></button>
                 <h2>Make a Playlist</h2>
             </div>
             <form class="makePlaylistForm" onsubmit="event.preventDefault()">
@@ -297,7 +297,7 @@
     <div class="loginScreen">
         <div class="closeCurrentScreen" id="closeLoginScreen"></div>
         <div class="pageBar">
-            <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-circle-left"></i></button>
+            <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-angle-left"></i></button>
             <h2 name="regLogTitle">Register</h2>
         </div>
         <div class="screenScrollable">
@@ -364,7 +364,7 @@
                 <hr>
                 <section class="versionSection">
                     <h2>VERSION</h2>
-                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.1.1a  |  All Rights Reserved</h5>
+                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.2a  |  All Rights Reserved</h5>
                 </section>
                 <hr>
             </div>

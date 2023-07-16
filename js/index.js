@@ -142,6 +142,35 @@ monopToggle.addEventListener('click', () => {
     }
 })
 
+let nextSongBtn = 0,prevSongBtn = 0;
+let isAutoPlayOn = true;
+const autoplayBtn = document.querySelector('#autoplayBtn');
+autoplayBtn.addEventListener('click', () => {
+    if (isAutoPlayOn) {
+        autoplayBtn.classList.add('activeBtn');
+        autoplayBtn.innerHTML = `AUTOPLAY ON<i class="bi bi-collection-play-fill"></i>`;
+        isAutoPlayOn = false;
+    }else{
+        autoplayBtn.classList.remove('activeBtn');
+        autoplayBtn.innerHTML = `AUTOPLAY OFF<i class="bi bi-collection-play-fill"></i>`;
+        isAutoPlayOn = true;
+    }
+})
+
+const backwardBtn = document.querySelector('#backward');
+backwardBtn.addEventListener('click', () => {
+    if(prevSongBtn != 0){
+        prevSongBtn.children[1].click();
+    }
+})
+
+const forwardBtn = document.querySelector('#forward');
+forwardBtn.addEventListener('click', () => {
+    if(nextSongBtn != 0){
+        nextSongBtn.children[1].click();
+    }
+})
+
 /* ----- LOGIN SCREEN ----- */
 
 function openLoginScreen(){
@@ -232,12 +261,12 @@ let playingFrom = document.getElementById("playingFromSpan");
 
 let isTheVaultOn = false;
 
-function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vft){
+function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,playedFromBtn){
     openMiniPlayer();
 
     currentSongAudio.autoplay = true;
-    currentSongAudio.play();
     currentSongAudio.src = songURL;
+    currentSongAudio.play();
 
     let songBanners = document.getElementsByName("songBanner");
     let songTitles = document.getElementsByName("songTitle");
@@ -262,20 +291,13 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,vf
 
     playingFrom.innerHTML = playedFrom;
 
-    currentSongAudio.currentTime = 0;
-    currentSongAudio.play();
-    if(currentSongAudio.paused){
-        currentSongAudio.play();
+    let songList = playedFromBtn.parentElement;
+    for (let i = 0; i < songList.children.length; i++) {
+        if(songList.children[i] == playedFromBtn){
+            nextSongBtn = songList.children[i+1] || 0;
+            prevSongBtn = songList.children[i-1] || 0;
+        }
     }
-    // if(vft){
-    //     setTimeout(() => {
-    //         document.getElementById("openTheVaultBtn").click();
-    //         setTimeout(() => {
-    //             document.getElementById("openTheVaultBtn").click();
-    //         }, 50);
-    //     }, 50);
-    // }
-
 }
 
 // PLAY PLAYLIST FROM PLAY BUTTON
@@ -357,11 +379,13 @@ currentSongAudio.addEventListener('ended', () => {
         currentSongAudio.currentTime = 0;
         currentSongAudio.play();
     }else{
-        if(playingFrom.innerHTML === "Playlist"){
-
-        }
         if(isTheVaultOn){
             playRandomSongForTheVault();
+        }
+        else if(isAutoPlayOn){
+            if(nextSongBtn != 0){
+                nextSongBtn.children[1].click();
+            }
         }
         else{
             let songPlayBtns = document.getElementsByName("songPlayButton");
@@ -989,7 +1013,6 @@ function isOverflown(element) {
 observer = new MutationObserver(function(mutationsList, observer) {
     mutationsList[0].target.classList.remove("scrollTextCl");
     if(isOverflown(mutationsList[0].target)){
-        console.log("overflown");
         mutationsList[0].target.classList.add("scrollTextCl");
     }
 });

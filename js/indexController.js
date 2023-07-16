@@ -230,7 +230,7 @@ function GenerateOneSong(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home',this.parentElement);"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -418,7 +418,7 @@ function findSearchedSong(songName, inputText){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement);"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -628,7 +628,7 @@ function findSongOfCategory(songName, inputText){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement);"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -723,7 +723,7 @@ function SetTheLatestRelease(artist){
                                     <h3>`+ songCreator +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release');"></div>
+                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release',this.parentElement);"></div>
                             <div class="songBtns">
                                 <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
@@ -793,7 +793,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists',this.parentElement);"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -873,7 +873,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement);"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -927,9 +927,7 @@ function playerSelectedSongVault(songName){
             songTitle  = snapshot.val().SongName;
             imageURL = snapshot.val().ImgURL;
 
-            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,"TheVault",true);
-            // document.getElementsByClassName("bigPlayButton")[0].click();
-            // document.getElementsByClassName("bigPlayButton")[0].click();
+            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,"TheVault");
         }
     })
 }
@@ -1161,7 +1159,7 @@ function GenerateOneSongFromLiked(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement);"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`',true)"><i class="fa-solid fa-bars"></i></button>
                 </div>
