@@ -148,11 +148,11 @@ const autoplayBtn = document.querySelector('#autoplayBtn');
 autoplayBtn.addEventListener('click', () => {
     if (isAutoPlayOn) {
         autoplayBtn.classList.add('activeBtn');
-        autoplayBtn.innerHTML = `AUTOPLAY ON<i class="bi bi-collection-play-fill"></i>`;
+        autoplayBtn.innerHTML = `AUTOPLAY OFF<i class="bi bi-collection-play-fill"></i>`;
         isAutoPlayOn = false;
     }else{
         autoplayBtn.classList.remove('activeBtn');
-        autoplayBtn.innerHTML = `AUTOPLAY OFF<i class="bi bi-collection-play-fill"></i>`;
+        autoplayBtn.innerHTML = `AUTOPLAY ON<i class="bi bi-collection-play-fill"></i>`;
         isAutoPlayOn = true;
     }
 })
