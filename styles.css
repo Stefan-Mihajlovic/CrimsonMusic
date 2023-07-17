@@ -160,6 +160,7 @@ header{
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
     z-index: 80;
     transition: all .3s ease-in-out;
+    overflow: hidden;
 }
 
 header h2{
@@ -276,8 +277,8 @@ main{
     padding-inline: 25px;
     position: relative;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
-    border-left: 3px solid var(--offWhite);
-    border-right: 3px solid var(--offWhite);
+    border-left: 1px solid var(--offWhite);
+    border-right: 1px solid var(--offWhite);
     gap: 10px;
 }
 
