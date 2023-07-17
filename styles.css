@@ -871,7 +871,7 @@ main{
     background-image: var(--sidePageback);
     z-index: 999;
     pointer-events: none;
-    transform: translateX(0%);
+    transform: translateX(110%);
     transition: all .35s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -1187,7 +1187,7 @@ hr{
     background-color: var(--darken);
     z-index: 999;
     pointer-events: none;
-    transform: translateX(0%);
+    transform: translateX(110%);
     transition: all .35s ease-in-out;
     z-index: 99;
     overflow: hidden;
