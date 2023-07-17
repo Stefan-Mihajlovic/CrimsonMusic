@@ -58,6 +58,7 @@ body{
 }
 
 .bodyHolder{
+    position: relative;
     height: 100vh;
     overflow: hidden !important;
 }
