@@ -866,7 +866,7 @@ main{
 .loginScreen{
     position: absolute;
     top: 0px;
-    bottom: 0;
+    min-height: 100vh;
     left: 0;
     width: 100vw;
     background-color: var(--bodyBg);
