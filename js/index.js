@@ -7,19 +7,25 @@ function getTime(){
     var d = new Date();
     var time = d.getHours();
 
-    todEl = document.getElementById('timeOfDay');
+    todEl = document.getElementsByName('timeOfDay');
     todEl2 = document.getElementById('timeOfDayNav');
 
     if (time < 12) {
-        todEl.innerHTML = 'Good Morning';
+        todEl.forEach((todel) => {
+            todel.innerHTML = 'Good Morning';
+        });
         todEl2.innerHTML = 'Good Morning';
     }
     if (time >= 12 && time < 18) {
-        todEl.innerHTML = 'Good Afternoon';
+        todEl.forEach((todel) => {
+            todel.innerHTML = 'Good Afternoon';
+        });
         todEl2.innerHTML = 'Good Afternoon';
     }
     if (time >= 18) {
-        todEl.innerHTML = 'Good Evening';
+        todEl.forEach((todel) => {
+            todel.innerHTML = 'Good Evening';
+    });
         todEl2.innerHTML = 'Good Evening';
     }
 }
