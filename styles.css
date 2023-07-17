@@ -49,6 +49,7 @@ body{
     background-color: var(--bodyBg);
     font-family: 'Outfit', sans-serif;
     min-height: 100vh;
+    min-width: 100vw;
     color: var(--offWhite);
     touch-action: none;
     -ms-touch-action: none;
@@ -58,6 +59,7 @@ body{
 
 .bodyHolder{
     height: 100vh;
+    width: 100vw;
     overflow: hidden !important;
 }
 
@@ -150,7 +152,7 @@ header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 100vw;
     padding-inline: 15px;
     padding-top: calc(env(safe-area-inset-top) + 10px);
     padding-bottom: 15px;
