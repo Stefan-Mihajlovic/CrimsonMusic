@@ -152,8 +152,7 @@ header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100vw;
-    padding-inline: 15px;
+    width: 100%;
     padding-top: calc(env(safe-area-inset-top) + 15px);
     padding-bottom: 15px;
     border-bottom: 1px solid  var(--playerColor);
