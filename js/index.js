@@ -261,7 +261,7 @@ let playingFrom = document.getElementById("playingFromSpan");
 
 let isTheVaultOn = false;
 
-function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,playedFromBtn){
+function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,playedFromBtn,id){
     openMiniPlayer();
 
     currentSongAudio.autoplay = true;
@@ -303,6 +303,28 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
                 prevSongBtn.classList.remove("songPlayingLi");
             }
         }
+    }
+
+    seeIfSongIsLiked(id);
+
+    const playerLyricsBtn = document.getElementById("playerLyricsBtn");
+    playerLyricsBtn.onclick = () => {
+        console.log("SongID: " + id + " Lyrics Button Clicked ");
+    }
+
+    const playerLikeBtn = document.getElementById("playerLikeBtn");
+    playerLikeBtn.onclick = () => {
+        addSongToLiked(id);
+    }
+
+    const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
+    miniPlayerLikeBtn.onclick = () => {
+        addSongToLiked(id);
+    }
+
+    const miniPlayerPopupBtn = document.getElementById("miniPlayerPopupBtn");
+    miniPlayerPopupBtn.onclick = () => {
+        openPopup('song',imageURL,songCreator,songTitle,id);
     }
 }
 
@@ -591,7 +613,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     let likeSongBtn = document.getElementById("likeSongBtn");
     if(isLikedPage){
         likeSongBtn.addEventListener('click', () => {
-            addSongToLiked(id,true);
+            addSongToLiked(id);
             likeSongBtn.classList.add("likeBtnAnim");
             setTimeout(() => {
                 likeSongBtn.classList.remove("likeBtnAnim");

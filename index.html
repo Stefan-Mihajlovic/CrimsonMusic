@@ -129,14 +129,14 @@
             </div>
             <div class="playerClickDiv"></div>
             <div class="playerSongBtns">
-                <button><i class="fa-regular fa-heart"></i></button>
+                <button id="miniPlayerLikeBtn"><i class="fa-regular fa-heart"></i></button>
                 <button onclick="pausePlayCurrentSong()" name="songPlayButton"><i class="fa-solid fa-circle-pause"></i></button>
             </div>
         </div>
         <div class="pageBar">
             <button type="button" onclick="clickEffect(this); closeBigPlayer()"><i class="fa-solid fa-angle-down"></i></button>
             <h2>Playing from <span id="playingFromSpan">Home</span></h2>
-            <button onclick="clickEffect(this);"><i class="fa-solid fa-bars"></i></button>
+            <button id="miniPlayerPopupBtn"><i class="fa-solid fa-bars"></i></button>
         </div>
         <div class="bigPlayer">
             <img loading="lazy" class="songBackdrop" src="images/CrimsonLogo.png" alt="playerBackdrop" name="songBanner">
@@ -150,8 +150,8 @@
                             <h3 class="scrollText"><div name="songArtist">Demo artist</di></h3>
                         </div>
                         <div class="littleSongBtns">
-                            <button><i class="fa-solid fa-compact-disc"></i></button>
-                            <button name="songLiked"><i class="fa-regular fa-heart"></i></button>
+                            <button id="playerLyricsBtn"><i class="fa-solid fa-compact-disc"></i></button>
+                            <button id="playerLikeBtn" name="songLiked"><i class="fa-regular fa-heart"></i></button>
                         </div>
                     </div>
                 </div>
@@ -364,7 +364,7 @@
                 <hr>
                 <section class="versionSection">
                     <h2>VERSION</h2>
-                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.2a  |  All Rights Reserved</h5>
+                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.3a  |  All Rights Reserved</h5>
                 </section>
                 <hr>
             </div>

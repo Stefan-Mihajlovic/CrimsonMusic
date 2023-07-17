@@ -230,7 +230,7 @@ function GenerateOneSong(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home',this.parentElement);"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -418,7 +418,7 @@ function findSearchedSong(songName, inputText){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement);"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -628,7 +628,7 @@ function findSongOfCategory(songName, inputText){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement);"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -723,7 +723,7 @@ function SetTheLatestRelease(artist){
                                     <h3>`+ songCreator +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release',this.parentElement);"></div>
+                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release',this.parentElement,'`+ i +`');"></div>
                             <div class="songBtns">
                                 <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
@@ -793,7 +793,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists',this.parentElement);"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -873,7 +873,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement);"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -1159,7 +1159,7 @@ function GenerateOneSongFromLiked(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement);"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`',true)"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -1232,11 +1232,17 @@ export function seeIfSongIsLiked(id){
             }
             let likedSongsArray = setLikedSongs.split(',');
 
+            const likeSongBtn = document.getElementById("likeSongBtn");
+            const playerLikeBtn = document.getElementById("playerLikeBtn");
+            const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
+
             if(likedSongsArray.includes(id)){
-                let likeSongBtn = document.getElementById("likeSongBtn");
+                miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
                 likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
             }else{
-                let likeSongBtn = document.getElementById("likeSongBtn");
+                miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
                 likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
             }
         }
@@ -1245,7 +1251,7 @@ export function seeIfSongIsLiked(id){
     return true;
 }
 
-export function addSongToLiked(id,isFromLiked){
+export function addSongToLiked(id){
     const dbRef = ref(realdb);
         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -1271,8 +1277,13 @@ export function addSongToLiked(id,isFromLiked){
                     AppTheme: setTheme
                 })
                 .then(()=>{
-                    let likeSongBtn = document.getElementById("likeSongBtn");
+                    const likeSongBtn = document.getElementById("likeSongBtn");
+                    const playerLikeBtn = document.getElementById("playerLikeBtn");
+                    const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
                     likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
+                    playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                    miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                    reloadLikedSongs();
                 })
                 .catch((error)=>{
                     alert("error "+error);
@@ -1292,8 +1303,12 @@ export function addSongToLiked(id,isFromLiked){
                     AppTheme: setTheme
                 })
                 .then(()=>{
-                    let likeSongBtn = document.getElementById("likeSongBtn");
+                    const likeSongBtn = document.getElementById("likeSongBtn");
+                    const playerLikeBtn = document.getElementById("playerLikeBtn");
+                    const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
                     likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+                    playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                    miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
                     reloadLikedSongs();
                 })
                 .catch((error)=>{
