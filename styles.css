@@ -154,7 +154,7 @@ header{
     justify-content: space-between;
     width: 100vw;
     padding-inline: 15px;
-    padding-top: calc(env(safe-area-inset-top) + 10px);
+    padding-top: calc(env(safe-area-inset-top) + 15px);
     padding-bottom: 15px;
     border-bottom: 1px solid  var(--playerColor);
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
@@ -567,7 +567,6 @@ main{
 /* ----- SEARCH SCREEN ----- */
 
 .searchScreen{
-    padding-inline: 20px;
     padding-top: calc(env(safe-area-inset-top) + 20px);
 }
 
@@ -1520,7 +1519,6 @@ hr{
 /* ----- LIBRARY / YOURS SCREEN ----- */
 
 .yoursScreen{
-    padding-inline: 20px;
     padding-top: calc(env(safe-area-inset-top) + 15px);
 }
 
