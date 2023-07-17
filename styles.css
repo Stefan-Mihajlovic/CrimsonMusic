@@ -28,6 +28,7 @@
     --pageBarColor: rgba(0, 0, 0, 0.8);
     --latestReleaseBox: black;
     --allChColor: rgba(255, 255, 255, 0.2);
+    --vibeVault: rgba(27, 12, 52, 0.5);
 
     --artistSearch: rgba(0, 128, 0, 0.3);
     --songSearch: rgba(255, 0, 0, 0.2);
@@ -35,7 +36,7 @@
 
     --sidePageback: black;
 
-    --footerBg: linear-gradient(45deg, #100e1c, rgb(22, 20, 29));
+    --footerBg: rgba(192, 179, 219, 0.7);
 }
 
 html{
@@ -56,13 +57,8 @@ body{
 }
 
 .bodyHolder{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     height: 100vh;
     overflow: hidden !important;
-    position: relative;
-    gap: 10px;
 }
 
 .bubble{
@@ -157,24 +153,13 @@ header{
     width: 100%;
     height: 70px;
     padding-inline: 15px;
-    padding-top: 120px;
-    padding-bottom: 35px;
+    padding-top: env(safe-area-inset-top);
     flex-shrink: 0;
     overflow: hidden;
-    position: fixed;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
     border-bottom: 1px solid  var(--playerColor);
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
-    top: calc(env(safe-area-inset-top) - 85px);
-    left: 0;
-    right: 0;
     z-index: 80;
     transition: all .3s ease-in-out;
-}
-
-.headerHidden{
-    transform: translateY(-150px);
 }
 
 header h2{
@@ -212,12 +197,10 @@ header button img{
 
 main{
     width: 100%;
-    height: calc(100vh - 70px);
+    height: 100vh;
     z-index: 10;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
-    padding-top: calc(env(safe-area-inset-top) + 90px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 200px);
     overflow-x: hidden;
-    overflow-y: scroll;
     position: relative;
     flex-direction: column;
     gap: 15px;
@@ -282,20 +265,19 @@ main{
 .vibeVaultItem{
     width: calc(100% - 40px);
     height: 150px;
-    background-color: rgba(15, 7, 44, 0.6);
+    background-color: var(--vibeVault);
     border-radius: 15px;
     margin-bottom: 15px;
     margin-left: 20px;
+    margin-top: 7.5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-inline: 25px;
     position: relative;
-    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2), inset 0px 0px 15px 5px rgb(7, 0, 24);
-    border-bottom: 1px solid var(--offWhite);
-    border-top: 1px solid var(--bodyBg);
-    border-left: 1px solid var(--bodyBg);
-    border-right: 1px solid var(--bodyBg);
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    border-left: 3px solid var(--offWhite);
+    border-right: 3px solid var(--offWhite);
     gap: 10px;
 }
 
@@ -307,7 +289,7 @@ main{
     left: 0;
     width: 100%;
     object-fit: cover;
-    opacity: 0.7;
+    opacity: 1;
     border-radius: 15px;
 }
 
@@ -320,23 +302,6 @@ main{
     animation: speakerPulse 2.5s ease-in-out infinite;
 }
 
-@keyframes speakerPulse {
-    0%{ transform: scale(1) translateY(0px); }
-    5%{ transform: scale(1.03) translateY(2px); }
-    15%{ transform: scale(1) translateY(0px); }
-    30%{ transform: scale(1.01) translateY(1px); }
-    40%{ transform: scale(1) translateY(0px); }
-    100%{ transform: scale(1) translateY(0px); }
-}
-
-.leftSpeaker{
-    left: 3.5%;
-}
-
-.rightSpeaker{
-    right: 3.5%;
-}
-
 .vibeVaultItem button{
     position: absolute;
     left: 0;
@@ -346,11 +311,12 @@ main{
     top: 45%;
     width: 120px;
     aspect-ratio: 2 / 1 !important;
+    border: none;
+    background-color: rgba(141, 84, 125, 0.5);
     border: 1px solid #DCD6F7;
-    background-color: transparent;
-    backdrop-filter: blur(10px) brightness(1.2);
-    -webkit-backdrop-filter: blur(10px) brightness(1.2);
-    box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-shadow: 0px 0px 25px 1px rgba(104, 76, 126, 0.6);
     border-radius: 15px;
 }
 
@@ -377,17 +343,16 @@ main{
     height: 80%;
     padding-top: 5px;
     flex-grow: 1;
-    text-shadow: 0px 0px 10px black, 1px 3px 0px black;
-    text-transform:uppercase;
-    color: #DCD6F7;
+    text-transform: uppercase;
+    color: var(--offWhite);
 }
 
 .vibeVaultItem h2 i{
     font-size: 15px;
     position: relative;
     bottom: auto;
-    text-shadow: 0px 0px 10px black, 1px 3px 0px black;
-    animation: none !important;
+    color: var(--offWhite);
+    text-shadow: none;
 }
 
 /* ----- Recommended songs Section ----- */
@@ -603,7 +568,7 @@ main{
 
 .searchScreen{
     padding-inline: 20px;
-    padding-top: calc(env(safe-area-inset-top) + 90px);
+    padding-top: calc(env(safe-area-inset-top) + 20px);
 }
 
 .searchScreen .catTitle{
@@ -1556,6 +1521,7 @@ hr{
 
 .yoursScreen{
     padding-inline: 20px;
+    padding-top: calc(env(safe-area-inset-top) + 15px);
 }
 
 .yoursScreen h1{
@@ -1830,7 +1796,7 @@ hr{
     left: 0;
     right: 0;
     top: auto;
-    bottom: calc(-100svh + 90px + calc(env(safe-area-inset-bottom) * 0.6));
+    bottom: calc(-100svh + 79px + calc(env(safe-area-inset-bottom) * 0.6));
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -1845,10 +1811,6 @@ hr{
 
 .playerMovable{
     transition: none;
-}
-
-.playerMovable .miniPlayer{
-    margin: 0;
 }
 
 .songBackdrop{
@@ -1892,10 +1854,6 @@ hr{
     background-color: rgba(35, 29, 46, 1);
 }
 
-.playerOpen .miniPlayer{
-    margin: 0;
-}
-
 @media screen and (orientation: landscape) {
     .playerOpen{
         height: calc(100svh);
@@ -1907,7 +1865,7 @@ hr{
     justify-content: space-between;
     box-shadow: none;
     border: none;
-    transform: translateY(100%);
+    transform: translateY(200%);
     transition: all .2s ease-in-out;
     padding-top: 0px !important;
     padding-bottom: 20px !important;
@@ -1954,10 +1912,10 @@ hr{
     transition: all .4s ease-in-out;
     z-index: 2;
     position: relative;
-    background-color: rgba(35, 29, 46, 0.8);
+    background-color: var(--footerBg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    margin: 7.5px;
+    margin: 3px;
     border-radius: 7px;
 }
 
@@ -2003,7 +1961,7 @@ hr{
     white-space: nowrap;
     width: 57vw;
     font-weight: 500;
-    color: #DCD6F7;
+    color: var(--offWhite);
     position: relative;
 }
 
@@ -2015,7 +1973,7 @@ hr{
 
 .playerSongText h3{
     font-size: 14px;
-    color: #8a85a1;
+    color: var(--offWhiteDark);
     font-weight: 300;
     line-height: 14px;
     margin-bottom: 5px;
@@ -2039,7 +1997,7 @@ hr{
 
 .playerSongBtns i{
     font-size: 27.5px;
-    color: #DCD6F7;
+    color: var(--offWhite);
 }
 
 .playerClickDiv{
@@ -2147,6 +2105,7 @@ hr{
     text-overflow: clip;
     white-space: nowrap;
     flex-grow: 1;
+    color: #8a85a1;
 }
 
 .bigSongInfo .playerSongText button{
@@ -2283,18 +2242,18 @@ nav{
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    background-color: white;
-    background-image: var(--footerBg);
     width: 100%;
     gap: 10px;
     flex-shrink: 0;
-    bottom: 0px;
+    bottom: -1px;
     left: 0;
     right: 0;
     padding: 15px;
     padding-bottom: calc(calc(env(safe-area-inset-bottom) * 0.6) + 16px);
     z-index: 1000;
-    border-top: 1px solid  var(--mainColor);
+    background-color: var(--footerBg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     transition: all 0.4s ease-in-out;
     box-shadow: 0px 0px 15px rgba(5, 1, 20, 0.3);
 }
@@ -2344,7 +2303,7 @@ nav button{
     flex-direction: column;
     gap: 7px;
     color: var(--offWhite);
-    font-weight: 700;
+    font-weight: 600;
     font-size: 11px;
 }
 

@@ -927,7 +927,7 @@ function playerSelectedSongVault(songName){
             songTitle  = snapshot.val().SongName;
             imageURL = snapshot.val().ImgURL;
 
-            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,"TheVault");
+            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,"TheVault",0);
         }
     })
 }

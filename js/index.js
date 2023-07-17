@@ -291,16 +291,18 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
 
     playingFrom.innerHTML = playedFrom;
 
-    let songList = playedFromBtn.parentElement;
-    for (let i = 0; i < songList.children.length; i++) {
-        songList.children[i].classList.remove("songPlayingLi");
-        if(songList.children[i] == playedFromBtn){
-            currentSongBtn = playedFromBtn;
-            currentSongBtn.classList.add("songPlayingLi");
-            nextSongBtn = songList.children[i+1] || 0;
-            prevSongBtn = songList.children[i-1] || 0;
-            if(prevSongBtn != 0){
-                prevSongBtn.classList.remove("songPlayingLi");
+    if(playedFromBtn != 0){
+        let songList = playedFromBtn.parentElement;
+        for (let i = 0; i < songList.children.length; i++) {
+            songList.children[i].classList.remove("songPlayingLi");
+            if(songList.children[i] == playedFromBtn){
+                currentSongBtn = playedFromBtn;
+                currentSongBtn.classList.add("songPlayingLi");
+                nextSongBtn = songList.children[i+1] || 0;
+                prevSongBtn = songList.children[i-1] || 0;
+                if(prevSongBtn != 0){
+                    prevSongBtn.classList.remove("songPlayingLi");
+                }
             }
         }
     }
@@ -675,7 +677,8 @@ function setDarkTheme(){
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(21, 19, 23, 0.6)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
-    document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, #100e1c, rgb(22, 20, 29))');
+    document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
+    document.documentElement.style.setProperty('--footerBg', 'rgba(35, 29, 46, 0.7)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
         photo.style.filter = "invert(0) brightness(1)";
@@ -706,8 +709,9 @@ function setLightTheme(){
     document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(255, 255, 255, 0.5)');
     document.documentElement.style.setProperty('--latestReleaseBox', 'rgb(0,0,0,0.2)');
+    document.documentElement.style.setProperty('--vibeVault', 'rgba(169, 141, 215, 0.3)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
-    document.documentElement.style.setProperty('--footerBg', 'linear-gradient(45deg, #ece8ff, rgba(134, 69, 255, 0.15))');
+    document.documentElement.style.setProperty('--footerBg', 'rgba(192, 179, 219, 0.7)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
         photo.style.filter = "invert(1) brightness(0)";
