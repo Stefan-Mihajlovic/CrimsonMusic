@@ -160,7 +160,6 @@ header{
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
     z-index: 80;
     transition: all .3s ease-in-out;
-    overflow: hidden;
 }
 
 header h2{
@@ -202,6 +201,7 @@ main{
     z-index: 10;
     padding-bottom: calc(env(safe-area-inset-bottom) + 200px);
     overflow-x: hidden !important;
+    overflow-y: scroll !important;
     position: relative;
     flex-direction: column;
     gap: 15px;
