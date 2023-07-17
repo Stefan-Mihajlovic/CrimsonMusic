@@ -882,7 +882,6 @@ main{
 }
 
 .loginScreen .pageBar{
-    padding-top: 0px !important;
     z-index: 2;
 }
 
