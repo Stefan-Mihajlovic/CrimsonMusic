@@ -43,6 +43,7 @@ html{
     touch-action: none;
     -ms-touch-action: none;
     overscroll-behavior-y: none;
+    overflow-x: hidden !important;
 }
 
 body{
