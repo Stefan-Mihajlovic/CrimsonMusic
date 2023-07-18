@@ -801,9 +801,11 @@ closeLoginScreenBtn.addEventListener("touchstart", (e) => {
 const closePlaylistScreenBtn = document.getElementById("closePlaylistScreen");
 const closeArtistScreenBtn = document.getElementById("closeArtistScreen");
 const closeCategoryScreenBtn = document.getElementById("closeCategoryScreen");
+const closeMakePlaylistScreenBtn = document.getElementById("closeMakePlaylistScreen");
 const playlistScreen = document.getElementsByClassName("playlistScreen")[0];
 const artistScreen = document.getElementsByClassName("artistScreen")[0];
 const categoryScreen = document.getElementsByClassName("categoryScreen")[0];
+const makePlaylistScreen = document.getElementsByClassName("makePlaylistScreen")[0];
 
 // Playlist Close
 
@@ -874,6 +876,29 @@ const moveSide4 = (e) =>{
     // console.log("moved " + e.touches[0].clientX - offsetX);
 }
 
+// Make a Playlist Close
+
+closeMakePlaylistScreenBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    // console.log("touched");
+    // Calc the initial offset Values
+    offsetX = e.touches[0].clientX - makePlaylistScreen.offsetLeft;
+    makePlaylistScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    makePlaylistScreen.classList.add("playerMovable");
+    document.addEventListener("touchmove", moveSide5);
+    touchSideStarted = true;
+    moveStarted = false;
+})
+
+const moveSide5 = (e) =>{
+    currentTouchPos = e.touches[0].clientX - offsetX;
+    moveStarted = true;
+    // Update div pos based on new cursor pos
+    makePlaylistScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    // console.log("moved " + e.touches[0].clientX - offsetX);
+}
+
 // Popup Screen
 
 const popupScreen = document.getElementsByClassName("popupScreen")[0];
@@ -939,32 +964,39 @@ document.addEventListener("touchend", () => {
             document.removeEventListener("touchmove", moveSide2);
             document.removeEventListener("touchmove", moveSide3);
             document.removeEventListener("touchmove", moveSide4);
+            document.removeEventListener("touchmove", moveSide5);
             loginScreen.classList.remove("playerMovable");
             playlistScreen.classList.remove("playerMovable");
             artistScreen.classList.remove("playerMovable");
             categoryScreen.classList.remove("playerMovable");
+            makePlaylistScreen.classList.remove("playerMovable");
             playlistScreen.style.left = '0';
             artistScreen.style.left = '0';
             categoryScreen.style.left = '0';
             loginScreen.style.left = '0';
+            makePlaylistScreen.style.left = '0';
         }else{
             document.removeEventListener("touchmove", moveSide);
             document.removeEventListener("touchmove", moveSide2);
             document.removeEventListener("touchmove", moveSide3);
             document.removeEventListener("touchmove", moveSide4);
+            document.removeEventListener("touchmove", moveSide5);
             loginScreen.classList.remove("playerMovable");
             playerTouchStarted2 = false;
             playlistScreen.classList.remove("playerMovable");
             artistScreen.classList.remove("playerMovable");
             categoryScreen.classList.remove("playerMovable");
+            makePlaylistScreen.classList.remove("playerMovable");
             playlistScreen.style.left = '0';
             artistScreen.style.left = '0';
             categoryScreen.style.left = '0';
             loginScreen.style.left = '0';
+            makePlaylistScreen.style.left = '0';
             closePlaylistPage();
             closeArtistPage();
             closeCategoryPage();
             closeLoginScreen();
+            CloseMakePlaylistScreen();
             touchSideStarted = false;
             moveStarted = false;
         }

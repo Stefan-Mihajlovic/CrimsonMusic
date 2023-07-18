@@ -282,7 +282,7 @@
     </div>
 
     <div class="makePlaylistScreen">
-        <div class="screenScrollable" name="screenScrollable">
+        <div class="screenScrollable">
             <div class="pageBar">
                 <button type="button" onclick="CloseMakePlaylistScreen()"><i class="fa-solid fa-angle-left"></i></button>
                 <h2>Make a Playlist</h2>
@@ -296,6 +296,7 @@
                 <input onkeyup="changeMakePlaylistName(this.value)" onkeydown="changeMakePlaylistName(this.value)" type="text" name="nameInput" id="nameInput" placeholder="Enter the name">
                 <input type="submit" value="Finish" id="submitMakePlaylist" onclick="SubmitAPlaylist()">
             </form>
+            <div class="closeCurrentScreen" id="closeMakePlaylistScreen"></div>
         </div>
     </div>
 
