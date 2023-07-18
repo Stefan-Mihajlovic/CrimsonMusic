@@ -277,8 +277,6 @@ main{
     padding-inline: 25px;
     position: relative;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
-    border-left: 1px solid var(--offWhite);
-    border-right: 1px solid var(--offWhite);
     gap: 10px;
 }
 
@@ -290,8 +288,9 @@ main{
     left: 0;
     width: 100%;
     object-fit: cover;
-    opacity: 0.5;
+    opacity: 1;
     border-radius: 15px;
+    filter: contrast(1.5) hue-rotate(-25deg);
 }
 
 .vibeVaultItem i{
@@ -345,15 +344,8 @@ main{
     padding-top: 5px;
     flex-grow: 1;
     text-transform: uppercase;
-    color: var(--offWhite);
-}
-
-.vibeVaultItem h2 i{
-    font-size: 15px;
-    position: relative;
-    bottom: auto;
-    color: var(--offWhite);
-    text-shadow: none;
+    color: #DCD6F7;
+    text-shadow: 0px 0px 10px rgb(195, 159, 219);
 }
 
 /* ----- Recommended songs Section ----- */
@@ -367,6 +359,11 @@ main{
     gap: 5px;
     padding: 20px;
     padding-block: 0px;
+}
+
+.yourPlaylists{
+    width: calc(100% - 30px) !important;
+    margin-left: 15px !important;
 }
 
 .categoryRecommendedSongs, .yourPlaylists{
@@ -567,14 +564,11 @@ main{
 
 /* ----- SEARCH SCREEN ----- */
 
-.searchScreen .catTitle{
-    margin-left: 0px;
-}
-
 .searchScreen form{
-    width: 100%;
+    width: calc(100% - 30px);
     display: flex;
     gap: 5px;
+    margin-left: 15px;
 }
 
 .searchScreen input{
@@ -601,8 +595,9 @@ main{
 .searchList{
     flex-direction: column;
     gap: 5px;
-    width: 100%;
+    width: calc(100% - 30px);
     display: none;
+    margin-left: 15px;
 }
 
 .searchListOpen{
@@ -719,11 +714,13 @@ main{
 .SearchTypeChips{
     display: flex;
     width: 100%;
-    overflow-y: scroll;
+    overflow-x: scroll;
     align-items: center;
     gap: 5px;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .SearchTypeChips::-webkit-scrollbar{
@@ -777,7 +774,8 @@ main{
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 100%;
+    width: calc(100% - 30px);
+    margin-left: 15px;
 }
 
 .catItems{
@@ -1517,13 +1515,15 @@ hr{
 .yoursScreen h1{
     display: flex;
     justify-content: space-between;
+    width: calc(100% - 30px);
+    margin-left: 15px;
 }
 
 .yoursScreen h1 div{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7.5px;
+    gap: 0px;
 }
 
 .yoursScreen h1 button{
@@ -1550,6 +1550,8 @@ hr{
     transition: all .1s ease-in-out;
     border-radius: 10px !important;
     height: 70px;
+    width: calc(100% - 30px);
+    margin-left: 15px;
     background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 40, 1));
 }
 
