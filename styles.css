@@ -2535,5 +2535,5 @@ nav button i{
 }
 
 .songPlayingLi{
-    background-color: rgba(35, 29, 46, 0.7);
+    background-color: var(--footerBg);
 }
