@@ -1332,6 +1332,7 @@ export function getArtistId(artistName){
                         clickEffect(this); 
                         openArtistPage(i,artistName,artistImage,artistFollowers,artistListens,artistAboutImage);
                         closePopup();
+                        closeBigPlayer();
                     };
                 }
             }
