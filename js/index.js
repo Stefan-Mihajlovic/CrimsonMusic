@@ -1,5 +1,10 @@
 setHomeScreen();
 
+let brojPesama = 31;
+let brojArtista = 15;
+let brojPlejlista = 5;
+let brojKategorija = 14;
+
 /* ----- GET THE TIME ----- */
 
 window.onload = getTime();
@@ -547,6 +552,8 @@ function changeMakePlaylistName(text){
 function openPopup(type,src,art,nam,id,isLikedPage){
     let popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
+
+    getArtistId(art.split(',')[0]);
 
     let songPopupBody = document.getElementsByClassName("songPopupBody")[0];
     let playlistPopupBody = document.getElementsByClassName("playlistPopupBody")[0];

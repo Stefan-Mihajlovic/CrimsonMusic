@@ -5,11 +5,6 @@ import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from 'h
 import { getDatabase, ref, set, child, get, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
-let brojPesama = 31;
-let brojArtista = 15;
-let brojPlejlista = 5;
-let brojKategorija = 14;
-
 // Firebase Config with all IDs
 const firebaseConfig = {
     apiKey: "AIzaSyBtHlJGvOX-dNiyWWUUzheaSl21fD3-WBA",
@@ -1317,6 +1312,31 @@ export function addSongToLiked(id){
             }
         }
     })
+}
+
+// ----- GETTING ARTIST ID FROM NAME
+
+export function getArtistId(artistName){
+    let dbRef = ref(realdb);
+    
+    for (let i = 0; i < brojArtista; i++) {
+        get(child(dbRef, "Artists/"+i)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let artistNameDB = snapshot.val().Artist;
+                let artistImage = snapshot.val().ImageURL;
+                let artistFollowers = snapshot.val().Followers;
+                let artistListens = snapshot.val().Listens;
+                let artistAboutImage = snapshot.val().AboutBanner;
+                if(artistName == artistNameDB){
+                    document.getElementById('seeMoreFromBtn').onclick = () => {
+                        clickEffect(this); 
+                        openArtistPage(i,artistName,artistImage,artistFollowers,artistListens,artistAboutImage);
+                        closePopup();
+                    };
+                }
+            }
+        })
+    }
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS

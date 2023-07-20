@@ -370,7 +370,7 @@
                 <hr>
                 <section class="versionSection">
                     <h2>VERSION</h2>
-                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.3a  |  All Rights Reserved</h5>
+                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.4a  |  All Rights Reserved</h5>
                 </section>
                 <hr>
             </div>
@@ -391,11 +391,11 @@
                     <i class="fa-regular fa-heart"></i>
                     <h5>Add to favourites</h5>
                 </li>
-                <li class="popupItem" onclick="clickEffect(this)">
+                <li class="popupItem" onclick="clickEffect(this)" id="seeMoreFromBtn">
                     <i class="fa-regular fa-user"></i>
                     <h5>See more from <span name="popupArtist">SongArtist</span></h5>
                 </li>
-                <li class="popupItem" onclick="clickEffect(this)">
+                <li class="popupItem" onclick="clickEffect(this)" id="addToPlBtn">
                     <i class="fa-regular fa-plus"></i>
                     <h5>Add to playlist</h5>
                 </li>
@@ -433,7 +433,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -448,6 +448,7 @@
         window.addSongToLiked = addSongToLiked;
         window.seeIfSongIsLiked = seeIfSongIsLiked;
         window.reloadLikedSongs = reloadLikedSongs;
+        window.getArtistId = getArtistId;
     </script>
 
     <audio src="https://firebasestorage.googleapis.com/v0/b/crimsonmusic-b97d9.appspot.com/o/Songs%2F1.mp3?alt=media&token=54e2f635-d62d-491f-aaab-44ba18c77f65" id="currentSong"></audio>

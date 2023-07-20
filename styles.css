@@ -880,6 +880,9 @@ main{
 }
 
 .loginScreen .pageBar{
+    background-color: var(--pageBarColor) !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     z-index: 2;
 }
 
@@ -890,6 +893,12 @@ main{
 
 .loginScreenOpen .pageBar h2{
     transform: translateX(0%);
+}
+
+.loginScreen .screenScrollable{
+    position: absolute;
+    top: 0;
+    padding-top: 50px;
 }
 
 .loginForm{
