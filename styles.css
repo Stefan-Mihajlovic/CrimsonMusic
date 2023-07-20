@@ -898,7 +898,7 @@ main{
 .loginScreen .screenScrollable{
     position: absolute;
     top: 0;
-    padding-top: 50px;
+    padding-top: calc(env(safe-area-inset-top) + 50px);
 }
 
 .loginForm{
