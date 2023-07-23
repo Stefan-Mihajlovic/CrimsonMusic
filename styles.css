@@ -1700,6 +1700,9 @@ hr{
 .popupPl{
     top: 0px !important;
     height: 100% !important;
+    border-radius: 0px;
+    border: none;
+    padding-top: env(safe-area-inset-top);
 }
 
 #addToPlBtn .playlistAddPopup{
