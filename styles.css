@@ -1669,14 +1669,6 @@ hr{
     pointer-events: all !important;
 }
 
-.blackoutDiv{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: linear-gradient(0deg, rgba(90, 0, 186, 0.334), transparent);
-}
-
 .closePopup{
     position: fixed;
     width: 100%;
@@ -1687,12 +1679,13 @@ hr{
 .popupScreen{
     width: 100%;
     height: 55%;
-    background-color: var(--bodyBg);
+    background: linear-gradient(0deg, rgb(58, 0, 103), rgba(0, 0, 0));
     box-shadow: 0px 0px 30px rgb(0, 0, 0);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     border-top: 1px solid #242027;
     position: absolute;
+    overflow: scroll;
     bottom: 0px;
     left: 0px;
     transform: translateY(300%);
@@ -1702,6 +1695,59 @@ hr{
 
 .popupOpen .popupScreen{
     transform: translateY(0%);
+}
+
+.popupPl{
+    top: 0px !important;
+    height: 100% !important;
+}
+
+#addToPlBtn .playlistAddPopup{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 22px;
+    padding: 15px;
+    border-bottom: 1px solid #242027;
+    font-weight: 100;
+    padding: 20px;
+    transition: all .3s ease-in-out;
+    width: 100%;
+}
+
+#addToPlBtn{
+    padding: 0px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+}
+
+#addToPlBtn #closePopupPlBtn{
+    background-color: var(--offWhite);
+    border: none;
+    border-radius: 7px;
+    padding-inline: 30px;
+    padding-block: 7px;
+    margin-top: 5px;
+    display: none;
+}
+
+.popupMyPlaylists{
+    display: none;
+    margin-left: 15px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: calc(100% - 30px);
+}
+
+.popupPl .songPopupBody #addToPlBtn .popupMyPlaylists{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.popupPl .songPopupBody #addToPlBtn #closePopupPlBtn{
+    display: block;
 }
 
 .popupInfo{

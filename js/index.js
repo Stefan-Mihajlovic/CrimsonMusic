@@ -146,6 +146,16 @@ forwardBtn.addEventListener('click', () => {
     }
 })
 
+const addToPlBtn = document.querySelector('#addToPlBtn');
+addToPlBtn.addEventListener('click', addToPlFunc);
+
+function addToPlFunc(){
+    popupScreen.classList.add("popupPl");
+    LoadUserPlaylistsPopup();
+    this.removeEventListener('click', addToPlFunc);
+    addToPlBtn.onclick = () => {};
+}
+
 /* ----- LOGIN SCREEN ----- */
 
 function openLoginScreen(){
@@ -1040,6 +1050,17 @@ document.addEventListener("touchend", () => {
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
+})
+
+// ----- CLOSE THE POPUP ADD TO PLAYLIST UL
+
+const closePopupPlBtn = document.querySelector('#closePopupPlBtn');
+closePopupPlBtn.addEventListener('click', () => {
+    popupScreen.classList.remove("popupPl");
+    popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
+    setTimeout(() => {
+        addToPlBtn.addEventListener('click', addToPlFunc);
+    }, 100);
 })
 
 // ----- TEXT SCROLL ON OVERFLOW

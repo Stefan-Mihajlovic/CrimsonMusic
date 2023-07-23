@@ -1340,7 +1340,42 @@ export function getArtistId(artistName){
     }
 }
 
+// ----- LOADING USERS PLAYLISTS IN THE POPUP
+
+const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
+
+export function LoadUserPlaylistsPopup(){
+    popupMyPlaylists.innerHTML = "";
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let usersPlaylists = (snapshot.val().Playlists).split('{');
+            numberOfPlaylists = usersPlaylists.length;
+
+            for (let i = numberOfPlaylists-1; i >= 0; i--) {
+                let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                    <div class="songInfo">
+                        <img loading="lazy" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                        <div class="songText">
+                            <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                            <h3>`+ "by " + currentUser.Username +`</h3>
+                        </div>
+                    </div>
+                    <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
+                    <div class="songBtns">
+                        <button onclick="clickEffect(this)"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </li>`;
+                popupMyPlaylists.innerHTML += currentLi;
+            }
+        }
+    })
+}
+
 // ----- CALLING ALL NECESSARY FUNCTIONS
+
 getUsername();
 seeIfUserIsSignedIn();
 generateSongs();
