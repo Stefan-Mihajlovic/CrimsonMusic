@@ -1854,7 +1854,11 @@ hr{
     transition: all .3s ease-in-out;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(300%);
+    transform: translateY(300%) translateZ(0);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
     background-color: transparent;
 }
 
@@ -1872,8 +1876,11 @@ hr{
     z-index: -1;
     pointer-events: none;
     filter: brightness(0.4) blur(20px) saturate(2.5);
-    transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0) translateZ(0);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
     opacity: 0;
 }
 
@@ -1901,7 +1908,6 @@ hr{
 .playerOpen{
     bottom: 0;
     background-color: rgba(35, 29, 46, 1);
-    box-shadow: 0px 0px 30px rgb(0, 0, 0);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     border-top: 1px solid #242027;
