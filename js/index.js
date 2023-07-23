@@ -619,8 +619,13 @@ function openPopup(type,src,art,nam,id,isLikedPage){
 }
 
 function closePopup(){
-    let popupWrapper = document.getElementById("popupWrapper");
+    const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.remove("popupOpen");
+
+    const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
+    popupScreen.classList.remove('popupPl');
+    popupMyPlaylists.innerHTML = "";
+    addToPlBtn.addEventListener('click', addToPlFunc);
 }
 
 // ----- SET APP THEME
@@ -1043,7 +1048,7 @@ document.addEventListener("touchend", () => {
             if(currentTouchPos <= startPopupOffsetTop + 100){
                 popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
             }else{
-                popupWrapper.classList.remove("popupOpen");
+                closePopup();
             }
         }
     }
