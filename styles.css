@@ -1737,7 +1737,6 @@ hr{
 
 .popupMyPlaylists{
     display: none;
-    margin-left: 15px;
     margin-top: 5px;
     margin-bottom: 15px;
     width: calc(100% - 30px);
@@ -1746,7 +1745,7 @@ hr{
 .popupPl .songPopupBody #addToPlBtn .popupMyPlaylists{
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
 }
 
 .popupPl .songPopupBody #addToPlBtn #closePopupPlBtn{
