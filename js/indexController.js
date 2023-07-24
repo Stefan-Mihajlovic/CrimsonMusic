@@ -1355,78 +1355,98 @@ export function LoadUserPlaylistsPopup(songId){
             numberOfPlaylists = usersPlaylists.length;
 
             for (let i = numberOfPlaylists-2; i > 0; i--) {
-                let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
-                    <div class="songInfo">
-                        <img loading="lazy" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
-                        <div class="songText">
-                            <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
-                            <h3>`+ "by " + currentUser.Username +`</h3>
+                if(usersPlaylists[i].split('}')[3].includes(',' + songId) || usersPlaylists[i].split('}')[3].includes(songId + ',')){
+                    let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                        <div class="songInfo">
+                            <img loading="lazy" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                            <div class="songText">
+                                <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                                <h3>`+ "by " + currentUser.Username +`</h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
-                    <div class="songBtns">
-                        <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-plus checkAnim"></i></button>
-                        <div class="greenSidePl"></div>
-                    </div>
-                </li>`;
-                popupMyPlaylists.innerHTML += currentLi;
+                        <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
+                        <div class="songBtns greenCheck">
+                            <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-circle-check checkAnim"></i></button>
+                            <div class="greenSidePl"></div>
+                        </div>
+                    </li>`;
+                    popupMyPlaylists.innerHTML += currentLi;
+                }else{
+                    let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                        <div class="songInfo">
+                            <img loading="lazy" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                            <div class="songText">
+                                <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                                <h3>`+ "by " + currentUser.Username +`</h3>
+                            </div>
+                        </div>
+                        <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
+                        <div class="songBtns">
+                            <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-plus checkAnim"></i></button>
+                            <div class="greenSidePl"></div>
+                        </div>
+                    </li>`;
+                    popupMyPlaylists.innerHTML += currentLi;
+                }
             }
         }
     })
 }
 
 export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
-    
-    clickedPlaylist.children[2].children[0].innerHTML = '<i class="fa-solid fa-circle-check checkAnim"></i>';
-    clickedPlaylist.children[2].classList.add('greenCheck');
-    let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
-    let newSetPlaylists = "{";
+    if(!clickedPlaylist.children[2].classList.contains('greenCheck')){
+        clickedPlaylist.children[2].children[0].innerHTML = '<i class="fa-solid fa-circle-check checkAnim"></i>';
+        clickedPlaylist.children[2].classList.add('greenCheck');
+        let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
+        let newSetPlaylists = "{";
 
-    let dbRef = ref(realdb);
+        let dbRef = ref(realdb);
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            setUsername = snapshot.val().Username;
-            setEmail = snapshot.val().Email;
-            setPassword = snapshot.val().Password;
-            setPlaylists = snapshot.val().Playlists;
-            setLikedSongs = snapshot.val().LikedSongs;
-            setTheme = snapshot.val().AppTheme;
-            let usersPlaylists = setPlaylists.split('{');
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+                setUsername = snapshot.val().Username;
+                setEmail = snapshot.val().Email;
+                setPassword = snapshot.val().Password;
+                setPlaylists = snapshot.val().Playlists;
+                setLikedSongs = snapshot.val().LikedSongs;
+                setTheme = snapshot.val().AppTheme;
+                let usersPlaylists = setPlaylists.split('{');
 
-            for (let i = 1; i < usersPlaylists.length; i++) {
-                if(usersPlaylists[i].split('}')[0] == playlistId){
-                    if(usersPlaylists[i].split('}')[3] != ""){
-                        newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + "," + songId + "}" + "{";
+                for (let i = 1; i < usersPlaylists.length; i++) {
+                    if(usersPlaylists[i].split('}')[0] == playlistId){
+                        if(usersPlaylists[i].split('}')[3] != ""){
+                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + "," + songId + "}" + "{";
+                        }else{
+                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + songId + "}" + "{";
+                        }
                     }else{
-                        newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + songId + "}" + "{";
-                    }
-                }else{
-                    if(i != (usersPlaylists.length-1)){
-                        newSetPlaylists += usersPlaylists[i] + "{";
-                    }else{
-                        newSetPlaylists += usersPlaylists[i];
+                        if(i != (usersPlaylists.length-1)){
+                            newSetPlaylists += usersPlaylists[i] + "{";
+                        }else{
+                            newSetPlaylists += usersPlaylists[i];
+                        }
                     }
                 }
-            }
 
-            set(ref(realdb, "Users/"+currentUser.Username),
-            {
-                Username: setUsername,
-                Email: setEmail,
-                Password: setPassword,
-                Playlists: newSetPlaylists,
-                LikedSongs: setLikedSongs,
-                AppTheme: setTheme
-            })
-            .then(()=>{
-                // console.log("Added");
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            })
-        }
-    })
+                set(ref(realdb, "Users/"+currentUser.Username),
+                {
+                    Username: setUsername,
+                    Email: setEmail,
+                    Password: setPassword,
+                    Playlists: newSetPlaylists,
+                    LikedSongs: setLikedSongs,
+                    AppTheme: setTheme
+                })
+                .then(()=>{
+                    LoadUserPlaylists();
+                    // console.log("Added");
+                })
+                .catch((error)=>{
+                    alert("error "+error);
+                })
+            }
+        })
+    }
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
