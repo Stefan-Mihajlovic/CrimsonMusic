@@ -2536,7 +2536,7 @@ nav button i{
         display: none;
     }
     main{
-        height: 100vh;
+        padding-top: calc(env(safe-area-inset-top) + 75px);
     }
     nav{
         display: none;
