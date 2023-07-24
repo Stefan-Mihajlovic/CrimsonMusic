@@ -29,7 +29,7 @@
     --latestReleaseBox: black;
     --allChColor: rgba(255, 255, 255, 0.2);
     --vibeVault: rgba(27, 12, 52, 0.5);
-    --popupScreenBg: linear-gradient(0deg, rgb(58, 0, 103), rgba(0, 0, 0));
+    --popupScreenBg: linear-gradient(0deg, rgb(57, 29, 107), rgba(0, 0, 0));
 
     --artistSearch: rgba(0, 128, 0, 0.3);
     --songSearch: rgba(255, 0, 0, 0.2);
@@ -1706,6 +1706,14 @@ hr{
     padding-top: env(safe-area-inset-top);
 }
 
+#addToPlBtn{
+    padding: 0px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: none;
+}
+
 #addToPlBtn .playlistAddPopup{
     display: flex;
     align-items: center;
@@ -1719,13 +1727,6 @@ hr{
     width: 100%;
 }
 
-#addToPlBtn{
-    padding: 0px;
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-}
-
 #addToPlBtn #closePopupPlBtn{
     background-color: var(--offWhite);
     border: none;
@@ -1734,6 +1735,7 @@ hr{
     padding-block: 7px;
     margin-top: 5px;
     display: none;
+    color: var(--bodyBg);
 }
 
 .popupMyPlaylists{

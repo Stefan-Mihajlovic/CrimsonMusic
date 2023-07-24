@@ -671,7 +671,7 @@ function setDarkTheme(){
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
     document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
-    document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(58, 0, 103), rgba(0, 0, 0))');
+    document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(57, 29, 107), rgba(0, 0, 0))');
     document.documentElement.style.setProperty('--footerBg', 'rgba(35, 29, 46, 0.7)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {

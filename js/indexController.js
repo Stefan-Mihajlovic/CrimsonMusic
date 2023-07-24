@@ -813,7 +813,6 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
         playlistSongsList.innerHTML = "";
 
-        document.getElementById("addToPlaylistBtn").style.display = "none";
         document.getElementById("playlistLikesH5").style.display = "block";
         document.getElementById("likePlaylist").style.display = "block";
 
@@ -959,6 +958,7 @@ function DBMakePl(){
         if(snapshot.exists()){
             let setUsername = snapshot.val().Username;
             let setEmail = snapshot.val().Email;
+            let setLikedSongs = snapshot.val().LikedSongs;
             let setPassword = snapshot.val().Password;
             let setPlaylists = snapshot.val().Playlists;
             let setTheme = snapshot.val().AppTheme;
@@ -969,6 +969,7 @@ function DBMakePl(){
             {
                 Username: setUsername,
                 Email: setEmail,
+                LikedSongs: setLikedSongs,
                 Password: setPassword,
                 Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}"),
                 AppTheme: setTheme
@@ -999,7 +1000,7 @@ function LoadUserPlaylists(){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
             numberOfPlaylists = usersPlaylists.length;
 
-            for (let i = numberOfPlaylists-1; i >= 0; i--) {
+            for (let i = numberOfPlaylists-2; i > 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                     <div class="songInfo">
                         <img loading="lazy" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
@@ -1027,7 +1028,6 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
-        document.getElementById("addToPlaylistBtn").style.display = "block";
         document.getElementById("playlistLikesH5").style.display = "none";
         document.getElementById("likePlaylist").style.display = "none";
 
@@ -1354,7 +1354,7 @@ export function LoadUserPlaylistsPopup(songId){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
             numberOfPlaylists = usersPlaylists.length;
 
-            for (let i = numberOfPlaylists-1; i >= 0; i--) {
+            for (let i = numberOfPlaylists-2; i > 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                     <div class="songInfo">
                         <img loading="lazy" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
@@ -1376,9 +1376,11 @@ export function LoadUserPlaylistsPopup(songId){
 }
 
 export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
+    
     clickedPlaylist.children[2].children[0].innerHTML = '<i class="fa-solid fa-circle-check checkAnim"></i>';
     clickedPlaylist.children[2].classList.add('greenCheck');
     let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
+    let newSetPlaylists = "{";
 
     let dbRef = ref(realdb);
 
@@ -1392,19 +1394,28 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
             setTheme = snapshot.val().AppTheme;
             let usersPlaylists = setPlaylists.split('{');
 
-            // for (let i = 0; i < usersPlaylists.length; i++) {
-            //     if(usersPlaylists[i].split('}')[0] == playlistId){
-            //         usersPlaylists[i].split('}')[3] = usersPlaylists[i].split('}')[3] + "," + songId;
-            //         //console.log(usersPlaylists[i].split('}')[3]);
-            //     }
-            // }
+            for (let i = 1; i < usersPlaylists.length; i++) {
+                if(usersPlaylists[i].split('}')[0] == playlistId){
+                    if(usersPlaylists[i].split('}')[3] != ""){
+                        newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + "," + songId + "}" + "{";
+                    }else{
+                        newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + songId + "}" + "{";
+                    }
+                }else{
+                    if(i != (usersPlaylists.length-1)){
+                        newSetPlaylists += usersPlaylists[i] + "{";
+                    }else{
+                        newSetPlaylists += usersPlaylists[i];
+                    }
+                }
+            }
 
             set(ref(realdb, "Users/"+currentUser.Username),
             {
                 Username: setUsername,
                 Email: setEmail,
                 Password: setPassword,
-                Playlists: setPlaylists,
+                Playlists: newSetPlaylists,
                 LikedSongs: setLikedSongs,
                 AppTheme: setTheme
             })
