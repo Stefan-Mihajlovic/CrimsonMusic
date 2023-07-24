@@ -1344,7 +1344,7 @@ export function getArtistId(artistName){
 
 const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
 
-export function LoadUserPlaylistsPopup(){
+export function LoadUserPlaylistsPopup(songId){
     popupMyPlaylists.innerHTML = "";
 
     let dbRef = ref(realdb);
@@ -1363,13 +1363,57 @@ export function LoadUserPlaylistsPopup(){
                             <h3>`+ "by " + currentUser.Username +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
+                    <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this)"><i class="fa-solid fa-plus"></i></button>
+                        <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-plus checkAnim"></i></button>
+                        <div class="greenSidePl"></div>
                     </div>
                 </li>`;
                 popupMyPlaylists.innerHTML += currentLi;
             }
+        }
+    })
+}
+
+export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
+    clickedPlaylist.children[2].children[0].innerHTML = '<i class="fa-solid fa-circle-check checkAnim"></i>';
+    clickedPlaylist.children[2].classList.add('greenCheck');
+    let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            setUsername = snapshot.val().Username;
+            setEmail = snapshot.val().Email;
+            setPassword = snapshot.val().Password;
+            setPlaylists = snapshot.val().Playlists;
+            setLikedSongs = snapshot.val().LikedSongs;
+            setTheme = snapshot.val().AppTheme;
+            let usersPlaylists = setPlaylists.split('{');
+
+            // for (let i = 0; i < usersPlaylists.length; i++) {
+            //     if(usersPlaylists[i].split('}')[0] == playlistId){
+            //         usersPlaylists[i].split('}')[3] = usersPlaylists[i].split('}')[3] + "," + songId;
+            //         //console.log(usersPlaylists[i].split('}')[3]);
+            //     }
+            // }
+
+            set(ref(realdb, "Users/"+currentUser.Username),
+            {
+                Username: setUsername,
+                Email: setEmail,
+                Password: setPassword,
+                Playlists: setPlaylists,
+                LikedSongs: setLikedSongs,
+                AppTheme: setTheme
+            })
+            .then(()=>{
+                // console.log("Added");
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            })
         }
     })
 }

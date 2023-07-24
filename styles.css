@@ -1738,8 +1738,12 @@ hr{
 .popupMyPlaylists{
     display: none;
     margin-top: 5px;
-    margin-bottom: 15px;
+    margin-bottom: calc(env(safe-area-inset-bottom) + 15px);
     width: calc(100% - 30px);
+}
+
+.popupMyPlaylists .songItem{
+    overflow: hidden;
 }
 
 .popupPl .songPopupBody #addToPlBtn .popupMyPlaylists{
@@ -1750,6 +1754,32 @@ hr{
 
 .popupPl .songPopupBody #addToPlBtn #closePopupPlBtn{
     display: block;
+}
+
+.greenSidePl{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(172, 255, 47, 0.5));
+    opacity: 0;
+    transition: all .4s ease-in-out;
+}
+
+.checkAnim{
+    transition: all .2s ease-in-out;
+    color: var(--offWhite);
+}
+
+.greenCheck button i{
+    color: greenyellow !important;
+}
+
+.greenCheck .greenSidePl{
+    opacity: 1;
 }
 
 .popupInfo{

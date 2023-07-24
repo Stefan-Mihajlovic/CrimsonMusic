@@ -151,7 +151,7 @@ addToPlBtn.addEventListener('click', addToPlFunc);
 
 function addToPlFunc(){
     popupScreen.classList.add("popupPl");
-    LoadUserPlaylistsPopup();
+    LoadUserPlaylistsPopup(addToPlBtn.getAttribute('name'));
     this.removeEventListener('click', addToPlFunc);
     addToPlBtn.onclick = () => {};
 }
@@ -560,21 +560,23 @@ function changeMakePlaylistName(text){
 // ----- Close Popup
 
 function openPopup(type,src,art,nam,id,isLikedPage){
-    let popupWrapper = document.getElementById("popupWrapper");
+    const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
 
     getArtistId(art.split(',')[0]);
 
-    let songPopupBody = document.getElementsByClassName("songPopupBody")[0];
-    let playlistPopupBody = document.getElementsByClassName("playlistPopupBody")[0];
+    const songPopupBody = document.getElementsByClassName("songPopupBody")[0];
+    const playlistPopupBody = document.getElementsByClassName("playlistPopupBody")[0];
 
-    let popupImages = document.getElementsByName("popupImage");
-    let popupSongTitle = document.getElementsByName("popupSongTitle");
-    let popupArtist = document.getElementsByName("popupArtist");
+    const popupImages = document.getElementsByName("popupImage");
+    const popupSongTitle = document.getElementsByName("popupSongTitle");
+    const popupArtist = document.getElementsByName("popupArtist");
 
-    document.getElementsByClassName("popupScreen")[0].classList.remove("playerMovable");
-    document.getElementsByClassName("popupScreen")[0].focus();
-    document.getElementsByClassName("popupScreen")[0].style.top = 'auto';
+    popupScreen.classList.remove("playerMovable");
+    popupScreen.focus();
+    popupScreen.style.top = 'auto';
+
+    addToPlBtn.setAttribute('name', id);
 
     popupImages.forEach((image) => {
         image.src = src;
