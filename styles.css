@@ -1392,12 +1392,12 @@ hr{
     flex-direction: column;
     gap: 15px;
     z-index: 2;
-    background-color: var(--darken);
+    background-color: black;
 }
 
 .catWork{
     padding-top: 0px !important;
-    background-color: transparent !important;
+    background: linear-gradient(180deg, transparent, black, black, black, black);
 }
 
 #catH3Title{
@@ -1519,7 +1519,6 @@ hr{
 
 .catBanner{
     height: calc(env(safe-area-inset-top) + 200px) !important;
-    clip-path: ellipse(100% 52% at 50% 38%);
 }
 
 /* ----- LIBRARY / YOURS SCREEN ----- */
