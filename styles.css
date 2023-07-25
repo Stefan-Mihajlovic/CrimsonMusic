@@ -1392,15 +1392,15 @@ hr{
     flex-direction: column;
     gap: 15px;
     z-index: 2;
-    background-color: black;
+    background-color: var(--bodyBg);
 }
 
 .catWork{
-    background: linear-gradient(180deg, transparent, black, black, black, black);
+    background: linear-gradient(180deg, transparent, var(--bodyBg), var(--bodyBg), var(--bodyBg), var(--bodyBg));
 }
 
 #catH3Title{
-    text-shadow: 0px 0px 20px var(--darken);
+    text-shadow: 0px 0px 50px var(--darken), 0px 0px 1px var(--darken);
 }
 
 .latestRelease{
