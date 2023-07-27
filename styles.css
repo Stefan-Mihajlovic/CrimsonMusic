@@ -1963,6 +1963,7 @@ hr{
     padding-top: 0px !important;
     padding-bottom: 20px !important;
     z-index: 4;
+    height: 50px;
 }
 
 .playerOpen .pageBar{
@@ -2231,7 +2232,7 @@ hr{
     position: absolute;
     bottom: 0px;
     top: 0px;
-    padding-bottom: calc(env(safe-area-inset-bottom) + env(safe-area-inset-top) + 30px);
+    padding-bottom: calc(env(safe-area-inset-bottom));
     width: 100%;
     max-width: 700px;
     display: flex;
