@@ -1468,9 +1468,11 @@ export function turnLyrcis(songId){
 
     playerPageBar.style.height = '60px';
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
-    let titlePB = bigSongInfo.children[3].children[0].children[0].innerHTML;
-    playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
+    setTimeout(() => {
+        let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
+        let titlePB = bigSongInfo.children[3].children[0].children[0].innerHTML;
+        playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
+    }, 450);
 
     playerLyrcis.style.display = 'block';
     playerLyrcis.classList.remove('playerLyricsAway');

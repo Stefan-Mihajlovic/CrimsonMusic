@@ -1986,10 +1986,11 @@ hr{
     color: #8a85a1;
     transform: translateX(0%) !important;
     font-size: 17px;
+    line-height: 17px;
     text-shadow: 0px 0px 20px black;
     flex-grow: 1;
     pointer-events: none;
-    margin-bottom: 3px;
+    margin-bottom: 8px;
     margin-right: 2px;
     text-align: center;
 }
