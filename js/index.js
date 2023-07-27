@@ -969,12 +969,16 @@ document.addEventListener("touchend", () => {
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
+            if(isLyricsOn){
+                document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
+            }
             isPlayerOpen = true;
             // console.log("less than 350!");
         }else{
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
             movablePlayer.classList.remove("playerOpen");
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+            document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }
         // console.log("touch ended");
@@ -985,6 +989,9 @@ document.addEventListener("touchend", () => {
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
+            if(isLyricsOn){
+                document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
+            }
             isPlayerOpen = true;
         }
     }
