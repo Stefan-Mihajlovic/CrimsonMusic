@@ -1461,7 +1461,7 @@ export function turnLyrcis(songId){
     bigSongInfo.children[0].classList.add('playerBannerAway');
     setTimeout(() => {
         bigSongInfo.children[0].style.display = 'none';
-    }, 300);
+    }, 450);
     bigSongInfo.children[3].style.display = 'none';
 
     playerPageBar.style.height = '60px';
@@ -1491,7 +1491,7 @@ export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     playerLyrcis.classList.add('playerLyricsAway');
     setTimeout(() => {
         playerLyrcis.style.display = 'none';
-    }, 300);
+    }, 450);
 
     playerPageBar.style.height = '50px';
     playerPageBar.children[1].innerHTML = previousPBH2text;

@@ -2150,8 +2150,8 @@ hr{
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 1);
     z-index: 0;
-    transition: all .3s ease-in-out;
-    animation: popInBanner .3s ease-in-out;
+    transition: all .45s ease-in-out;
+    animation: popInBanner .45s ease-in-out;
 }
 
 .playerBannerAway{
@@ -2185,8 +2185,8 @@ hr{
     justify-content: space-between;
     align-items: center;
     z-index: 3;
-    transition: all .3s ease-in-out;
-    animation: popInBanner .3s ease-in-out;
+    transition: all .45s ease-in-out;
+    animation: popInBanner .45s ease-in-out;
 }
 
 .littleSongBtns{
@@ -2240,8 +2240,8 @@ hr{
     margin-bottom: 25px;
     z-index: 99;
     font-size: 2.5rem;
-    transition: all .3s ease-in-out;
-    animation: popInLyrics .3s ease-in-out;
+    transition: all .45s ease-in-out;
+    animation: popInLyrics .45s ease-in-out;
 }
 
 .playerLyricsAway{
@@ -2256,8 +2256,8 @@ hr{
 
 .bigControls{
     position: absolute;
-    bottom: 0px;
     top: 0px;
+    bottom: 0;
     padding-bottom: calc(env(safe-area-inset-bottom));
     width: 100%;
     max-width: 700px;
