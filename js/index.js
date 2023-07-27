@@ -295,9 +295,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
     seeIfSongIsLiked(id);
 
     const playerLyricsBtn = document.getElementById("playerLyricsBtn");
-    playerLyricsBtn.onclick = () => {
-        console.log("SongID: " + id + " Lyrics Button Clicked ");
-    }
+    playerLyricsBtn.setAttribute('onclick', `turnLyrcis(`+ id +`)`);
 
     const playerLikeBtn = document.getElementById("playerLikeBtn");
     playerLikeBtn.onclick = () => {

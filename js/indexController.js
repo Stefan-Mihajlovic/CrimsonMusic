@@ -1449,6 +1449,48 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
     }
 }
 
+// ----- BIG PLAYER LYRICS
+
+export function turnLyrcis(songId){
+    const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
+    const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
+    const playerPageBar = document.getElementsByClassName('player')[0].children[1];
+    let previousPBH2text = playerPageBar.children[1].innerHTML;
+    let previousPBBonclick = playerPageBar.children[0].onclick;
+
+    bigSongInfo.children[0].style.display = 'none';
+    bigSongInfo.children[3].style.display = 'none';
+
+    playerPageBar.style.height = '60px';
+    playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
+    let titlePB = bigSongInfo.children[3].children[0].children[0].innerHTML;
+    playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
+
+    playerLyrcis.style.display = 'block';
+    playerLyrcis.innerHTML = 'Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis'
+
+    playerPageBar.children[0].onclick = () => {
+        closePlayerLyrics(previousPBH2text, previousPBBonclick);
+    }
+}
+
+export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
+    const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
+    const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
+    const playerPageBar = document.getElementsByClassName('player')[0].children[1];
+
+    bigSongInfo.children[0].style.display = 'block';
+    bigSongInfo.children[3].style.display = 'flex';
+
+    playerLyrcis.style.display = 'none';
+
+    playerPageBar.style.height = '50px';
+    playerPageBar.children[1].innerHTML = previousPBH2text;
+    playerPageBar.children[0].onclick = previousPBBonclick;
+    playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
+}
+
 // ----- CALLING ALL NECESSARY FUNCTIONS
 
 getUsername();
