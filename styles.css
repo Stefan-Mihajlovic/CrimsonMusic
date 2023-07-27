@@ -2150,6 +2150,18 @@ hr{
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 1);
     z-index: 0;
+    transition: all .3s ease-in-out;
+    animation: popInBanner .3s ease-in-out;
+}
+
+.playerBannerAway{
+    position: absolute;
+    transform: translateX(200%);
+}
+
+@keyframes popInBanner {
+    0%{ transform: translateX(200%); }
+    1000%{ transform: translateX(0%); }
 }
 
 /* ---- ORIENT - LANDSCAPE PLAYER */
@@ -2173,6 +2185,8 @@ hr{
     justify-content: space-between;
     align-items: center;
     z-index: 3;
+    transition: all .3s ease-in-out;
+    animation: popInBanner .3s ease-in-out;
 }
 
 .littleSongBtns{
@@ -2226,6 +2240,18 @@ hr{
     margin-bottom: 25px;
     z-index: 99;
     font-size: 2.5rem;
+    transition: all .3s ease-in-out;
+    animation: popInLyrics .3s ease-in-out;
+}
+
+.playerLyricsAway{
+    position: absolute;
+    transform: translateX(-200%);
+}
+
+@keyframes popInLyrics {
+    0%{ transform: translateX(-200%); }
+    1000%{ transform: translateX(0%); }
 }
 
 .bigControls{

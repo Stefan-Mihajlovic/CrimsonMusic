@@ -1458,7 +1458,10 @@ export function turnLyrcis(songId){
     let previousPBH2text = playerPageBar.children[1].innerHTML;
     let previousPBBonclick = playerPageBar.children[0].onclick;
 
-    bigSongInfo.children[0].style.display = 'none';
+    bigSongInfo.children[0].classList.add('playerBannerAway');
+    setTimeout(() => {
+        bigSongInfo.children[0].style.display = 'none';
+    }, 300);
     bigSongInfo.children[3].style.display = 'none';
 
     playerPageBar.style.height = '60px';
@@ -1468,6 +1471,7 @@ export function turnLyrcis(songId){
     playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
 
     playerLyrcis.style.display = 'block';
+    playerLyrcis.classList.remove('playerLyricsAway');
     playerLyrcis.innerHTML = 'Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis'
 
     playerPageBar.children[0].onclick = () => {
@@ -1481,9 +1485,13 @@ export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
 
     bigSongInfo.children[0].style.display = 'block';
+    bigSongInfo.children[0].classList.remove('playerBannerAway');
     bigSongInfo.children[3].style.display = 'flex';
 
-    playerLyrcis.style.display = 'none';
+    playerLyrcis.classList.add('playerLyricsAway');
+    setTimeout(() => {
+        playerLyrcis.style.display = 'none';
+    }, 300);
 
     playerPageBar.style.height = '50px';
     playerPageBar.children[1].innerHTML = previousPBH2text;
