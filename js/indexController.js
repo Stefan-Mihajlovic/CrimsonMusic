@@ -1455,12 +1455,14 @@ export function turnLyrcis(songId){
     const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
     const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
+    const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
     let previousPBH2text = playerPageBar.children[1].innerHTML;
     let previousPBBonclick = playerPageBar.children[0].onclick;
 
     bigSongInfo.children[0].classList.add('playerBannerAway');
     setTimeout(() => {
         bigSongInfo.children[0].style.display = 'none';
+        document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
     }, 450);
     bigSongInfo.children[3].style.display = 'none';
 
@@ -1472,31 +1474,41 @@ export function turnLyrcis(songId){
 
     playerLyrcis.style.display = 'block';
     playerLyrcis.classList.remove('playerLyricsAway');
+    setTimeout(() => {
+        playerLyrcis.classList.add('playerLyrcisOn');
+    }, 600);
     playerLyrcis.innerHTML = 'Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis'
 
     playerPageBar.children[0].onclick = () => {
         closePlayerLyrics(previousPBH2text, previousPBBonclick);
     }
+
+    isLyricsOn = true;
 }
 
 export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
     const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
+    const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
 
     bigSongInfo.children[0].style.display = 'block';
     bigSongInfo.children[0].classList.remove('playerBannerAway');
     bigSongInfo.children[3].style.display = 'flex';
 
     playerLyrcis.classList.add('playerLyricsAway');
+    playerLyrcis.classList.remove('playerLyrcisOn');
     setTimeout(() => {
         playerLyrcis.style.display = 'none';
+        document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
     }, 450);
 
     playerPageBar.style.height = '50px';
     playerPageBar.children[1].innerHTML = previousPBH2text;
     playerPageBar.children[0].onclick = previousPBBonclick;
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
+
+    isLyricsOn = false;
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
