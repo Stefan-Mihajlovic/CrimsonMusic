@@ -2249,7 +2249,7 @@ hr{
 }
 
 .playerLyrcis{
-    padding-top: 100px;
+    padding-block: 65px;
     position: relative;
     width: 85vw;
     height: 55vh;
