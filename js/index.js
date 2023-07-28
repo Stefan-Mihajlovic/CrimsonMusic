@@ -294,6 +294,9 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
     }
 
     seeIfSongIsLiked(id);
+    const checkLyrics = document.getElementById('checkLyrics');
+    checkLyrics.setAttribute('onclick', `doesSongHaveLyrics(`+ id +`)`);
+    checkLyrics.click();
 
     const playerLyricsBtn = document.getElementById("playerLyricsBtn");
     playerLyricsBtn.setAttribute('onclick', `turnLyrcis(`+ id +`)`);

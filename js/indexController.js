@@ -1470,7 +1470,7 @@ export function turnLyrcis(songId){
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-xmark"></i>';
     setTimeout(() => {
         let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
-        let titlePB = bigSongInfo.children[3].children[0].children[0].innerHTML;
+        let titlePB = bigSongInfo.children[3].children[0].children[0].children[0].innerHTML || bigSongInfo.children[3].children[0].children[0].innerHTML;
         playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
     }, 450);
 
@@ -1479,13 +1479,40 @@ export function turnLyrcis(songId){
     setTimeout(() => {
         playerLyrcis.classList.add('playerLyrcisOn');
     }, 600);
-    playerLyrcis.innerHTML = 'Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis<br><b>Test lyrcis Bold</b><br>Test lyrcis<br>Test lyrcis<br>Test lyrcis'
+
+    let dbRef = ref(realdb);
+
+        get(child(dbRef, "Songs/"+songId)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let LYRICS = snapshot.val().Lyrics;
+                if(LYRICS != undefined){
+                    playerLyrcis.innerHTML = LYRICS;
+                }
+            }
+        })
 
     playerPageBar.children[0].onclick = () => {
         closePlayerLyrics(previousPBH2text, previousPBBonclick);
     }
 
     isLyricsOn = true;
+}
+
+export function doesSongHaveLyrics(songId){
+    const playerLyricsBtn = document.getElementById('playerLyricsBtn');
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+songId)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let LYRICS = snapshot.val().Lyrics;
+            if(LYRICS == undefined){
+                playerLyricsBtn.style.display = 'none';
+            }else{
+                playerLyricsBtn.style.display = 'inline';
+            }
+        }
+    })
 }
 
 export function closePlayerLyrics(previousPBH2text, previousPBBonclick){

@@ -164,6 +164,7 @@
                             <h3 class="scrollText"><div name="songArtist">Demo artist</di></h3>
                         </div>
                         <div class="littleSongBtns">
+                            <button id="checkLyrics" style="display: none !important;"></button>
                             <button id="playerLyricsBtn"><i class="fa-solid fa-compact-disc"></i></button>
                             <button id="playerLikeBtn" name="songLiked"><i class="fa-regular fa-heart"></i></button>
                         </div>
@@ -445,7 +446,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrcis } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrcis,doesSongHaveLyrics } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -464,6 +465,7 @@
         window.LoadUserPlaylistsPopup = LoadUserPlaylistsPopup;
         window.addSongToThisPlaylist = addSongToThisPlaylist;
         window.turnLyrcis = turnLyrcis;
+        window.doesSongHaveLyrics = doesSongHaveLyrics;
     </script>
 
     <audio src="https://firebasestorage.googleapis.com/v0/b/crimsonmusic-b97d9.appspot.com/o/Songs%2F1.mp3?alt=media&token=54e2f635-d62d-491f-aaab-44ba18c77f65" id="currentSong"></audio>
