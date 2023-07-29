@@ -1466,13 +1466,11 @@ export function turnLyrcis(songId){
     }, 450);
     bigSongInfo.children[3].style.display = 'none';
 
-    playerPageBar.style.height = '60px';
+    playerPageBar.children[1].classList.add("smallH2");
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    setTimeout(() => {
-        let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
-        let titlePB = bigSongInfo.children[3].children[0].children[0].children[0].innerHTML || bigSongInfo.children[3].children[0].children[0].innerHTML;
-        playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
-    }, 450);
+    let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
+    let titlePB = bigSongInfo.children[3].children[0].children[0].children[0].innerHTML || bigSongInfo.children[3].children[0].children[0].innerHTML;
+    playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
 
     playerLyrcis.style.display = 'block';
     playerLyrcis.classList.remove('playerLyricsAway');
@@ -1532,7 +1530,7 @@ export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
         document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
     }, 450);
 
-    playerPageBar.style.height = '50px';
+    playerPageBar.children[1].classList.remove("smallH2");
     playerPageBar.children[1].innerHTML = previousPBH2text;
     playerPageBar.children[0].onclick = previousPBBonclick;
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
