@@ -1,7 +1,7 @@
 setHomeScreen();
 
 let brojPesama = 31;
-let brojArtista = 15;
+let brojArtista = 18;
 let brojPlejlista = 5;
 let brojKategorija = 14;
 

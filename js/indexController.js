@@ -1327,7 +1327,7 @@ export function getArtistId(artistName){
                 let artistFollowers = snapshot.val().Followers;
                 let artistListens = snapshot.val().Listens;
                 let artistAboutImage = snapshot.val().AboutBanner;
-                if(artistName == artistNameDB){
+                if(artistName.includes(artistNameDB)){
                     document.getElementById('seeMoreFromBtn').onclick = () => {
                         clickEffect(this); 
                         openArtistPage(i,artistName,artistImage,artistFollowers,artistListens,artistAboutImage);
