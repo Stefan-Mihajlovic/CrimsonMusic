@@ -1084,6 +1084,7 @@ hr{
     border-radius: 0px !important;
     width: 60%;
     aspect-ratio: 1 / 2;
+    background-color: transparent !important;
 }
 
 .themeItem h3{
