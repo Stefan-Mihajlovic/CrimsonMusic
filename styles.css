@@ -1681,7 +1681,7 @@ hr{
 
 .popupScreen{
     width: 100%;
-    height: 55%;
+    height: 60%;
     background: var(--popupScreenBg);
     box-shadow: 0px 0px 30px rgb(0, 0, 0);
     border-top-left-radius: 20px;
@@ -1796,6 +1796,7 @@ hr{
     flex-direction: column;
     border-bottom: 1px solid #242027;
     padding: 20px;
+    padding-top: 30px;
     color: #DCD6F7;
 }
 
@@ -1960,6 +1961,18 @@ hr{
     border-top: 1px solid #242027;
 }
 
+.player .draggableBarTop{
+    display: none;
+}
+
+.player .draggableBarTop div{
+    background-color: #DCD6F7 !important;
+}
+
+.playerOpen .draggableBarTop{
+    display: flex;
+}
+
 @media screen and (orientation: landscape) {
     .playerOpen{
         height: calc(100svh);
@@ -1998,9 +2011,9 @@ hr{
 }
 
 .smallH2{
+    margin-bottom: 0px !important;
     font-size: 14px !important;
     line-height: 14px !important;
-    margin-bottom: 0px !important;
 }
 
 .player .pageBar span{
@@ -2029,7 +2042,7 @@ hr{
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     margin: 7px;
-    border-radius: 7px;
+    border-radius: 10px;
 }
 
 .playerOpen .miniPlayer .playerClickDiv{
@@ -2735,4 +2748,19 @@ nav button i{
 
 .songPlayingLi{
     background-color: var(--footerBg);
+}
+
+.draggableBarTop{
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.draggableBarTop div{
+    width: 40px;
+    border-radius: 20px;
+    background-color: var(--offWhite);
 }
