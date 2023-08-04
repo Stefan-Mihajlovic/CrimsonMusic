@@ -193,6 +193,19 @@ header button img{
     position: relative;
 }
 
+.topScrollDiv{
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    background-color: red;
+    z-index: 99;
+    padding-top: env(safe-area-inset-top);
+    background-color: var(--footerBg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all .07s ease-in-out;
+}
+
 /* ----- MAIN ----- */
 
 main{
