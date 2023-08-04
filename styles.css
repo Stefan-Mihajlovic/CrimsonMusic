@@ -201,17 +201,12 @@ header button img{
     background-color: red;
     z-index: 99;
     background-color: var(--footerBg);
-    height: calc(env(safe-area-inset-top) * 1);
-}
-
-.topScrollDiv::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-  }
+    height: calc(env(safe-area-inset-top) * 1);
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 /* ----- MAIN ----- */
 
