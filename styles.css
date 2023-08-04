@@ -195,7 +195,7 @@ header button img{
 
 .topScrollDiv{
     position: fixed;
-    top: 0px;
+    top: -1px;
     left: 0px;
     width: 100vw;
     background-color: red;
@@ -203,9 +203,7 @@ header button img{
     background-color: var(--footerBg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    height: calc(env(safe-area-inset-top) * 1);
-    left: 50%;
-    transform: translateX(-50%);
+    height: calc(env(safe-area-inset-top) + 1px);
 }
 
 /* ----- MAIN ----- */
