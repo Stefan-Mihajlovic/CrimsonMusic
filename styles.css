@@ -204,6 +204,7 @@ header button img{
     background-color: var(--footerBg);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    height: 50px;
 }
 
 /* ----- MAIN ----- */
