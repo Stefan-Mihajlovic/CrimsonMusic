@@ -202,8 +202,8 @@ header button img{
     z-index: 99;
     height: env(safe-area-inset-top);
     background-color: var(--footerBg);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 /* ----- MAIN ----- */
