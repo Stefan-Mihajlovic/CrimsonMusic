@@ -1112,3 +1112,12 @@ observer = new MutationObserver(function(mutationsList, observer) {
 for (let i = 0; i < scrollTexts.length; i++) {
     observer.observe(scrollTexts[i].children[0], {characterData: false, childList: true, attributes: false});
 }
+
+let activeMainScroll = document.getElementsByClassName('activeMain')[0];
+activeMainScroll.addEventListener('scroll', () => {
+    if(activeMainScroll.scrollTop > 5){
+        document.getElementsByClassName('topScrollDiv')[0].classList.add('topScrollDivOn');
+    }else{
+        document.getElementsByClassName('topScrollDiv')[0].classList.remove('topScrollDivOn');
+    }
+})

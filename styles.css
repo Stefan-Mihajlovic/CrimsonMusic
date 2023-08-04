@@ -204,6 +204,13 @@ header button img{
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     height: calc(env(safe-area-inset-top) + 1px);
+    transition: all .2s ease-in-out;
+    opacity: 0;
+}
+
+.topScrollDivOn{
+    opacity: 1;
+    transition: all .2s ease-in-out;
 }
 
 /* ----- MAIN ----- */
