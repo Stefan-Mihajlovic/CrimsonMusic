@@ -199,7 +199,7 @@ header button img{
     width: 100%;
     background-color: red;
     z-index: 99;
-    padding-top: env(safe-area-inset-top);
+    height: env(safe-area-inset-top);
     background-color: var(--footerBg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
