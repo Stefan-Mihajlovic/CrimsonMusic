@@ -2774,7 +2774,7 @@ nav button i{
 .draggableBarTop{
     position: absolute;
     width: 100%;
-    height: 4px;
+    height: 5px;
     top: 10px;
     display: flex;
     justify-content: center;

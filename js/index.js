@@ -156,6 +156,17 @@ function addToPlFunc(){
     addToPlBtn.onclick = () => {};
 }
 
+let isShuffleOn = false;
+const shuffleBtn = document.getElementById('shuffleBtn');
+shuffleBtn.addEventListener('click', () => {
+    isShuffleOn = !isShuffleOn;
+    shuffleBtn.classList.toggle("buttonTurnedOn");
+    if(isRepeatOn){
+        isRepeatOn = false;
+        repeatBtn.classList.toggle('buttonTurnedOn');
+    }
+})
+
 /* ----- LOGIN SCREEN ----- */
 
 function openLoginScreen(){
@@ -390,6 +401,8 @@ function setTheVault(){
     isTheVaultOn = true;
 }
 
+
+let randomListShuffle = [];
 currentSongAudio.addEventListener('ended', () => {
     if(isRepeatOn){
         currentSongAudio.currentTime = 0;
@@ -399,7 +412,35 @@ currentSongAudio.addEventListener('ended', () => {
             playRandomSongForTheVault();
         }
         else if(isAutoPlayOn){
-            if(nextSongBtn != 0){
+            if(isShuffleOn){
+                // console.log("ShuffleOn");
+                let currentPlaylistUl,currentPlaylistLength;
+
+                if(nextSongBtn != 0){
+                    currentPlaylistUl = nextSongBtn.parentElement.className;
+                    currentPlaylistLength = nextSongBtn.parentElement.children.length;
+                }else{
+                    currentPlaylistUl = prevSongBtn.parentElement.className;
+                    currentPlaylistLength = prevSongBtn.parentElement.children.length;
+                }
+
+                // console.log("UL: " + currentPlaylistUl);
+                // console.log("Length: " + currentPlaylistLength);
+                
+                if(randomListShuffle.length >= currentPlaylistLength){
+                    randomListShuffle = [];
+                }
+                while(true){
+                    let g = Math.floor(Math.random() * currentPlaylistLength);
+                    if(!randomListShuffle.includes(g)){
+                        // console.log(document.getElementsByClassName(currentPlaylistUl)[0]);
+                        document.getElementsByClassName(currentPlaylistUl)[0].children[g].children[1].click();
+                        randomListShuffle.push(g);
+                        break;
+                    }
+                }
+            }
+            else if(nextSongBtn != 0){
                 nextSongBtn.children[1].click();
             }
         }
@@ -421,6 +462,10 @@ currentSongAudio.addEventListener('ended', () => {
 let repeatBtn = document.getElementById("repeatBtn");
 repeatBtn.addEventListener('click', () => {
     isRepeatOn = !isRepeatOn;
+    if(isShuffleOn){
+        isShuffleOn = !isShuffleOn;
+        shuffleBtn.classList.toggle("buttonTurnedOn");
+    }
     repeatBtn.classList.toggle("buttonTurnedOn");
 });
 
