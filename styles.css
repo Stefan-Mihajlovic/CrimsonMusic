@@ -2060,8 +2060,8 @@ hr{
     z-index: 2;
     position: relative;
     background-color: var(--footerBg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) brightness(1.2);
+    -webkit-backdrop-filter: blur(10px) brightness(1.2);
     margin: 7px;
     border-radius: 10px;
 }
@@ -2477,8 +2477,8 @@ nav{
     padding-bottom: calc(calc(env(safe-area-inset-bottom) * 0.6) + 16px);
     z-index: 1000;
     background-color: var(--footerBg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) brightness(1.2);
+    -webkit-backdrop-filter: blur(10px) brightness(1.2);
     transition: all 0.4s ease-in-out;
     box-shadow: 0px 0px 15px rgba(5, 1, 20, 0.3);
 }
