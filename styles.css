@@ -400,7 +400,7 @@ main{
     align-items: center;
     justify-content: space-between;
     padding: 6px;
-    border-radius: 7px;
+    border-radius: 10px;
     position: relative;
     box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.15);
     animation: showUp 0.5s ease-in-out;
@@ -445,9 +445,10 @@ main{
 
 .songInfo img{
     border-radius: 5px;
-    width: 40px;
+    width: 35px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    margin-left: 5px;
 }
 
 .songBtns{
@@ -590,7 +591,7 @@ main{
 .searchScreen form{
     width: calc(100% - 30px);
     display: flex;
-    gap: 5px;
+    gap: 10px;
     margin-left: 15px;
 }
 
@@ -608,16 +609,14 @@ main{
 #submitSearch{
     width: 20%;
     max-width: 60px;
-    background-color: var(--offWhite);
-    color: var(--mainColor);
-    border: 1px solid var(--mainColor);
+    color: var(--offWhite);
     transition: all .3s ease-in-out;
     font-size: 15px;
 }
 
 .searchList{
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
     width: calc(100% - 30px);
     display: none;
     margin-left: 15px;
@@ -739,7 +738,7 @@ main{
     width: 100%;
     overflow-x: scroll;
     align-items: center;
-    gap: 5px;
+    gap: 10px;
     -ms-overflow-style: none;
     scrollbar-width: none;
     padding-left: 15px;
@@ -816,7 +815,7 @@ main{
 .catItem{
     width: 100%;
     height: 100%;
-    border-radius: 8px;
+    border-radius: 10px;
     display: flex;
     align-items: flex-end;
     overflow: hidden;
@@ -1577,7 +1576,7 @@ hr{
 
 .favouritesItem{
     transition: all .1s ease-in-out;
-    border-radius: 10px !important;
+    border-radius: 15px !important;
     height: 70px;
     width: calc(100% - 30px);
     margin-left: 15px;
@@ -1629,7 +1628,7 @@ hr{
     align-items: center;
     justify-content: center;
     border: 1px solid var(--playerColor);
-    border-radius: 10px;
+    border-radius: 15px;
     color: var(--playerColor);
     box-shadow: 0px 0px 20px black;
     background-size: cover;
@@ -1701,8 +1700,8 @@ hr{
     height: 60%;
     background: var(--popupScreenBg);
     box-shadow: 0px 0px 30px rgb(0, 0, 0);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
     border-top: 1px solid #242027;
     position: absolute;
     overflow: scroll;
@@ -1914,6 +1913,8 @@ hr{
     -ms-transform: translateZ(0);
     -o-transform: translateZ(0);
     background-color: transparent;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
 }
 
 .playerMovable{
@@ -1973,8 +1974,6 @@ hr{
 .playerOpen{
     bottom: 0;
     background-color: rgba(35, 29, 46, 1);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
     border-top: 1px solid #242027;
 }
 
