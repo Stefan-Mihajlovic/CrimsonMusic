@@ -195,13 +195,14 @@ header button img{
 
 .topScrollDiv{
     position: fixed;
-    top: -1px;
+    top: -2px;
     left: 0px;
     width: 100vw;
     background-color: red;
     z-index: 99;
     background-color: var(--footerBg);
     backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--playerColor);
     -webkit-backdrop-filter: blur(10px);
     height: calc(env(safe-area-inset-top) + 1px);
     transition: all .2s ease-in-out;
@@ -795,15 +796,15 @@ main{
 .categories{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     width: calc(100% - 30px);
     margin-left: 15px;
 }
 
 .catItems{
     width: 100%;
-    height: 85px;
-    gap: 10px;
+    height: 90px;
+    gap: 15px;
     display: flex;
     align-items: center;
 }
