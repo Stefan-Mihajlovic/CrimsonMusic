@@ -24,7 +24,7 @@
     --accentColor: #8d6ffc;
     --playerColor: #242027;
     --darken: black;
-    --yoursBubbleColor: rgb(90, 0, 27);
+    --yoursBubbleColor: rgba(90, 0, 27, 0.7);
     --pageBarColor: rgba(0, 0, 0, 0.8);
     --latestReleaseBox: black;
     --allChColor: rgba(255, 255, 255, 0.2);
@@ -68,7 +68,7 @@ body{
     position: absolute;
     top: -50%;
     right: -50%;
-    width: 1000px;
+    width: 1500px;
     aspect-ratio: 1 / 1;
     z-index: -1;
     background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
@@ -1281,10 +1281,6 @@ hr{
 .pageBarOn h2{
     opacity: 1 !important;
     transform: translateX(0%) !important;
-}
-
-.artistScreen .pageBar button i, .playlistScreen .pageBar button i, .categoryScreen .pageBar button i, .makePlaylistScreen .pageBar button i{
-    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 }
 
 .artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryScreenOpen .pageBar h2{

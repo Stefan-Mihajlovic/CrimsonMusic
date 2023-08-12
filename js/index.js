@@ -710,7 +710,7 @@ function setDarkTheme(){
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
     document.documentElement.style.setProperty('--darken', 'black');
     document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
-    document.documentElement.style.setProperty('--yoursBubbleColor', 'rgb(90, 0, 27)');
+    document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(0, 0, 0, 0.8)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
     document.documentElement.style.setProperty('--sidePageback', 'black');
@@ -745,7 +745,7 @@ function setLightTheme(){
     document.documentElement.style.setProperty('--offWhiteDark', '#100e1c');
     document.documentElement.style.setProperty('--darken', '#ede7ff');
     document.documentElement.style.setProperty('--allChColor', 'rgba(0, 0, 0, 0.2)');
-    document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.25)');
+    document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.5)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(222, 213, 255, 0.6)');
     document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #ece8ff, rgba(134, 69, 255, 0.25))');
     document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
