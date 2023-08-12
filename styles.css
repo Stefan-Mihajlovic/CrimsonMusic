@@ -2065,6 +2065,7 @@ hr{
     -webkit-backdrop-filter: blur(10px) brightness(1.2);
     margin: 7px;
     border-radius: 10px;
+    border: 1px solid var(--playerColor);
 }
 
 .playerOpen .miniPlayer .playerClickDiv{
@@ -2082,7 +2083,7 @@ hr{
 
 .miniSeek{
     position: absolute;
-    top: 1px;
+    top: -1px;
     left: 10px;
     width: calc(100% - 20px);
     height: 1px;
@@ -2482,6 +2483,7 @@ nav{
     -webkit-backdrop-filter: blur(10px) brightness(1.2);
     transition: all 0.4s ease-in-out;
     box-shadow: 0px 0px 15px rgba(5, 1, 20, 0.3);
+    border-top: 1px solid var(--playerColor);
 }
 
 .navClosed{
