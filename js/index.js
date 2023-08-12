@@ -1,7 +1,7 @@
 setHomeScreen();
 
-let brojPesama = 35;
-let brojArtista = 20;
+let brojPesama = 36;
+let brojArtista = 21;
 let brojPlejlista = 5;
 let brojKategorija = 14;
 
@@ -534,8 +534,9 @@ screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
         if(screen.id !== "screenScrollableCat"){
-            if(screen.scrollTop > 170){
-                screen.children[2].children[1].children[0].style.opacity = 1 - (screen.scrollTop/124.5 - 1);
+            if(screen.scrollTop > 130){
+                let curOp = 1 - (screen.scrollTop/125 - 1);
+                screen.children[2].children[1].children[0].style.opacity = curOp;
             }else{
                 screen.children[2].children[1].children[0].style.opacity = 1;
             }

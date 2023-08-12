@@ -904,8 +904,8 @@ main{
 
 .loginScreen .pageBar{
     background-color: var(--pageBarColor) !important;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 2;
 }
 
@@ -1256,21 +1256,21 @@ hr{
 
 .makePlaylistScreen .pageBar{
     background-color: var(--pageBarColor);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--playerColor) !important;
 }
 
 .artistScreen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
     opacity: 0;
-    transition: all 0.45s ease-in-out;
+    transition: all 0.35s ease-in-out;
     font-weight: 500;
 }
 
 .pageBarOn{
     background-color: var(--pageBarColor);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--playerColor) !important;
 }
 
@@ -1311,7 +1311,6 @@ hr{
     object-fit: cover;
     height: calc(env(safe-area-inset-top) + 400px);
     border-bottom: 1px solid var(--playerColor);
-    transition: all 0.03s ease-in-out;
 }
 
 .artistControls{
