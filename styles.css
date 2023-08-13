@@ -444,11 +444,11 @@ main{
 }
 
 .songInfo img{
-    border-radius: 5px;
-    width: 35px;
+    border-radius: 7.5px;
+    width: 40px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    margin-left: 5px;
+    margin-left: 2px;
 }
 
 .songBtns{
@@ -1955,10 +1955,11 @@ hr{
 }
 
 .playerSongInfo img{
-    border-radius: 5px;
-    width: 35px;
+    border-radius: 7.5px;
+    width: 40px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    margin-block: 1px;
 }
 
 /* ----- LANDSCAPE ORIENTATION ----- */
@@ -2050,7 +2051,7 @@ hr{
 .miniPlayer{
     display: flex;
     justify-content: space-between;
-    padding: 7px;
+    padding: 5px;
     transition: opacity .1s ease-in-out, margin .4s ease-in-out;
     z-index: 2;
     position: relative;
@@ -2103,7 +2104,8 @@ hr{
 }
 
 .playerSongText h2{
-    font-size: 17px;
+    font-size: 16px;
+    line-height: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2122,12 +2124,12 @@ hr{
     font-size: 13px;
     color: var(--offWhiteDark);
     font-weight: 300;
-    line-height: 14px;
-    margin-bottom: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 57vw;
+    line-height: 15px !important;
+    margin-bottom: 2px;
 }
 
 .playerSongBtns{
