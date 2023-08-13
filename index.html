@@ -114,7 +114,6 @@
         <h1>Library
             <div>
                 <button><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>
             </div>
         </h1>
         <div class="songItem favouritesItem" onclick="clickEffect(this); openLikedSongs()">
@@ -126,7 +125,14 @@
                 </div>
             </div>
         </div>
+        <h1>Your Playlists
+            <div>
+                <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </h1>
         <ul class="yourPlaylists"></ul>
+        <h1>Artists You Follow</h1>
+        <ul class="yourFArtists"></ul>
     </main>
 
     <div class="player">
@@ -242,7 +248,7 @@
                         <h5><span name="artistFollowers" id="artistFollowers">0</span>&nbsp;Followers</h5>
                     </div>
                     <div class="artistBtns">
-                        <button><i class="fa-solid fa-plus"></i> Follow</button>
+                        <button id="followArtistBtn"><i class="fa-solid fa-plus"></i> Follow</button>
                         <button><i class="fa-solid fa-play"></i> Play</button>
                     </div>
                     <div class="darken"></div>

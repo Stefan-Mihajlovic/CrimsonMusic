@@ -89,7 +89,8 @@ function RegisterUser(){
                 Password: encPass(),
                 Playlists: "",
                 LikedSongs: "",
-                AppTheme: "Dark"
+                AppTheme: "Dark",
+                FollowedArtists: ""
             })
             .then(()=>{
                 alert('User registered successfuly!');
@@ -184,6 +185,7 @@ logoutBtn.addEventListener('click', ()=>{
     signOut(auth).then(() => {
         SignOutUser();
         DeLoadUserPlaylists();
+        DeLoadUserFArtists();
     }).catch((error) => {
         // An error happened.
     });
@@ -197,6 +199,7 @@ function seeIfUserIsSignedIn(){
     else{
         loginUser(currentUser);
         LoadUserPlaylists();
+        LoadUserFArtists();
     }
 }
 
@@ -654,6 +657,8 @@ export function closeArtistPage(){
 
 export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage){
 
+    checkIfArtistIsFollowed(artistID);
+
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     for (let i = 0; i < screenScrollables.length; i++) {
@@ -692,9 +697,139 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
         GenerateOneSongFromArtist(i, artistName);
     }
 
+    const followArtistBtn = document.getElementById('followArtistBtn');
+    followArtistBtn.addEventListener('click', () => {
+        followArtist(artistID);
+    });
+
     if(artistAImage != undefined){
         document.getElementById("artistAboutBanner").src = artistAImage;
     }
+}
+
+function checkIfArtistIsFollowed(artistId){
+    const dbRef = ref(realdb);
+    const followArtistBtn = document.getElementById('followArtistBtn');
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setLikedSongs = snapshot.val().LikedSongs;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            let setTheme = snapshot.val().AppTheme;
+            let setFollowedArtists = snapshot.val().FollowedArtists;
+            if(setFollowedArtists == undefined){
+                setFollowedArtists = "";
+            }
+
+            let fArtistsCut = setFollowedArtists.split(',');
+            if(fArtistsCut.includes(String(artistId))){
+                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
+            }else{
+                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
+            }
+
+
+        }
+    })
+}
+
+function followArtist(artistId){
+    const dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setLikedSongs = snapshot.val().LikedSongs;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            let setTheme = snapshot.val().AppTheme;
+            let setFollowedArtists = snapshot.val().FollowedArtists;
+            if(setFollowedArtists == undefined){
+                setFollowedArtists = "";
+            }
+
+            let isArtistFollowed = false;
+            let newFollowedArtists;
+            let fArtistsCut = setFollowedArtists.split(',');
+            if(fArtistsCut.includes(String(artistId))){
+                isArtistFollowed = true;
+                for (let i = 0; i < fArtistsCut.length; i++) {
+                    if(fArtistsCut[i] == artistId){
+                        fArtistsCut.splice(i, 1);
+                    }
+                }
+                newFollowedArtists = fArtistsCut.join(',');
+            }else{
+                isArtistFollowed = false;
+                newFollowedArtists = setFollowedArtists + artistId + ",";
+            }
+
+            set(ref(realdb, "Users/"+currentUser.Username),
+            {
+                Username: setUsername,
+                Email: setEmail,
+                LikedSongs: setLikedSongs,
+                Password: setPassword,
+                Playlists: setPlaylists,
+                AppTheme: setTheme,
+                FollowedArtists: newFollowedArtists
+            })
+            .then(()=>{
+                const followArtistBtn = document.getElementById('followArtistBtn');
+
+                get(child(dbRef, "Artists/"+artistId)).then((snapshot)=>{
+                    if(snapshot.exists()){
+                        let artistNameDB = snapshot.val().Artist;
+                        let artistImage = snapshot.val().ImageURL;
+                        let artistFollowers = snapshot.val().Followers;
+                        let artistListens = snapshot.val().Listens;
+                        let artistAboutImage = snapshot.val().AboutBanner;
+
+                        if(!isArtistFollowed){
+                            set(ref(realdb, "Artists/"+artistId),
+                            {
+                                AboutBanner: artistAboutImage,
+                                Artist: artistNameDB,
+                                Followers: String(Number(artistFollowers)+1),
+                                ImageURL: artistImage,
+                                Listens: artistListens
+                            })
+                            .then(()=>{
+                                LoadUserFArtists();
+                                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
+                            })
+                            .catch((error)=>{
+                                alert("error "+error);
+                            })
+                        }else{
+                            set(ref(realdb, "Artists/"+artistId),
+                            {
+                                AboutBanner: artistAboutImage,
+                                Artist: artistNameDB,
+                                Followers: String(Number(artistFollowers)-1),
+                                ImageURL: artistImage,
+                                Listens: artistListens
+                            })
+                            .then(()=>{
+                                LoadUserFArtists();
+                                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
+                            })
+                            .catch((error)=>{
+                                alert("error "+error);
+                            })
+                        }
+                    }
+                })
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            })
+        }
+    })
 }
 
 function SetTheLatestRelease(artist){
@@ -962,6 +1097,7 @@ function DBMakePl(){
             let setPassword = snapshot.val().Password;
             let setPlaylists = snapshot.val().Playlists;
             let setTheme = snapshot.val().AppTheme;
+            let setFollowedArtists = snapshot.val().FollowedArtists;
 
             let currentMakePlaylistName = document.getElementsByClassName("currentMakePlaylistName")[0];
 
@@ -972,7 +1108,8 @@ function DBMakePl(){
                 LikedSongs: setLikedSongs,
                 Password: setPassword,
                 Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}"),
-                AppTheme: setTheme
+                AppTheme: setTheme,
+                FollowedArtists: setFollowedArtists
             })
             .then(()=>{
                 alert("Playlist made");
@@ -989,6 +1126,7 @@ function DBMakePl(){
 
 let yoursPage = document.getElementsByClassName("yoursScreen")[0];
 let yourPlaylists = document.getElementsByClassName("yourPlaylists")[0];
+let yourFArtists = document.getElementsByClassName("yourFArtists")[0];
 
 function LoadUserPlaylists(){
     yourPlaylists.innerHTML = "";
@@ -1022,6 +1160,56 @@ function LoadUserPlaylists(){
 
 function DeLoadUserPlaylists(){
     yourPlaylists.innerHTML = "";
+}
+
+function LoadUserFArtists(){
+    yourFArtists.innerHTML = "";
+
+    const dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            let setLikedSongs = snapshot.val().LikedSongs;
+            let setFollowedArtists = snapshot.val().FollowedArtists;
+
+            let fArtistsCut = setFollowedArtists.split(',');
+            fArtistsCut.reverse();
+            fArtistsCut.forEach(artist => {
+                if(artist != undefined && artist != ""){
+                    GetArtists2(artist);
+                }
+            });
+        }
+    })
+}
+
+function GetArtists2(artistName){
+    let name = artistName;
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            artistName = snapshot.val().Artist;
+            artistImage = snapshot.val().ImageURL;
+            artistFollowers = snapshot.val().Followers;
+            artistListens = snapshot.val().Listens;
+            artistAboutImage = snapshot.val().AboutBanner;
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
+            <img  src="`+ artistImage +`" alt="artistImage">
+            <h3>`+ artistName +`</h3>
+            </li>`;
+            yourFArtists.innerHTML += currentImg;
+        }
+    })
+}
+
+function DeLoadUserFArtists(){
+    yourFArtists.innerHTML = "";
 }
 
 export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
@@ -1256,6 +1444,7 @@ export function addSongToLiked(id){
             let setPlaylists = snapshot.val().Playlists;
             let setLikedSongs = snapshot.val().LikedSongs;
             let setTheme = snapshot.val().AppTheme;
+            let setFollowedArtists = snapshot.val().FollowedArtists;
 
             if(setLikedSongs === undefined){
                 setLikedSongs = "";
@@ -1269,7 +1458,8 @@ export function addSongToLiked(id){
                     Password: setPassword,
                     Playlists: setPlaylists,
                     LikedSongs: setLikedSongs + id + ",",
-                    AppTheme: setTheme
+                    AppTheme: setTheme,
+                    FollowedArtists: setFollowedArtists
                 })
                 .then(()=>{
                     const likeSongBtn = document.getElementById("likeSongBtn");
@@ -1399,6 +1589,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
         clickedPlaylist.children[2].classList.add('greenCheck');
         let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
         let newSetPlaylists = "{";
+        let setFollowedArtists;
 
         let dbRef = ref(realdb);
 
@@ -1410,6 +1601,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                 setPlaylists = snapshot.val().Playlists;
                 setLikedSongs = snapshot.val().LikedSongs;
                 setTheme = snapshot.val().AppTheme;
+                setFollowedArtists = snapshot.val().FollowedArtists;
                 let usersPlaylists = setPlaylists.split('{');
 
                 for (let i = 1; i < usersPlaylists.length; i++) {
@@ -1435,7 +1627,8 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                     Password: setPassword,
                     Playlists: newSetPlaylists,
                     LikedSongs: setLikedSongs,
-                    AppTheme: setTheme
+                    AppTheme: setTheme,
+                    FollowedArtists: setFollowedArtists
                 })
                 .then(()=>{
                     LoadUserPlaylists();

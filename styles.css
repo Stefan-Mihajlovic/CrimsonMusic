@@ -478,16 +478,21 @@ main{
 
 /* ----- Recommended artists Section ----- */
 
-.recArtists{
+.recArtists, .yourFArtists{
     width: 100%;
     height: fit-content;
     display: flex;
     align-items: center;
     gap: 15px;
     overflow-x: scroll;
-    overflow-y: visible;
+    overflow-y: hidden;
     padding-block: 10px;
     padding-inline: 20px;
+}
+
+.yourFArtists{
+    min-height: 120px;
+    gap: 10px;
 }
 
 .artistItem{
@@ -502,12 +507,21 @@ main{
     animation: showUp 0.5s ease-in-out;
 }
 
+.yourFArtists .artistItem{
+    width: 100px;
+    padding-top: 0px;
+}
+
 .artistItem img{
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+}
+
+.yourFArtists .artistItem img{
+    box-shadow: none;   
 }
 
 .artistItem h3{
@@ -1544,7 +1558,9 @@ hr{
     display: flex;
     justify-content: space-between;
     width: calc(100% - 30px);
-    margin-left: 15px;
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .yoursScreen h1 div{
@@ -1552,6 +1568,7 @@ hr{
     align-items: center;
     justify-content: center;
     gap: 0px;
+    margin-top: -7px;
 }
 
 .yoursScreen h1 button{
@@ -1565,12 +1582,12 @@ hr{
 }
 
 .yoursScreen h1 button i{
-    font-size: 26px;
+    font-size: 22px;
     color: var(--offWhite);
 }
 
 .yoursScreen h1 button:nth-child(1) i{
-    font-size: 22px;
+    font-size: 18px;
     margin-top: 2px;
 }
 
