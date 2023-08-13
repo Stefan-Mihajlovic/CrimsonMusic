@@ -1248,6 +1248,10 @@ hr{
     flex-direction: column;
 }
 
+.makePlaylistScreen .screenScrollable{
+    padding-top: env(safe-area-inset-top);
+}
+
 .artistScreen .closeCurrentScreen, .playlistScreen .closeCurrentScreen, .categoryScreen .closeCurrentScreen, .makePlaylistScreen .closeCurrentScreen{
     z-index: 3;
 }
