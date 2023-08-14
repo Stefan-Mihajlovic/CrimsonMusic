@@ -70,6 +70,14 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
     let activeMain = document.getElementsByClassName(activeScreen)[0];
     activeMain.classList.add("activeMain");
 
+    activeMain.addEventListener('scroll', () => {
+        if(activeMain.scrollTop > 5){
+            document.getElementsByClassName('topScrollDiv')[0].classList.add('topScrollDivOn');
+        }else{
+            document.getElementsByClassName('topScrollDiv')[0].classList.remove('topScrollDivOn');
+        }
+    })
+
     if(activeScreen === "searchScreen"){
         let searchList = document.getElementsByClassName("searchList")[0];
         let searchInput = document.getElementById("searchInput");
@@ -82,6 +90,13 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
 
 function setHomeScreen(){
     document.getElementsByClassName("homeScreen")[0].classList.add("activeMain");
+    document.getElementsByClassName("homeScreen")[0].addEventListener('scroll', () => {
+        if(document.getElementsByClassName("homeScreen")[0].scrollTop > 5){
+            document.getElementsByClassName('topScrollDiv')[0].classList.add('topScrollDivOn');
+        }else{
+            document.getElementsByClassName('topScrollDiv')[0].classList.remove('topScrollDivOn');
+        }
+    })
 }
 
 /* ----- Button clicks ----- */
@@ -1158,12 +1173,3 @@ observer = new MutationObserver(function(mutationsList, observer) {
 for (let i = 0; i < scrollTexts.length; i++) {
     observer.observe(scrollTexts[i].children[0], {characterData: false, childList: true, attributes: false});
 }
-
-let activeMainScroll = document.getElementsByClassName('activeMain')[0];
-activeMainScroll.addEventListener('scroll', () => {
-    if(activeMainScroll.scrollTop > 5){
-        document.getElementsByClassName('topScrollDiv')[0].classList.add('topScrollDivOn');
-    }else{
-        document.getElementsByClassName('topScrollDiv')[0].classList.remove('topScrollDivOn');
-    }
-})

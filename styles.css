@@ -2268,6 +2268,7 @@ hr{
 
 .bigSongInfo .playerSongText h2{
     font-size: 22px;
+    line-height: 25px;
     text-align: left;
     overflow: scroll;
     overflow-y: visible;

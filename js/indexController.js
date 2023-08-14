@@ -1138,7 +1138,7 @@ function LoadUserPlaylists(){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
             numberOfPlaylists = usersPlaylists.length;
 
-            for (let i = numberOfPlaylists-2; i > 0; i--) {
+            for (let i = numberOfPlaylists-1; i > 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                     <div class="songInfo">
                         <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
