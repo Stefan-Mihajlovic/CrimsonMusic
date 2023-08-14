@@ -504,7 +504,7 @@ function GetCategories(name){
             catBanner = snapshot.val().Banner;
 
             currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`', '`+ catBanner +`')" style="background-color: `+ catColor +`">
-            <h3>`+ catName +`</h3>
+            <h3>`+ catName +`</h3><div class="darkenCat"></div>
             </div>`;
         }
     })
@@ -516,7 +516,7 @@ function GetCategories(name){
             catBanner2 = snapshot.val().Banner;
 
             currentLi += `<div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName2 +`', '`+ catColor2 +`', '`+ catBanner2 +`')" style="background-color: `+ catColor2 +`">
-            <h3>`+ catName2 +`</h3>
+            <h3>`+ catName2 +`</h3><div class="darkenCat"></div>
             </div></li>`;
 
             categoriesList.innerHTML += currentLi;
