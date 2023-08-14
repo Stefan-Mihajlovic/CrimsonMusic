@@ -1731,6 +1731,76 @@ export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     isLyricsOn = false;
 }
 
+// ----- THIS MONTHS FEATURE
+
+function generateThisMonthsFeature(){
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "HomeFeatures/ThisMonthsArtist")).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setArtistId = snapshot.val().ArtistId;
+            let setSongId = snapshot.val().SongId;
+            let setMonth = snapshot.val().Month;
+
+            document.getElementsByClassName('thisMFSection')[0].innerHTML = `
+            <h2 class="catTitle">This Months Feature</h2>
+            <div class="thisMFDiv">
+                <img id="artistMFBanner" src="images/CrimsonLogo.png" alt="artistFeatureBanner">
+                <div id="MFArtistInfo">
+                    
+                </div>
+            </div>
+            `;
+
+            get(child(dbRef, "Artists/"+setArtistId)).then((snapshot)=>{
+                if(snapshot.exists()){
+                    let artistName = snapshot.val().Artist;
+                    let artistImage = snapshot.val().ImageURL;
+                    let artistFollowers = snapshot.val().Followers;
+                    let artistListens = snapshot.val().Listens;
+                    let artistAboutImage = snapshot.val().AboutBanner;
+
+                    document.getElementById('artistMFBanner').src = artistImage;
+                    GenerateOneSongMF(setSongId,artistName,artistFollowers);
+                }
+            })
+        }
+    })
+}
+
+function GenerateOneSongMF(songName,artistName,artistFollowers){
+
+    let name = songName;
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(snapshot.exists()){
+            songToBePlayed = snapshot.val().SongURL;
+            songTitle  = snapshot.val().SongName;
+            songCreator = snapshot.val().Creator;
+            imageURL = snapshot.val().ImgURL;
+            let currentLI =  `<li class="songItem">
+                <div class="songInfo">
+                    <img  src="`+imageURL+`" alt="songBanner">
+                    <div class="songText">
+                        <h2>`+ songTitle +`</h2>
+                        <h3>`+ songCreator +`</h3>
+                    </div>
+                </div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home',this.parentElement,'`+ name +`');"></div>
+                <div class="songBtns">
+                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
+                </div>
+                </li>`;
+            document.getElementById('MFArtistInfo').innerHTML += `
+            <h2 id="MFArtistName">${artistName}</h2>
+            <h5 id="MFArtistFollowers">${artistFollowers + "&nbsp;Followers"}</h5>
+            ` + currentLI;
+        }
+    })
+}
+
 // ----- CALLING ALL NECESSARY FUNCTIONS
 
 getUsername();
@@ -1739,3 +1809,4 @@ generateSongs();
 generateArtists();
 generatePlaylists();
 generateCategories();
+generateThisMonthsFeature();
