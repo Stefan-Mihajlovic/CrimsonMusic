@@ -93,8 +93,8 @@ function RegisterUser(){
                 FollowedArtists: ""
             })
             .then(()=>{
-                alert('User registered successfuly!');
-
+                alert(`Welcome to crimson ${username.value}!`);
+                AuthenticateUser();
             })
             .catch((error)=>{
                 alert("error "+error);
@@ -125,6 +125,7 @@ function AuthenticateUser(){
             if(dbpass == password.value){
                 loginUser(snapshot.val());
                 LoadUserPlaylists();
+                LoadUserFArtists();
             }
         }else{
             alert("Account not found!");
@@ -707,129 +708,164 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
     }
 }
 
+export function openArtistPageByName(artistName2){
+
+    let dbRef = ref(realdb);
+    let artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage;
+    let br = 0;
+    
+    for (let i = 1; i < brojArtista; i++) {
+        get(child(dbRef, "Artists/"+i)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let ArtistName = artistName2.split(',')[0];
+
+                artistName = snapshot.val().Artist;
+
+                if(artistName.includes(ArtistName)){
+                    artistID = i;
+                    artistImage = snapshot.val().ImageURL;
+                    artistFollowers = snapshot.val().Followers;
+                    artistListens = snapshot.val().Listens;
+                    artistAboutImage = snapshot.val().AboutBanner;
+                    br = 1;
+                    closeBigPlayer();
+                    openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage);
+                }
+            }
+        })
+        if(br == 1){
+            break;
+        }
+    }
+}
+
 function checkIfArtistIsFollowed(artistId){
     const dbRef = ref(realdb);
     const followArtistBtn = document.getElementById('followArtistBtn');
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let setUsername = snapshot.val().Username;
-            let setEmail = snapshot.val().Email;
-            let setLikedSongs = snapshot.val().LikedSongs;
-            let setPassword = snapshot.val().Password;
-            let setPlaylists = snapshot.val().Playlists;
-            let setTheme = snapshot.val().AppTheme;
-            let setFollowedArtists = snapshot.val().FollowedArtists;
-            if(setFollowedArtists == undefined){
-                setFollowedArtists = "";
+    if(currentUser != undefined){
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let setUsername = snapshot.val().Username;
+                let setEmail = snapshot.val().Email;
+                let setLikedSongs = snapshot.val().LikedSongs;
+                let setPassword = snapshot.val().Password;
+                let setPlaylists = snapshot.val().Playlists;
+                let setTheme = snapshot.val().AppTheme;
+                let setFollowedArtists = snapshot.val().FollowedArtists;
+                if(setFollowedArtists == undefined){
+                    setFollowedArtists = "";
+                }
+    
+                let fArtistsCut = setFollowedArtists.split(',');
+                if(fArtistsCut.includes(String(artistId))){
+                    followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
+                }else{
+                    followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
+                }
+    
+    
             }
-
-            let fArtistsCut = setFollowedArtists.split(',');
-            if(fArtistsCut.includes(String(artistId))){
-                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
-            }else{
-                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
-            }
-
-
-        }
-    })
+        })
+    }
 }
 
 function followArtist(artistId){
     const dbRef = ref(realdb);
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let setUsername = snapshot.val().Username;
-            let setEmail = snapshot.val().Email;
-            let setLikedSongs = snapshot.val().LikedSongs;
-            let setPassword = snapshot.val().Password;
-            let setPlaylists = snapshot.val().Playlists;
-            let setTheme = snapshot.val().AppTheme;
-            let setFollowedArtists = snapshot.val().FollowedArtists;
-            if(setFollowedArtists == undefined){
-                setFollowedArtists = "";
-            }
-
-            let isArtistFollowed = false;
-            let newFollowedArtists;
-            let fArtistsCut = setFollowedArtists.split(',');
-            if(fArtistsCut.includes(String(artistId))){
-                isArtistFollowed = true;
-                for (let i = 0; i < fArtistsCut.length; i++) {
-                    if(fArtistsCut[i] == artistId){
-                        fArtistsCut.splice(i, 1);
-                    }
+    if(currentUser != undefined){
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let setUsername = snapshot.val().Username;
+                let setEmail = snapshot.val().Email;
+                let setLikedSongs = snapshot.val().LikedSongs;
+                let setPassword = snapshot.val().Password;
+                let setPlaylists = snapshot.val().Playlists;
+                let setTheme = snapshot.val().AppTheme;
+                let setFollowedArtists = snapshot.val().FollowedArtists;
+                if(setFollowedArtists == undefined){
+                    setFollowedArtists = "";
                 }
-                newFollowedArtists = fArtistsCut.join(',');
-            }else{
-                isArtistFollowed = false;
-                newFollowedArtists = setFollowedArtists + artistId + ",";
-            }
-
-            set(ref(realdb, "Users/"+currentUser.Username),
-            {
-                Username: setUsername,
-                Email: setEmail,
-                LikedSongs: setLikedSongs,
-                Password: setPassword,
-                Playlists: setPlaylists,
-                AppTheme: setTheme,
-                FollowedArtists: newFollowedArtists
-            })
-            .then(()=>{
-                const followArtistBtn = document.getElementById('followArtistBtn');
-
-                get(child(dbRef, "Artists/"+artistId)).then((snapshot)=>{
-                    if(snapshot.exists()){
-                        let artistNameDB = snapshot.val().Artist;
-                        let artistImage = snapshot.val().ImageURL;
-                        let artistFollowers = snapshot.val().Followers;
-                        let artistListens = snapshot.val().Listens;
-                        let artistAboutImage = snapshot.val().AboutBanner;
-
-                        if(!isArtistFollowed){
-                            set(ref(realdb, "Artists/"+artistId),
-                            {
-                                AboutBanner: artistAboutImage,
-                                Artist: artistNameDB,
-                                Followers: String(Number(artistFollowers)+1),
-                                ImageURL: artistImage,
-                                Listens: artistListens
-                            })
-                            .then(()=>{
-                                LoadUserFArtists();
-                                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
-                            })
-                            .catch((error)=>{
-                                alert("error "+error);
-                            })
-                        }else{
-                            set(ref(realdb, "Artists/"+artistId),
-                            {
-                                AboutBanner: artistAboutImage,
-                                Artist: artistNameDB,
-                                Followers: String(Number(artistFollowers)-1),
-                                ImageURL: artistImage,
-                                Listens: artistListens
-                            })
-                            .then(()=>{
-                                LoadUserFArtists();
-                                followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
-                            })
-                            .catch((error)=>{
-                                alert("error "+error);
-                            })
+    
+                let isArtistFollowed = false;
+                let newFollowedArtists;
+                let fArtistsCut = setFollowedArtists.split(',');
+                if(fArtistsCut.includes(String(artistId))){
+                    isArtistFollowed = true;
+                    for (let i = 0; i < fArtistsCut.length; i++) {
+                        if(fArtistsCut[i] == artistId){
+                            fArtistsCut.splice(i, 1);
                         }
                     }
+                    newFollowedArtists = fArtistsCut.join(',');
+                }else{
+                    isArtistFollowed = false;
+                    newFollowedArtists = setFollowedArtists + artistId + ",";
+                }
+    
+                set(ref(realdb, "Users/"+currentUser.Username),
+                {
+                    Username: setUsername,
+                    Email: setEmail,
+                    LikedSongs: setLikedSongs,
+                    Password: setPassword,
+                    Playlists: setPlaylists,
+                    AppTheme: setTheme,
+                    FollowedArtists: newFollowedArtists
                 })
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            })
-        }
-    })
+                .then(()=>{
+                    const followArtistBtn = document.getElementById('followArtistBtn');
+    
+                    get(child(dbRef, "Artists/"+artistId)).then((snapshot)=>{
+                        if(snapshot.exists()){
+                            let artistNameDB = snapshot.val().Artist;
+                            let artistImage = snapshot.val().ImageURL;
+                            let artistFollowers = snapshot.val().Followers;
+                            let artistListens = snapshot.val().Listens;
+                            let artistAboutImage = snapshot.val().AboutBanner;
+    
+                            if(!isArtistFollowed){
+                                set(ref(realdb, "Artists/"+artistId),
+                                {
+                                    AboutBanner: artistAboutImage,
+                                    Artist: artistNameDB,
+                                    Followers: String(Number(artistFollowers)+1),
+                                    ImageURL: artistImage,
+                                    Listens: artistListens
+                                })
+                                .then(()=>{
+                                    LoadUserFArtists();
+                                    followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
+                                })
+                                .catch((error)=>{
+                                    alert("error "+error);
+                                })
+                            }else{
+                                set(ref(realdb, "Artists/"+artistId),
+                                {
+                                    AboutBanner: artistAboutImage,
+                                    Artist: artistNameDB,
+                                    Followers: String(Number(artistFollowers)-1),
+                                    ImageURL: artistImage,
+                                    Listens: artistListens
+                                })
+                                .then(()=>{
+                                    LoadUserFArtists();
+                                    followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
+                                })
+                                .catch((error)=>{
+                                    alert("error "+error);
+                                })
+                            }
+                        }
+                    })
+                })
+                .catch((error)=>{
+                    alert("error "+error);
+                })
+            }
+        })
+    }
 }
 
 function SetTheLatestRelease(artist){
@@ -1167,24 +1203,29 @@ function LoadUserFArtists(){
 
     const dbRef = ref(realdb);
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let setUsername = snapshot.val().Username;
-            let setEmail = snapshot.val().Email;
-            let setPassword = snapshot.val().Password;
-            let setPlaylists = snapshot.val().Playlists;
-            let setLikedSongs = snapshot.val().LikedSongs;
-            let setFollowedArtists = snapshot.val().FollowedArtists;
-
-            let fArtistsCut = setFollowedArtists.split(',');
-            fArtistsCut.reverse();
-            fArtistsCut.forEach(artist => {
-                if(artist != undefined && artist != ""){
-                    GetArtists2(artist);
+    if(currentUser != undefined){
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let setUsername = snapshot.val().Username;
+                let setEmail = snapshot.val().Email;
+                let setPassword = snapshot.val().Password;
+                let setPlaylists = snapshot.val().Playlists;
+                let setLikedSongs = snapshot.val().LikedSongs;
+                let setFollowedArtists = snapshot.val().FollowedArtists;
+                if(setFollowedArtists == undefined){
+                    setFollowedArtists = "";
                 }
-            });
-        }
-    })
+    
+                let fArtistsCut = setFollowedArtists.split(',');
+                fArtistsCut.reverse();
+                fArtistsCut.forEach(artist => {
+                    if(artist != undefined && artist != ""){
+                        GetArtists2(artist);
+                    }
+                });
+            }
+        })
+    }
 }
 
 function GetArtists2(artistName){
@@ -1402,106 +1443,110 @@ export function seeIfSongIsLiked(id){
 
     const dbRef = ref(realdb);
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let setUsername = snapshot.val().Username;
-            let setEmail = snapshot.val().Email;
-            let setPassword = snapshot.val().Password;
-            let setPlaylists = snapshot.val().Playlists;
-            let setLikedSongs = snapshot.val().LikedSongs;
-
-            if(setLikedSongs === undefined){
-                setLikedSongs = "";
+    if(currentUser != undefined){
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let setUsername = snapshot.val().Username;
+                let setEmail = snapshot.val().Email;
+                let setPassword = snapshot.val().Password;
+                let setPlaylists = snapshot.val().Playlists;
+                let setLikedSongs = snapshot.val().LikedSongs;
+    
+                if(setLikedSongs === undefined){
+                    setLikedSongs = "";
+                }
+                let likedSongsArray = setLikedSongs.split(',');
+    
+                const likeSongBtn = document.getElementById("likeSongBtn");
+                const playerLikeBtn = document.getElementById("playerLikeBtn");
+                const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
+    
+                if(likedSongsArray.includes(id)){
+                    miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                    playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                    likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
+                }else{
+                    miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                    playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                    likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+                }
             }
-            let likedSongsArray = setLikedSongs.split(',');
-
-            const likeSongBtn = document.getElementById("likeSongBtn");
-            const playerLikeBtn = document.getElementById("playerLikeBtn");
-            const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
-
-            if(likedSongsArray.includes(id)){
-                miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
-                playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
-                likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
-            }else{
-                miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
-                playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
-                likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
-            }
-        }
-    })
+        })
+    }
 
     return true;
 }
 
 export function addSongToLiked(id){
     const dbRef = ref(realdb);
-        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let setUsername = snapshot.val().Username;
-            let setEmail = snapshot.val().Email;
-            let setPassword = snapshot.val().Password;
-            let setPlaylists = snapshot.val().Playlists;
-            let setLikedSongs = snapshot.val().LikedSongs;
-            let setTheme = snapshot.val().AppTheme;
-            let setFollowedArtists = snapshot.val().FollowedArtists;
-
-            if(setLikedSongs === undefined){
-                setLikedSongs = "";
-            }
-            let likedSongsArray = setLikedSongs.split(',');
-            if(!likedSongsArray.includes(id)){
-                set(ref(realdb, "Users/"+currentUser.Username),
-                {
-                    Username: setUsername,
-                    Email: setEmail,
-                    Password: setPassword,
-                    Playlists: setPlaylists,
-                    LikedSongs: setLikedSongs + id + ",",
-                    AppTheme: setTheme,
-                    FollowedArtists: setFollowedArtists
-                })
-                .then(()=>{
-                    const likeSongBtn = document.getElementById("likeSongBtn");
-                    const playerLikeBtn = document.getElementById("playerLikeBtn");
-                    const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
-                    likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
-                    playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
-                    miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
-                    reloadLikedSongs();
-                })
-                .catch((error)=>{
-                    alert("error "+error);
-                })
-            }else{
-                likedSongsArray = likedSongsArray.filter(function(item) {
-                    return item !== id;
-                });
-
-                set(ref(realdb, "Users/"+currentUser.Username),
-                {
-                    Username: setUsername,
-                    Email: setEmail,
-                    Password: setPassword,
-                    Playlists: setPlaylists,
-                    LikedSongs: likedSongsArray.toString(),
-                    AppTheme: setTheme
-                })
-                .then(()=>{
-                    const likeSongBtn = document.getElementById("likeSongBtn");
-                    const playerLikeBtn = document.getElementById("playerLikeBtn");
-                    const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
-                    likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
-                    playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
-                    miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
-                    reloadLikedSongs();
-                })
-                .catch((error)=>{
-                    alert("error "+error);
-                })
-            }
+        if(currentUser != undefined){
+            get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+                if(snapshot.exists()){
+                    let setUsername = snapshot.val().Username;
+                    let setEmail = snapshot.val().Email;
+                    let setPassword = snapshot.val().Password;
+                    let setPlaylists = snapshot.val().Playlists;
+                    let setLikedSongs = snapshot.val().LikedSongs;
+                    let setTheme = snapshot.val().AppTheme;
+                    let setFollowedArtists = snapshot.val().FollowedArtists;
+        
+                    if(setLikedSongs === undefined){
+                        setLikedSongs = "";
+                    }
+                    let likedSongsArray = setLikedSongs.split(',');
+                    if(!likedSongsArray.includes(id)){
+                        set(ref(realdb, "Users/"+currentUser.Username),
+                        {
+                            Username: setUsername,
+                            Email: setEmail,
+                            Password: setPassword,
+                            Playlists: setPlaylists,
+                            LikedSongs: setLikedSongs + id + ",",
+                            AppTheme: setTheme,
+                            FollowedArtists: setFollowedArtists
+                        })
+                        .then(()=>{
+                            const likeSongBtn = document.getElementById("likeSongBtn");
+                            const playerLikeBtn = document.getElementById("playerLikeBtn");
+                            const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
+                            likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
+                            playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                            miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                            reloadLikedSongs();
+                        })
+                        .catch((error)=>{
+                            alert("error "+error);
+                        })
+                    }else{
+                        likedSongsArray = likedSongsArray.filter(function(item) {
+                            return item !== id;
+                        });
+        
+                        set(ref(realdb, "Users/"+currentUser.Username),
+                        {
+                            Username: setUsername,
+                            Email: setEmail,
+                            Password: setPassword,
+                            Playlists: setPlaylists,
+                            LikedSongs: likedSongsArray.toString(),
+                            AppTheme: setTheme
+                        })
+                        .then(()=>{
+                            const likeSongBtn = document.getElementById("likeSongBtn");
+                            const playerLikeBtn = document.getElementById("playerLikeBtn");
+                            const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
+                            likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+                            playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                            miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                            reloadLikedSongs();
+                        })
+                        .catch((error)=>{
+                            alert("error "+error);
+                        })
+                    }
+                }
+            })
         }
-    })
 }
 
 // ----- GETTING ARTIST ID FROM NAME

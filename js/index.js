@@ -332,6 +332,11 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
         addSongToLiked(id);
     }
 
+    const openArtistPageBigBtn = document.getElementById('openArtistPageBigBtn');
+    openArtistPageBigBtn.onclick = () => {
+        openArtistPageByName(songCreator);
+    }
+
     const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
     miniPlayerLikeBtn.onclick = () => {
         addSongToLiked(id);

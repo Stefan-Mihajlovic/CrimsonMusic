@@ -1990,6 +1990,17 @@ hr{
     margin-block: 1px;
 }
 
+.playerSongNames{
+    position: relative;
+}
+
+#openArtistPageBigBtn{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    z-index: 2;
+}
+
 /* ----- LANDSCAPE ORIENTATION ----- */
 @media screen and (orientation: landscape) {
     .player{
@@ -2188,8 +2199,8 @@ hr{
 .playerClickDiv2{
     position: fixed;
     top: -50vh;
+    bottom: 0;
     z-index: 1;
-    height: 200vh;
     left: -5vw;
     width: 120vw;
     display: none;
