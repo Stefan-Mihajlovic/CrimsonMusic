@@ -890,9 +890,9 @@ main{
     font-size: 23px;
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 50%;
-    padding-left: 6px;
+    padding-left: 6.5px;
     padding-right: 8px;
-    padding-block: 2px;
+    padding-block: 2.5px;
 }
 
 .pageBar h2{
