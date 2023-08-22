@@ -888,6 +888,11 @@ main{
 .pageBar button i{
     color: var(--offWhite);
     font-size: 23px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    padding-left: 6px;
+    padding-right: 8px;
+    padding-block: 2px;
 }
 
 .pageBar h2{
