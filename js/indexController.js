@@ -834,7 +834,7 @@ function followArtist(artistId){
                                     Listens: artistListens
                                 })
                                 .then(()=>{
-                                    LoadUserFArtists();
+                                    // LoadUserFArtists();
                                     followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
                                 })
                                 .catch((error)=>{
@@ -850,7 +850,7 @@ function followArtist(artistId){
                                     Listens: artistListens
                                 })
                                 .then(()=>{
-                                    LoadUserFArtists();
+                                    // LoadUserFArtists();
                                     followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
                                 })
                                 .catch((error)=>{
@@ -1707,7 +1707,12 @@ export function turnLyrcis(songId){
     playerPageBar.children[1].classList.add("smallH2");
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-xmark"></i>';
     let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
-    let titlePB = bigSongInfo.children[3].children[0].children[0].children[0].innerHTML || bigSongInfo.children[3].children[0].children[0].innerHTML;
+    let titlePB;
+    if(bigSongInfo.children[3].children[0].children[0].children[0] != undefined){
+        titlePB = bigSongInfo.children[3].children[0].children[0].children[0].innerHTML
+    }else{
+        titlePB = bigSongInfo.children[3].children[0].children[0].innerHTML;
+    }
     playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
 
     playerLyrcis.style.display = 'block';

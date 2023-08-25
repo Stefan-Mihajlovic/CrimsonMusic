@@ -2084,10 +2084,12 @@ hr{
 
 .player .pageBar button i{
     color: #DCD6F7;
+    background-color: transparent !important;
 }
 
 .player .pageBar button{
     z-index: 2;
+    background-color: transparent !important;
     width: 30px;
 }
 
