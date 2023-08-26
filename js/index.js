@@ -263,6 +263,7 @@ function closeBigPlayer(){
     document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
     document.querySelector('header').style.opacity = '1';
     document.querySelector('.bubble').style.opacity = '1';
+    document.querySelector('.topScrollDiv').style.opacity = '1';
     document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
     isPlayerOpen = false;
 }
@@ -813,6 +814,7 @@ const move = (e) => {
     document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
     document.querySelector('header').style.opacity = opa;
     document.querySelector('.bubble').style.opacity = opa;
+    document.querySelector('.topScrollDiv').style.opacity = opa;
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -856,6 +858,7 @@ const move2 = (e) => {
         document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
         document.querySelector('header').style.opacity = opa;
         document.querySelector('.bubble').style.opacity = opa;
+        document.querySelector('.topScrollDiv').style.opacity = opa;
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
@@ -1042,6 +1045,7 @@ document.addEventListener("touchend", () => {
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
             document.querySelector('.bubble').style.opacity = '0';
+            document.querySelector('.topScrollDiv').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1063,6 +1067,7 @@ document.addEventListener("touchend", () => {
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
             document.querySelector('.bubble').style.opacity = '0';
+            document.querySelector('.topScrollDiv').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1124,6 +1129,7 @@ document.addEventListener("touchend", () => {
             document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
             document.querySelector('header').style.opacity = '1';
             document.querySelector('.bubble').style.opacity = '1';
+            document.querySelector('.topScrollDiv').style.opacity = '1';
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }else{
