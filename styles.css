@@ -2242,10 +2242,11 @@ hr{
     width: 87vw;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 15px;
+    border-radius: 7.5px;
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 1);
     z-index: 0;
+    margin-bottom: 2.5vh;
     transition: all .45s ease-in-out;
     animation: popInBanner .45s ease-in-out;
 }
@@ -2274,7 +2275,6 @@ hr{
 .bigSongInfo .playerSongText{
     text-align: left;
     width: 98%;
-    padding: 2.5px;
     padding-top: 10px;
     padding-bottom: 15px;
     display: flex;
