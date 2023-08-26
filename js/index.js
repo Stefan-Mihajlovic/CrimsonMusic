@@ -262,6 +262,7 @@ function closeBigPlayer(){
     // Setting the opacity to 1 on main and header
     document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
     document.querySelector('header').style.opacity = '1';
+    document.querySelector('.bubble').style.opacity = '1';
     document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
     isPlayerOpen = false;
 }
@@ -811,6 +812,7 @@ const move = (e) => {
     // Setting the opacity of main and header
     document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
     document.querySelector('header').style.opacity = opa;
+    document.querySelector('.bubble').style.opacity = opa;
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -853,6 +855,7 @@ const move2 = (e) => {
         // Setting the opacity of main and header
         document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
         document.querySelector('header').style.opacity = opa;
+        document.querySelector('.bubble').style.opacity = opa;
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
@@ -1038,6 +1041,7 @@ document.addEventListener("touchend", () => {
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
+            document.querySelector('.bubble').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1058,6 +1062,7 @@ document.addEventListener("touchend", () => {
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
+            document.querySelector('.bubble').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1118,6 +1123,7 @@ document.addEventListener("touchend", () => {
             document.querySelector('header').classList.remove("playerMovable");
             document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
             document.querySelector('header').style.opacity = '1';
+            document.querySelector('.bubble').style.opacity = '1';
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }else{
