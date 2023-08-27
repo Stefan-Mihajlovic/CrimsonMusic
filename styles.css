@@ -204,7 +204,6 @@ header button img{
     border-bottom: 1px solid var(--playerColor);
     -webkit-backdrop-filter: blur(10px);
     height: calc(env(safe-area-inset-top) + 1px);
-    transition: all .2s ease-in-out;
     opacity: 0;
 }
 
@@ -2844,7 +2843,6 @@ nav button i{
     background-color: rgba(53, 40, 63, 0.9);
     background-image: url('videos/ThisMF.gif');
     background-size: cover;
-    background-blend-mode: none;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0px 0px 50px rgba(48, 138, 173, 0.2);
@@ -2912,4 +2910,14 @@ nav button i{
 
 .thisMFDiv div .songItem .songBtns{
     padding-right: 0px;
+}
+
+.thisMFSection button{
+    border-radius: 7px;
+    width: 100%;
+    padding-block: 5px;
+    margin-top: 55px;
+    border: none;
+    background-color: rgba(48, 138, 173, 1);
+    box-shadow: 0px 0px 100px var(--offWhite);
 }

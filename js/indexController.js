@@ -1795,7 +1795,7 @@ function generateThisMonthsFeature(){
             document.getElementsByClassName('thisMFSection')[0].innerHTML = `
             <h2 class="catTitle">This Months Feature</h2>
             <div class="thisMFDiv">
-                <img onclick="clickEffect(this);" id="artistMFBanner" src="images/CrimsonLogo.png" alt="artistFeatureBanner">
+                <img id="artistMFBanner" src="images/CrimsonLogo.png" alt="artistFeatureBanner">
                 <div id="MFArtistInfo">
                     
                 </div>
@@ -1810,7 +1810,7 @@ function generateThisMonthsFeature(){
                     let artistListens = snapshot.val().Listens;
                     let artistAboutImage = snapshot.val().AboutBanner;
 
-                    document.getElementById('artistMFBanner').addEventListener('click', () => {
+                    document.querySelector('.thisMFDiv').addEventListener('click', () => {
                         openArtistPage(setArtistId, artistName, artistImage, artistFollowers, artistListens , artistAboutImage);
                     })
 
@@ -1818,6 +1818,7 @@ function generateThisMonthsFeature(){
                     document.getElementById('MFArtistInfo').innerHTML += `
                         <h2 id="MFArtistName">${artistName}</h2>
                         <h5 id="MFArtistFollowers">${artistFollowers + "&nbsp;Followers"}</h5>
+                        <button onclick="clickEffect(this)">View Profile</button>
                         `;
                 }
             })
