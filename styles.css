@@ -2920,4 +2920,5 @@ nav button i{
     border: none;
     background-color: rgba(48, 138, 173, 1);
     box-shadow: 0px 0px 100px var(--offWhite);
+    color: black;
 }
