@@ -1815,7 +1815,10 @@ function generateThisMonthsFeature(){
                     })
 
                     document.getElementById('artistMFBanner').src = artistImage;
-                    GenerateOneSongMF(setSongId,artistName,artistFollowers);
+                    document.getElementById('MFArtistInfo').innerHTML += `
+                        <h2 id="MFArtistName">${artistName}</h2>
+                        <h5 id="MFArtistFollowers">${artistFollowers + "&nbsp;Followers"}</h5>
+                        `;
                 }
             })
         }
