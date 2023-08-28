@@ -222,8 +222,8 @@ main{
 
 .catTitle{
     font-size: 20px;
-    margin-left: 15px;
-    width: calc(100% - 30px);
+    margin-left: 20px;
+    width: calc(100% - 40px);
 }
 
 .catTitleNoMargin{
@@ -235,8 +235,8 @@ main{
 .catTitleAlone{
     font-size: 20px;
     margin-bottom: 15px;
-    margin-left: 15px;
-    width: calc(100% - 30px);
+    margin-left: 20px;
+    width: calc(100% - 40px);
 }
 
 .catDesc{
@@ -245,8 +245,8 @@ main{
     margin: 2px;
     color: var(--offWhiteDark);
     margin-bottom: 15px;
-    margin-left: 15px;
-    width: calc(100% - 30px);
+    margin-left: 20px;
+    width: calc(100% - 40px);
 }
 
 .scrollTextCl{
@@ -264,12 +264,13 @@ main{
 /* ----- VibeVault Section ----- */
 
 .vibeVaultItem{
-    width: calc(100% - 30px);
+    width: calc(100% - 40px);
     height: 150px;
     background-color: var(--vibeVault);
     border-radius: 15px;
     margin-bottom: 15px;
-    margin-left: 15px;
+    margin-left: 20px;
+    margin-top: 7.5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -356,7 +357,7 @@ main{
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 15px;
+    padding: 20px;
     padding-block: 0px;
 }
 
@@ -459,11 +460,11 @@ main{
     height: fit-content;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     overflow-x: scroll;
     overflow-y: hidden;
     padding-block: 10px;
-    padding-inline: 15px;
+    padding-inline: 20px;
 }
 
 .yourFArtists{
@@ -517,11 +518,11 @@ main{
     height: fit-content;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     overflow-x: scroll;
     overflow-y: hidden;
     padding-block: 10px;
-    padding-inline: 15px;
+    padding-inline: 20px;
 }
 
 .categoryRecommendedPlaylists{
@@ -2815,8 +2816,8 @@ nav button i{
     display: flex;
     gap: 15px;
     margin-top: 15px;
-    margin-left: 15px;
-    width: calc(100% - 30px);
+    margin-left: 20px;
+    width: calc(100% - 40px);
     height: 150px;
     background-color: rgba(53, 40, 63, 0.9);
     background-image: url('videos/ThisMF.gif');
