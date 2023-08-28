@@ -27,7 +27,7 @@
 <body>
     <div class="bodyHolder">
         <div class="bubble"></div>
-        
+
     <main class="homeScreen">
         <header>
             <div class="greeting">
@@ -47,7 +47,7 @@
         <section class="recSongsSection">
             <h2 class="catTitle">Handpicked pieces to enjoy</h2>
             <h5 class="catDesc">These songs refresh each time you visit the app, or you can just refresh. Up to you!</h5>
-            <ul class="recSongs" id="recSongs"></ul>
+            <ul class="recSongs" id="recSongs" name="Home"></ul>
         </section>
 
         <section class="recArtistsSection">
@@ -101,7 +101,7 @@
                 </div>
             </div>
         </div>
-        <ul class="searchList"></ul>
+        <ul class="searchList" name="Search"></ul>
         <h1 class="catTitle">Categories</h1>
         <ul class="categories"></ul>
     </main>
@@ -227,7 +227,7 @@
             <div class="closeCurrentScreen" id="closeCategoryScreen"></div>
             <section class="catWork">
                 <h2 class="catTitle center">Featured Songs</h2>
-                <ul class="categoryRecommendedSongs"></ul>
+                <ul class="categoryRecommendedSongs" name="Categories"></ul>
                 <h2 class="catTitle center">Featured Playlists</h2>
                 <ul class="categoryRecommendedPlaylists"></ul>
             </section>
@@ -259,10 +259,10 @@
                 </div>
             </div>
             <div class="closeCurrentScreen" id="closeArtistScreen"></div>
-            <section class="artistWork">
-                <article class="latestRelease"></article>
+            <section class="artistWork" name="Artists">
+                <article class="latestRelease" name="Artists"></article>
                 <h2 class="catTitleNoMargin">Top tracks this month</h2>
-                <ul class="artistTopTracks"></ul>
+                <ul class="artistTopTracks" name="Top Tracks"></ul>
                 <h2 class="catTitleNoMargin">About <span name="artistName"></span></h2>
                 <div id="aboutTheArtist">
                     <img id="artistAboutBanner" src="" alt="aboutArtistImage">
@@ -300,7 +300,7 @@
             </div>
             <div class="closeCurrentScreen" id="closePlaylistScreen"></div>
             <section class="playlistWork">
-                <ul class="playlistSongsList"></ul>
+                <ul class="playlistSongsList" name="Playlist"></ul>
             </section>
         </div>
     </div>

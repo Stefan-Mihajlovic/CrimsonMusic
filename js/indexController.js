@@ -1739,8 +1739,9 @@ export function turnLyrcis(songId){
     isLyricsOn = true;
 }
 
-export function doesSongHaveLyrics(songId){
+export function doesSongHaveLyrics(songId, playedFrom){
     const playerLyricsBtn = document.getElementById('playerLyricsBtn');
+    const playerPageBar = document.getElementsByClassName('player')[0].children[1];
 
     let dbRef = ref(realdb);
 
@@ -1749,8 +1750,14 @@ export function doesSongHaveLyrics(songId){
             let LYRICS = snapshot.val().Lyrics;
             if(LYRICS == undefined){
                 playerLyricsBtn.style.display = 'none';
+                if(isLyricsOn){
+                    closePlayerLyrics2(playedFrom);
+                }
             }else{
                 playerLyricsBtn.style.display = 'inline';
+                if(isLyricsOn){
+                    turnLyrcis(songId);
+                }
             }
         }
     })
@@ -1779,6 +1786,36 @@ export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
 
     isLyricsOn = false;
+}
+
+function closePlayerLyrics2(playedFrom){
+    if(isLyricsOn){
+        const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
+        const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
+        const playerPageBar = document.getElementsByClassName('player')[0].children[1];
+        const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
+
+        bigSongInfo.children[0].style.display = 'block';
+        bigSongInfo.children[0].classList.remove('playerBannerAway');
+        bigSongInfo.children[3].style.display = 'flex';
+
+        playerLyrcis.classList.add('playerLyricsAway');
+        playerLyrcis.classList.remove('playerLyrcisOn');
+        setTimeout(() => {
+            playerLyrcis.style.display = 'none';
+            document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
+        }, 450);
+
+        playerPageBar.children[1].innerHTML = "Playing From " + `<span id="playingFromSpan">${playedFrom}</span>`;
+        playerPageBar.children[1].classList.remove("smallH2");
+        playerPageBar.children[0].onclick = () => {
+            clickEffect(this);
+            closeBigPlayer();
+        };
+        playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
+
+        isLyricsOn = false;
+    }
 }
 
 // ----- THIS MONTHS FEATURE
@@ -1822,39 +1859,6 @@ function generateThisMonthsFeature(){
                         `;
                 }
             })
-        }
-    })
-}
-
-function GenerateOneSongMF(songName,artistName,artistFollowers){
-
-    let name = songName;
-
-    let dbRef = ref(realdb);
-
-    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
-        if(snapshot.exists()){
-            songToBePlayed = snapshot.val().SongURL;
-            songTitle  = snapshot.val().SongName;
-            songCreator = snapshot.val().Creator;
-            imageURL = snapshot.val().ImgURL;
-            let currentLI =  `<li class="songItem">
-                <div class="songInfo">
-                    <img  src="`+imageURL+`" alt="songBanner">
-                    <div class="songText">
-                        <h2>`+ songTitle +`</h2>
-                        <h3>`+ songCreator +`</h3>
-                    </div>
-                </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home',this.parentElement,'`+ name +`');"></div>
-                <div class="songBtns">
-                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
-                </div>
-                </li>`;
-            document.getElementById('MFArtistInfo').innerHTML += `
-            <h2 id="MFArtistName">${artistName}</h2>
-            <h5 id="MFArtistFollowers">${artistFollowers + "&nbsp;Followers"}</h5>
-            ` + currentLI;
         }
     })
 }

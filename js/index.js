@@ -288,7 +288,13 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
         artist.innerHTML = songCreator;
     });
 
-    playingFrom.innerHTML = playedFrom;
+    playingFrom = document.getElementById("playingFromSpan");
+    if(playedFrom != undefined){
+        playingFrom.innerHTML = playedFrom;
+    }else{
+        playingFrom.innerHTML = playedFromBtn.parentElement.name;
+        playedFrom = playedFromBtn.parentElement.name;
+    }
 
     if(playedFromBtn != 0){
         let songList = playedFromBtn.parentElement;
@@ -308,7 +314,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
 
     seeIfSongIsLiked(id);
     const checkLyrics = document.getElementById('checkLyrics');
-    checkLyrics.setAttribute('onclick', `doesSongHaveLyrics(`+ id +`)`);
+    checkLyrics.setAttribute('onclick', `doesSongHaveLyrics(${id},'${playedFrom}')`);
     checkLyrics.click();
 
     const playerLyricsBtn = document.getElementById("playerLyricsBtn");
