@@ -153,8 +153,7 @@ header{
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-inline: 20px;
-    padding-block: 15px;
+    padding: 15px;
     border-bottom: 1px solid var(--playerColor);
     z-index: 80;
     transition: all .3s ease-in-out;
@@ -223,8 +222,8 @@ main{
 
 .catTitle{
     font-size: 20px;
-    margin-left: 20px;
-    width: calc(100% - 40px);
+    margin-left: 15px;
+    width: calc(100% - 30px);
 }
 
 .catTitleNoMargin{
@@ -236,8 +235,8 @@ main{
 .catTitleAlone{
     font-size: 20px;
     margin-bottom: 15px;
-    margin-left: 20px;
-    width: calc(100% - 40px);
+    margin-left: 15px;
+    width: calc(100% - 30px);
 }
 
 .catDesc{
@@ -246,8 +245,8 @@ main{
     margin: 2px;
     color: var(--offWhiteDark);
     margin-bottom: 15px;
-    margin-left: 20px;
-    width: calc(100% - 40px);
+    margin-left: 15px;
+    width: calc(100% - 30px);
 }
 
 .scrollTextCl{
@@ -265,13 +264,12 @@ main{
 /* ----- VibeVault Section ----- */
 
 .vibeVaultItem{
-    width: calc(100% - 40px);
+    width: calc(100% - 30px);
     height: 150px;
     background-color: var(--vibeVault);
     border-radius: 15px;
     margin-bottom: 15px;
-    margin-left: 20px;
-    margin-top: 7.5px;
+    margin-left: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -358,7 +356,7 @@ main{
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 20px;
+    padding: 15px;
     padding-block: 0px;
 }
 
@@ -465,7 +463,7 @@ main{
     overflow-x: scroll;
     overflow-y: hidden;
     padding-block: 10px;
-    padding-inline: 20px;
+    padding-inline: 15px;
 }
 
 .yourFArtists{
@@ -523,7 +521,7 @@ main{
     overflow-x: scroll;
     overflow-y: hidden;
     padding-block: 10px;
-    padding-inline: 20px;
+    padding-inline: 15px;
 }
 
 .categoryRecommendedPlaylists{
