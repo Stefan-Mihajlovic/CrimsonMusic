@@ -71,14 +71,6 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
     let activeMain = document.getElementsByClassName(activeScreen)[0];
     activeMain.classList.add("activeMain");
 
-    activeMain.addEventListener('scroll', () => {
-        if(activeMain.scrollTop > 5){
-            document.getElementsByClassName('topScrollDiv')[0].classList.add('topScrollDivOn');
-        }else{
-            document.getElementsByClassName('topScrollDiv')[0].classList.remove('topScrollDivOn');
-        }
-    })
-
     if(activeScreen === "searchScreen"){
         let searchList = document.getElementsByClassName("searchList")[0];
         let searchInput = document.getElementById("searchInput");
@@ -91,13 +83,6 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
 
 function setHomeScreen(){
     document.getElementsByClassName("homeScreen")[0].classList.add("activeMain");
-    document.getElementsByClassName("homeScreen")[0].addEventListener('scroll', () => {
-        if(document.getElementsByClassName("homeScreen")[0].scrollTop > 5){
-            document.getElementsByClassName('topScrollDiv')[0].classList.add('topScrollDivOn');
-        }else{
-            document.getElementsByClassName('topScrollDiv')[0].classList.remove('topScrollDivOn');
-        }
-    })
 }
 
 /* ----- Button clicks ----- */
@@ -264,7 +249,6 @@ function closeBigPlayer(){
     document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
     document.querySelector('header').style.opacity = '1';
     document.querySelector('.bubble').style.opacity = '1';
-    document.querySelector('.topScrollDiv').style.opacity = startTSDValue;
     document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
     isPlayerOpen = false;
 }
@@ -815,7 +799,6 @@ const move = (e) => {
     document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
     document.querySelector('header').style.opacity = opa;
     document.querySelector('.bubble').style.opacity = opa;
-    document.querySelector('.topScrollDiv').style.opacity = opa;
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -832,7 +815,6 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     if(isLyricsOn){
         document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
     }
-    startTSDValue = document.querySelector('.topScrollDiv').style.opacity;
     document.addEventListener("touchmove", move);
     playerTouchStarted = true;
     moveStarted = false;
@@ -859,7 +841,6 @@ const move2 = (e) => {
         document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
         document.querySelector('header').style.opacity = opa;
         document.querySelector('.bubble').style.opacity = opa;
-        document.querySelector('.topScrollDiv').style.opacity = opa;
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
@@ -871,7 +852,6 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
     offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
     movablePlayer.classList.add("playerMovable");
-    startTSDValue = document.querySelector('.topScrollDiv').style.opacity;
     document.addEventListener("touchmove", move2);
     playerTouchStarted2 = true;
     moveStarted = false;
@@ -1047,7 +1027,6 @@ document.addEventListener("touchend", () => {
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
             document.querySelector('.bubble').style.opacity = '0';
-            document.querySelector('.topScrollDiv').style.opacity = startTSDValue;
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1069,7 +1048,6 @@ document.addEventListener("touchend", () => {
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
             document.querySelector('.bubble').style.opacity = '0';
-            document.querySelector('.topScrollDiv').style.opacity = startTSDValue;
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1131,7 +1109,6 @@ document.addEventListener("touchend", () => {
             document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
             document.querySelector('header').style.opacity = '1';
             document.querySelector('.bubble').style.opacity = '1';
-            document.querySelector('.topScrollDiv').style.opacity = startTSDValue;
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }else{
