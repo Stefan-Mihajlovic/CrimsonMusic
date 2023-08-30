@@ -421,7 +421,7 @@ main{
 }
 
 .songInfo img{
-    border-radius: 7.5px;
+    border-radius: 6px;
     width: 40px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
@@ -1339,26 +1339,32 @@ hr{
 .artistText{
     display: flex;
     flex-direction: column;
+    gap: 0px;
     z-index: 2;
 }
 
 .artistControls h3{
     text-align: center;
     color: var(--offWhite);
-    font-size: 30px;
+    font-size: 40px;
+    line-height: 40px;
+    margin-block: 0px;
 }
 
 .artistControls h5{
+    width: auto;
     text-align: center;
-    color: var(--offWhite);
-    font-size: 13px;
+    color: var(--offWhiteDark);
+    font-size: 15px;
+    line-height: 15px;
+    margin-block: 0px;
 }
 
 .artistBtns{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 7.5px;
     z-index: 2;
 }
 
@@ -1370,11 +1376,11 @@ hr{
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px;
+    padding: 7.5px;
     gap: 10px;
     padding-inline: 15px;
     font-weight: 600;
-    min-width: 100px;
+    min-width: 120px;
 }
 
 .artistBtns button i{
@@ -1965,7 +1971,7 @@ hr{
 }
 
 .playerSongInfo img{
-    border-radius: 7.5px;
+    border-radius: 6px;
     width: 40px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
