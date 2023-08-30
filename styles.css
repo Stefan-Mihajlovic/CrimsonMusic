@@ -25,7 +25,7 @@
     --playerColor: #242027;
     --darken: black;
     --yoursBubbleColor: rgba(90, 0, 27, 0.7);
-    --pageBarColor: rgba(0, 0, 0, 0.8);
+    --pageBarColor: rgba(0, 0, 0, 0.6);
     --latestReleaseBox: black;
     --allChColor: rgba(255, 255, 255, 0.2);
     --vibeVault: rgba(27, 12, 52, 0.5);
@@ -907,8 +907,8 @@ main{
 
 .loginScreen .pageBar{
     background-color: var(--pageBarColor) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     z-index: 2;
 }
 
@@ -1263,8 +1263,8 @@ hr{
 
 .makePlaylistScreen .pageBar{
     background-color: var(--pageBarColor);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--playerColor) !important;
 }
 
@@ -1276,8 +1276,8 @@ hr{
 
 .pageBarOn{
     background-color: var(--pageBarColor);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--playerColor) !important;
 }
 
@@ -1915,7 +1915,7 @@ hr{
     left: 0;
     right: 0;
     top: auto;
-    bottom: calc(-100svh + 80px + calc(env(safe-area-inset-bottom) * 0.6));
+    bottom: calc(-100svh + 87px + calc(env(safe-area-inset-bottom) * 0.6));
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -1973,10 +1973,10 @@ hr{
 
 .playerSongInfo img{
     border-radius: 6px;
-    width: 40px;
+    width: 35px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    margin-block: 1px;
+    margin-block: 2px;
 }
 
 .playerSongNames{
@@ -2085,10 +2085,10 @@ hr{
     transition: opacity .1s ease-in-out, margin .4s ease-in-out;
     z-index: 2;
     position: relative;
-    background-color: var(--footerBg);
-    backdrop-filter: blur(10px) brightness(1.2);
-    -webkit-backdrop-filter: blur(10px) brightness(1.2);
-    margin: 7px;
+    background-color: var(--pageBarColor);
+    backdrop-filter: blur(20px) brightness(1.2);
+    -webkit-backdrop-filter: blur(20px) brightness(1.2);
+    margin: 10px;
     border-radius: 10px;
     border: 1px solid var(--playerColor);
 }
@@ -2505,9 +2505,9 @@ nav{
     padding: 15px;
     padding-bottom: calc(calc(env(safe-area-inset-bottom) * 0.6) + 16px);
     z-index: 1000;
-    background-color: var(--footerBg);
-    backdrop-filter: blur(10px) brightness(1.2);
-    -webkit-backdrop-filter: blur(10px) brightness(1.2);
+    background-color: var(--pageBarColor);
+    backdrop-filter: blur(20px) brightness(1.2);
+    -webkit-backdrop-filter: blur(20px) brightness(1.2);
     transition: all 0.4s ease-in-out;
     box-shadow: 0px 0px 15px rgba(5, 1, 20, 0.3);
     border-top: 1px solid var(--playerColor);
@@ -2798,7 +2798,7 @@ nav button i{
 }
 
 .songPlayingLi{
-    background-color: var(--footerBg);
+    background-color: var(--pageBarColor);
 }
 
 .draggableBarTop{
