@@ -330,7 +330,7 @@ function generatePlaylists(){
 
     let randomList = [];
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         while(true){
             let g = Math.floor(Math.random() * brojPlejlista) + 1;
             if(!randomList.includes(g)){

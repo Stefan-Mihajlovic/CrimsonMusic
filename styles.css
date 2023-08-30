@@ -153,7 +153,8 @@ header{
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 15px;
+    padding: 20px;
+    padding-block: 15px;
     border-bottom: 1px solid var(--playerColor);
     z-index: 80;
     transition: all .3s ease-in-out;
