@@ -26,7 +26,7 @@
 </head>
 <body>
     <div class="bodyHolder">
-        <div class="bubble"></div>
+        <!-- <div class="bubble"></div> -->
 
     <main class="homeScreen">
         <header>
@@ -39,8 +39,25 @@
         <section class="vaultSection">
             <div class="vibeVaultItem">
                 <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>
-                <h2>VAULT</h2>
+                <h2 class="vaultH2">VAULT</h2>
                 <button id="openTheVaultBtn"><i class="fa-solid fa-play"></i><div class="blob"></div></button>
+                <ul class="vaultEmotions vaultItemOff">
+                    <li class="emotionItem" onclick="clickEffect(this)">
+                        <h3>Party</h3>
+                    </li>
+                    <li class="emotionItem" onclick="clickEffect(this)">
+                        <h3>Focus</h3>
+                    </li>
+                    <li class="emotionItem" onclick="clickEffect(this)">
+                        <h3>Melancholy</h3>
+                    </li>
+                    <li class="emotionItem" onclick="clickEffect(this)">
+                        <h3>Chill</h3>
+                    </li>
+                    <li class="emotionItem" onclick="clickEffect(this)">
+                        <h3>Motivation</h3>
+                    </li>
+                </ul>
             </div>
         </section>
 
@@ -394,7 +411,7 @@
                 <hr>
                 <section class="versionSection">
                     <h2>VERSION</h2>
-                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.5a  |  All Rights Reserved</h5>
+                    <h5>Copyright © 2023  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 2.5.1a  |  All Rights Reserved</h5>
                 </section>
                 <hr>
             </div>
@@ -444,7 +461,7 @@
         <div class="closePopup" onclick="closePopup()"></div>
     </div>
 
-    <nav>
+    <nav id="mobileNav" class="navNoPlayer">
         <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i><span>&nbsp;Home&nbsp;</span></button>
         <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></button>
         <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-solid fa-border-all"></i><span>Library</span></button>

@@ -1065,19 +1065,43 @@ closePlaylistBtn.addEventListener(('click'), () => {
 // ----- THE VAULT
 
 let isTheVaultOn = false;
+let vaultH2Text = ['Your Mood, Choose!','Pick Your Feels!','Moody, are we?','Mood Check: Go!','Feel Like Choosing?'];
 
 let openTheVaultBtn = document.getElementById("openTheVaultBtn");
 openTheVaultBtn.addEventListener('click', () => {
-    if(!isTheVaultOn){
-        document.getElementById("currentSong").focus();
-        playRandomSongForTheVault();
+    // if(!isTheVaultOn){
+    //     document.getElementById("currentSong").focus();
+    //     playRandomSongForTheVault();
 
-        let vaultSection = document.getElementsByClassName("vaultSection")[0];
-        openTheVaultBtn.classList.add("openedVaultBtn");
-        openTheVaultBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+    //     let vaultSection = document.getElementsByClassName("vaultSection")[0];
+    //     openTheVaultBtn.classList.add("openedVaultBtn");
+    //     openTheVaultBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
 
-        isTheVaultOn = true;
+    //     isTheVaultOn = true;
+    // }
+
+    const vaultEmotions = document.querySelector('.vaultEmotions');
+    vaultEmotions.classList.remove('vaultItemOff');
+    openTheVaultBtn.classList.add('vaultItemOff2');
+
+    const vaultH2 = document.querySelector('.vaultH2');
+
+    let g = Math.floor(Math.random() * 5);
+    vaultH2.innerHTML = vaultH2Text[g];
+    for(const child of vaultEmotions.children){
+        child.addEventListener('click', () => {
+            document.getElementById("currentSong").focus();
+            playRandomSongForTheVault();
+    
+            vaultEmotions.classList.add('vaultItemOff');
+            openTheVaultBtn.classList.remove('vaultItemOff2');
+
+            vaultH2.innerHTML = `VAULT`;
+        
+            isTheVaultOn = true;
+        })
     }
+
 });
 
 function playerSelectedSongVault(songName){

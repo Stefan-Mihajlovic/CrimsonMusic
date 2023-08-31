@@ -59,11 +59,11 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
             main.classList.remove("activeMain");
         });
 
-        let bubble = document.getElementsByClassName("bubble")[0];
-        bubble.classList.remove("yoursScreenBubble");
-        bubble.classList.remove("searchScreenBubble");
-        bubble.classList.remove("homeScreenBubble");
-        bubble.classList.add(activeScreen+"Bubble");
+        // let bubble = document.getElementsByClassName("bubble")[0];
+        // bubble.classList.remove("yoursScreenBubble");
+        // bubble.classList.remove("searchScreenBubble");
+        // bubble.classList.remove("homeScreenBubble");
+        // bubble.classList.add(activeScreen+"Bubble");
 
         currentScreen = activeScreen;
     }
@@ -248,7 +248,6 @@ function closeBigPlayer(){
     // Setting the opacity to 1 on main and header
     document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
     document.querySelector('header').style.opacity = '1';
-    document.querySelector('.bubble').style.opacity = '1';
     document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
     isPlayerOpen = false;
 }
@@ -351,6 +350,7 @@ function playPlaylist(){
 
 // Open MINI PLAYER
 function openMiniPlayer(){
+    document.querySelector('#mobileNav').classList.remove('navNoPlayer');
     if(!isPlayerOpen){
         let player = document.getElementsByClassName("player")[0];
         player.style.opacity = "1";
@@ -718,10 +718,10 @@ function setDarkTheme(){
     lightThemeInput2.checked = false;
     darkThemeInput2.checked = true;
 
-    document.documentElement.style.setProperty('--bodyBg', 'black');
+    document.documentElement.style.setProperty('--bodyBg', 'rgb(21, 17, 27)');
     document.documentElement.style.setProperty('--playerColor', '#242027');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
-    document.documentElement.style.setProperty('--darken', 'black');
+    document.documentElement.style.setProperty('--darken', 'rgb(21, 17, 27)');
     document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(35, 29, 46, 0.7)');
@@ -732,8 +732,9 @@ function setDarkTheme(){
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
     document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
-    document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(37, 18, 71), rgba(0, 0, 0))');
+    document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(37, 18, 71), rgb(21, 17, 27))');
     document.documentElement.style.setProperty('--footerBg', 'rgba(35, 29, 46, 0.7)');
+    document.documentElement.style.setProperty('--footerBgHO', 'rgba(35, 29, 46, 1)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
         photo.style.filter = "invert(0) brightness(1)";
@@ -768,6 +769,7 @@ function setLightTheme(){
     document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(210, 184, 255), rgb(255, 255, 255))');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
     document.documentElement.style.setProperty('--footerBg', 'rgba(192, 179, 219, 0.7)');
+    document.documentElement.style.setProperty('--footerBgHO', 'rgba(192, 179, 219, 1)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
         photo.style.filter = "invert(1) brightness(0)";
@@ -804,7 +806,6 @@ const move = (e) => {
     // Setting the opacity of main and header
     document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
     document.querySelector('header').style.opacity = opa;
-    document.querySelector('.bubble').style.opacity = opa;
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -846,7 +847,6 @@ const move2 = (e) => {
         // Setting the opacity of main and header
         document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
         document.querySelector('header').style.opacity = opa;
-        document.querySelector('.bubble').style.opacity = opa;
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
@@ -1032,7 +1032,6 @@ document.addEventListener("touchend", () => {
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
-            document.querySelector('.bubble').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1053,7 +1052,6 @@ document.addEventListener("touchend", () => {
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
             document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
             document.querySelector('header').style.opacity = '0';
-            document.querySelector('.bubble').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1114,7 +1112,6 @@ document.addEventListener("touchend", () => {
             document.querySelector('header').classList.remove("playerMovable");
             document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
             document.querySelector('header').style.opacity = '1';
-            document.querySelector('.bubble').style.opacity = '1';
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }else{
