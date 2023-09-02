@@ -732,7 +732,7 @@ function setDarkTheme(){
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
     document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
-    document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(37, 18, 71), rgb(21, 17, 27))');
+    document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27))');
     document.documentElement.style.setProperty('--footerBg', 'rgba(35, 29, 46, 0.7)');
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(35, 29, 46, 1)');
 
@@ -761,12 +761,12 @@ function setLightTheme(){
     document.documentElement.style.setProperty('--allChColor', 'rgba(0, 0, 0, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.5)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(222, 213, 255, 0.6)');
-    document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #ece8ff, rgba(134, 69, 255, 0.25))');
+    document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #ece8ff, rgba(134, 69, 255, 0.1))');
     document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(255, 255, 255, 0.5)');
     document.documentElement.style.setProperty('--latestReleaseBox', 'rgb(0,0,0,0.2)');
-    document.documentElement.style.setProperty('--vibeVault', 'rgba(169, 141, 215, 0.3)');
-    document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(210, 184, 255), rgb(255, 255, 255))');
+    document.documentElement.style.setProperty('--vibeVault', 'rgba(169, 141, 215, 0.25)');
+    document.documentElement.style.setProperty('--popupScreenBg', 'var(--darken)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
     document.documentElement.style.setProperty('--footerBg', 'rgba(192, 179, 219, 0.7)');
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(192, 179, 219, 1)');

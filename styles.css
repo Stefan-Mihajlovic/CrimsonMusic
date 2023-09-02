@@ -29,7 +29,7 @@
     --latestReleaseBox: black;
     --allChColor: rgba(255, 255, 255, 0.2);
     --vibeVault: rgba(27, 12, 52, 0.5);
-    --popupScreenBg: linear-gradient(0deg, rgb(37, 18, 71), rgb(21, 17, 27));
+    --popupScreenBg: linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27));
 
     --artistSearch: rgba(0, 128, 0, 0.3);
     --songSearch: rgba(255, 0, 0, 0.2);
@@ -50,6 +50,7 @@ html{
 
 body{
     background-color: var(--bodyBg);
+    background-image: var(--sidePageback);
     font-family: 'Outfit', sans-serif;
     min-height: 100vh;
     color: var(--offWhite);
