@@ -1613,7 +1613,7 @@ export function LoadUserPlaylistsPopup(songId){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
             numberOfPlaylists = usersPlaylists.length;
 
-            for (let i = numberOfPlaylists-2; i > 0; i--) {
+            for (let i = numberOfPlaylists-1; i > 0; i--) {
                 if(usersPlaylists[i].split('}')[3].includes(',' + songId) || usersPlaylists[i].split('}')[3].includes(songId + ',')){
                     let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                         <div class="songInfo">
@@ -1671,6 +1671,12 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                 setLikedSongs = snapshot.val().LikedSongs;
                 setTheme = snapshot.val().AppTheme;
                 setFollowedArtists = snapshot.val().FollowedArtists;
+                if(setFollowedArtists == undefined){
+                    setFollowedArtists = "";
+                }
+                if(setLikedSongs == undefined){
+                    setLikedSongs = "";
+                }
                 let usersPlaylists = setPlaylists.split('{');
 
                 for (let i = 1; i < usersPlaylists.length; i++) {

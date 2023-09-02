@@ -47,6 +47,10 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
     closeCategoryPage();
     closeLoginScreen();
 
+    if(activeScreen == "yoursScreen"){
+        resetSearchScreenToNormal();
+    }
+
     if (activeScreen !== currentScreen) {
         let buttons = document.querySelectorAll("nav > button");
         buttons.forEach((button) => {
@@ -1171,4 +1175,35 @@ observer = new MutationObserver(function(mutationsList, observer) {
 // Passing it the element to observe, and the options object
 for (let i = 0; i < scrollTexts.length; i++) {
     observer.observe(scrollTexts[i].children[0], {characterData: false, childList: true, attributes: false});
+}
+
+// ----- Search Bar YOURS SCREEN
+
+function showSearchBarYours(searchOnBtn){
+    document.getElementById('searchBarYours').classList.toggle('searchBarOn');
+    if(searchOnBtn.innerHTML == `<i class="fa-solid fa-xmark"></i>`){
+        searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
+        document.querySelector('.favouritesItem').classList.remove('displayNone');
+        document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
+        document.querySelector('.yourPlaylists').classList.remove('displayNone');
+        document.querySelector('.yourFArtistsH1').classList.remove('displayNone');
+        document.querySelector('.yourFArtists').classList.remove('displayNone');
+    }else{
+        searchOnBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+        document.querySelector('.favouritesItem').classList.add('displayNone');
+        document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
+        document.querySelector('.yourPlaylists').classList.add('displayNone');
+        document.querySelector('.yourFArtistsH1').classList.add('displayNone');
+        document.querySelector('.yourFArtists').classList.add('displayNone');
+    }
+}
+
+function resetSearchScreenToNormal(){
+    searchOnBtn = document.querySelector('.searchOnYoursBtn');
+    searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
+    document.querySelector('.favouritesItem').classList.remove('displayNone');
+    document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
+    document.querySelector('.yourPlaylists').classList.remove('displayNone');
+    document.querySelector('.yourFArtistsH1').classList.remove('displayNone');
+    document.querySelector('.yourFArtists').classList.remove('displayNone');
 }

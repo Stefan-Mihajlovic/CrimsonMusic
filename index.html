@@ -133,9 +133,15 @@
         </header>
         <h1>Library
             <div>
-                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="searchOnYoursBtn" onclick="showSearchBarYours(this)"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </h1>
+        <div id="searchBarYours" class="searchBar">
+            <form onsubmit="event.preventDefault()">
+                <input type="search" name="search" id="searchYoursInput" placeholder="Search your playlists and artists...">
+                <input onclick="clickEffect(this)" style="font-family: FontAwesome" id="submitYoursSearch" type="submit" value="&#xf002;">
+            </form>
+        </div>
         <div class="songItem favouritesItem" onclick="clickEffect(this); openLikedSongs()">
             <div class="songInfo">
                 <img loading="lazy" src="images/favourites.jpg" alt="playlistBanner">
@@ -145,13 +151,13 @@
                 </div>
             </div>
         </div>
-        <h1>Your Playlists
+        <h1 class="yourPlaylistsH1">Your Playlists
             <div>
                 <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>
             </div>
         </h1>
         <ul class="yourPlaylists"></ul>
-        <h1>Artists You Follow</h1>
+        <h1 class="yourFArtistsH1">Artists You Follow</h1>
         <ul class="yourFArtists"></ul>
     </main>
 
@@ -351,9 +357,9 @@
             <form class="loginForm">
                 <h2 name="regLogTitle">Sign Up</h2>
     
-                <input type="text" id="username" aria-describedby="usernameHelp" placeholder="Username">
-                <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email">
-                <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password">
+                <input type="text" id="username" aria-describedby="usernameHelp" placeholder="Username" autocomplete="username" required>
+                <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email" autocomplete="email" required>
+                <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password" autocomplete="current-password" required>
     
                 <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" id="changeLoginScreenBtn" onclick="RegToLog()">Log in!</span></h5>
     

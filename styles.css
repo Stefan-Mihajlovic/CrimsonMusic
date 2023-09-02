@@ -422,6 +422,15 @@ main{
     }
 }
 
+@keyframes dontShowUp {
+    from {
+        filter: brightness(1) blur(0px);
+    }
+    to{
+        filter: brightness(0.3) blur(5px);
+    }
+}
+
 .songPlayingLi{
     background-color: var(--playerColor);
 }
@@ -609,14 +618,14 @@ main{
 
 /* ----- SEARCH SCREEN ----- */
 
-.searchScreen form{
+.searchBar form{
     width: calc(100% - 30px);
     display: flex;
     gap: 10px;
     margin-left: 15px;
 }
 
-.searchScreen input{
+.searchBar input{
     padding: 15px;
     width: 80%;
     flex-grow: 1;
@@ -627,8 +636,8 @@ main{
     color: var(--offWhite);
 }
 
-#submitSearch{
-    width: 20%;
+#submitSearch, #submitYoursSearch{
+    width: 20% !important;
     max-width: 60px;
     color: var(--offWhite);
     transition: all .3s ease-in-out;
@@ -1576,7 +1585,7 @@ hr{
 .yoursScreen h1{
     display: flex;
     justify-content: space-between;
-    width: calc(100% - 30px);
+    width: calc(100% - 40px);
     margin-left: 20px;
     font-size: 20px;
     font-weight: 600;
@@ -1636,6 +1645,16 @@ hr{
     margin-bottom: 10px;
     opacity: 0.7;
     color: #8a85a1;
+}
+
+.yoursScreen .searchBar{
+    display: none;
+    transition: all .3s ease-in-out;
+}
+
+.yoursScreen .searchBarOn{
+    display: flex;
+    animation: showUp .3s ease-in-out;
 }
 
 /* ----- MAKE A PLAYLIST ----- */
@@ -2934,4 +2953,8 @@ nav button i{
     background-color: rgba(48, 138, 173, 1);
     box-shadow: 0px 0px 100px var(--offWhite);
     color: black;
+}
+
+.displayNone{
+    display: none !important;
 }
