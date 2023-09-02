@@ -367,6 +367,10 @@ main{
     border-radius: 7.5px;
 }
 
+.emotionItem h3{
+    color: #DCD6F7;
+}
+
 .vaultItemOff{
     height: 0px;
     opacity: 0;
