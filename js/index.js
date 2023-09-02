@@ -754,7 +754,7 @@ function setLightTheme(){
     darkThemeInput2.checked = false;
 
     document.documentElement.style.setProperty('--bodyBg', '#ece8ff');
-    document.documentElement.style.setProperty('--playerColor', '#c1bbc6');
+    document.documentElement.style.setProperty('--playerColor', '#CFB7E3');
     document.documentElement.style.setProperty('--offWhite', '#100e1c');
     document.documentElement.style.setProperty('--offWhiteDark', '#100e1c');
     document.documentElement.style.setProperty('--darken', '#ede7ff');

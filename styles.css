@@ -661,7 +661,6 @@ main{
     padding-block: 5px;
     padding-right: 15px;
     padding-left: 5px;
-    background-color: var(--secondaryColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
     border: 1px solid var(--mainColorLighter);
     border-bottom: 1px solid var(--artistSearch);
@@ -706,7 +705,6 @@ main{
     padding-block: 5px;
     padding-right: 15px;
     padding-left: 5px;
-    background-color: var(--secondaryColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
     border: 1px solid var(--mainColorLighter);
     border-bottom: 1px solid var(--playlistSearch);
@@ -1032,7 +1030,6 @@ main{
 }
 
 .buttonField input{
-    background-color: var(--secondaryColor);
     border: 1px solid var(--offWhite);
     color: var(--offWhite);
 }
@@ -1467,25 +1464,17 @@ hr{
 
 .latestRelease{
     width: 100%;
-    padding: 10px;
-    background-color: var(--secondaryColor);
+    padding: 0px;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px var(--latestReleaseBox);
-    border: 1px solid rgb(30, 27, 34);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .latestRelease li{
-    border: 1px solid var(--offWhite);
+    border: 2px solid var(--offWhite);
     background-color: var(--bodyBg);
-}
-
-.latestRelease img{
-    width: 35px;
-    border-radius: 5px;
-    aspect-ratio: 1 / 1;
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.5);
 }
 
 .latestPin{
@@ -1496,8 +1485,8 @@ hr{
     color: var(--bodyBg);
     border-radius: 20px;
     font-size: 12px;
-    top: -15px;
-    left: -5px;
+    top: -13px;
+    left: -10px;
     border: 1px solid var(--bodyBg);
     transform: rotate(-5deg);
 }
