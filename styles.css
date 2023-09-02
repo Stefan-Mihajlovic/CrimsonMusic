@@ -2120,7 +2120,7 @@ hr{
     margin: 10px;
     border-radius: 10px;
     border: 1px solid var(--playerColor);
-    box-shadow: 0px calc(150px + env(safe-area-inset-bottom)*0.6) 50px 100px var(--bodyBg);
+    box-shadow: 0px calc(150px + env(safe-area-inset-bottom)*0.6) 40px 100px var(--bodyBg);
 }
 
 .playerOpen .miniPlayer .playerClickDiv{
