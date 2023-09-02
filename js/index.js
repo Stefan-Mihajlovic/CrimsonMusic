@@ -1177,18 +1177,14 @@ for (let i = 0; i < scrollTexts.length; i++) {
     observer.observe(scrollTexts[i].children[0], {characterData: false, childList: true, attributes: false});
 }
 
-// ----- Search Bar YOURS SCREEN
+// ----- Search -> YOURS SCREEN
 
 function showSearchBarYours(searchOnBtn){
     document.getElementById('searchBarYours').classList.toggle('searchBarOn');
     if(searchOnBtn.innerHTML == `<i class="fa-solid fa-xmark"></i>`){
-        searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
-        document.querySelector('.favouritesItem').classList.remove('displayNone');
-        document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
-        document.querySelector('.yourPlaylists').classList.remove('displayNone');
-        document.querySelector('.yourFArtistsH1').classList.remove('displayNone');
-        document.querySelector('.yourFArtists').classList.remove('displayNone');
+        resetSearchScreenToNormal();
     }else{
+        document.getElementById('searchYoursInput').focus();
         searchOnBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
         document.querySelector('.favouritesItem').classList.add('displayNone');
         document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
@@ -1199,6 +1195,8 @@ function showSearchBarYours(searchOnBtn){
 }
 
 function resetSearchScreenToNormal(){
+    document.getElementById('searchYoursInput').value = "";
+
     searchOnBtn = document.querySelector('.searchOnYoursBtn');
     searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
     document.querySelector('.favouritesItem').classList.remove('displayNone');
@@ -1206,4 +1204,61 @@ function resetSearchScreenToNormal(){
     document.querySelector('.yourPlaylists').classList.remove('displayNone');
     document.querySelector('.yourFArtistsH1').classList.remove('displayNone');
     document.querySelector('.yourFArtists').classList.remove('displayNone');
+
+    const yourPlaylists = [].slice.call(document.querySelector('.yourPlaylists').children);
+    yourPlaylists.forEach((playlist) => {
+        playlist.classList.remove('displayNone');
+    })
+
+    const yourFArtists = [].slice.call(document.querySelector('.yourFArtists').children);
+    yourFArtists.forEach((artist) => {
+        artist.classList.remove('displayNone');
+    })
 }
+
+const submitYoursSearchBtn = document.getElementById("submitYoursSearch");
+submitYoursSearchBtn.addEventListener('click', () => {
+    const searchInput = document.getElementById('searchYoursInput').value;
+    const yourPlaylists = [].slice.call(document.querySelector('.yourPlaylists').children);
+    const yourFArtists = [].slice.call(document.querySelector('.yourFArtists').children);
+
+    let brP = 0, brA = 0;
+    if(searchInput != "" && searchInput != undefined){
+
+        yourPlaylists.forEach((playlist) => {
+            if(playlist.children[0].children[1].children[0].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(playlist.children[0].children[1].children[0].innerHTML.toLowerCase())){
+                playlist.classList.remove('displayNone');
+                brP++;
+            }else{
+                playlist.classList.add('displayNone');
+            }
+        })
+
+        yourFArtists.forEach((artist) => {
+            if(artist.children[1].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(artist.children[1].innerHTML.toLowerCase())){
+                artist.classList.remove('displayNone');
+                brA++;
+            }else{
+                artist.classList.add('displayNone');
+            }
+        })
+
+        if(brP != 0){
+            document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
+            document.querySelector('.yourPlaylists').classList.remove('displayNone');
+            brP = 0;
+        }else{
+            document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
+            document.querySelector('.yourPlaylists').classList.add('displayNone');
+        }
+
+        if(brA != 0){
+            document.querySelector('.yourFArtistsH1').classList.remove('displayNone');
+            document.querySelector('.yourFArtists').classList.remove('displayNone');
+            brA = 0;
+        }else{
+            document.querySelector('.yourFArtistsH1').classList.add('displayNone');
+            document.querySelector('.yourFArtists').classList.add('displayNone');
+        }
+    }
+});
