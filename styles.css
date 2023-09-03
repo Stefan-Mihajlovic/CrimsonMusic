@@ -362,7 +362,7 @@ main{
 
 /* ----- Recommended songs Section ----- */
 
-.recSongs, .categoryRecommendedSongs, .yourPlaylists{
+.recSongs, .categoryRecommendedSongs, .yourPlaylists, .yourLPlaylists{
     list-style: none;
     width: 100%;
     position: relative;
@@ -373,12 +373,12 @@ main{
     padding-block: 0px;
 }
 
-.yourPlaylists{
+.yourPlaylists, .yourLPlaylists{
     width: calc(100% - 30px) !important;
     margin-left: 15px !important;
 }
 
-.categoryRecommendedSongs, .yourPlaylists{
+.categoryRecommendedSongs, .yourPlaylists, .yourLPlaylists{
     padding: 0px;
 }
 

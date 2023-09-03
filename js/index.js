@@ -1189,6 +1189,8 @@ function showSearchBarYours(searchOnBtn){
         document.querySelector('.favoritesItem').classList.add('displayNone');
         document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
         document.querySelector('.yourPlaylists').classList.add('displayNone');
+        document.querySelector('.yourLPlaylistsH1').classList.add('displayNone');
+        document.querySelector('.yourLPlaylists').classList.add('displayNone');
         document.querySelector('.yourFArtistsH1').classList.add('displayNone');
         document.querySelector('.yourFArtists').classList.add('displayNone');
     }
@@ -1202,11 +1204,18 @@ function resetSearchScreenToNormal(){
     document.querySelector('.favoritesItem').classList.remove('displayNone');
     document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
     document.querySelector('.yourPlaylists').classList.remove('displayNone');
+    document.querySelector('.yourLPlaylistsH1').classList.remove('displayNone');
+    document.querySelector('.yourLPlaylists').classList.remove('displayNone');
     document.querySelector('.yourFArtistsH1').classList.remove('displayNone');
     document.querySelector('.yourFArtists').classList.remove('displayNone');
 
     const yourPlaylists = [].slice.call(document.querySelector('.yourPlaylists').children);
     yourPlaylists.forEach((playlist) => {
+        playlist.classList.remove('displayNone');
+    })
+
+    const yourLPlaylists = [].slice.call(document.querySelector('.yourLPlaylists').children);
+    yourLPlaylists.forEach((playlist) => {
         playlist.classList.remove('displayNone');
     })
 
@@ -1220,15 +1229,25 @@ const submitYoursSearchBtn = document.getElementById("submitYoursSearch");
 submitYoursSearchBtn.addEventListener('click', () => {
     const searchInput = document.getElementById('searchYoursInput').value;
     const yourPlaylists = [].slice.call(document.querySelector('.yourPlaylists').children);
+    const yourLPlaylists = [].slice.call(document.querySelector('.yourLPlaylists').children);
     const yourFArtists = [].slice.call(document.querySelector('.yourFArtists').children);
 
-    let brP = 0, brA = 0;
+    let brP = 0, brL = 0, brA = 0;
     if(searchInput != "" && searchInput != undefined){
 
         yourPlaylists.forEach((playlist) => {
             if(playlist.children[0].children[1].children[0].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(playlist.children[0].children[1].children[0].innerHTML.toLowerCase())){
                 playlist.classList.remove('displayNone');
                 brP++;
+            }else{
+                playlist.classList.add('displayNone');
+            }
+        })
+
+        yourLPlaylists.forEach((playlist) => {
+            if(playlist.children[0].children[1].children[0].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(playlist.children[0].children[1].children[0].innerHTML.toLowerCase())){
+                playlist.classList.remove('displayNone');
+                brL++;
             }else{
                 playlist.classList.add('displayNone');
             }
@@ -1250,6 +1269,15 @@ submitYoursSearchBtn.addEventListener('click', () => {
         }else{
             document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
             document.querySelector('.yourPlaylists').classList.add('displayNone');
+        }
+
+        if(brL != 0){
+            document.querySelector('.yourLPlaylistsH1').classList.remove('displayNone');
+            document.querySelector('.yourLPlaylists').classList.remove('displayNone');
+            brP = 0;
+        }else{
+            document.querySelector('.yourLPlaylistsH1').classList.add('displayNone');
+            document.querySelector('.yourLPlaylists').classList.add('displayNone');
         }
 
         if(brA != 0){
