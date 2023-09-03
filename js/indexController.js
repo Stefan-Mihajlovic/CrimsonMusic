@@ -1475,7 +1475,7 @@ function LoadLikedPlaylists(){
                                     <h3>`+ "by " + playlistArtists +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersLikedPlaylists[i] +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');"></div>
+                            <div class="songClickDiv" onclick="clickEffect(this); openPlaylistPage(`+ usersLikedPlaylists[i] +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');"></div>
                             <div class="songBtns">
                                 <button onclick="clickEffect(this); openPopup('playlist','`+ playlistBanner +`','`+ playlistArtists +`','`+ playlistName +`','')"><i class="fa-solid fa-bars"></i></button>
                             </div>
