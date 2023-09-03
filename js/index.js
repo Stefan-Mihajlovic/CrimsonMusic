@@ -1186,7 +1186,7 @@ function showSearchBarYours(searchOnBtn){
     }else{
         document.getElementById('searchYoursInput').focus();
         searchOnBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-        document.querySelector('.favouritesItem').classList.add('displayNone');
+        document.querySelector('.favoritesItem').classList.add('displayNone');
         document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
         document.querySelector('.yourPlaylists').classList.add('displayNone');
         document.querySelector('.yourFArtistsH1').classList.add('displayNone');
@@ -1199,7 +1199,7 @@ function resetSearchScreenToNormal(){
 
     searchOnBtn = document.querySelector('.searchOnYoursBtn');
     searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
-    document.querySelector('.favouritesItem').classList.remove('displayNone');
+    document.querySelector('.favoritesItem').classList.remove('displayNone');
     document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
     document.querySelector('.yourPlaylists').classList.remove('displayNone');
     document.querySelector('.yourFArtistsH1').classList.remove('displayNone');

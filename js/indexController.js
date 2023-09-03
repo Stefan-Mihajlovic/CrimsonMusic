@@ -1453,9 +1453,9 @@ export function openLikedSongs(){
             let userLiked = snapshot.val().LikedSongs;
 
             if(userLiked != undefined){
-                openMyPlaylistPage(0, "Favourites", "images/favouritesPlaylistPage.gif", "0", userLiked);
+                openMyPlaylistPage(0, "Favorites", "images/favoritesPlaylistPage.gif", "0", userLiked);
             }else{
-                openMyPlaylistPage(0, "Favourites", "images/favouritesPlaylistPage.gif", "0", "");
+                openMyPlaylistPage(0, "Favorites", "images/favoritesPlaylistPage.gif", "0", "");
             }
         }
     })

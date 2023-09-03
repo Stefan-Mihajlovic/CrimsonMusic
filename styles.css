@@ -1601,7 +1601,7 @@ hr{
     margin-top: 2px;
 }
 
-.favouritesItem{
+.favoritesItem{
     transition: all .1s ease-in-out;
     border-radius: 15px !important;
     height: 70px;
@@ -1610,18 +1610,18 @@ hr{
     background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 40, 1));
 }
 
-.favouritesItem .songInfo img{
+.favoritesItem .songInfo img{
     width: 60px;
     border-radius: 6px;
     filter: hue-rotate(-20deg) saturate(0.6) brightness(0.7);
 }
 
-.favouritesItem .songInfo .songText h2{
+.favoritesItem .songInfo .songText h2{
     font-size: 25px;
     color: #DCD6F7;
 }
 
-.favouritesItem .songInfo .songText h3{
+.favoritesItem .songInfo .songText h3{
     font-size: 13px;
     line-height: 7px;
     margin-bottom: 10px;
