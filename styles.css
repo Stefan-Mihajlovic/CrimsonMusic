@@ -66,28 +66,6 @@ body{
     overflow: hidden !important;
 }
 
-.bubble{
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 1500px;
-    aspect-ratio: 1 / 1;
-    z-index: -1;
-    background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
-}
-
-.homeScreenBubble{
-    background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
-}
-
-.searchScreenBubble{
-    background-image: radial-gradient(closest-side, rgba(134, 69, 255, 0.25), transparent);
-}
-
-.yoursScreenBubble{
-    background-image: radial-gradient(closest-side, var(--yoursBubbleColor), transparent);
-}
-
 .highlightSpan{
     color: var(--accentColor);
     font-weight: 900;
@@ -1063,7 +1041,7 @@ hr{
     height: 1px;
     border: none;
     border-radius: 5px;
-    background-color: var(--mainColorLighter);
+    background-color: var(--playerColor);
 }
 
 .logOutSection{
@@ -1529,7 +1507,7 @@ hr{
     aspect-ratio: 1 / 1 !important;
     padding-inline: 8px !important;
     padding-top: 5.5px !important;
-    padding-bottom: 5px !important;
+    padding-bottom: 4.5px !important;
 }
 
 #addToPlaylistBtn{
@@ -2271,7 +2249,6 @@ hr{
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 10px;
-    border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 1);
     z-index: 0;
     margin-bottom: 2.5vh;
