@@ -1488,11 +1488,11 @@ export function seeIfSongIsLiked(id){
                 if(likedSongsArray.includes(id)){
                     miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
                     playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
-                    likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
+                    likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favorites</h5>`;
                 }else{
                     miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
                     playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
-                    likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+                    likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favorites</h5>`;
                 }
             }
         })
@@ -1547,7 +1547,7 @@ export function addSongToLiked(id, likeBtn){
                             const likeSongBtn = document.getElementById("likeSongBtn");
                             const playerLikeBtn = document.getElementById("playerLikeBtn");
                             const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
-                            likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favourites</h5>`;
+                            likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favorites</h5>`;
                             playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
                             miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
                             reloadLikedSongs();
@@ -1579,7 +1579,7 @@ export function addSongToLiked(id, likeBtn){
                             const likeSongBtn = document.getElementById("likeSongBtn");
                             const playerLikeBtn = document.getElementById("playerLikeBtn");
                             const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
-                            likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favourites</h5>`;
+                            likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favorites</h5>`;
                             playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
                             miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
                             reloadLikedSongs();
