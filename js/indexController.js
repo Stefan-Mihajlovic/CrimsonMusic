@@ -1501,9 +1501,10 @@ export function seeIfSongIsLiked(id){
     return true;
 }
 
-export function addSongToLiked(id){
+export function addSongToLiked(id, likeBtn){
     const dbRef = ref(realdb);
         if(currentUser != undefined){
+
             get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
                 if(snapshot.exists()){
                     let setUsername = snapshot.val().Username;
@@ -1514,6 +1515,13 @@ export function addSongToLiked(id){
                     let setTheme = snapshot.val().AppTheme;
                     let setFollowedArtists = snapshot.val().FollowedArtists;
         
+                    if(setFollowedArtists == undefined){
+                        setFollowedArtists = "";
+                    }
+                    if(setLikedSongs == undefined){
+                        setLikedSongs = "";
+                    }
+
                     if(setLikedSongs === undefined){
                         setLikedSongs = "";
                     }
@@ -1530,6 +1538,12 @@ export function addSongToLiked(id){
                             FollowedArtists: setFollowedArtists
                         })
                         .then(()=>{
+                            if(likeBtn != undefined){
+                                likeBtn.classList.add('likeBtnAnim');
+                                setTimeout(() => {
+                                    likeBtn.classList.remove('likeBtnAnim');
+                                }, 400);
+                            }
                             const likeSongBtn = document.getElementById("likeSongBtn");
                             const playerLikeBtn = document.getElementById("playerLikeBtn");
                             const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
@@ -1556,6 +1570,12 @@ export function addSongToLiked(id){
                             AppTheme: setTheme
                         })
                         .then(()=>{
+                            if(likeBtn != undefined){
+                                likeBtn.classList.add('likeBtnAnimDel');
+                                setTimeout(() => {
+                                    likeBtn.classList.remove('likeBtnAnimDel');
+                                }, 400);
+                            }
                             const likeSongBtn = document.getElementById("likeSongBtn");
                             const playerLikeBtn = document.getElementById("playerLikeBtn");
                             const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");

@@ -325,7 +325,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
 
     const playerLikeBtn = document.getElementById("playerLikeBtn");
     playerLikeBtn.onclick = () => {
-        addSongToLiked(id);
+        addSongToLiked(id,playerLikeBtn);
     }
 
     const openArtistPageBigBtn = document.getElementById('openArtistPageBigBtn');
@@ -335,7 +335,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
 
     const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
     miniPlayerLikeBtn.onclick = () => {
-        addSongToLiked(id);
+        addSongToLiked(id,miniPlayerLikeBtn);
     }
 
     const miniPlayerPopupBtn = document.getElementById("miniPlayerPopupBtn");
@@ -669,17 +669,17 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     if(isLikedPage){
         likeSongBtn.addEventListener('click', () => {
             addSongToLiked(id);
-            likeSongBtn.classList.add("likeBtnAnim");
+            likeSongBtn.classList.add("likeBtnAnim2");
             setTimeout(() => {
-                likeSongBtn.classList.remove("likeBtnAnim");
+                likeSongBtn.classList.remove("likeBtnAnim2");
             }, 500);
         })
     }else{
         likeSongBtn.addEventListener('click', () => {
             addSongToLiked(id);
-            likeSongBtn.classList.add("likeBtnAnim");
+            likeSongBtn.classList.add("likeBtnAnim2");
             setTimeout(() => {
-                likeSongBtn.classList.remove("likeBtnAnim");
+                likeSongBtn.classList.remove("likeBtnAnim2");
             }, 500);
         })
     }

@@ -1527,9 +1527,9 @@ hr{
     min-width: 0px !important;
     width: auto !important;
     aspect-ratio: 1 / 1 !important;
-    padding-inline: 5px !important;
-    padding-top: 6px !important;
-    padding-left: 5px !important;
+    padding-inline: 8px !important;
+    padding-top: 5.5px !important;
+    padding-bottom: 5px !important;
 }
 
 #addToPlaylistBtn{
@@ -1931,7 +1931,7 @@ hr{
     color: var(--offWhite);
 }
 
-.likeBtnAnim{
+.likeBtnAnim2{
     animation: danceBtn 0.3s;
 }
 
@@ -2961,4 +2961,40 @@ nav button i{
 
 .displayNone{
     display: none !important;
+}
+
+.likeBtnAnim{
+    animation: likeBtnAnimation .4s ease-in-out;
+}
+
+.likeBtnAnim i{
+    animation: likeBtnAnimationIAdd .4s ease-in-out;
+}
+
+.likeBtnAnimDel{
+    animation: likeBtnAnimation .4s ease-in-out;
+}
+
+.likeBtnAnimDel i{
+    animation: likeBtnAnimationIDel .4s ease-in-out;
+}
+
+@keyframes likeBtnAnimation{
+    0%{ transform: scale(1);  }
+    25%{ transform: scale(1.1); }
+    50%{ transform: scale(1); }
+    75%{ transform: scale(1.05); }
+    100%{ transform: scale(1); }
+}
+
+@keyframes likeBtnAnimationIAdd{
+    0%{ color: auto; }
+    50%{ color: var(--accentColor); }
+    100%{ color: auto; }
+}
+
+@keyframes likeBtnAnimationIDel{
+    0%{ color: auto; }
+    50%{ color: rgb(212, 66, 90); }
+    100%{ color: auto; }
 }
