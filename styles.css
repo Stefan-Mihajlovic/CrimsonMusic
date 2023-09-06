@@ -457,7 +457,7 @@ main{
 .songBtns{
     display: flex;
     gap: 15px;
-    padding-right: 14px;
+    padding-right: 10px;
     z-index: 2;
 }
 
@@ -467,7 +467,7 @@ main{
 }
 
 .songBtns i{
-    font-size: 22px;
+    font-size: 20px;
     color: var(--offWhite);
 }
 
