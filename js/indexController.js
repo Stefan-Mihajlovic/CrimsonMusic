@@ -158,7 +158,6 @@ function loginUser(user){
     });
     accountTheme = user.AppTheme;
     setLoggedInScreen();
-    setAppTheme(accountTheme);
 }
 
 function getUsername(){

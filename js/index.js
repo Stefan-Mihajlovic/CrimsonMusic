@@ -723,30 +723,56 @@ function closePopup(){
 
 // ----- SET APP THEME
 
-function setAppTheme(userTheme){
+const autoThemeInput = document.getElementById('autoThemeInput');
 
-    if(userTheme === "Dark"){
+let themePreference = window.matchMedia("(prefers-color-scheme: dark)");
+const setAutoTheme = e => {
+    let autoThemeInput2 = document.getElementById('autoThemeInput2');
+    lightThemeInput2.checked = false;
+    autoThemeInput2.checked = true;
+    darkThemeInput2.checked = false;
+    if(e.matches){
         setDarkTheme();
-    }else if(userTheme === "Light"){
-        setLightTheme();
-    }
-
-    if(darkThemeInput.checked){
-        setDarkTheme();
+        // console.log("Set to Dark!");
     }else{
         setLightTheme();
+        // console.log("Set to Light!");
     }
 }
 
-function setDarkTheme(){
+setAutoTheme(themePreference);
+themePreference.addEventListener('change', () => {
+    if(autoThemeInput.checked){
+        setAutoTheme(themePreference);
+    }
+});
+
+function setAppTheme(userTheme,clicked){
+
+    if(userTheme === "Dark"){
+        setDarkTheme(clicked);
+    }else if(userTheme === "Light"){
+        setLightTheme(clicked);
+    }else{
+        autoThemeInput.checked = true;
+        themePreference = window.matchMedia("(prefers-color-scheme: dark)");
+        setAutoTheme(themePreference);
+    }
+}
+
+function setDarkTheme(clicked){
 
     let lightThemeInput = document.getElementById("lightThemeInput");
     let lightThemeInput2 = document.getElementById("lightThemeInput2");
     let darkThemeInput = document.getElementById("darkThemeInput");
     let darkThemeInput2 = document.getElementById("darkThemeInput2");
+    let autoThemeInput2 = document.getElementById('autoThemeInput2');
     
-    lightThemeInput2.checked = false;
-    darkThemeInput2.checked = true;
+    if(clicked){
+        lightThemeInput2.checked = false;
+        autoThemeInput2.checked = false;
+        darkThemeInput2.checked = true;
+    }
 
     document.documentElement.style.setProperty('--bodyBg', 'rgb(21, 17, 27)');
     document.documentElement.style.setProperty('--playerColor', '#242027');
@@ -773,15 +799,19 @@ function setDarkTheme(){
     accountTheme = "Dark";
 }
 
-function setLightTheme(){
+function setLightTheme(clicked){
 
     let lightThemeInput = document.getElementById("lightThemeInput");
     let lightThemeInput2 = document.getElementById("lightThemeInput2");
     let darkThemeInput = document.getElementById("darkThemeInput");
     let darkThemeInput2 = document.getElementById("darkThemeInput2");
+    let autoThemeInput2 = document.getElementById('autoThemeInput2');
 
-    lightThemeInput2.checked = true;
-    darkThemeInput2.checked = false;
+    if(clicked){
+        lightThemeInput2.checked = true;
+        darkThemeInput2.checked = false;
+        autoThemeInput2.checked = false;
+    }
 
     document.documentElement.style.setProperty('--bodyBg', '#ece8ff');
     document.documentElement.style.setProperty('--playerColor', '#CFB7E3');

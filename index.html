@@ -169,7 +169,7 @@
                 <div id="miniSeekBar"></div>
             </div>
             <div class="playerSongInfo">
-                <img loading="lazy" src="images/demoSongBanner.jpg" alt="songBanner" name="songBanner">
+                <img loading="lazy" src="images/CrimsonLogo.png" alt="songBanner" name="songBanner">
                 <div class="playerSongText">
                     <h2 name="songTitle">Demo Song</h2>
                     <h3 name="songArtist">Demo artist</h3>
@@ -389,14 +389,20 @@
                         <div class="themeItem">
                             <img src="images/LightModeBanner.png" alt="themeImage">
                             <h3>Light</h3>
-                            <input type="radio" class="fullInput" name="appTheme" id="lightThemeInput" onchange="setAppTheme()">
+                            <input type="radio" class="fullInput" name="appTheme" id="lightThemeInput" onchange="setAppTheme('Light',true)">
                             <input type="checkbox" name="appTheme2" id="lightThemeInput2">
                         </div>
                         <div class="themeItem">
                             <img src="images/DarkModeBanner.png" alt="themeImage">
                             <h3>Dark</h3>
-                            <input type="radio" class="fullInput" name="appTheme" id="darkThemeInput" checked onchange="setAppTheme()">
-                            <input type="checkbox" name="appTheme2" id="darkThemeInput2" checked>
+                            <input type="radio" class="fullInput" name="appTheme" id="darkThemeInput" onchange="setAppTheme('Dark',true)">
+                            <input type="checkbox" name="appTheme2" id="darkThemeInput2">
+                        </div>
+                        <div class="themeItem">
+                            <img src="images/AutoModeBanner.png" alt="themeImage">
+                            <h3>Auto</h3>
+                            <input type="radio" class="fullInput" name="appTheme" id="autoThemeInput" onchange="setAppTheme('Auto',false)" checked>
+                            <input type="checkbox" name="appTheme2" id="autoThemeInput2" checked>
                         </div>
                     </div>
                 </section>
