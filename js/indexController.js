@@ -227,6 +227,12 @@ function GenerateOneSong(songName){
             imageURL = snapshot.val().ImgURL;
             let currentLI =  `<li class="songItem">
                 <div class="songInfo">
+                    <div class="songVisualizer">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                     <img  src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
@@ -237,7 +243,7 @@ function GenerateOneSong(songName){
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
-                </li>`;
+            </li>`;
             recSongs.innerHTML += currentLI;
         }
     })
@@ -415,6 +421,12 @@ function findSearchedSong(songName, inputText){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem songItemSearch" onclick="clickEffect(this)">
                     <div class="songInfo">
+                        <div class="songVisualizer">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                         <img  src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
@@ -625,6 +637,12 @@ function findSongOfCategory(songName, inputText){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
+                        <div class="songVisualizer">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                         <img  src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
@@ -899,6 +917,12 @@ function SetTheLatestRelease(artist){
                         imageURL = snapshot.val().ImgURL;
                         latestReleaseLi =  `<li class="songItem">
                             <div class="songInfo">
+                                <div class="songVisualizer">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
                                 <img  src="`+imageURL+`" alt="songBanner">
                                 <div class="songText">
                                     <h2>`+ songTitle +`</h2>
@@ -969,6 +993,12 @@ function GenerateOneSongFromArtist(songName,artist){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
+                        <div class="songVisualizer">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                         <img  src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
@@ -1052,6 +1082,12 @@ function GenerateOneSongFromPlaylist(songName){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
+                    <div class="songVisualizer">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                     <img  src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
@@ -1578,6 +1614,12 @@ function GenerateOneSongFromLiked(songName){
                 imageURL = snapshot.val().ImgURL;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
+                    <div class="songVisualizer">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                     <img  src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>

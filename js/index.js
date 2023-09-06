@@ -262,13 +262,27 @@ let playingFrom = document.getElementById("playingFromSpan");
 // PLAY THE SELECTED SONG
 
 let isTheVaultOn = false;
+let LastPlayedFromBtn;
 
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,playedFromBtn,id){
     openMiniPlayer();
 
+    if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
+        LastPlayedFromBtn.classList.remove("songPlayingLi");
+    }
+
     currentSongAudio.autoplay = true;
     currentSongAudio.src = songURL;
-    currentSongAudio.play();
+    var playPromise = currentSongAudio.play();
+
+    if (playPromise !== undefined) {
+    playPromise.then(_ => {
+        // Automatic playback started!
+    })
+    .catch(error => {
+        // Auto-play was prevented
+    });
+    }
 
     let songBanners = document.getElementsByName("songBanner");
     let songTitles = document.getElementsByName("songTitle");
@@ -298,6 +312,8 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,pl
         playingFrom.innerHTML = playedFromBtn.parentElement.name;
         playedFrom = playedFromBtn.parentElement.name;
     }
+
+    LastPlayedFromBtn = playedFromBtn;
 
     if(playedFromBtn != 0){
         let songList = playedFromBtn.parentElement;
@@ -388,9 +404,15 @@ function pausePlayCurrentSong(from){
                 playlistQueue[0].children[1].click();
             }else{
                 currentSongAudio.play();
+                if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
+                    LastPlayedFromBtn.classList.add("songPlayingLi");
+                }
             }
         }else{
             currentSongAudio.play();
+            if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
+                LastPlayedFromBtn.classList.add("songPlayingLi");
+            }
         }
 
         isSongPaused = false;
@@ -404,6 +426,10 @@ function pausePlayCurrentSong(from){
 
         if(from === "Playlist"){
             playPlaylistBtn.innerHTML = `<i class="fa-solid fa-play"></i> Play`;
+        }
+
+        if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
+            LastPlayedFromBtn.classList.remove("songPlayingLi");
         }
 
         isSongPaused = true;

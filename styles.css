@@ -384,14 +384,14 @@ main{
 
 .songItem{
     width: 100%;
-    height: 54px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px;
+    padding: 7px;
     border-radius: 10px;
     position: relative;
     box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.15);
+    transition: all .3s ease-in-out;
     animation: showUp 0.5s ease-in-out;
 }
 
@@ -424,8 +424,8 @@ main{
 }
 
 .songText h2{
-    font-size: 15px;
-    width: 50vw;
+    font-size: 17px;
+    width: 100%;
     margin-top: 0px;
     margin-inline: 0px;
     overflow: hidden;
@@ -434,16 +434,20 @@ main{
 }
 
 .songText h3{
-    font-size: 12px;
+    font-size: 13px;
     color: var(--offWhiteDark);
-    line-height: 10px;
+    width: 60vw;
+    line-height: 13px;
     margin-bottom: 3px;
     font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .songInfo img{
-    border-radius: 6px;
-    width: 40px;
+    border-radius: 7px;
+    width: 45px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     margin-left: 2px;
@@ -472,6 +476,65 @@ main{
     bottom: 0;
     left: 0;
     width: calc(100% - 50px);
+}
+
+.songVisualizer{
+    position: absolute;
+    width: 45px;
+    aspect-ratio: 1 / 1;
+    margin-left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    opacity: 0;
+    z-index: 2;
+}
+
+.songVisualizer span{
+    height: 50%;
+    width: 4px;
+    background-color: #DCD6F7;
+    border-radius: 20px;
+}
+
+.songVisualizer span:nth-child(1){
+    animation: visSpanAnim .6s ease-in-out infinite;
+    animation-delay: 0s;
+}
+
+.songVisualizer span:nth-child(2){
+    animation: visSpanAnim .6s ease-in-out infinite;
+    animation-delay: 0.2s;
+}
+
+.songVisualizer span:nth-child(3){
+    animation: visSpanAnim .6s ease-in-out infinite;
+    animation-delay: 0.4s;
+}
+
+.songVisualizer span:nth-child(4){
+    animation: visSpanAnim .6s ease-in-out infinite;
+    animation-delay: 0.6s;
+}
+
+@keyframes visSpanAnim {
+    0%{ height: 50%; }
+    50%{ height: 20%; }
+    100%{ height: 50%; }
+}
+
+.songPlayingLi{
+    background: linear-gradient(270deg, transparent, var(--playerColor));
+}
+
+.songPlayingLi .songInfo img{
+    filter: brightness(0.3);
+    opacity: 0.8;
+}
+
+.songPlayingLi .songVisualizer{
+    opacity: 1;
 }
 
 /* ----- Recommended artists Section ----- */
@@ -569,9 +632,8 @@ main{
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-bottom: 3px solid var(--accentColor);
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 .playlistItem h3{
@@ -2822,10 +2884,6 @@ nav button i{
     color: var(--offWhite);
     margin: 0;
     margin-right: 10px;
-}
-
-.songPlayingLi{
-    background-color: var(--pageBarColor);
 }
 
 .draggableBarTop{
