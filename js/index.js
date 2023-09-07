@@ -677,6 +677,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
         title.innerHTML = nam;
     })
 
+    art = art.split(',')[0];
     popupArtist.forEach((artist) => {
         artist.innerHTML = art;
     })
