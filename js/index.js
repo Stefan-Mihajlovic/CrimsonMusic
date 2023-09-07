@@ -42,6 +42,11 @@ let startTSDValue = 0;
 
 function setScreen(screenToSet, clickedBtn, activeScreen){
 
+    if(!UserSignedIn() && activeScreen == "yoursScreen"){
+        openLoginPopup();
+        return;
+    }
+
     closePlaylistPage();
     closeArtistPage();
     closeCategoryPage();
@@ -155,10 +160,14 @@ const addToPlBtn = document.querySelector('#addToPlBtn');
 addToPlBtn.addEventListener('click', addToPlFunc);
 
 function addToPlFunc(){
-    popupScreen.classList.add("popupPl");
-    LoadUserPlaylistsPopup(addToPlBtn.getAttribute('name'));
-    this.removeEventListener('click', addToPlFunc);
-    addToPlBtn.onclick = () => {};
+    if(UserSignedIn()){
+        popupScreen.classList.add("popupPl");
+        LoadUserPlaylistsPopup(addToPlBtn.getAttribute('name'));
+        this.removeEventListener('click', addToPlFunc);
+        addToPlBtn.onclick = () => {};
+    }else{
+        openLoginPopup();
+    }
 }
 
 let isShuffleOn = false;
@@ -693,23 +702,17 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     seeIfSongIsLiked(id);
 
     let likeSongBtn = document.getElementById("likeSongBtn");
-    if(isLikedPage){
-        likeSongBtn.addEventListener('click', () => {
+    likeSongBtn.addEventListener('click', () => {
+        if(UserSignedIn()){
             addSongToLiked(id);
             likeSongBtn.classList.add("likeBtnAnim2");
             setTimeout(() => {
                 likeSongBtn.classList.remove("likeBtnAnim2");
             }, 500);
-        })
-    }else{
-        likeSongBtn.addEventListener('click', () => {
-            addSongToLiked(id);
-            likeSongBtn.classList.add("likeBtnAnim2");
-            setTimeout(() => {
-                likeSongBtn.classList.remove("likeBtnAnim2");
-            }, 500);
-        })
-    }
+        }else{
+            openLoginPopup();
+        }
+    })
 }
 
 function closePopup(){
@@ -1347,3 +1350,23 @@ submitYoursSearchBtn.addEventListener('click', () => {
         }
     }
 });
+
+// ------ Login Popup
+
+let isLoginPopupOn = false;
+
+function openLoginPopup(){
+    if(!isLoginPopupOn){
+        document.getElementsByClassName('loginPopup')[0].classList.add('loginPopupOn');
+        setTimeout(() => {
+            document.getElementsByClassName('loginPopup')[0].classList.remove('loginPopupOn');
+            isLoginPopupOn = false;
+        }, 2500);
+        isLoginPopupOn = true;
+    }
+}
+
+// function closeLoginPopup(){
+//     document.getElementsByClassName('loginPopup')[0].classList.remove('loginPopupOn');
+//     isLoginPopupOn = false;
+// }

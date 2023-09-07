@@ -179,7 +179,8 @@ function SignOutUser(){
     accountEmails.forEach((email) => {
         email.innerHTML = accountEmail;
     });
-    setLoggedOutScreen();
+    location.reload();
+    return false;
 }
 
 let logoutBtn = document.getElementById('logoutBtn');
@@ -204,6 +205,16 @@ function seeIfUserIsSignedIn(){
         LoadUserPlaylists();
         LoadLikedPlaylists();
         LoadUserFArtists();
+    }
+}
+
+// Is user signed in check
+
+export function UserSignedIn(){
+    if(currentUser != undefined){
+        return true;
+    }else{
+        return false;
     }
 }
 
@@ -721,7 +732,11 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
 
     const followArtistBtn = document.getElementById('followArtistBtn');
     followArtistBtn.addEventListener('click', () => {
-        followArtist(artistID);
+        if(UserSignedIn()){
+            followArtist(artistID);
+        }else{
+            openLoginPopup();
+        }
     });
 
     if(artistAImage != undefined){
@@ -1197,6 +1212,8 @@ likePlaylistBtn.addEventListener('click', () => {
                 }
             }
         })
+    }else{
+        openLoginPopup();
     }
 });
 
@@ -1812,6 +1829,8 @@ export function addSongToLiked(id, likeBtn){
                     }
                 }
             })
+        }else{
+            openLoginPopup();
         }
 }
 
@@ -1850,48 +1869,52 @@ export function LoadUserPlaylistsPopup(songId){
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let usersPlaylists = (snapshot.val().Playlists).split('{');
-            numberOfPlaylists = usersPlaylists.length;
-
-            for (let i = numberOfPlaylists-1; i > 0; i--) {
-                if(usersPlaylists[i].split('}')[3].includes(',' + songId) || usersPlaylists[i].split('}')[3].includes(songId + ',')){
-                    let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
-                        <div class="songInfo">
-                            <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
-                            <div class="songText">
-                                <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
-                                <h3>`+ "by " + currentUser.Username +`</h3>
+    if(currentUser != undefined){
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let usersPlaylists = (snapshot.val().Playlists).split('{');
+                numberOfPlaylists = usersPlaylists.length;
+    
+                for (let i = numberOfPlaylists-1; i > 0; i--) {
+                    if(usersPlaylists[i].split('}')[3].includes(',' + songId) || usersPlaylists[i].split('}')[3].includes(songId + ',')){
+                        let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                            <div class="songInfo">
+                                <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <div class="songText">
+                                    <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                                    <h3>`+ "by " + currentUser.Username +`</h3>
+                                </div>
                             </div>
-                        </div>
-                        <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
-                        <div class="songBtns greenCheck">
-                            <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-circle-check checkAnim"></i></button>
-                            <div class="greenSidePl"></div>
-                        </div>
-                    </li>`;
-                    popupMyPlaylists.innerHTML += currentLi;
-                }else{
-                    let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
-                        <div class="songInfo">
-                            <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
-                            <div class="songText">
-                                <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
-                                <h3>`+ "by " + currentUser.Username +`</h3>
+                            <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
+                            <div class="songBtns greenCheck">
+                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-circle-check checkAnim"></i></button>
+                                <div class="greenSidePl"></div>
                             </div>
-                        </div>
-                        <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
-                        <div class="songBtns">
-                            <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-plus checkAnim"></i></button>
-                            <div class="greenSidePl"></div>
-                        </div>
-                    </li>`;
-                    popupMyPlaylists.innerHTML += currentLi;
+                        </li>`;
+                        popupMyPlaylists.innerHTML += currentLi;
+                    }else{
+                        let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                            <div class="songInfo">
+                                <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <div class="songText">
+                                    <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                                    <h3>`+ "by " + currentUser.Username +`</h3>
+                                </div>
+                            </div>
+                            <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
+                            <div class="songBtns">
+                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-plus checkAnim"></i></button>
+                                <div class="greenSidePl"></div>
+                            </div>
+                        </li>`;
+                        popupMyPlaylists.innerHTML += currentLi;
+                    }
                 }
             }
-        }
-    })
+        })
+    }else{
+        
+    }
 }
 
 export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){

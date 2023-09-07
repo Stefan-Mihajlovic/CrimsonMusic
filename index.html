@@ -475,6 +475,13 @@
         <div class="closePopup" onclick="closePopup()"></div>
     </div>
 
+    <div class="loginPopup">
+        <div>
+            <h5>To access this feature, you'll have to create an account!</h5>
+            <i class="fa-regular fa-face-dizzy"></i>
+        </div>
+    </div>
+
     <nav id="mobileNav" class="navNoPlayer">
         <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i><span>&nbsp;Home&nbsp;</span></button>
         <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></button>
@@ -494,7 +501,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrcis,doesSongHaveLyrics,openArtistPageByName } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrcis,doesSongHaveLyrics,openArtistPageByName,UserSignedIn } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -515,6 +522,7 @@
         window.turnLyrcis = turnLyrcis;
         window.doesSongHaveLyrics = doesSongHaveLyrics;
         window.openArtistPageByName = openArtistPageByName;
+        window.UserSignedIn = UserSignedIn;
     </script>
 
     <audio src="https://firebasestorage.googleapis.com/v0/b/crimsonmusic-b97d9.appspot.com/o/Songs%2F1.mp3?alt=media&token=54e2f635-d62d-491f-aaab-44ba18c77f65" id="currentSong"></audio>
