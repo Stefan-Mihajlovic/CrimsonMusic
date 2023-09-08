@@ -68,12 +68,6 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
             main.classList.remove("activeMain");
         });
 
-        // let bubble = document.getElementsByClassName("bubble")[0];
-        // bubble.classList.remove("yoursScreenBubble");
-        // bubble.classList.remove("searchScreenBubble");
-        // bubble.classList.remove("homeScreenBubble");
-        // bubble.classList.add(activeScreen+"Bubble");
-
         currentScreen = activeScreen;
     }
 
@@ -124,6 +118,109 @@ monopToggle.addEventListener('click', () => {
         document.getElementsByClassName('songBackdrop')[0].style.display = 'none';
     }else{
         document.getElementsByClassName('songBackdrop')[0].style.display = 'block';
+    }
+})
+
+let reduceAnimations = false;
+
+const redanimToggle = document.getElementById('redanimToggle');
+redanimToggle.addEventListener('click', () => {
+    if(redanimToggle.checked){
+        const pageBars = document.getElementsByClassName('pageBar');
+        for (let i = 0; i < pageBars.length; i++) {
+            pageBars[i].classList.add('noAnimTransitions');
+        }
+        const mains = document.querySelectorAll('main');
+        for (let i = 0; i < mains.length; i++) {
+            mains[i].classList.add('noAnimTransitions');
+        }
+        document.querySelector('header').classList.add('noAnimTransitions');
+        document.getElementById('mobileNav').classList.add('noAnimTransitions');
+
+        document.getElementById('popupWrapper').classList.add('noAnimTransitions');
+        document.getElementsByClassName('popupScreen')[0].classList.add('noAnimTransitions');
+
+        document.getElementsByClassName('player')[0].classList.add('noAnimTransitions');
+        document.getElementsByClassName('miniPlayer')[0].classList.add('noAnimTransitions');
+        document.getElementsByClassName('bigSongInfo')[0].classList.add('noAnimTransitions');
+        document.getElementsByClassName('bigControls')[0].classList.add('noAnimTransitions');
+
+        document.querySelector('.categoryScreen').classList.add('noAnimTransitions');
+        document.querySelector('.artistScreen').classList.add('noAnimTransitions');
+        document.querySelector('.playlistScreen').classList.add('noAnimTransitions');
+        document.querySelector('.makePlaylistScreen').classList.add('noAnimTransitions');
+        document.querySelector('.loginScreen').classList.add('noAnimTransitions');
+        document.getElementsByClassName('loggedInScreen')[0].classList.add('noAnimTransitions');
+        
+        const h2s = document.querySelectorAll('h2');
+        for (let i = 0; i < h2s.length; i++) {
+            h2s[i].classList.add('noAnimTransitions');
+        }
+
+        const songItems = document.querySelectorAll('.songItem');
+        for (let i = 0; i < songItems.length; i++) {
+            songItems[i].classList.add('noAnimTransitions');
+        }
+        const artistItems = document.querySelectorAll('.artistItem');
+        for (let i = 0; i < artistItems.length; i++) {
+            artistItems[i].classList.add('noAnimTransitions');
+        }
+        const playlistItems = document.querySelectorAll('.playlistItem');
+        for (let i = 0; i < playlistItems.length; i++) {
+            playlistItems[i].classList.add('noAnimTransitions');
+        }
+
+        document.getElementById('searchBarYours').classList.add('noAnimTransitions');
+        
+        reduceAnimations = true;
+    }else{
+        const pageBars = document.getElementsByClassName('pageBar');
+        for (let i = 0; i < pageBars.length; i++) {
+            pageBars[i].classList.remove('noAnimTransitions');
+        }
+        const mains = document.querySelectorAll('main');
+        for (let i = 0; i < mains.length; i++) {
+            mains[i].classList.remove('noAnimTransitions');
+        }
+        document.querySelector('header').classList.remove('noAnimTransitions');
+        document.getElementById('mobileNav').classList.remove('noAnimTransitions');
+
+        document.getElementById('popupWrapper').classList.remove('noAnimTransitions');
+        document.getElementsByClassName('popupScreen')[0].classList.remove('noAnimTransitions');
+
+        document.getElementsByClassName('player')[0].classList.remove('noAnimTransitions');
+        document.getElementsByClassName('miniPlayer')[0].classList.remove('noAnimTransitions');
+        document.getElementsByClassName('bigSongInfo')[0].classList.remove('noAnimTransitions');
+        document.getElementsByClassName('bigControls')[0].classList.remove('noAnimTransitions');
+
+        document.querySelector('.categoryScreen').classList.remove('noAnimTransitions');
+        document.querySelector('.artistScreen').classList.remove('noAnimTransitions');
+        document.querySelector('.playlistScreen').classList.remove('noAnimTransitions');
+        document.querySelector('.makePlaylistScreen').classList.remove('noAnimTransitions');
+        document.querySelector('.loginScreen').classList.remove('noAnimTransitions');
+        document.getElementsByClassName('loggedInScreen')[0].classList.remove('noAnimTransitions');
+        
+        const h2s = document.querySelectorAll('h2');
+        for (let i = 0; i < h2s.length; i++) {
+            h2s[i].classList.remove('noAnimTransitions');
+        }
+
+        const songItems = document.querySelectorAll('.songItem');
+        for (let i = 0; i < songItems.length; i++) {
+            songItems[i].classList.remove('noAnimTransitions');
+        }
+        const artistItems = document.querySelectorAll('.artistItem');
+        for (let i = 0; i < artistItems.length; i++) {
+            artistItems[i].classList.remove('noAnimTransitions');
+        }
+        const playlistItems = document.querySelectorAll('.playlistItem');
+        for (let i = 0; i < playlistItems.length; i++) {
+            playlistItems[i].classList.remove('noAnimTransitions');
+        }
+
+        document.getElementById('searchBarYours').classList.remove('noAnimTransitions');
+
+        reduceAnimations = false;
     }
 })
 
@@ -585,37 +682,48 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
-        if(screen.id != "screenScrollableCat"){
-            if(screen.scrollTop > 130){
-                let curOp = 1 - (screen.scrollTop/125 - 1);
-                screen.children[2].children[1].children[0].style.opacity = curOp;
-                screen.children[2].children[0].style.opacity = curOp;
+        if(!reduceAnimations){
+            if(screen.id != "screenScrollableCat"){
+                if(screen.scrollTop > 130){
+                    let curOp = 1 - (screen.scrollTop/125 - 1);
+                    screen.children[2].children[1].children[0].style.opacity = curOp;
+                    screen.children[2].children[0].style.opacity = curOp;
+                }else{
+                    screen.children[2].children[1].children[0].style.opacity = 1;
+                    screen.children[2].children[0].style.opacity = 1;
+                }
             }else{
-                screen.children[2].children[1].children[0].style.opacity = 1;
-                screen.children[2].children[0].style.opacity = 1;
+                if(screen.scrollTop > 130){
+                    let curOp = 1 - (screen.scrollTop/125 - 1);
+                    screen.children[3].children[0].style.opacity = curOp;
+                }else{
+                    screen.children[3].children[0].style.opacity = 1;
+                }
+            }
+    
+            if(screen.scrollTop > 250){
+                screen.children[0].classList.add("pageBarOn");
+                screen.children[1].classList.add("pageBarOn2");
+            }else{
+                screen.children[0].classList.remove("pageBarOn");
+                screen.children[1].classList.remove("pageBarOn2");
+            }
+    
+            if(screen.id != "screenScrollableCat"){
+                screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
+            }else{
+                screen.children[3].children[0].style.transform = "translateY(-"+ screen.scrollTop / 4 +"px)";
             }
         }else{
-            if(screen.scrollTop > 130){
-                let curOp = 1 - (screen.scrollTop/125 - 1);
-                screen.children[3].children[0].style.opacity = curOp;
+            if(screen.scrollTop > 250){
+                screen.children[0].classList.add("pageBarOn");
+                screen.children[1].classList.add("pageBarOn2");
             }else{
-                screen.children[3].children[0].style.opacity = 1;
+                screen.children[0].classList.remove("pageBarOn");
+                screen.children[1].classList.remove("pageBarOn2");
             }
         }
 
-        if(screen.scrollTop > 250){
-            screen.children[0].classList.add("pageBarOn");
-            screen.children[1].classList.add("pageBarOn2");
-        }else{
-            screen.children[0].classList.remove("pageBarOn");
-            screen.children[1].classList.remove("pageBarOn2");
-        }
-
-        if(screen.id != "screenScrollableCat"){
-            screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
-        }else{
-            screen.children[3].children[0].style.transform = "translateY(-"+ screen.scrollTop / 4 +"px)";
-        }
     })
 })
 
@@ -890,6 +998,12 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     // console.log("touched");
     movablePlayer.classList.add("playerOpen");
     document.getElementsByTagName("nav")[0].classList.add("navClosed");
+    if(reduceAnimations){
+        document.querySelector('.bigControls').classList.add('noPointerEvents');
+        setTimeout(() => {
+            document.querySelector('.bigControls').classList.remove('noPointerEvents');
+        }, 200);
+    }
     // Calc the initial offset Values
     offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
     movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
