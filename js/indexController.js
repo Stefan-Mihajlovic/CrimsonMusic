@@ -782,14 +782,7 @@ function checkIfArtistIsFollowed(artistId){
     if(currentUser != undefined){
         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
             if(snapshot.exists()){
-                let setUsername = snapshot.val().Username;
-                let setEmail = snapshot.val().Email;
-                let setLikedSongs = snapshot.val().LikedSongs;
-                let setPassword = snapshot.val().Password;
-                let setPlaylists = snapshot.val().Playlists;
-                let setTheme = snapshot.val().AppTheme;
                 let setFollowedArtists = snapshot.val().FollowedArtists;
-                let setLikedPlaylists = snapshot.val().LikedPlaylists;
                 if(setFollowedArtists == undefined){
                     setFollowedArtists = "";
                 }
@@ -800,8 +793,6 @@ function checkIfArtistIsFollowed(artistId){
                 }else{
                     followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
                 }
-    
-    
             }
         })
     }
@@ -1134,6 +1125,7 @@ closePlaylistBtn.addEventListener(('click'), () => {
 
 const likePlaylistBtn = document.getElementById('likePlaylist');
 likePlaylistBtn.addEventListener('click', () => {
+    
     const dbRef = ref(realdb);
 
     if(currentUser != undefined){
@@ -1218,6 +1210,7 @@ likePlaylistBtn.addEventListener('click', () => {
 });
 
 function IsPPlaylistLiked(id){
+
     const dbRef = ref(realdb);
 
     id = id + "";
@@ -1225,8 +1218,13 @@ function IsPPlaylistLiked(id){
     if(currentUser != undefined){
         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
             if(snapshot.exists()){
+                let slpArray
                 let setLikedPlaylists = snapshot.val().LikedPlaylists;
-                let slpArray = setLikedPlaylists.split(',');
+                if(setLikedPlaylists != undefined){
+                    slpArray = setLikedPlaylists.split(',');
+                }else{
+                    slpArray = "";
+                }
                 if(slpArray.includes(id)){
                     likePlaylistBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
                 }else{
@@ -1244,16 +1242,6 @@ let vaultH2Text = ['Your Mood, Choose!','Pick Your Feels!','Moody, are we?','Moo
 
 let openTheVaultBtn = document.getElementById("openTheVaultBtn");
 openTheVaultBtn.addEventListener('click', () => {
-    // if(!isTheVaultOn){
-    //     document.getElementById("currentSong").focus();
-    //     playRandomSongForTheVault();
-
-    //     let vaultSection = document.getElementsByClassName("vaultSection")[0];
-    //     openTheVaultBtn.classList.add("openedVaultBtn");
-    //     openTheVaultBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
-
-    //     isTheVaultOn = true;
-    // }
 
     const vaultEmotions = document.querySelector('.vaultEmotions');
     vaultEmotions.classList.remove('vaultItemOff');
@@ -1505,7 +1493,12 @@ function LoadLikedPlaylists(){
 
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
-            let usersLikedPlaylists = (snapshot.val().LikedPlaylists).split(',');
+            let usersLikedPlaylists
+            if(snapshot.val().LikedPlaylists != undefined){
+                usersLikedPlaylists = (snapshot.val().LikedPlaylists).split(',');
+            }else{
+                usersLikedPlaylists = "";
+            }
             let numberOfLPlaylists = usersLikedPlaylists.length;
 
             let dbRef = ref(realdb);
@@ -1757,9 +1750,8 @@ export function addSongToLiked(id, likeBtn){
                     if(setLikedSongs == undefined){
                         setLikedSongs = "";
                     }
-
-                    if(setLikedSongs === undefined){
-                        setLikedSongs = "";
+                    if(setLikedPlaylists === undefined){
+                        setLikedPlaylists = "";
                     }
                     let likedSongsArray = setLikedSongs.split(',');
                     if(!likedSongsArray.includes(id)){

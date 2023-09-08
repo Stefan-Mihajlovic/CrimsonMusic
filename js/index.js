@@ -585,12 +585,21 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
-        if(screen.id !== "screenScrollableCat"){
+        if(screen.id != "screenScrollableCat"){
             if(screen.scrollTop > 130){
                 let curOp = 1 - (screen.scrollTop/125 - 1);
                 screen.children[2].children[1].children[0].style.opacity = curOp;
+                screen.children[2].children[0].style.opacity = curOp;
             }else{
                 screen.children[2].children[1].children[0].style.opacity = 1;
+                screen.children[2].children[0].style.opacity = 1;
+            }
+        }else{
+            if(screen.scrollTop > 130){
+                let curOp = 1 - (screen.scrollTop/125 - 1);
+                screen.children[3].children[0].style.opacity = curOp;
+            }else{
+                screen.children[3].children[0].style.opacity = 1;
             }
         }
 
@@ -602,9 +611,11 @@ screenScrollables.forEach((screen) => {
             screen.children[1].classList.remove("pageBarOn2");
         }
 
-        sideBanner1.style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
-        sideBanner2.style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
-        sideBanner3.style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
+        if(screen.id != "screenScrollableCat"){
+            screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
+        }else{
+            screen.children[3].children[0].style.transform = "translateY(-"+ screen.scrollTop / 4 +"px)";
+        }
     })
 })
 
