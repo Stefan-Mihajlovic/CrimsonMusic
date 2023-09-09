@@ -2137,7 +2137,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
-    background-color: rgba(35, 29, 46, 1);
+    background-color: rgb(28, 22, 37);
     border-top: 1px solid #242027;
     overflow: hidden;
 }
