@@ -321,7 +321,7 @@ console.log();
 }
 
 /* ----- GENERATE PLAYLISTS ----- */
-let playlistBanner,playlistLikes,playlistSongs,playlistArtists;
+let playlistBanner,playlistLikes,playlistSongs,playlistArtists,playlistOwners;
 let recPlaylists = document.getElementsByClassName("recPlaylists")[0];
 
 function GetPlaylists(playlistName){
@@ -331,16 +331,32 @@ function GetPlaylists(playlistName){
 
     get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
+            let currentLi = "";
+
             playlistName = snapshot.val().Title;
             playlistBanner = snapshot.val().Banner;
             playlistLikes = snapshot.val().Likes;
             playlistSongs = snapshot.val().Songs;
             playlistArtists = snapshot.val().Artists;
-            let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-            <img  src="`+ playlistBanner +`" alt="playlistBanner">
-            <h3>`+ playlistName +`</h3>
-            <h5>`+ playlistArtists +`</h5>
-            </li>`;
+            playlistOwners = snapshot.val().Owners;
+
+            if(playlistOwners != "..Crimson.."){
+                currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                    <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                    <h3>`+ playlistName +`</h3>
+                    <h5>`+ playlistArtists +`</h5>
+                </li>`;
+            }else{
+                currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                    <div>
+                        <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                        <h2 class="crimsonPlaylistTag">`+ playlistName +`</h2>
+                    </div>
+                    <h3>`+ playlistName +`</h3>
+                    <h5>`+ playlistArtists +`</h5>
+                </li>`;
+            }
+
             recPlaylists.innerHTML += currentLi;
         }
     })
