@@ -15,7 +15,7 @@
 }
 
 :root{
-    --bodyBg: rgb(21, 17, 27);
+    --bodyBg: rgb(18, 14, 24);
     --mainColor: #242027;
     --mainColorLighter: rgba(21, 19, 23, 0.6);
     --mainColorLighter2:rgb(139, 135, 146);
@@ -38,8 +38,8 @@
 
     --sidePageback: black;
 
-    --footerBg: rgba(35, 29, 46, 0.7);
-    --footerBgHO: rgba(35, 29, 46, 1);
+    --footerBg: rgba(21, 17, 29, 0.7);
+    --footerBgHO: rgba(21, 17, 29, 1);
 }
 
 html{

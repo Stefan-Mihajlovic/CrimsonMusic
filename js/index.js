@@ -897,13 +897,13 @@ function setDarkTheme(clicked){
         darkThemeInput2.checked = true;
     }
 
-    document.documentElement.style.setProperty('--bodyBg', 'rgb(21, 17, 27)');
+    document.documentElement.style.setProperty('--bodyBg', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--playerColor', '#242027');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
     document.documentElement.style.setProperty('--darken', 'rgb(21, 17, 27)');
     document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
-    document.documentElement.style.setProperty('--pageBarColor', 'rgba(35, 29, 46, 0.7)');
+    document.documentElement.style.setProperty('--pageBarColor', 'rgba(21, 17, 29, 0.7)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
     document.documentElement.style.setProperty('--sidePageback', 'black');
     document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
@@ -912,8 +912,8 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
     document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
     document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27))');
-    document.documentElement.style.setProperty('--footerBg', 'rgba(35, 29, 46, 0.7)');
-    document.documentElement.style.setProperty('--footerBgHO', 'rgba(35, 29, 46, 1)');
+    document.documentElement.style.setProperty('--footerBg', 'rgba(21, 17, 29, 0.7)');
+    document.documentElement.style.setProperty('--footerBgHO', 'rgba(21, 17, 29, 1)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
         photo.style.filter = "invert(0) brightness(1)";
@@ -951,7 +951,7 @@ function setLightTheme(clicked){
     document.documentElement.style.setProperty('--vibeVault', 'rgba(169, 141, 215, 0.25)');
     document.documentElement.style.setProperty('--popupScreenBg', 'var(--darken)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
-    document.documentElement.style.setProperty('--footerBg', 'rgba(192, 179, 219, 0.7)');
+    document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 0.6)');
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(192, 179, 219, 1)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
