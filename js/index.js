@@ -900,7 +900,7 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--bodyBg', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--playerColor', '#242027');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
-    document.documentElement.style.setProperty('--darken', 'rgb(21, 17, 27)');
+    document.documentElement.style.setProperty('--darken', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(21, 17, 29, 0.7)');
