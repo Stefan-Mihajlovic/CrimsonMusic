@@ -41,7 +41,7 @@
     --footerBg: rgba(21, 17, 29, 0.7);
     --footerBgHO: rgba(21, 17, 29, 1);
 
-    --topInsetArea: calc(env(safe-area-inset-top) + 400px);
+    --topInsetArea: env(safe-area-inset-top);
 }
 
 html{
