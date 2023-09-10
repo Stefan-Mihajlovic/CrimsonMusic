@@ -793,6 +793,8 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
 
+    popupWrapper.focus();
+
     getArtistId(art.split(',')[0]);
 
     const songPopupBody = document.getElementsByClassName("songPopupBody")[0];
