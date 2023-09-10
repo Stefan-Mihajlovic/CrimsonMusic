@@ -693,8 +693,8 @@ screenScrollables.forEach((screen) => {
                     screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
                 }
 
-                if(screen.scrollTop > 140){
-                    let curOp = 1 - (screen.scrollTop/130 - 1);
+                if(screen.scrollTop > 150){
+                    let curOp = 1 - (screen.scrollTop/136 - 1);
                     screen.children[2].children[1].children[0].style.opacity = curOp;
                     screen.children[2].children[0].style.opacity = curOp;
                 }else{
@@ -710,7 +710,7 @@ screenScrollables.forEach((screen) => {
                 }
             }
     
-            if(screen.scrollTop > 260){
+            if(screen.scrollTop > 268){
                 screen.children[0].classList.add("pageBarOn");
                 screen.children[1].classList.add("pageBarOn2");
             }else{
