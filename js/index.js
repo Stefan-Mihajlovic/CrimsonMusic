@@ -688,7 +688,7 @@ screenScrollables.forEach((screen) => {
                     screen.children[2].children[0].classList.add('noAnimTransitions');
                     let newHeight = -screen.scrollTop + 400 + getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0];
                     screen.children[2].children[0].style.height = `${newHeight}px`;
-                    document.getElementById('testVar').innerHTML = newHeight;
+                    document.getElementById('testVar').innerHTML = getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0];
                 }else{
                     screen.children[2].children[0].classList.remove('noAnimTransitions');
                     screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 400px)`;
