@@ -684,7 +684,7 @@ screenScrollables.forEach((screen) => {
 
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
-                if(screen.scrollTop == 0){
+                if(screen.scrollTop < 0){
                     screen.children[2].children[0].classList.add('noAnimTransitions');
                     let newHeight = -screen.scrollTop + 400 + getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0];
                     screen.children[2].children[0].style.height = `${newHeight}px`;
