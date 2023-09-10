@@ -684,14 +684,15 @@ screenScrollables.forEach((screen) => {
 
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
-                if(screen.scrollTop < 0){
+                if(screen.scrollTop == 0){
                     screen.children[2].children[0].classList.add('noAnimTransitions');
-                    let newHeight = getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea") - screen.scrollTop + 400;
+                    let newHeight = -screen.scrollTop + 400 + getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0];
                     screen.children[2].children[0].style.height = `${newHeight}px`;
                 }else{
                     screen.children[2].children[0].classList.remove('noAnimTransitions');
                     screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 400px)`;
                 }
+
                 if(screen.scrollTop > 130){
                     let curOp = 1 - (screen.scrollTop/125 - 1);
                     screen.children[2].children[1].children[0].style.opacity = curOp;
@@ -717,6 +718,7 @@ screenScrollables.forEach((screen) => {
                 screen.children[1].classList.remove("pageBarOn2");
             }
     
+            screen.children[2].children[0].classList.add('noAnimTransitions');
             if(screen.id != "screenScrollableCat"){
                 screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
             }else{
