@@ -684,8 +684,9 @@ screenScrollables.forEach((screen) => {
 
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
-                if(screen.scrollTop < 0){
-                    screen.children[2].children[0].style.height = screen.children[2].children[0].offsetHeight - screen.scrollTop;
+                if(screen.scrollTop < 20){
+                    let newHeight = screen.children[2].children[0].offsetHeight - screen.scrollTop;
+                    screen.children[2].children[0].style.height = `${newHeight}px`;
                 }
                 if(screen.scrollTop > 130){
                     let curOp = 1 - (screen.scrollTop/125 - 1);
