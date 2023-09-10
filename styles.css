@@ -1447,7 +1447,7 @@ hr{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 275px;
+    padding-top: calc(env(safe-area-inset-top) + 275px);
     gap: 10px;
     padding-bottom: 14px;
 }
