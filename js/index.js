@@ -958,7 +958,7 @@ function setLightTheme(clicked){
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.5)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(222, 213, 255, 0.6)');
     document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #ece8ff, rgba(134, 69, 255, 0.1))');
-    document.documentElement.style.setProperty('--mainColor', 'rgba(220,220,220, 0.9)');
+    document.documentElement.style.setProperty('--mainColor', '#d3cdee');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(255, 255, 255, 0.5)');
     document.documentElement.style.setProperty('--latestReleaseBox', 'rgb(0,0,0,0.2)');
     document.documentElement.style.setProperty('--vibeVault', 'rgba(169, 141, 215, 0.25)');
