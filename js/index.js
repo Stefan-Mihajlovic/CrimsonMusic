@@ -718,10 +718,11 @@ screenScrollables.forEach((screen) => {
                 screen.children[1].classList.remove("pageBarOn2");
             }
     
-            screen.children[2].children[0].classList.add('noAnimTransitions');
             if(screen.id != "screenScrollableCat"){
+                screen.children[2].children[0].classList.add('noAnimTransitions');
                 screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
             }else{
+                screen.children[3].children[0].classList.add('noAnimTransitions');
                 screen.children[3].children[0].style.transform = "translateY(-"+ screen.scrollTop / 4 +"px)";
             }
         }else{
