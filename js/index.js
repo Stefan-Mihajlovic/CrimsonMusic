@@ -1402,6 +1402,8 @@ function showSearchBarYours(searchOnBtn){
 function resetSearchScreenToNormal(){
     document.getElementById('searchYoursInput').value = "";
 
+    document.getElementById('searchBarYours').classList.remove('searchBarOn');
+
     searchOnBtn = document.querySelector('.searchOnYoursBtn');
     searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
     document.querySelector('.favoritesItem').classList.remove('displayNone');
@@ -1513,3 +1515,14 @@ function openLoginPopup(){
 //     document.getElementsByClassName('loginPopup')[0].classList.remove('loginPopupOn');
 //     isLoginPopupOn = false;
 // }
+
+// ----- Search sticky
+
+const stickyElm = document.querySelector('#searchScreenBar')
+
+const observer2 = new IntersectionObserver( 
+  ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
+  {threshold: [1]}
+);
+
+observer2.observe(stickyElm)

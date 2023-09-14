@@ -685,6 +685,23 @@ main{
 
 /* ----- SEARCH SCREEN ----- */
 
+.searchBar{
+    position: sticky;
+    top: -1px;
+    z-index: 9;
+    padding-block: 15px;
+    margin-block: -15px;
+    transition: background-color .3s ease-in-out;
+}
+
+.searchBar.isSticky{
+    padding-bottom: 15px;
+    padding-top: calc(env(safe-area-inset-top) + 15px);
+    background-color: var(--pageBarColor);
+    backdrop-filter: blur(15px) brightness(1.2);
+    -webkit-backdrop-filter: blur(15px) brightness(1.2);
+}
+
 .searchBar form{
     width: calc(100% - 30px);
     display: flex;
@@ -1717,6 +1734,11 @@ hr{
 .yoursScreen h1 button:nth-child(1) i{
     font-size: 18px;
     margin-top: 2px;
+}
+
+.yoursScreen .searchBar{
+    position: relative !important;
+    top: auto !important;
 }
 
 .favoritesItem{
