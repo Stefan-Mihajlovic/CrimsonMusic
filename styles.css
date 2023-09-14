@@ -696,7 +696,7 @@ main{
 
 .searchBar.isSticky{
     padding-bottom: 15px;
-    padding-top: calc(env(safe-area-inset-top) + 15px);
+    padding-top: 16px;
     background-color: var(--pageBarColor);
     backdrop-filter: blur(15px) brightness(1.2);
     -webkit-backdrop-filter: blur(15px) brightness(1.2);
