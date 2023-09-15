@@ -1518,11 +1518,20 @@ function openLoginPopup(){
 
 // ----- Search sticky
 
-const stickyElm = document.querySelector('#searchScreenBar')
+const stickyElm = document.querySelector('#searchScreenBar');
 
 const observer2 = new IntersectionObserver( 
   ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
   {threshold: [1]}
 );
 
-observer2.observe(stickyElm)
+observer2.observe(stickyElm);
+
+const stickyElm2 = document.querySelector('#homeSearchBar');
+
+const observer3 = new IntersectionObserver( 
+  ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
+  {threshold: [1]}
+);
+
+observer3.observe(stickyElm2);

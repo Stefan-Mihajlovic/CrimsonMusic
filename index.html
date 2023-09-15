@@ -36,6 +36,30 @@
             </div>
             <button name="accountImage" type="button" onclick="openLoginScreen()"><img loading="lazy" name="accountPhoto" src="images/noUserImg.png" alt="userButtonImage"></button>
         </header>
+        <div class="searchBar" id="homeSearchBar">
+            <div class="SearchTypeChips">
+                <div class="searchChip">
+                    <input type="radio" name="allChip" id="allInput" class="allchipCh" checked onchange="checkTheChip()">
+                    <label for="allInput">All</label>
+                </div>
+                <div class="searchChip">
+                    <input type="radio" name="allChip" id="songsInput" onchange="checkTheChip()">
+                    <label for="songsInput">Songs</label>
+                </div>
+                <div class="searchChip">
+                    <input type="radio" name="allChip" id="artistsInput" onchange="checkTheChip()">
+                    <label for="artistsInput">Artists</label>
+                </div>
+                <div class="searchChip">
+                    <input type="radio" name="allChip" id="playlistsInput" onchange="checkTheChip()">
+                    <label for="playlistsInput">Playlists</label>
+                </div>
+                <div class="searchChip">
+                    <input type="radio" name="allChip" id="profilesInput" onchange="checkTheChip()">
+                    <label for="profilesInput">Profiles</label>
+                </div>
+            </div>
+        </div>
         <section class="vaultSection">
             <div class="vibeVaultItem">
                 <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>

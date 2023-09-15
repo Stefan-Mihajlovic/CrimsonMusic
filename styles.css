@@ -702,6 +702,22 @@ main{
     -webkit-backdrop-filter: blur(15px) brightness(1.2);
 }
 
+#homeSearchBar{
+    padding-bottom: 10px !important;
+    transition: all .2s ease-in-out, backdrop-filter 0s;
+}
+
+#homeSearchBar .SearchTypeChips{
+    padding-inline: 20px !important;
+}
+
+#homeSearchBar.isSticky{
+    padding-block: 10px !important;
+    background-color: var(--pageBarColor);
+    backdrop-filter: blur(15px) brightness(1.2);
+    -webkit-backdrop-filter: blur(15px) brightness(1.2);
+}
+
 .searchBar form{
     width: calc(100% - 30px);
     display: flex;
@@ -715,8 +731,9 @@ main{
     flex-grow: 1;
     border-radius: 10px;
     border: none;
-    background-color: var(--mainColorLighter);
+    background-color: var(--mainColor);
     border: 1px solid var(--playerColor);
+    font-size: 15px;
     color: var(--offWhite);
 }
 
@@ -725,7 +742,7 @@ main{
     max-width: 60px;
     color: var(--offWhite);
     transition: all .3s ease-in-out;
-    font-size: 15px;
+    font-size: 15px !important;
 }
 
 .searchList{
@@ -862,8 +879,8 @@ main{
 }
 
 .searchChip{
-    width: 90px;
-    height: 37.5px;
+    width: 100px;
+    height: 40px;
     position: relative;
     flex-shrink: 0;
 }
@@ -877,8 +894,8 @@ main{
     border: 1px solid var(--playerColor);
     margin-block: 2px;
     position: absolute;
-    border-radius: 40px !important;
-    background-color: var(--mainColorLighter);
+    border-radius: 10px !important;
+    background-color: var(--mainColor);
     z-index: 1;
     transition: all .1s ease-in-out;
     cursor: pointer;
@@ -892,7 +909,7 @@ main{
     position: absolute;
     pointer-events: none;
     z-index: 2;
-    font-size: 13px;
+    font-size: 15px;
     top: 0;
     left: 0;
     height: calc(100% - 2px);
