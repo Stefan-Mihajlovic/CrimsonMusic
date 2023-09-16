@@ -919,12 +919,12 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--playerColor', '#242027');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
     document.documentElement.style.setProperty('--darken', 'rgb(18, 14, 24)');
-    document.documentElement.style.setProperty('--allChColor', 'rgba(255, 255, 255, 0.2)');
+    document.documentElement.style.setProperty('--allChColor', '#302A40');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--pageBarColor', 'rgba(21, 17, 29, 0.7)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
     document.documentElement.style.setProperty('--sidePageback', 'black');
-    document.documentElement.style.setProperty('--mainColor', 'rgba(36, 34, 39, 0.6)');
+    document.documentElement.style.setProperty('--mainColor', '#1A1724');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(21, 19, 23, 0.6)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
@@ -1518,20 +1518,11 @@ function openLoginPopup(){
 
 // ----- Search sticky
 
-const stickyElm = document.querySelector('#searchScreenBar');
+// const stickyElm = document.querySelector('#searchScreenBar');
 
-const observer2 = new IntersectionObserver( 
-  ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
-  {threshold: [1]}
-);
+// const observer2 = new IntersectionObserver( 
+//   ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
+//   {threshold: [1]}
+// );
 
-observer2.observe(stickyElm);
-
-const stickyElm2 = document.querySelector('#homeSearchBar');
-
-const observer3 = new IntersectionObserver( 
-  ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
-  {threshold: [1]}
-);
-
-observer3.observe(stickyElm2);
+// observer2.observe(stickyElm);
