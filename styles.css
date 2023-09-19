@@ -699,7 +699,6 @@ main{
 }
 
 .searchBar.isSticky{
-    padding-top: calc(env(safe-area-inset-top) + 10px);
     background-color: var(--pageBarColor);
     backdrop-filter: blur(15px) brightness(0.5);
     border-bottom: 1px solid var(--playerColor);
