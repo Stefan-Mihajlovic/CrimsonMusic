@@ -685,12 +685,13 @@ let sideBanner1 = document.getElementsByName("artistBanner")[0];
 let sideBanner2 = document.getElementsByName("playlistBanner")[0];
 let sideBanner3 = document.getElementsByName("catBanner")[0];
 
+let lastHeight = 0;
+
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
-                let lastHeight = 0;
                 if(screen.scrollTop < 0){
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
                     // mhm
