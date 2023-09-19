@@ -382,53 +382,42 @@ function generatePlaylists(){
 
 let searchList = document.getElementsByClassName("searchList")[0];
 
-let searchBtn = document.getElementById("submitSearch");
+const searchBtn = document.getElementById("submitSearch");
 searchBtn.addEventListener('click', () => {
     
-    let searchInput = document.getElementById("searchInput");
-    let searchedText = searchInput.value;
-    let searchedTextLower = searchedText.toLowerCase();
+    const searchInput = document.getElementById("searchInput");
+    const searchedText = searchInput.value;
+    const searchedTextLower = searchedText.toLowerCase();
 
-    let isAllCh = document.getElementById("allInput").checked;
-    let isSongsCh = document.getElementById("songsInput").checked;
-    let isArtistsCh = document.getElementById("artistsInput").checked;
-    let isPlaylistsCh = document.getElementById("playlistsInput").checked;
-    let isProfilesCh = document.getElementById("profilesInput").checked;
+    const isAllCh = document.getElementById("allInput").checked;
+    const isSongsCh = document.getElementById("songsInput").checked;
+    const isArtistsCh = document.getElementById("artistsInput").checked;
+    const isPlaylistsCh = document.getElementById("playlistsInput").checked;
+    const isProfilesCh = document.getElementById("profilesInput").checked;
 
     searchList.innerHTML = "";
     searchList.classList.add("searchListOpen");
 
-    if(searchedTextLower !== ""){
-        if(isAllCh){
-            for (let i = 1; i <= brojPesama; i++) {
-                findSearchedSong(i,searchedTextLower);
-            }
+    if(searchedTextLower != ""){
+        const searchTypeChips = document.querySelector('.SearchTypeChips');
+        searchTypeChips.style.display = 'flex';
+
         
-            for (let i = 1; i <= brojArtista; i++) {
-                findSearchedArtist(i,searchedTextLower);
-            }
+        for (let i = 1; i <= brojPesama; i++) {
+            findSearchedSong(i,searchedTextLower);
+        }
     
-            for (let i = 1; i <= brojPlejlista; i++) {
-                findSearchedPlaylist(i,searchedTextLower);
-            }
-        }else{
-            if(isSongsCh){
-                for (let i = 1; i <= brojPesama; i++) {
-                    findSearchedSong(i,searchedTextLower);
-                }
-            }
-            if(isArtistsCh){
-                for (let i = 1; i <= brojArtista; i++) {
-                    findSearchedArtist(i,searchedTextLower);
-                }
-            }
-            if(isPlaylistsCh){
-                for (let i = 1; i <= brojPlejlista; i++) {
-                    findSearchedPlaylist(i,searchedTextLower);
-                }
-            }
+        for (let i = 1; i <= brojArtista; i++) {
+            findSearchedArtist(i,searchedTextLower);
+        }
+
+        for (let i = 1; i <= brojPlejlista; i++) {
+            findSearchedPlaylist(i,searchedTextLower);
         }
     }else{
+        const searchTypeChips = document.querySelector('.SearchTypeChips');
+        searchTypeChips.style.display = 'none';
+
         searchList.classList.remove("searchListOpen");
     }
 });

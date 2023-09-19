@@ -42,6 +42,12 @@ let startTSDValue = 0;
 
 function setScreen(screenToSet, clickedBtn, activeScreen){
 
+    if(currentScreen == activeScreen && currentScreen == "searchScreen"){
+        document.getElementById('searchInput').focus();
+
+        return;
+    }
+
     if(!UserSignedIn() && activeScreen == "yoursScreen"){
         openLoginPopup();
         return;
@@ -1428,6 +1434,9 @@ function resetSearchScreenToNormal(){
     yourFArtists.forEach((artist) => {
         artist.classList.remove('displayNone');
     })
+
+    const searchTypeChips = document.querySelector('.SearchTypeChips');
+    searchTypeChips.style.display = 'none';
 }
 
 const submitYoursSearchBtn = document.getElementById("submitYoursSearch");
