@@ -305,11 +305,12 @@ function closeLoginScreen(){
 
 // Switch from register to login screen
 function RegToLog(){
-    let titles = document.getElementsByName("regLogTitle");
-    let emailInput = document.getElementById("email");
-    let alreadyAcc = document.getElementById("alreadtAcc");
-    let registerBtn = document.getElementById("registerBtn");
-    let loginBtn = document.getElementById("loginBtn");
+    const titles = document.getElementsByName("regLogTitle");
+    const emailInput = document.getElementById("email");
+    const alreadyAcc = document.getElementById("alreadtAcc");
+    const registerBtn = document.getElementById("registerBtn");
+    const loginBtn = document.getElementById("loginBtn");
+    const emailLabel = document.querySelector('.emailLabel');
 
     titles.forEach((title) => {
         title.innerHTML = "Login";
@@ -317,6 +318,7 @@ function RegToLog(){
     email.style.display = "none";
     alreadyAcc.innerHTML = `Don't have an account? <span class="highlightSpan" onclick="LogToReg()">Register here!</span>`;
     registerBtn.style.display = "none";
+    emailLabel.style.display = "none";
     loginBtn.style.display = "block";
 }
 
@@ -325,6 +327,7 @@ function LogToReg(){
     let emailInput = document.getElementById("email");
     let alreadyAcc = document.getElementById("alreadtAcc");
     let registerGoogleBtn = document.getElementById("regGoogleBtn");
+    const emailLabel = document.querySelector('.emailLabel');
 
     titles.forEach((title) => {
         title.innerHTML = "Register";
@@ -332,6 +335,7 @@ function LogToReg(){
     email.style.display = "block";
     alreadyAcc.innerHTML = `Already have an account? <span class="highlightSpan" onclick="RegToLog()">Log in!</span>`;
     registerBtn.style.display = "block";
+    emailLabel.style.display = "block";
     loginBtn.style.display = "none";
 }
 
