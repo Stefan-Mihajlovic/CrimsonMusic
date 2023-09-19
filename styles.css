@@ -72,6 +72,7 @@ body{
 .highlightSpan{
     color: var(--accentColor);
     font-weight: 900;
+    text-shadow: 0px 0px 25px rgba(141, 111, 252, 0.4);
 }
 
 ul::-webkit-scrollbar, div::-webkit-scrollbar{
@@ -1054,12 +1055,12 @@ main{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 7.5px;
+    gap: 3px;
     min-width: 375px;
     max-width: 500px;
     transition: all .4s ease-in-out;
     transform: translateX(100%);
-    margin-top: 10vh;
+    margin-top: 7.5vh;
 }
 
 .loginScreenOpen .loginForm{
@@ -1068,18 +1069,18 @@ main{
 
 .loginForm h2{
     width: 100%;
-    text-align: center;
     margin-bottom: 10px;
 }
 
 .loginForm input{
     width: 100%;
     padding: 12.5px;
-    border-radius: 13px;
+    border-radius: 7.5px;
     border: none;
     font-size: 13px;
-    border: 1px solid var(--mainColor);
-    background-color: var(--mainColorLighter);
+    border: 1px solid var(--playerColor);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+    background-color: var(--mainColor);
     color: var(--offWhite);
 }
 
@@ -1089,6 +1090,20 @@ main{
     text-align: center;
     color: var(--offWhiteDark);
     font-weight: 400;
+}
+
+.loginForm label{
+    font-size: 14px;
+    width: 100%;
+    color: var(--offWhiteDark);
+    font-weight: 400;
+    margin-top: 5px;
+    z-index: 2;
+}
+
+#alreadtAcc{
+    margin-top: 10px;
+    font-size: 14px;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -1108,7 +1123,7 @@ main{
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 15px;
     gap: 5px;
 }
 
@@ -1120,6 +1135,7 @@ main{
     padding: 15px;
     font-size: 13px;
     font-weight: 600;
+    box-shadow: 0px 10px 35px rgba(220, 214, 247, 0.2);
 }
 
 #registerBtn, #loginBtn{

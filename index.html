@@ -359,9 +359,12 @@
             <form class="loginForm">
                 <h2 name="regLogTitle">Sign Up</h2>
     
-                <input type="text" id="username" aria-describedby="usernameHelp" placeholder="Username" autocomplete="username" required>
-                <input type="email" id="email" aria-describedby="emailHelp" placeholder="Email" autocomplete="email" required>
-                <input type="password" id="password" aria-describedby="passwordHelp" placeholder="Password" autocomplete="current-password" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" aria-describedby="usernameHelp" autocomplete="username" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" aria-describedby="emailHelp" autocomplete="email" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" aria-describedby="passwordHelp" autocomplete="current-password" required>
     
                 <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" id="changeLoginScreenBtn" onclick="RegToLog()">Log in!</span></h5>
     
