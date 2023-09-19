@@ -688,10 +688,9 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
-        let lastHeight = 0;
-
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
+                let lastHeight = 0;
                 if(screen.scrollTop < 0){
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
                     // mhm
