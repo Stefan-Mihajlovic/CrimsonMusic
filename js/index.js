@@ -694,13 +694,11 @@ screenScrollables.forEach((screen) => {
             if(screen.id != "screenScrollableCat"){
                 if(screen.scrollTop < 0){
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
-                    // mhm
-                    document.getElementById('test').innerHTML = lastHeight + " " + newHeight;
                     if(newHeight >= lastHeight){
                         screen.children[2].children[0].classList.add('noAnimTransitions');
                         screen.children[2].children[0].style.height = `${newHeight}px`;
                     }else{
-                        screen.children[2].children[0].classList.remove('noAnimTransitions');
+                        screen.children[2].children[0].classList.add('noAnimTransitions');
                         screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
                     }
                     lastHeight = newHeight;
