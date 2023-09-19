@@ -688,17 +688,20 @@ let sideBanner3 = document.getElementsByName("catBanner")[0];
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
+        let lastHeight = 0;
+
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
                 if(screen.scrollTop < 0){
-                    screen.children[2].children[0].classList.add('noAnimTransitions');
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
-                    screen.children[2].children[0].style.height = `${newHeight}px`;
-                    // if(screen.scrollTop >= -50){
-                    //     screen.children[2].children[1].style.opacity = 1 - (-screen.scrollTop)/50;
-                    // }else{
-                    //     screen.children[2].children[1].style.opacity = 1;
-                    // }
+                    if(newHeight > lastHeight){
+                        screen.children[2].children[0].classList.add('noAnimTransitions');
+                        screen.children[2].children[0].style.height = `${newHeight}px`;
+                    }else{
+                        screen.children[2].children[0].classList.remove('noAnimTransitions');
+                        screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
+                    }
+                    lastHeight = newHeight;
                 }else{
                     screen.children[2].children[0].classList.remove('noAnimTransitions');
                     screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
