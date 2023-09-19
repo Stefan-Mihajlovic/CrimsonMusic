@@ -2,7 +2,7 @@ setHomeScreen();
 
 let brojPesama = 48;
 let brojArtista = 24;
-let brojPlejlista = 5;
+let brojPlejlista = 6;
 let brojKategorija = 14;
 
 /* ----- GET THE TIME ----- */
@@ -1518,11 +1518,11 @@ function openLoginPopup(){
 
 // ----- Search sticky
 
-// const stickyElm = document.querySelector('#searchScreenBar');
+const stickyElm = document.querySelector('#searchScreenBar');
 
-// const observer2 = new IntersectionObserver( 
-//   ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
-//   {threshold: [1]}
-// );
+const observer2 = new IntersectionObserver( 
+  ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
+  {threshold: [1]}
+);
 
-// observer2.observe(stickyElm);
+observer2.observe(stickyElm);

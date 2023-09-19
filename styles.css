@@ -687,27 +687,24 @@ main{
 /* ----- SEARCH SCREEN ----- */
 
 .searchBar{
-    /* position: sticky;
-    top: -55px; */
+    position: sticky;
+    top: -1px;
+    margin-block: -10px;
+    padding-block: 10px;
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 5px;
     z-index: 9;
-    padding-block: 15px;
-    margin-block: -15px;
-    transition: background-color .3s ease-in-out;
 }
 
-/* .searchBar.isSticky{
-    flex-direction: column-reverse !important;
-    padding-bottom: 7px;
-    padding-top: 16px;
+.searchBar.isSticky{
+    padding-top: calc(env(safe-area-inset-top) + 10px);
     background-color: var(--pageBarColor);
     backdrop-filter: blur(15px) brightness(0.5);
     border-bottom: 1px solid var(--playerColor);
     -webkit-backdrop-filter: blur(15px) brightness(0.5);
-} */
+}
 
 .searchBar form{
     width: calc(100% - 30px);
@@ -848,7 +845,7 @@ main{
 }
 
 .SearchTypeChips{
-    display: flex;
+    display: none;
     width: 100%;
     overflow-x: scroll;
     align-items: center;
