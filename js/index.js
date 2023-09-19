@@ -685,32 +685,18 @@ let sideBanner1 = document.getElementsByName("artistBanner")[0];
 let sideBanner2 = document.getElementsByName("playlistBanner")[0];
 let sideBanner3 = document.getElementsByName("catBanner")[0];
 
-let lastHeight = 0;
-let isNoAnimSetToSideBanner = false;
-
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
 
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
                 if(screen.scrollTop < 0){
+                    screen.children[2].children[0].classList.add('noAnimTransitions');
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
-                    if(newHeight >= lastHeight){
-                        screen.children[2].children[0].classList.add('noAnimTransitions');
-                        screen.children[2].children[0].style.height = `${newHeight}px`;
-                        isNoAnimSetToSideBanner = false;
-                    }else{
-                        if(!isNoAnimSetToSideBanner){
-                            screen.children[2].children[0].classList.remove('noAnimTransitions');
-                            screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
-                            isNoAnimSetToSideBanner = true;
-                        }
-                    }
-                    lastHeight = newHeight;
+                    screen.children[2].children[0].style.height = `${newHeight}px`;
                 }else{
                     screen.children[2].children[0].classList.remove('noAnimTransitions');
                     screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
-                    isNoAnimSetToSideBanner = false;
                 }
 
                 if(screen.scrollTop > 150){
