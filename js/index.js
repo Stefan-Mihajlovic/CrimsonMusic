@@ -696,7 +696,7 @@ screenScrollables.forEach((screen) => {
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
                     // mhm
                     document.getElementById('test').innerHTML = lastHeight + " " + newHeight;
-                    if(newHeight <= lastHeight){
+                    if(newHeight >= lastHeight){
                         screen.children[2].children[0].classList.add('noAnimTransitions');
                         screen.children[2].children[0].style.height = `${newHeight}px`;
                     }else{
