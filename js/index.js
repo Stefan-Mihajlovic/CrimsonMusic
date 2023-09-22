@@ -717,8 +717,8 @@ screenScrollables.forEach((screen) => {
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
                     screen.children[2].children[0].style.height = `${newHeight}px`;
                     screen.children[2].children[1].style.opacity = (30 / (-screen.scrollTop));
-                    screen.children[2].children[1].children[0].style.opacity = (15 / (-screen.scrollTop));
-                    screen.children[2].children[1].children[1].style.opacity = (15 / (-screen.scrollTop));
+                    screen.children[2].children[1].children[0].style.opacity = (5 / (-screen.scrollTop));
+                    screen.children[2].children[1].children[1].style.opacity = (5 / (-screen.scrollTop));
                     screen.children[2].children[1].children[2].style.opacity = (15 / (-screen.scrollTop));
                 }else{
                     screen.children[2].children[1].style.opacity = 1;
