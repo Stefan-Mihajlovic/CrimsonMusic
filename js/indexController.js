@@ -1369,7 +1369,7 @@ function LoadUserPlaylists(){
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
-            numberOfPlaylists = usersPlaylists.length;
+            numberOfPlaylists = usersPlaylists.length - 1;
 
             for (let i = numberOfPlaylists-1; i > 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
@@ -1870,10 +1870,10 @@ export function LoadUserPlaylistsPopup(songId){
         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
             if(snapshot.exists()){
                 let usersPlaylists = (snapshot.val().Playlists).split('{');
-                numberOfPlaylists = usersPlaylists.length;
+                numberOfPlaylists = usersPlaylists.length - 1;
     
                 for (let i = numberOfPlaylists-1; i > 0; i--) {
-                    if(usersPlaylists[i].split('}')[3].includes(',' + songId) || usersPlaylists[i].split('}')[3].includes(songId + ',')){
+                    if(usersPlaylists[i].split('}')[3]?.includes(',' + songId) || usersPlaylists[i].split('}')[3]?.includes(songId + ',')){
                         let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                             <div class="songInfo">
                                 <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
