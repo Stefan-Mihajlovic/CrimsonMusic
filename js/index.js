@@ -716,15 +716,11 @@ screenScrollables.forEach((screen) => {
                     screen.children[2].children[0].classList.add('noAnimTransitions');
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
                     screen.children[2].children[0].style.height = `${newHeight}px`;
-                    screen.children[2].children[1].style.opacity = (30 / (-screen.scrollTop));
-                    screen.children[2].children[1].children[0].style.opacity = (5 / (-screen.scrollTop));
-                    screen.children[2].children[1].children[1].style.opacity = (5 / (-screen.scrollTop));
-                    screen.children[2].children[1].children[2].style.opacity = (15 / (-screen.scrollTop));
+                    if(screen.scrollTop < -10){
+                        screen.children[2].children[1].style.opacity = (-screen.scrollTop);
+                    }
                 }else{
                     screen.children[2].children[1].style.opacity = 1;
-                    screen.children[2].children[1].children[0].style.opacity = 1;
-                    screen.children[2].children[1].children[1].style.opacity = 1;
-                    screen.children[2].children[1].children[2].style.opacity = 1;
                     screen.children[2].children[0].classList.remove('noAnimTransitions');
                     screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
                 }
