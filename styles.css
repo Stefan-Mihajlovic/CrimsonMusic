@@ -700,10 +700,10 @@ main{
 }
 
 .searchBar.isSticky{
-    background-color: var(--pageBarColor);
-    backdrop-filter: blur(15px) brightness(0.5);
+    background-color: var(--footerBg);
+    backdrop-filter: blur(15px) brightness(1.2);
     border-bottom: 1px solid var(--playerColor);
-    -webkit-backdrop-filter: blur(15px) brightness(0.5);
+    -webkit-backdrop-filter: blur(15px) brightness(1.2);
 }
 
 .searchBar form{

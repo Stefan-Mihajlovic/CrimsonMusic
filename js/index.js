@@ -671,10 +671,28 @@ songTime.addEventListener('change', ()=>{
 
 let allChips = document.getElementsByName("allChip");
 
-function checkTheChip(){
+function checkTheChip(chipName){
+
+    const searchListUl = document.querySelector('.searchList').children;
+
     allChips.forEach((chip) => {
         if(chip.checked){
             chip.classList.add("allchipCh");
+            if(chipName == 'All'){
+                for (let i = 0; i < searchListUl.length; i++) {
+                    searchListUl[i].style.display = 'flex';
+                }
+            }
+            else{
+                let fullClassChip = chipName + 'ItemSearch';
+                for (let i = 0; i < searchListUl.length; i++) {
+                    if(searchListUl[i].classList.contains(fullClassChip)){
+                        searchListUl[i].style.display = 'flex';
+                    }else{
+                        searchListUl[i].style.display = 'none';
+                    }
+                }
+            }
         }else{
             chip.classList.remove("allchipCh");
         }
