@@ -3231,3 +3231,106 @@ nav button i{
 .noPointerEvents{
     pointer-events: none !important;
 }
+
+/* ----- LOADER ----- */
+
+.loaderWrapper{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bodyBg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    transition: all .1s ease-in-out;
+}
+
+.loaderOff{
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.loader {
+    animation: rotate 1s infinite;
+    height: 50px;
+    width: 50px;
+    filter: drop-shadow(0px 0px 50px var(--accentColor));
+}
+  
+.loader:before,
+.loader:after {
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 20px;
+    width: 20px;
+}
+  
+.loader:before {
+    animation: ball1 1s infinite;
+    background-color: #a48cfa;
+    box-shadow: 30px 0 0 #f8b334;
+    margin-bottom: 10px;
+}
+  
+.loader:after {
+    animation: ball2 1s infinite;
+    background-color: #8d6ffc;
+    box-shadow: 30px 0 0 #97bf0d;
+}
+  
+@keyframes rotate {
+    0% {
+      -webkit-transform: rotate(0deg) scale(0.8);
+      -moz-transform: rotate(0deg) scale(0.8);
+    }
+  
+    50% {
+      -webkit-transform: rotate(360deg) scale(1.2);
+      -moz-transform: rotate(360deg) scale(1.2);
+    }
+  
+    100% {
+      -webkit-transform: rotate(720deg) scale(0.8);
+      -moz-transform: rotate(720deg) scale(0.8);
+    }
+}
+  
+@keyframes ball1 {
+    0% {
+      box-shadow: 30px 0 0 #b5a1fc;
+    }
+  
+    50% {
+      box-shadow: 0 0 0 #b5a1fc;
+      margin-bottom: 0;
+      -webkit-transform: translate(15px,15px);
+      -moz-transform: translate(15px, 15px);
+    }
+  
+    100% {
+      box-shadow: 30px 0 0 #b5a1fc;
+      margin-bottom: 10px;
+    }
+}
+  
+@keyframes ball2 {
+    0% {
+      box-shadow: 30px 0 0 #a48cfa;
+    }
+  
+    50% {
+      box-shadow: 0 0 0 #a48cfa;
+      margin-top: -20px;
+      -webkit-transform: translate(15px,15px);
+      -moz-transform: translate(15px, 15px);
+    }
+  
+    100% {
+      box-shadow: 30px 0 0 #a48cfa;
+      margin-top: 0;
+    }
+}

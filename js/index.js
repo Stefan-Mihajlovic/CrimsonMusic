@@ -38,9 +38,14 @@ function getTime(){
 /* ----- SET SCREEN ----- */
 
 let currentScreen = "homeScreen";
+let isLoaderOff = false;
 let startTSDValue = 0;
 
 function setScreen(screenToSet, clickedBtn, activeScreen){
+
+    if(!isLoaderOff && (activeScreen == "searchScreen" || activeScreen == "yoursScreen")){
+        document.querySelector('.loaderWrapper').classList.add('loaderOff');
+    }
 
     if(currentScreen == activeScreen && currentScreen == "searchScreen"){
         document.getElementById('searchInput').focus();
