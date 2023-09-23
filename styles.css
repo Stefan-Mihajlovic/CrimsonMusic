@@ -3251,6 +3251,7 @@ nav button i{
 .loaderOff {
     opacity: 0 !important;
     pointer-events: none !important;
+    transform: scale(5);
 }
 
 .loader {
@@ -3259,10 +3260,6 @@ nav button i{
     width: 50px;
     filter: drop-shadow(0px 0px 50px var(--accentColor));
     transition: all .15s ease-in-out;
-}
-
-.loaderOff .loader{
-    transform: scale(5);
 }
   
 .loader:before,
