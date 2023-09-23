@@ -3245,7 +3245,7 @@ nav button i{
     align-items: center;
     justify-content: center;
     z-index: 999;
-    transition: all .15s ease-in-out;
+    transition: all .25s ease-in-out;
 }
 
 .loaderOff {
@@ -3259,7 +3259,6 @@ nav button i{
     height: 50px;
     width: 50px;
     filter: drop-shadow(0px 0px 50px var(--accentColor));
-    transition: all .15s ease-in-out;
 }
   
 .loader:before,
