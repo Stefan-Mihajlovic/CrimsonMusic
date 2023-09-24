@@ -130,6 +130,10 @@ img{
     background-color: var(--offWhiteDark);
 }
 
+.StTransition{
+    transition: all .25s ease-in-out !important;
+}
+
 /* ----- HEADER ----- */
 
 header{
