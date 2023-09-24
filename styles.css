@@ -130,10 +130,6 @@ img{
     background-color: var(--offWhiteDark);
 }
 
-.StTransition{
-    transition: all .25s ease-in-out !important;
-}
-
 /* ----- HEADER ----- */
 
 header{
@@ -1483,6 +1479,7 @@ hr{
     padding-top: calc(env(safe-area-inset-top) + 275px);
     gap: 10px;
     padding-bottom: 14px;
+    transition: all .25s ease-in-out !important;
 }
 
 .darken{
