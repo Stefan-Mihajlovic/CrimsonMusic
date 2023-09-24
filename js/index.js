@@ -954,7 +954,7 @@ function setDarkTheme(clicked){
     }
 
     document.documentElement.style.setProperty('--bodyBg', 'rgb(18, 14, 24)');
-    document.documentElement.style.setProperty('--playerColor', '#242027');
+    document.documentElement.style.setProperty('--playerColor', '#211a27');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
     document.documentElement.style.setProperty('--darken', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--allChColor', '#302A40');

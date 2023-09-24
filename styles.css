@@ -23,7 +23,7 @@
     --offWhite: #DCD6F7;
     --offWhiteDark: #8a85a1;
     --accentColor: #8d6ffc;
-    --playerColor: #242027;
+    --playerColor: #211a27;
     --darken: rgb(21, 17, 27);
     --yoursBubbleColor: rgba(90, 0, 27, 0.7);
     --pageBarColor: rgba(35, 29, 46, 0.7);
@@ -418,10 +418,6 @@ main{
     to{
         filter: brightness(0.3) blur(5px);
     }
-}
-
-.songPlayingLi{
-    background-color: var(--playerColor);
 }
 
 .songInfo{
@@ -1881,7 +1877,7 @@ hr{
 
 .popupOpen{
     background-color: rgba(0, 0, 0, 0.4) !important;
-    backdrop-filter: blur(2px) brightness(0.8);
+    backdrop-filter: blur(2px) brightness(0.65);
     -webkit-backdrop-filter: blur(2px) brightness(0.8);
     pointer-events: all !important;
 }
@@ -1948,9 +1944,9 @@ hr{
 #addToPlBtn #closePopupPlBtn{
     background-color: var(--offWhite);
     border: none;
-    border-radius: 7px;
-    padding-inline: 30px;
-    padding-block: 7px;
+    border-radius: 9px;
+    padding-inline: 45px;
+    padding-block: 11px;
     margin-top: 5px;
     display: none;
     color: var(--bodyBg);
@@ -2140,7 +2136,7 @@ hr{
     object-fit: cover;
     z-index: -1;
     pointer-events: none;
-    filter: brightness(0.4) blur(20px) saturate(2.5);
+    filter: brightness(0.5) blur(50px) saturate(2.5);
     transform: translate3d(0, 0, 0) translateZ(0);
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
