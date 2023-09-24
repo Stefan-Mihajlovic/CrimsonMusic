@@ -3248,17 +3248,17 @@ nav button i{
     align-items: center;
     justify-content: center;
     z-index: 999;
-    transition: all .25s ease-in-out;
+    transition: all .2s ease-in-out;
+    overflow: hidden;
 }
 
 .loaderOff {
     opacity: 0 !important;
     pointer-events: none !important;
-    transform: scale(5);
 }
 
 .loader {
-    animation: rotate 1s infinite;
+    animation: rotate 1.5s infinite ease-in-out;
     height: 50px;
     width: 50px;
     filter: drop-shadow(0px 0px 50px var(--accentColor));
@@ -3276,28 +3276,31 @@ nav button i{
 .loader:before {
     animation: ball1 1s infinite;
     background-color: #a48cfa;
-    box-shadow: 30px 0 0 #f8b334;
+    box-shadow: 30px 0 0 #a48cfa;
     margin-bottom: 10px;
 }
   
 .loader:after {
     animation: ball2 1s infinite;
     background-color: #8d6ffc;
-    box-shadow: 30px 0 0 #97bf0d;
+    box-shadow: 30px 0 0 #8d6ffc;
 }
   
 @keyframes rotate {
     0% {
+      transform: rotate(0deg) scale(0.8);
       -webkit-transform: rotate(0deg) scale(0.8);
       -moz-transform: rotate(0deg) scale(0.8);
     }
   
     50% {
+      transform: rotate(360deg) scale(1.2);
       -webkit-transform: rotate(360deg) scale(1.2);
       -moz-transform: rotate(360deg) scale(1.2);
     }
   
     100% {
+      transform: rotate(720deg) scale(0.8);
       -webkit-transform: rotate(720deg) scale(0.8);
       -moz-transform: rotate(720deg) scale(0.8);
     }
@@ -3311,6 +3314,7 @@ nav button i{
     50% {
       box-shadow: 0 0 0 #b5a1fc;
       margin-bottom: 0;
+      transform: translate(15px,15px);
       -webkit-transform: translate(15px,15px);
       -moz-transform: translate(15px, 15px);
     }
@@ -3329,6 +3333,7 @@ nav button i{
     50% {
       box-shadow: 0 0 0 #a48cfa;
       margin-top: -20px;
+      transform: translate(15px,15px);
       -webkit-transform: translate(15px,15px);
       -moz-transform: translate(15px, 15px);
     }

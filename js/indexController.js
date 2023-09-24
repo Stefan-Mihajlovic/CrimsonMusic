@@ -259,7 +259,7 @@ function GenerateOneSong(songName){
             if(recSongs.children.length == 5){
                 setTimeout(() => {
                     document.querySelector('.loaderWrapper').classList.add('loaderOff');
-                }, 300);
+                }, 500);
             }
         }
     })
