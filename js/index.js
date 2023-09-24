@@ -721,7 +721,7 @@ screenScrollables.forEach((screen) => {
                     screen.children[2].children[0].classList.add('noAnimTransitions');
                     let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
                     screen.children[2].children[0].style.height = `${newHeight}px`;
-                    if(screen.scrollTop > -100){
+                    if(screen.scrollTop > -120){
                         screen.children[2].children[1].style.opacity = 1;
                     }else{
                         screen.children[2].children[1].style.opacity = 0;
