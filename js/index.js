@@ -723,8 +723,8 @@ screenScrollables.forEach((screen) => {
                     screen.children[2].children[0].style.height = `${newHeight}px`;
                     if(screen.scrollTop < -75){
                         if(screen.scrollTop > -100){
-                            screen.children[2].children[1].classList.remove('StTransition');
                             screen.children[2].children[1].style.opacity = (75/(-screen.scrollTop));
+                            screen.children[2].children[1].classList.remove('StTransition');
                         }else{
                             screen.children[2].children[1].classList.add('StTransition');
                             screen.children[2].children[1].style.opacity = 0;
