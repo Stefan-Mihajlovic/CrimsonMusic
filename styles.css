@@ -195,7 +195,6 @@ main{
     display: none;
     transform: translateX(0%);
     transition: all .35s ease-in-out;
-    animation: showUp 0.2s ease-in-out;
     pointer-events: all;
 }
 
