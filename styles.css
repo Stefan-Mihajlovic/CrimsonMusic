@@ -188,7 +188,6 @@ main{
     height: 100vh;
     z-index: 10;
     padding-bottom: calc(env(safe-area-inset-bottom) + 200px);
-    margin-top: env(safe-area-inset-top);
     overflow-x: hidden !important;
     overflow-y: scroll !important;
     position: relative;
@@ -697,7 +696,8 @@ main{
     position: sticky;
     top: -1px;
     margin-block: -10px;
-    padding-block: 10px;
+    padding-bottom: 10px;
+    padding-top: calc(env(safe-area-inset-top) + 10px);
     margin-bottom: 5px;
     display: flex;
     flex-direction: column;
