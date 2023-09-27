@@ -698,13 +698,14 @@ main{
     margin-block: -10px;
     padding-bottom: 10px;
     padding-top: calc(env(safe-area-inset-top) + 10px);
+    border-bottom: 1px solid transparent;
     margin-bottom: 5px;
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 5px;
     z-index: 9;
-    transition: all .25s ease-in-out;
+    transition: all .1s ease-in-out;
 }
 
 .searchBar.isSticky{
