@@ -1768,6 +1768,7 @@ hr{
     position: relative !important;
     top: auto !important;
     margin-bottom: 0px !important;
+    padding-block: 0px;
 }
 
 .favoritesItem{
