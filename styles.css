@@ -704,6 +704,7 @@ main{
     width: 100%;
     gap: 5px;
     z-index: 9;
+    transition: all .25s ease-in-out;
 }
 
 .searchBar.isSticky{
