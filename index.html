@@ -28,14 +28,15 @@
     <div class="bodyHolder">
         <!-- <div class="bubble"></div> -->
 
+    <header>
+        <div class="greeting">
+            <h2 name="timeOfDay">Good Afternoon</h2>
+            <h2 class="accountName" name="accountName">Guest</h2>
+        </div>
+        <button name="accountImage" type="button" onclick="openLoginScreen()"><img loading="lazy" name="accountPhoto" src="images/noUserImg.png" alt="userButtonImage"></button>
+    </header>
+
     <main class="homeScreen">
-        <header>
-            <div class="greeting">
-                <h2 name="timeOfDay">Good Afternoon</h2>
-                <h2 class="accountName" name="accountName">Guest</h2>
-            </div>
-            <button name="accountImage" type="button" onclick="openLoginScreen()"><img loading="lazy" name="accountPhoto" src="images/noUserImg.png" alt="userButtonImage"></button>
-        </header>
         <section class="vaultSection">
             <div class="vibeVaultItem">
                 <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>
@@ -83,13 +84,6 @@
     </main>
 
     <main class="searchScreen">
-        <header>
-            <div class="greeting">
-                <h2 name="timeOfDay">Good Afternoon</h2>
-                <h2 class="accountName" name="accountName">Guest</h2>
-            </div>
-            <button name="accountImage" type="button" onclick="openLoginScreen()"><img loading="lazy" name="accountPhoto" src="images/noUserImg.png" alt="userButtonImage"></button>
-        </header>
         <div class="searchBar" id="searchScreenBar">
             <form onsubmit="event.preventDefault()">
                 <input type="search" name="search" id="searchInput" placeholder="Search away...">
@@ -124,13 +118,6 @@
     </main>
 
     <main class="yoursScreen">
-        <header>
-            <div class="greeting">
-                <h2 name="timeOfDay">Good Afternoon</h2>
-                <h2 class="accountName" name="accountName">Guest</h2>
-            </div>
-            <button name="accountImage" type="button" onclick="openLoginScreen()"><img loading="lazy" name="accountPhoto" src="images/noUserImg.png" alt="userButtonImage"></button>
-        </header>
         <h1>Library
             <div>
                 <button class="searchOnYoursBtn" onclick="showSearchBarYours(this)"><i class="fa-solid fa-magnifying-glass"></i></button>
