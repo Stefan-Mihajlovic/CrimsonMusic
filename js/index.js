@@ -85,13 +85,19 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
     let activeMain = document.getElementsByClassName(activeScreen)[0];
     activeMain.classList.add("activeMain");
 
-    if(activeScreen === "searchScreen"){
+    if(activeScreen == "searchScreen"){
         let searchList = document.getElementsByClassName("searchList")[0];
         let searchInput = document.getElementById("searchInput");
+        let header = document.querySelector('header');
 
         searchList.classList.remove("searchListOpen");
         searchList.innerHTML = "";
         searchInput.value = "";
+        header.style.display = 'none';
+    }else{
+        let header = document.querySelector('header');
+        
+        header.style.display = 'flex';
     }
 }
 
