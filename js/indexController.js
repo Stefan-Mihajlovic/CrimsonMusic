@@ -94,7 +94,7 @@ function RegisterUser(){
                 LikedPlaylists: ""
             })
             .then(()=>{
-                alert(`Welcome to crimson ${username.value}!`);
+                alert(`Welcome to Crimson ${username.value}!`);
                 AuthenticateUser();
             })
             .catch((error)=>{
@@ -1532,9 +1532,6 @@ function LoadLikedPlaylists(){
                                 </div>
                             </div>
                             <div class="songClickDiv" onclick="clickEffect(this); openPlaylistPage(`+ usersLikedPlaylists[i] +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');"></div>
-                            <div class="songBtns">
-                                <button onclick="clickEffect(this); openPopup('playlist','`+ playlistBanner +`','`+ playlistArtists +`','`+ playlistName +`','')"><i class="fa-solid fa-bars"></i></button>
-                            </div>
                         </li>`;
                         yourLPlaylists.innerHTML += currentLi;
                     }
