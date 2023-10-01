@@ -1569,3 +1569,16 @@ const observer2 = new IntersectionObserver(
 );
 
 observer2.observe(stickyElm);
+
+// ----- PC player seek
+
+if(window.innerHeight < window.innerWidth){
+    const miniSeek = document.querySelector('.miniSeek');
+    miniSeek.addEventListener('click', (e) => {
+        let procent = e.clientX / miniSeek.clientWidth;
+        procent = Math.round(procent * 100 - 1);
+        document.getElementById('currentSongInput').value = procent;
+        let seekto = currentSongAudio.duration * (procent / 100);
+        currentSongAudio.currentTime = seekto;
+    })
+}

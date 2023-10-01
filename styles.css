@@ -567,7 +567,7 @@ main{
 
 .artistItem{
     width: 35vw;
-    max-width: 250px;
+    max-width: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -629,7 +629,7 @@ main{
 
 .playlistItem{
     width: calc(40vw + 7.5px);
-    max-width: 225px;
+    max-width: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2179,11 +2179,9 @@ hr{
 
 /* ----- LANDSCAPE ORIENTATION ----- */
 @media screen and (orientation: landscape) {
-    .player{
-        height: 70px;
-    }
     .playerSongInfo img{
-        width: 55px;
+        width: 45px;
+        margin-block: 7px;
     }
 }
 
