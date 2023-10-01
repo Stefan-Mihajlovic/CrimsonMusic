@@ -2962,6 +2962,12 @@ nav button i{
         border-bottom: 1px solid var(--playerColor);
         -webkit-backdrop-filter: blur(15px) brightness(1.2);
     }
+    .yoursScreen .searchBar{
+        background-color: none !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
 }
 
 /* ----- MIN WIDTH 900px ----- */
