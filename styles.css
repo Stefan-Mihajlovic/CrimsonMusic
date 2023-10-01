@@ -113,7 +113,7 @@ button{
 }
 
 .buttonClicked{
-    transform: scale(0.9) rotate(2deg) !important;
+    transform: scale(0.9) !important;
     filter: brightness(0.5);
 }
 
