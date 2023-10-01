@@ -1929,6 +1929,20 @@ hr{
     padding-top: env(safe-area-inset-top);
 }
 
+@media screen and (orientation: landscape) {
+    #popupWrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .popupScreen{
+        position: relative;
+        width: 40%;
+        border-radius: 30px;
+        transition: all 0.3s ease-in-out;
+    }
+}
+
 #addToPlBtn{
     padding: 0px;
     display: flex !important;
@@ -2912,13 +2926,16 @@ nav button i{
         display: none;
     }
     main{
-        padding-top: calc(env(safe-area-inset-top) + 75px);
+        padding-top: calc(env(safe-area-inset-top) + 60px);
     }
     nav{
         display: none;
     }
     .navBig{
         display: flex;
+    }
+    header{
+        display: none !important;
     }
     .player{
         bottom: calc(-100svh + 15px + calc(env(safe-area-inset-bottom) * 0.6));
@@ -2938,6 +2955,12 @@ nav button i{
     }
     .makePlaylistScreen{
         top: 60px
+    }
+    .searchBar{
+        background-color: var(--footerBg);
+        backdrop-filter: blur(15px) brightness(1.2);
+        border-bottom: 1px solid var(--playerColor);
+        -webkit-backdrop-filter: blur(15px) brightness(1.2);
     }
 }
 
