@@ -1257,14 +1257,16 @@ const move3 = (e) => {
 }
 
 popupScreen.addEventListener("touchstart", (e) => {
-    // console.log("touched");
-    // Calc the initial offset Values
-    offsetY = e.touches[0].clientY - popupScreen.offsetTop;
-    popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
-    popupScreen.classList.add("playerMovable");
-    document.addEventListener("touchmove", move3);
-    playerTouchStarted3 = true;
-    moveStarted = false;
+    if(window.innerWidth < window.innerHeight){
+        // console.log("touched");
+        // Calc the initial offset Values
+        offsetY = e.touches[0].clientY - popupScreen.offsetTop;
+        popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
+        popupScreen.classList.add("playerMovable");
+        document.addEventListener("touchmove", move3);
+        playerTouchStarted3 = true;
+        moveStarted = false;
+    }
 })
 
 // ----- TOUCH END
@@ -1391,7 +1393,9 @@ document.addEventListener("touchend", () => {
 const closePopupPlBtn = document.querySelector('#closePopupPlBtn');
 closePopupPlBtn.addEventListener('click', () => {
     popupScreen.classList.remove("popupPl");
-    popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
+    if(window.innerHeight > window.innerWidth){
+        popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
+    }
     setTimeout(() => {
         addToPlBtn.addEventListener('click', addToPlFunc);
     }, 100);
