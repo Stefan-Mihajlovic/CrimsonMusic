@@ -1941,6 +1941,10 @@ hr{
         border-radius: 30px;
         transition: all 0.3s ease-in-out;
     }
+    main{
+        padding-left: env(safe-area-inset-top);
+        padding-right: env(safe-area-inset-bottom);
+    }
 }
 
 #addToPlBtn{
