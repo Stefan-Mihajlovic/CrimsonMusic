@@ -5,6 +5,8 @@ let brojArtista = 25;
 let brojPlejlista = 6;
 let brojKategorija = 14;
 
+let isPerformanceModeOn = false;
+
 /* ----- GET THE TIME ----- */
 
 window.onload = getTime();
@@ -32,6 +34,16 @@ function getTime(){
             todel.innerHTML = 'Good Evening';
     });
         todEl2.innerHTML = 'Good Evening';
+    }
+}
+
+/* ----- SET APP MODE ----- */
+
+function setAppPMode(){
+    if (/windows phone/i.test(navigator.userAgent) || /android/i.test(navigator.userAgent)) {
+        turnPerformanceModeOn();
+    }else{
+        turnPerformanceModeOff();
     }
 }
 
@@ -240,6 +252,49 @@ redanimToggle.addEventListener('click', () => {
         reduceAnimations = false;
     }
 })
+
+const pmToggle = document.getElementById('pmToggle');
+pmToggle.addEventListener('click', () => {
+    if(pmToggle.checked){
+        turnPerformanceModeOn();
+    }else{
+        turnPerformanceModeOff();
+    }
+})
+
+function turnPerformanceModeOn(){
+    document.documentElement.style.setProperty("--gmBackdrop", "none");
+    document.documentElement.style.setProperty("--gmBackdropPlayer", "none");
+    document.querySelector('.songBackdrop').style.display = 'none';
+    pmToggle.checked = true;
+    isPerformanceModeOn = true;
+    redrawAppTheme();
+}
+
+function turnPerformanceModeOff(){
+    document.documentElement.style.setProperty("--gmBackdrop", "blur(20px) brightness(1.2)");
+    document.documentElement.style.setProperty("--gmBackdropPlayer", "brightness(0.5) blur(50px) saturate(2.5)");
+    document.querySelector('.songBackdrop').style.display = 'block';
+    pmToggle.checked = false;
+    isPerformanceModeOn = false;
+    redrawAppTheme();
+}
+
+function redrawAppTheme(){
+
+    let themePreferencee = window.matchMedia("(prefers-color-scheme: dark)");
+
+    if(document.getElementById('lightThemeInput').checked){
+        setLightTheme();
+    }
+    if(document.getElementById('darkThemeInput').checked){
+        setDarkTheme();
+    }
+    if(document.getElementById('autoThemeInput').checked){
+        setAutoTheme(themePreferencee);
+    }
+
+}
 
 let nextSongBtn = 0,prevSongBtn = 0,currentSongBtn = 0;
 let isAutoPlayOn = true;
@@ -921,6 +976,7 @@ const setAutoTheme = e => {
     }
 }
 
+setAppPMode();
 setAutoTheme(themePreference);
 themePreference.addEventListener('change', () => {
     if(autoThemeInput.checked){
@@ -961,7 +1017,6 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--darken', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--allChColor', '#302A40');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
-    document.documentElement.style.setProperty('--pageBarColor', 'rgba(21, 17, 29, 0.7)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
     document.documentElement.style.setProperty('--sidePageback', 'black');
     document.documentElement.style.setProperty('--mainColor', '#1A1724');
@@ -970,7 +1025,11 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
     document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
     document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27))');
-    document.documentElement.style.setProperty('--footerBg', 'rgba(21, 17, 29, 0.7)');
+    if(isPerformanceModeOn){
+        document.documentElement.style.setProperty('--footerBg', 'rgba(21, 17, 29, 1)');
+    }else{
+        document.documentElement.style.setProperty('--footerBg', 'rgba(21, 17, 29, 0.7)');
+    }
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(21, 17, 29, 1)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
@@ -1001,7 +1060,6 @@ function setLightTheme(clicked){
     document.documentElement.style.setProperty('--darken', '#ede7ff');
     document.documentElement.style.setProperty('--allChColor', 'rgba(0, 0, 0, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.5)');
-    document.documentElement.style.setProperty('--pageBarColor', 'rgba(222, 213, 255, 0.6)');
     document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #ece8ff, rgba(134, 69, 255, 0.1))');
     document.documentElement.style.setProperty('--mainColor', '#d3cdee');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(255, 255, 255, 0.5)');
@@ -1009,7 +1067,11 @@ function setLightTheme(clicked){
     document.documentElement.style.setProperty('--vibeVault', 'rgba(169, 141, 215, 0.25)');
     document.documentElement.style.setProperty('--popupScreenBg', 'var(--darken)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(230, 230, 230, 0.45)');
-    document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 0.6)');
+    if(isPerformanceModeOn){
+        document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 1)');
+    }else{
+        document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 0.6)');
+    }
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(192, 179, 219, 1)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {

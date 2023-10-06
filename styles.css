@@ -26,7 +26,6 @@
     --playerColor: #211a27;
     --darken: rgb(21, 17, 27);
     --yoursBubbleColor: rgba(90, 0, 27, 0.7);
-    --pageBarColor: rgba(35, 29, 46, 0.7);
     --latestReleaseBox: black;
     --allChColor: rgba(255, 255, 255, 0.2);
     --vibeVault: rgba(27, 12, 52, 0.5);
@@ -37,6 +36,9 @@
     --playlistSearch: rgba(141, 111, 252, 0.5);
 
     --sidePageback: black;
+
+    --gmBackdrop: blur(20px) brightness(1.2);
+    --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
 
     --footerBg: rgba(21, 17, 29, 0.7);
     --footerBgHO: rgba(21, 17, 29, 1);
@@ -137,8 +139,8 @@ header{
     top: 0;
     border-bottom: 1px solid var(--playerColor);
     background-color: var(--footerBg);
-    backdrop-filter: blur(20px) brightness(1.2);
-    -webkit-backdrop-filter: blur(20px) brightness(1.2);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1036,9 +1038,9 @@ main{
 }
 
 .loginScreen .pageBar{
-    background-color: var(--pageBarColor) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: var(--footerBg) !important;
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
     z-index: 2;
 }
 
@@ -1427,9 +1429,9 @@ hr{
 }
 
 .makePlaylistScreen .pageBar{
-    background-color: var(--pageBarColor);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: var(--footerBg);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
     border-bottom: 1px solid var(--playerColor) !important;
 }
 
@@ -1440,9 +1442,9 @@ hr{
 }
 
 .pageBarOn{
-    background-color: var(--pageBarColor);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: var(--footerBg);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
     border-bottom: 1px solid var(--playerColor) !important;
 }
 
@@ -2163,7 +2165,7 @@ hr{
     object-fit: cover;
     z-index: -1;
     pointer-events: none;
-    filter: brightness(0.5) blur(50px) saturate(2.5);
+    filter: var(--gmBackdropPlayer);
     transform: translate3d(0, 0, 0) translateZ(0);
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
@@ -2311,9 +2313,9 @@ hr{
     transition: opacity .1s ease-in-out, margin .4s ease-in-out;
     z-index: 2;
     position: relative;
-    background-color: var(--pageBarColor);
-    backdrop-filter: blur(20px) brightness(1.2);
-    -webkit-backdrop-filter: blur(20px) brightness(1.2);
+    background-color: var(--footerBg);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
     margin: 10px;
     border-radius: 10px;
     border: 1px solid var(--playerColor);
@@ -2555,6 +2557,7 @@ hr{
     text-align: center;
     transition: all .45s ease-in-out;
     animation: popInLyrics .45s ease-in-out;
+    color: #DCD6F7 !important;
 }
 
 @keyframes appear {
@@ -2739,8 +2742,8 @@ nav{
 .navNoPlayer{
     border-top: 1px solid var(--playerColor);
     background-color: var(--footerBg);
-    backdrop-filter: blur(20px) brightness(1.2);
-    -webkit-backdrop-filter: blur(20px) brightness(1.2);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
 }
 
 .navClosed{
@@ -2756,8 +2759,8 @@ nav{
     border-top: none;
     border-bottom: 1px solid  var(--playerColor);
     background-color: var(--footerBg);
-    backdrop-filter: blur(20px) brightness(1.2);
-    -webkit-backdrop-filter: blur(20px) brightness(1.2);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
 }
 
 .navBig img{
@@ -3228,8 +3231,8 @@ nav button i{
     box-shadow: 0px 0px 50px rgba(255, 0, 76, 0.1);
     border: 1px solid var(--playerColor);
     background-color: var(--footerBg);
-    backdrop-filter: blur(20px) brightness(1.2);
-    -webkit-backdrop-filter: blur(20px) brightness(1.2);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
     border-radius: 20px;
     padding: 15px;
     padding-inline: 17px;
