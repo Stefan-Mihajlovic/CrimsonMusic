@@ -220,7 +220,7 @@ export function UserSignedIn(){
 
 // Generate a song based on the input number ( SongID )
 
-let songToBePlayed,songTitle,songCreator,imageURL;
+let songToBePlayed,songTitle,songCreator,imageURL,songColor;
 
 let recSongs = document.getElementById("recSongs");
 
@@ -235,6 +235,7 @@ function GenerateOneSong(songName){
             songTitle  = snapshot.val().SongName;
             songCreator = snapshot.val().Creator;
             imageURL = snapshot.val().ImgURL;
+            songColor = snapshot.val().Color;
             let currentLI =  `<li class="songItem">
                 <div class="songInfo">
                     <div class="songVisualizer">
@@ -249,7 +250,7 @@ function GenerateOneSong(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Home',this.parentElement,'`+ name +`');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Home',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -454,7 +455,7 @@ function findSearchedSong(songName, inputText){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement,'`+ name +`');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Search',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -670,7 +671,7 @@ function findSongOfCategory(songName, inputText){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Search',this.parentElement,'`+ name +`');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Search',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -945,7 +946,7 @@ function SetTheLatestRelease(artist){
                                     <h3>`+ songCreator +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Latest Release',this.parentElement,'`+ i +`');"></div>
+                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Latest Release',this.parentElement,'`+ i +`');"></div>
                             <div class="songBtns">
                                 <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
@@ -1007,6 +1008,7 @@ function GenerateOneSongFromArtist(songName,artist){
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
                 imageURL = snapshot.val().ImgURL;
+                songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
                         <div class="songVisualizer">
@@ -1021,7 +1023,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Artists',this.parentElement,'`+ name +`');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Artists',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
                         <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -1096,6 +1098,7 @@ function GenerateOneSongFromPlaylist(songName){
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
                 imageURL = snapshot.val().ImgURL;
+                songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
                     <div class="songVisualizer">
@@ -1110,7 +1113,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement,'`+ name +`');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Playlists',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -1289,8 +1292,9 @@ function playerSelectedSongVault(songName){
             songToBePlayed = snapshot.val().SongURL;
             songTitle  = snapshot.val().SongName;
             imageURL = snapshot.val().ImgURL;
+            songColor = snapshot.val().Color;
 
-            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,"TheVault",0);
+            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,songColor,"TheVault",0);
         }
     })
 }
@@ -1629,6 +1633,7 @@ function GenerateOneSongFromLiked(songName){
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
                 imageURL = snapshot.val().ImgURL;
+                songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
                     <div class="songVisualizer">
@@ -1643,7 +1648,7 @@ function GenerateOneSongFromLiked(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','Playlists',this.parentElement,'`+ name +`');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Playlists',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`',true)"><i class="fa-solid fa-bars"></i></button>
                 </div>

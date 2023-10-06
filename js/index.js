@@ -296,6 +296,15 @@ function redrawAppTheme(){
 
 }
 
+const mpbToggle = document.getElementById('mpbToggle');
+mpbToggle.addEventListener('click', () => {
+    if(mpbToggle.checked){
+        document.querySelector('.miniPlayer').classList.add('colorfulMiniPlayer');
+    }else{
+        document.querySelector('.miniPlayer').classList.remove('colorfulMiniPlayer');
+    }
+})
+
 let nextSongBtn = 0,prevSongBtn = 0,currentSongBtn = 0;
 let isAutoPlayOn = true;
 const autoplayBtn = document.querySelector('#autoplayBtn');
@@ -446,7 +455,10 @@ let playingFrom = document.getElementById("playingFromSpan");
 let isTheVaultOn = false;
 let LastPlayedFromBtn;
 
-function playerSelectedSong(songURL,songTitle,songCreator,imageURL,playedFrom,playedFromBtn,id){
+function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id){
+
+    document.documentElement.style.setProperty("--currentSongColor", songColor);
+
     openMiniPlayer();
 
     if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
@@ -1012,6 +1024,7 @@ function setDarkTheme(clicked){
     }
 
     document.documentElement.style.setProperty('--bodyBg', 'rgb(18, 14, 24)');
+    document.documentElement.style.setProperty('--bodyBgMP', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--playerColor', '#211a27');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
     document.documentElement.style.setProperty('--darken', 'rgb(18, 14, 24)');
@@ -1054,6 +1067,7 @@ function setLightTheme(clicked){
     }
 
     document.documentElement.style.setProperty('--bodyBg', '#ece8ff');
+    document.documentElement.style.setProperty('--bodyBgMP', 'rgba(255, 255, 255, 0.4)');
     document.documentElement.style.setProperty('--playerColor', '#CFB7E3');
     document.documentElement.style.setProperty('--offWhite', '#100e1c');
     document.documentElement.style.setProperty('--offWhiteDark', '#100e1c');

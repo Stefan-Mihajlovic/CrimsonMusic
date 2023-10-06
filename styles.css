@@ -16,6 +16,7 @@
 
 :root{
     --bodyBg: rgb(18, 14, 24);
+    --bodyBgMP: rgb(18, 14, 24);
     --mainColor: #242027;
     --mainColorLighter: rgba(21, 19, 23, 0.6);
     --mainColorLighter2:rgb(139, 135, 146);
@@ -34,6 +35,8 @@
     --artistSearch: rgba(0, 128, 0, 0.3);
     --songSearch: rgba(255, 0, 0, 0.2);
     --playlistSearch: rgba(141, 111, 252, 0.5);
+
+    --currentSongColor: rgb(28, 22, 37);
 
     --sidePageback: black;
 
@@ -500,6 +503,7 @@ main{
     gap: 2px;
     opacity: 0;
     z-index: 2;
+    pointer-events: none;
 }
 
 .songVisualizer span{
@@ -2158,10 +2162,10 @@ hr{
 
 .songBackdrop{
     position: absolute;
-    height: calc(100vh + 20px);
-    top: -10px;
-    left: -10px;
-    width: calc(100vw + 20px);
+    height: calc(100vh + 120px);
+    top: -60px;
+    left: -60px;
+    width: calc(100vw + 120px);
     object-fit: cover;
     z-index: -1;
     pointer-events: none;
@@ -2207,7 +2211,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
-    background-color: rgb(28, 22, 37);
+    background-color: var(--currentSongColor);
     border-top: 1px solid #242027;
     overflow: hidden;
 }
@@ -2322,6 +2326,12 @@ hr{
     box-shadow: 0px 150px 40px 100px var(--bodyBg);
 }
 
+.colorfulMiniPlayer{
+    background-color: var(--bodyBgMP) !important;
+    background-image: linear-gradient(var(--currentSongColor), var(--currentSongColor));
+    background-blend-mode: lighten;
+}
+
 .playerOpen .miniPlayer .playerClickDiv{
     display: none;
 }
@@ -2366,13 +2376,15 @@ hr{
 .playerSongText h2{
     font-size: 16px;
     line-height: 21px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 62vw;
     font-weight: 500;
     color: var(--offWhite);
     position: relative;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .playerSongText h2 div{
@@ -2384,12 +2396,14 @@ hr{
     font-size: 13px;
     color: var(--offWhiteDark);
     font-weight: 300;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 57vw;
     line-height: 15px !important;
     margin-bottom: 2px;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .playerSongBtns{
