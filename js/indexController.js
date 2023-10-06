@@ -441,6 +441,7 @@ function findSearchedSong(songName, inputText){
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
                 imageURL = snapshot.val().ImgURL;
+                songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem songItemSearch" onclick="clickEffect(this)">
                     <div class="songInfo">
                         <div class="songVisualizer">
@@ -657,6 +658,7 @@ function findSongOfCategory(songName, inputText){
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
                 imageURL = snapshot.val().ImgURL;
+                songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
                         <div class="songVisualizer">
@@ -932,6 +934,7 @@ function SetTheLatestRelease(artist){
                         songToBePlayed = snapshot.val().SongURL;
                         songTitle  = snapshot.val().SongName;
                         imageURL = snapshot.val().ImgURL;
+                        songColor = snapshot.val().Color;
                         latestReleaseLi =  `<li class="songItem">
                             <div class="songInfo">
                                 <div class="songVisualizer">
