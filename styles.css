@@ -37,6 +37,7 @@
     --playlistSearch: rgba(141, 111, 252, 0.5);
 
     --currentSongColor: rgb(28, 22, 37);
+    --currentSongColorBig: rgb(28, 22, 37);
 
     --sidePageback: black;
 
@@ -2211,7 +2212,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
-    background-color: var(--currentSongColor);
+    background-color: var(--currentSongColorBig);
     border-top: 1px solid #242027;
     overflow: hidden;
 }
@@ -2421,6 +2422,7 @@ hr{
 .playerSongBtns i{
     font-size: 27.5px;
     color: var(--offWhite);
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .playerClickDiv{

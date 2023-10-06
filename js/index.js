@@ -142,11 +142,15 @@ function clickEffect(button){
 }
 
 const monopToggle = document.getElementById('monopToggle');
+let lastPlayerColor;
 monopToggle.addEventListener('click', () => {
     if(monopToggle.checked){
         document.getElementsByClassName('songBackdrop')[0].style.display = 'none';
+        lastPlayerColor = getComputedStyle(document.documentElement).getPropertyValue('--currentSongColorBig');
+        document.documentElement.style.setProperty("--currentSongColorBig", 'rgb(28, 22, 37)');
     }else{
         document.getElementsByClassName('songBackdrop')[0].style.display = 'block';
+        document.documentElement.style.setProperty("--currentSongColorBig", lastPlayerColor);
     }
 })
 
@@ -458,6 +462,7 @@ let LastPlayedFromBtn;
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id){
 
     document.documentElement.style.setProperty("--currentSongColor", songColor);
+    document.documentElement.style.setProperty("--currentSongColorBig", songColor);
 
     openMiniPlayer();
 
