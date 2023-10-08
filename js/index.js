@@ -536,7 +536,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     checkLyrics.click();
 
     const playerLyricsBtn = document.getElementById("playerLyricsBtn");
-    playerLyricsBtn.setAttribute('onclick', `turnLyrcis(`+ id +`)`);
+    playerLyricsBtn.setAttribute('onclick', `turnLyrics(`+ id +`)`);
 
     const playerLikeBtn = document.getElementById("playerLikeBtn");
     playerLikeBtn.onclick = () => {

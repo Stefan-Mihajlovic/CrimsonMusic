@@ -2001,13 +2001,15 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
 
 // ----- BIG PLAYER LYRICS
 
-export function turnLyrcis(songId){
+export function turnLyrics(songId){
     const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
     const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
     const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
     let previousPBH2text = playerPageBar.children[1].innerHTML;
     let previousPBBonclick = playerPageBar.children[0].onclick;
+
+    document.querySelector('.playerClickDiv2').style.display = 'none';
 
     bigSongInfo.children[0].classList.add('playerBannerAway');
     setTimeout(() => {
@@ -2068,7 +2070,7 @@ export function doesSongHaveLyrics(songId, playedFrom){
             }else{
                 playerLyricsBtn.style.display = 'inline';
                 if(isLyricsOn){
-                    turnLyrcis(songId);
+                    turnLyrics(songId);
                 }
             }
         }
@@ -2080,6 +2082,8 @@ export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
     const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
+
+    document.querySelector('.playerClickDiv2').style.display = 'block';
 
     bigSongInfo.children[0].style.display = 'block';
     bigSongInfo.children[0].classList.remove('playerBannerAway');

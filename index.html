@@ -151,7 +151,7 @@
     </main>
 
     <div class="player">
-        <div class="miniPlayer">
+        <div class="miniPlayer colorfulMiniPlayer">
             <div class="miniSeek">
                 <div id="miniSeekBar"></div>
             </div>
@@ -434,7 +434,7 @@
                         <h2>Mini Player Background</h2>
                         <h5>This setting turns the mini players background on which follows the songs theme.</h5>
                     </div>
-                    <input id="mpbToggle" type="checkbox" name="mpbToggle" placeholder="Mini Player Background Toggle">
+                    <input checked id="mpbToggle" type="checkbox" name="mpbToggle" placeholder="Mini Player Background Toggle">
                 </section>
                 <hr>
                 <section class="versionSection">
@@ -520,7 +520,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrcis,doesSongHaveLyrics,openArtistPageByName,UserSignedIn } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -538,7 +538,7 @@
         window.getArtistId = getArtistId;
         window.LoadUserPlaylistsPopup = LoadUserPlaylistsPopup;
         window.addSongToThisPlaylist = addSongToThisPlaylist;
-        window.turnLyrcis = turnLyrcis;
+        window.turnLyrics = turnLyrics;
         window.doesSongHaveLyrics = doesSongHaveLyrics;
         window.openArtistPageByName = openArtistPageByName;
         window.UserSignedIn = UserSignedIn;
