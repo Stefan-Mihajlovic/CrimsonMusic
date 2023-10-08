@@ -1144,13 +1144,17 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
         }, 200);
     }
     // Calc the initial offset Values
-    offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
-    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
-    movablePlayer.classList.add("playerMovable");
+    if(window.innerWidth < window.innerHeight){
+        offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+        movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+        movablePlayer.classList.add("playerMovable");
+    }
     if(isLyricsOn){
         document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
     }
-    document.addEventListener("touchmove", move);
+    if(window.innerWidth < window.innerHeight){
+        document.addEventListener("touchmove", move);
+    }
     playerTouchStarted = true;
     moveStarted = false;
 })
@@ -1181,12 +1185,16 @@ const move2 = (e) => {
 
 playerOpenDiv2.addEventListener("touchstart", (e) => {
     // console.log("touched");
-    movablePlayer.classList.add("playerOpen");
     // Calc the initial offset Values
-    offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
-    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
-    movablePlayer.classList.add("playerMovable");
-    document.addEventListener("touchmove", move2);
+    if(window.innerWidth < window.innerHeight){
+        movablePlayer.classList.add("playerOpen");
+        offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+        movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+        movablePlayer.classList.add("playerMovable");
+    }
+    if(window.innerWidth < window.innerHeight){
+        document.addEventListener("touchmove", move2);
+    }
     playerTouchStarted2 = true;
     moveStarted = false;
 })

@@ -2030,6 +2030,7 @@ export function turnLyrics(songId){
     playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
 
     playerLyrcis.style.display = 'block';
+    playerLyrcis.scrollTop = 0;
     playerLyrcis.classList.remove('playerLyricsAway');
     setTimeout(() => {
         playerLyrcis.classList.add('playerLyrcisOn');
