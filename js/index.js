@@ -423,7 +423,7 @@ function LogToReg(){
 function setLoggedInScreen(){
     document.getElementsByClassName("loginForm")[0].style.display = "none";
     document.getElementsByClassName("loggedInScreen")[0].style.display = "flex";
-    document.getElementsByName("regLogTitle")[0].innerHTML = "Account";
+    document.getElementsByName("regLogTitle")[0].innerHTML = "Settings";
 
 }
 

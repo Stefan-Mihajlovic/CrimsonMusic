@@ -167,20 +167,20 @@ header h2{
     font-weight: 700 !important;
 }
 
-.accountImage{
-    border-radius: 50%;
-}
-
 header button{
     background: none;
     border: none;
 }
 
 header button img{
-    width: 35px;
+    width: 30px;
     aspect-ratio: 1 / 1;
-    border-radius: 50%;
     background-color: transparent;
+}
+
+header .buttonClicked{
+    transform: scale(0.9) rotate(40deg) !important;
+    filter: brightness(0.5);
 }
 
 .greeting{
