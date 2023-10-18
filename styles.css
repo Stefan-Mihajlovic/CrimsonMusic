@@ -2264,11 +2264,10 @@ hr{
 }
 
 .player .pageBar{
-    display: flex;
+    display: none;
     justify-content: space-between;
     box-shadow: none;
     border: none;
-    transform: translateY(200%);
     transition: all .2s ease-in-out;
     padding-top: 40px !important;
     padding-bottom: 20px !important;
@@ -2277,7 +2276,7 @@ hr{
 }
 
 .playerOpen .pageBar{
-    transform: translateY(0%);
+    display: flex;
 }
 
 .player .pageBar h2{
@@ -2330,7 +2329,7 @@ hr{
     margin: 10px;
     border-radius: 10px;
     border: 1px solid var(--playerColor);
-    box-shadow: 0px 150px 40px 100px var(--bodyBg);
+    box-shadow: 0px 110px 60px 100px var(--bodyBg);
 }
 
 .colorfulMiniPlayer{
@@ -2465,11 +2464,6 @@ hr{
     gap: 10px;
     padding-bottom: 0px;
     transition: all .4s ease-in-out;
-    transform: translateY(70%);
-}
-
-.playerOpen .bigPlayer .bigSongInfo{
-    transform: translateY(0%);
 }
 
 .bigSongInfo img{
