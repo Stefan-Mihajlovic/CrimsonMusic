@@ -2133,7 +2133,7 @@ hr{
     display: flex;
     flex-direction: column;
     height: calc(100svh + 55px) !important;
-    transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out, padding-top 0s;
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%) translateZ(0);
@@ -2162,6 +2162,7 @@ hr{
 }
 
 .songBackdrop{
+    opacity: 0;
     position: absolute;
     height: calc(100vh + 120px);
     top: -60px;
@@ -2176,7 +2177,7 @@ hr{
     -moz-transform: translateZ(0);
     -ms-transform: translateZ(0);
     -o-transform: translateZ(0);
-    opacity: 0;
+    transition: all 0s !important;
 }
 
 .playerOpen .songBackdrop{
@@ -2213,6 +2214,7 @@ hr{
 
 .playerOpen{
     bottom: 0;
+    padding-top: 50px;
     background-color: var(--currentSongColorBig);
     border-top: 1px solid #242027;
     overflow: hidden;
@@ -2348,9 +2350,7 @@ hr{
 }
 
 .playerOpen .miniPlayer{
-    opacity: 0;
-    /* margin: 0px; */
-    box-shadow: none;
+    display: none;
 }
 
 .miniSeek{
