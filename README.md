@@ -1,2 +1,2 @@
-# CrimsonMusic V2
-Version 2.6a of Crimson Music
+# CrimsonMusic
+Version 0.2.6 of Crimson Music
