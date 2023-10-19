@@ -81,6 +81,25 @@ body{
     text-shadow: 0px 0px 25px rgba(141, 111, 252, 0.4);
 }
 
+.highlightSpan2{
+    color: var(--accentColor);
+    background: linear-gradient(45deg, var(--accentColor), var(--offWhite));
+    background-size: 500%;
+    background-position: left;
+    font-size: 20px;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 0px 25px rgba(141, 111, 252, 0.4);
+    animation: textPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+    0%{ background-position: left; }
+    50%{ background-position: right; }
+    100%{ background-position: left; }
+}
+
 ul::-webkit-scrollbar, div::-webkit-scrollbar{
     display: none;
 }
@@ -134,6 +153,12 @@ li{
 
 img{
     background-color: var(--offWhiteDark);
+}
+
+.fcenter{
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
 }
 
 /* ----- HEADER ----- */
@@ -1385,7 +1410,7 @@ hr{
 
 /* ----- ARTIST SCREEN ----- */
 
-.artistScreen, .playlistScreen, .categoryScreen, .makePlaylistScreen{
+.artistScreen, .playlistScreen, .categoryScreen, .makePlaylistScreen, .bugReportScreen{
     position: absolute;
     top: 0px;
     min-height: 100vh;
@@ -1410,15 +1435,15 @@ hr{
     flex-direction: column;
 }
 
-.makePlaylistScreen .screenScrollable{
+.makePlaylistScreen .screenScrollable, .bugReportScreen .screenScrollable{
     padding-top: env(safe-area-inset-top);
 }
 
-.artistScreen .closeCurrentScreen, .playlistScreen .closeCurrentScreen, .categoryScreen .closeCurrentScreen, .makePlaylistScreen .closeCurrentScreen{
+.artistScreen .closeCurrentScreen, .playlistScreen .closeCurrentScreen, .categoryScreen .closeCurrentScreen, .makePlaylistScreen .closeCurrentScreen, .bugReportScreen .closeCurrentScreen{
     z-index: 3;
 }
 
-.artistScreenOpen, .playlistScreenOpen, .categoryPageOpen, .makePlaylistScreenOpen{
+.artistScreenOpen, .playlistScreenOpen, .categoryPageOpen, .makePlaylistScreenOpen, .bugReportScreenOpen{
     transform: translateX(0%);
     pointer-events: all;
 }
@@ -1433,11 +1458,15 @@ hr{
     transition: all 0.3s ease-in-out;
 }
 
-.makePlaylistScreen .pageBar{
+.makePlaylistScreen .pageBar, .bugReportScreen .pageBar{
     background-color: var(--footerBg);
     backdrop-filter: var(--gmBackdrop);
     -webkit-backdrop-filter: var(--gmBackdrop);
     border-bottom: 1px solid var(--playerColor) !important;
+}
+
+.bugReportScreen .pageBar{
+    gap: 0px !important;
 }
 
 .artistScreen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
@@ -2980,7 +3009,7 @@ nav button i{
     .loginScreen{
         top: 60px;
     }
-    .makePlaylistScreen{
+    .makePlaylistScreen, .bugReportScreen{
         top: 60px
     }
     .searchBar{
@@ -3216,6 +3245,54 @@ nav button i{
     0%{ color: auto; }
     50%{ color: rgb(212, 66, 90); }
     100%{ color: auto; }
+}
+
+/* ----- BUG BUTTON ----- */
+
+.bugSection button{
+    position: relative;
+    margin-top: 15px;
+    margin-left: 20px;
+    width: calc(100% - 40px);
+    padding-block: 10px;
+    text-align: right;
+    padding-right: 15px;
+    color: #DCD6F7;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    border: 1px solid var(--offWhite);
+    text-shadow: 0px 0px 30px black;
+    box-shadow: 0px 0px 60px rgba(141, 111, 252, 0.3);
+    border-radius: 15px;
+    background-image: linear-gradient(45deg, #d0c4ff, #755cd1);
+    overflow: hidden;
+}
+
+.bugSection button span{
+    display: block;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.466);
+    font-size: 15px;
+    line-height: 0px;
+    margin-bottom: 15px;
+    z-index: -1;
+}
+
+.bugSection button i{
+    position: absolute;
+    font-size: 25vw;
+    bottom: -7vw;
+    left: 3vw;
+    text-shadow: 0px 0px 100px black;
+    animation: bugDance 2s ease-in-out infinite;
+}
+
+@keyframes bugDance {
+    0%{ transform: rotate(0deg); }
+    5%{ transform: rotate(-3deg); }
+    10%{ transform: rotate(0deg); }
+    15%{ transform: rotate(2deg); }
+    20%{ transform: rotate(0deg); }
+    100%{ transform: rotate(0deg); }
 }
 
 /* ----- Login Popup ----- */

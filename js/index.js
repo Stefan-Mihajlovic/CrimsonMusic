@@ -1675,3 +1675,24 @@ if(window.innerHeight < window.innerWidth){
         currentSongAudio.currentTime = seekto;
     })
 }
+
+// ----- BUG REPORT SCREEN
+
+let isBugReportScreenOpen = false;
+let bugReportScreen = document.getElementsByClassName("bugReportScreen")[0];
+
+function openBugReport(){
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+
+    bugReportScreen.classList.add("bugReportScreenOpen");
+
+    isBugReportScreenOpen = true;
+}
+
+function closeBugScreen(){
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+
+    bugReportScreen.classList.remove("bugReportScreenOpen");
+
+    isBugReportScreenOpen = false;
+}
