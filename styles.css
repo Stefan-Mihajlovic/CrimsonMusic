@@ -426,6 +426,7 @@ main{
 }
 
 .songItem{
+    background-color: rgba(141, 111, 252, 0.02);
     width: 100%;
     display: flex;
     align-items: center;
@@ -436,6 +437,7 @@ main{
     box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.15);
     transition: all .3s ease-in-out;
     /* animation: showUp 0.3s ease-in-out; */
+    overflow: hidden;
 }
 
 @keyframes showUp {
@@ -572,6 +574,7 @@ main{
 .songPlayingLi .songInfo img{
     filter: brightness(0.3);
     opacity: 0.8;
+    box-shadow: 0px 0px 50px var(--offWhite);
 }
 
 .songPlayingLi .songVisualizer{
@@ -793,6 +796,7 @@ main{
 
 .artistItemSearch{
     width: 100%;
+    background-color: rgba(141, 111, 252, 0.02);
     display: flex;
     align-items: center;
     gap: 5px;
@@ -837,6 +841,7 @@ main{
 
 .playlistItemSearch{
     width: 100%;
+    background-color: rgba(141, 111, 252, 0.02);
     display: flex;
     align-items: center;
     gap: 5px;
@@ -2971,7 +2976,7 @@ nav button i{
     }
     .bigControls img{
         width: 100% !important;
-        max-width: 500px !important;
+        max-width: calc(100vw - 60px) !important;
     }
 }
 
@@ -3000,7 +3005,7 @@ nav button i{
         height: calc(100svh);
     }
     .bigSongInfo img{
-        width: 57.5vw;
+        width: 57.5vw !important;
     }
     .artistScreen, .playlistScreen, .categoryScreen{
         top: 60px;
