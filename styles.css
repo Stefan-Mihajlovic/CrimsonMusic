@@ -1815,13 +1815,14 @@ hr{
 .favoritesItem{
     transition: all .1s ease-in-out;
     border-radius: 15px !important;
-    height: 70px;
+    padding-block: 40px;
     width: calc(100% - 30px);
     margin-left: 15px;
     background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 40, 1));
 }
 
 .favoritesItem .songInfo img{
+    background-color: black !important;
     width: 60px !important;
     border-radius: 0px !important;
     filter: hue-rotate(-20deg) saturate(0.6) brightness(0.7);
@@ -3118,6 +3119,10 @@ nav button i{
 }
 
 /* ----- THIS MONTHS FEATURE ----- */
+
+.thisMFSection{
+    transition: all .15s ease-in-out;
+}
 
 .thisMFDiv{
     position: relative;

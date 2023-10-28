@@ -79,7 +79,7 @@
             <ul class="recPlaylists"></ul>
         </section>
 
-        <section class="thisMFSection"></section>
+        <section class="thisMFSection" onclick="clickEffect(this);"></section>
 
         <section class="bugSection">
             <button onclick="openBugReport()">SEE A BUG?<span>REPORT IT!</span><i class="fa-solid fa-bug"></i></button>
@@ -133,7 +133,7 @@
                 <input onclick="clickEffect(this)" style="font-family: FontAwesome" id="submitYoursSearch" type="submit" value="&#xf002;">
             </form>
         </div>
-        <div class="songItem favoritesItem" onclick="openLikedSongs()">
+        <div class="songItem favoritesItem" onclick="clickEffect(this); openLikedSongs();">
             <div class="songInfo">
                 <img loading="lazy" src="images/favorites.jpg" alt="playlistBanner">
                 <div class="songText">
