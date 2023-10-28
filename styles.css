@@ -1669,20 +1669,6 @@ hr{
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.5);
 }
 
-.latestPin{
-    position: absolute;
-    padding: 3px;
-    padding-inline: 10px;
-    background-color: var(--offWhite);
-    color: var(--bodyBg);
-    border-radius: 20px;
-    font-size: 12px;
-    top: -13px;
-    left: -10px;
-    border: 1px solid var(--bodyBg);
-    transform: rotate(-5deg);
-}
-
 .artistAppearsOn{
     display: flex;
     align-items: center;

@@ -953,7 +953,6 @@ function SetTheLatestRelease(artist){
                             <div class="songBtns">
                                 <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
-                            <span class="latestPin">Latest</span>
                         </li>`;
 
                         document.getElementsByClassName("latestRelease")[0].innerHTML = "";
@@ -1341,7 +1340,16 @@ function DBMakePl(){
                     let setTheme = snapshot.val().AppTheme;
                     let setLikedPlaylists = snapshot.val().LikedPlaylists;
                     let setFollowedArtists = snapshot.val().FollowedArtists;
-        
+                    if(setFollowedArtists == undefined){
+                        setFollowedArtists = "";
+                    }
+                    if(setLikedPlaylists == undefined){
+                        setLikedPlaylists = "";
+                    }
+                    if(setLikedSongs == undefined){
+                        setLikedSongs = "";
+                    }
+
                     let currentMakePlaylistName = document.getElementsByClassName("currentMakePlaylistName")[0];
         
                     set(ref(realdb, "Users/"+currentUser.Username),
@@ -1350,7 +1358,7 @@ function DBMakePl(){
                         Email: setEmail,
                         LikedSongs: setLikedSongs,
                         Password: setPassword,
-                        Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}"),
+                        Playlists: (setPlaylists + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}{"),
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
                         LikedPlaylists: setLikedPlaylists
@@ -1384,7 +1392,7 @@ function LoadUserPlaylists(){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
             numberOfPlaylists = usersPlaylists.length - 1;
 
-            for (let i = numberOfPlaylists-1; i > 0; i--) {
+            for (let i = numberOfPlaylists-1; i >= 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                     <div class="songInfo">
                         <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
