@@ -244,7 +244,7 @@ function GenerateOneSong(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img  src="`+imageURL+`" alt="songBanner">
+                    <img onError="noStorage()" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>

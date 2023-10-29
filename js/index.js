@@ -1696,3 +1696,7 @@ function closeBugScreen(){
 
     isBugReportScreenOpen = false;
 }
+
+function noStorage(){
+    document.querySelector('.noStorageMessage').style.display = 'flex';
+}
