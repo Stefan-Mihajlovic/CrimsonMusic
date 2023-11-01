@@ -581,6 +581,42 @@ main{
     opacity: 1;
 }
 
+/* ----- Ad Section ----- */
+
+.adSection{
+    position: relative;
+    width: calc(100vw - 40px);
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.adSection img{
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border: 1px solid var(--playerColor);
+    border-bottom: none;
+    box-shadow: 0px 0px 50px rgba(129, 67, 200, 0.13);
+}
+
+.adSection a{
+    display: block;
+    text-align: center;
+    width: 100%;
+    text-decoration: none;
+    background-color: var(--offWhite);
+    color: var(--bodyBg);
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: 1px solid var(--playerColor);
+    border-top: none;
+    padding: 10px;
+    transition: all .2s ease-in-out;
+}
+
 /* ----- Recommended artists Section ----- */
 
 .recArtists, .yourFArtists{
