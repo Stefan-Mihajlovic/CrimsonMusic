@@ -2006,12 +2006,12 @@ hr{
         transition: all 0.3s ease-in-out;
     }
     main{
-        padding-left: env(safe-area-inset-top) !important;
-        padding-right: env(safe-area-inset-bottom) !important;
+        padding-left: env(safe-area-inset-left, 20px) !important;
+        padding-right: env(safe-area-inset-right, 20px) !important;
     }
     .screenScrollable{
-        padding-left: env(safe-area-inset-top) !important;
-        padding-right: env(safe-area-inset-bottom) !important;
+        padding-left: env(safe-area-inset-left, 20px) !important;
+        padding-right: env(safe-area-inset-right, 20px) !important;
     }
 }
 
