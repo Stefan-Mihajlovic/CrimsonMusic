@@ -586,10 +586,15 @@ main{
 .adSection{
     position: relative;
     width: calc(100vw - 40px);
+    max-width: 450px;
     margin-left: 20px;
     display: flex;
     flex-direction: column;
     gap: 0px;
+}
+
+.adSection h2, .adSection h5{
+    margin-left: 0px;
 }
 
 .adSection img{
@@ -3284,14 +3289,15 @@ nav button i{
     padding-block: 10px;
     text-align: right;
     padding-right: 15px;
-    color: #DCD6F7;
+    color: var(--offWhite);
     font-family: 'Bebas Neue', sans-serif;
     font-size: 40px;
     border: 1px solid var(--offWhite);
     text-shadow: 0px 0px 30px black;
     box-shadow: 0px 0px 60px rgba(141, 111, 252, 0.3);
     border-radius: 15px;
-    background-image: linear-gradient(45deg, #d0c4ff, #755cd1);
+    background-color: transparent;
+    background-image: linear-gradient(45deg, rgba(206, 194, 255, 0.5), rgb(117, 92, 209,0.5));
     overflow: hidden;
 }
 
@@ -3311,6 +3317,7 @@ nav button i{
     left: 3vw;
     text-shadow: 0px 0px 100px black;
     animation: bugDance 2s ease-in-out infinite;
+    opacity: 0.7;
 }
 
 @keyframes bugDance {
