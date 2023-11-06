@@ -2052,6 +2052,11 @@ hr{
 
 .popupMyPlaylists .songItem{
     overflow: hidden;
+    position: relative;
+}
+
+.popupMyPlaylists .songItem .songInfo{
+    width: calc(100% - 45px);
 }
 
 .popupPl .songPopupBody #addToPlBtn .popupMyPlaylists{
@@ -2838,6 +2843,7 @@ nav{
     background-color: var(--footerBg);
     backdrop-filter: var(--gmBackdrop);
     -webkit-backdrop-filter: var(--gmBackdrop);
+    justify-content: flex-start;
 }
 
 .navBig img{
@@ -2873,9 +2879,11 @@ nav button{
     color: var(--offWhite);
     font-weight: 600;
     font-size: 11px;
+    font-family: 'Outfit', sans-serif !important;
 }
 
 .navBig button{
+    max-width: 150px;
     background-color: transparent;
     display: flex;
     flex-direction: row;
@@ -2886,11 +2894,14 @@ nav button{
     gap: 10px;
     transition: all 0.2s ease-in-out;
     font-size: 17px;
+    padding-block: 20px;
+    border: 1px solid transparent;
 }
 
 .navBig button:hover{
-    filter: brightness(1.2);
-    transform: scale(1.05);
+    filter: brightness(1.75);
+    background-color: var(--bodyBg);
+    border: 1px solid var(--playerColor);
 }
 
 .activeScreen{
@@ -3017,6 +3028,7 @@ nav button i{
     }
     .navBig{
         display: flex;
+        justify-content: center;
     }
     header{
         display: none !important;
@@ -3059,6 +3071,9 @@ nav button i{
 @media (min-width: 900px){
     .navBig div{
         display: flex;
+    }
+    .navBig{
+        justify-content: flex-start;
     }
 }
 
