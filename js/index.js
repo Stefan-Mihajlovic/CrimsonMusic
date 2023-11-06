@@ -1475,7 +1475,7 @@ document.addEventListener("touchend", () => {
             if(currentSideCloseTouched == "closeArtistScreen"){
                 closeArtistPage();
             }
-            if(currentSideCloseTouched == "closeArtistScreen"){
+            if(currentSideCloseTouched == "closeCategoryScreen"){
                 closeCategoryPage();
             }
             if(currentSideCloseTouched == "closeLoginScreen"){
