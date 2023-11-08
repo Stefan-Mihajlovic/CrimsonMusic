@@ -1303,8 +1303,7 @@ function playerSelectedSongVault(songName){
 
 export function playRandomSongForTheVault(){
     setTheVault();
-    let g = Math.floor(Math.random() * brojPesama) + 1;
-    playerSelectedSongVault(g);
+    playerSelectedSongVault();
 }
 
 // Make a playlist

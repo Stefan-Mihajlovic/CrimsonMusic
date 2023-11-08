@@ -2651,7 +2651,7 @@ hr{
     100%{ opacity: 1; }
 }
 
-.playerLyrcisOn:after {
+/* .playerLyrcisOn:after {
     content: "";
     position: fixed;
     z-index: 1;
@@ -2675,7 +2675,7 @@ hr{
     width: 100%;
     height: 4em;
     animation: appear .3s ease-in-out;
-}
+} */
 
 .playerLyricsAway{
     position: absolute;
