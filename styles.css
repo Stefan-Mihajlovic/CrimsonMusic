@@ -712,6 +712,7 @@ main{
     justify-content: center;
     flex-shrink: 0;
     padding-top: 5px;
+    transition: all .2s ease-in-out;
     /* animation: showUp 0.3s ease-in-out; */
 }
 
@@ -2625,7 +2626,7 @@ hr{
     padding-block: 65px;
     position: relative;
     width: 85vw;
-    height: 55vh;
+    height: 60vh;
     overflow-y: scroll;
     overflow-x: hidden;
     display: none;

@@ -244,7 +244,7 @@ function GenerateOneSong(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img onError="noStorage()" src="`+imageURL+`" alt="songBanner">
+                    <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" onError="noStorage()" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -252,7 +252,7 @@ function GenerateOneSong(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Home',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </li>`;
             recSongs.innerHTML += currentLI;
@@ -300,8 +300,8 @@ function GetArtists(artistName){
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
             artistAboutImage = snapshot.val().AboutBanner;
-            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
-            <img  src="`+ artistImage +`" alt="artistImage">
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
+            <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
             recArtists.innerHTML += currentImg;
@@ -348,15 +348,15 @@ function GetPlaylists(playlistName){
             playlistOwners = snapshot.val().Owners;
 
             if(playlistOwners != "..Crimson.."){
-                currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                    <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                    <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
                     <h3>`+ playlistName +`</h3>
                     <h5>`+ playlistArtists +`</h5>
                 </li>`;
             }else{
-                currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div>
-                        <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                        <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
                         <h2 class="crimsonPlaylistTag">`+ playlistName +`</h2>
                     </div>
                     <h3>`+ playlistName +`</h3>
@@ -450,7 +450,7 @@ function findSearchedSong(songName, inputText){
                             <span></span>
                             <span></span>
                         </div>
-                        <img  src="`+imageURL+`" alt="songBanner">
+                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -458,7 +458,7 @@ function findSearchedSong(songName, inputText){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Search',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                     </li>`;
                 searchList.innerHTML += currentLI;
@@ -633,8 +633,8 @@ function findPlaylistOfCategory(playlistName, inputText){
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
-                let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
                 </li>`;
@@ -667,7 +667,7 @@ function findSongOfCategory(songName, inputText){
                             <span></span>
                             <span></span>
                         </div>
-                        <img  src="`+imageURL+`" alt="songBanner">
+                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -943,7 +943,7 @@ function SetTheLatestRelease(artist){
                                     <span></span>
                                     <span></span>
                                 </div>
-                                <img  src="`+imageURL+`" alt="songBanner">
+                                <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
                                 <div class="songText">
                                     <h2>`+ songTitle +`</h2>
                                     <h3>`+ songCreator +`</h3>
@@ -951,7 +951,7 @@ function SetTheLatestRelease(artist){
                             </div>
                             <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Latest Release',this.parentElement,'`+ i +`');"></div>
                             <div class="songBtns">
-                                <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
+                                <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
                         </li>`;
 
@@ -982,8 +982,8 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
                 playlistBanner = snapshot.val().Banner;
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
-                let currentLi =  `<li class="playlistItem" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
                 </li>`;
@@ -1019,7 +1019,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <span></span>
                             <span></span>
                         </div>
-                        <img  src="`+imageURL+`" alt="songBanner">
+                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -1027,7 +1027,7 @@ function GenerateOneSongFromArtist(songName,artist){
                     </div>
                     <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Artists',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 artistTopTracksList.innerHTML += currentLI;
@@ -1109,7 +1109,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img  src="`+imageURL+`" alt="songBanner">
+                    <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -1117,7 +1117,7 @@ function GenerateOneSongFromPlaylist(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Playlists',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </li>`;
             playlistSongsList.innerHTML += currentLI;
@@ -1394,7 +1394,7 @@ function LoadUserPlaylists(){
             for (let i = numberOfPlaylists-1; i >= 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                     <div class="songInfo">
-                        <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
                         <div class="songText">
                             <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
                             <h3>`+ "by " + currentUser.Username +`</h3>
@@ -1402,7 +1402,7 @@ function LoadUserPlaylists(){
                     </div>
                     <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
                     <div class="songBtns">
-                        <button onclick="clickEffect(this); openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`','')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`','')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 yourPlaylists.innerHTML += currentLi;
@@ -1458,8 +1458,8 @@ function GetArtists2(artistName){
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
             artistAboutImage = snapshot.val().AboutBanner;
-            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
-            <img  src="`+ artistImage +`" alt="artistImage">
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
+            <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImage +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
             yourFArtists.innerHTML += currentImg;
@@ -1652,7 +1652,7 @@ function GenerateOneSongFromLiked(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img  src="`+imageURL+`" alt="songBanner">
+                    <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -1660,7 +1660,7 @@ function GenerateOneSongFromLiked(songName){
                 </div>
                 <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Playlists',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
-                    <button onclick="clickEffect(this); openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`',true)"><i class="fa-solid fa-bars"></i></button>
+                    <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`',true)"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </li>`;
             playlistSongsList.innerHTML += currentLI;
@@ -2156,7 +2156,7 @@ function generateThisMonthsFeature(){
             document.getElementsByClassName('thisMFSection')[0].innerHTML = `
             <h2 class="catTitle">This Months Feature</h2>
             <div class="thisMFDiv">
-                <img id="artistMFBanner" src="images/CrimsonLogo.png" alt="artistFeatureBanner">
+                <img onload="buttonClickAnim(this.parentElement)" id="artistMFBanner" src="images/CrimsonLogo.png" alt="artistFeatureBanner">
                 <div id="MFArtistInfo">
                     
                 </div>
