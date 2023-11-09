@@ -120,24 +120,23 @@ function setHomeScreen(){
 /* ----- Button clicks ----- */
 
 document.querySelectorAll("button").forEach((button) => {
-    button.addEventListener('click', () => {
-        buttonClickAnim(button);
-    });
+    buttonClickAnim(button);
 });
 
 function buttonClickAnim(button){
-    button.classList.add("buttonClicked");
-    setTimeout(() => {
-        button.classList.remove("buttonClicked");
-    }, 150);
+    button.addEventListener('touchstart', () => {
+        button.classList.add("buttonClicked");
+    });
+    button.addEventListener('touchend', () => {
+        setTimeout(() => {
+            button.classList.remove("buttonClicked");
+        }, 100);
+    });
 }
 
 function clickEffect(button){
     if(button !== undefined){
-        button.classList.add("buttonClicked");
-        setTimeout(() => {
-            button.classList.remove("buttonClicked");
-        }, 150);
+        buttonClickAnim(button);
     }
 }
 
