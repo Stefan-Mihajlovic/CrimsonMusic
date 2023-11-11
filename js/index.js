@@ -691,6 +691,7 @@ currentSongAudio.addEventListener('ended', () => {
             });
             
             currentSongBtn.classList.remove("songPlayingLi");
+            currentSongBtn.classList.remove("songPlayingLiPaused");
 
             isSongPaused = true;
         }
