@@ -1890,7 +1890,7 @@ export function LoadUserPlaylistsPopup(songId){
                 let usersPlaylists = (snapshot.val().Playlists).split('{');
                 numberOfPlaylists = usersPlaylists.length - 1;
     
-                for (let i = numberOfPlaylists-1; i > 0; i--) {
+                for (let i = numberOfPlaylists-1; i >= 0; i--) {
                     if(usersPlaylists[i].split('}')[3]?.includes(',' + songId) || usersPlaylists[i].split('}')[3]?.includes(songId + ',')){
                         let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                             <div class="songInfo">
