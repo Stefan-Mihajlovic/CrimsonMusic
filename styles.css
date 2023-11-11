@@ -574,11 +574,16 @@ main{
 .songPlayingLi .songInfo img{
     filter: brightness(0.3);
     opacity: 0.8;
-    box-shadow: 0px 0px 50px var(--offWhite);
+    box-shadow: 0px 0px 60px var(--offWhite);
+    transition: box-shadow .5s ease-in-out;
 }
 
 .songPlayingLi .songVisualizer{
     opacity: 1;
+}
+
+.songPlayingLiPaused{
+    background: linear-gradient(270deg, transparent, var(--playerColor));
 }
 
 /* ----- Ad Section ----- */
@@ -3534,6 +3539,12 @@ nav button i{
     }
 }
 
+.artistItem.buttonClicked, 
+.playlistItem.buttonClicked, 
+.thisMFDiv.buttonClicked, 
+.bugSection button.buttonClicked{
+    transform: scale(0.98) !important;
+}
 
 .noStorageMessage{
     position: fixed;

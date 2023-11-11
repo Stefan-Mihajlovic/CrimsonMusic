@@ -144,10 +144,12 @@ const monopToggle = document.getElementById('monopToggle');
 let lastPlayerColor;
 monopToggle.addEventListener('click', () => {
     if(monopToggle.checked){
+        document.querySelector('.miniPlayer').classList.remove('colorfulMiniPlayer');
         document.getElementsByClassName('songBackdrop')[0].style.display = 'none';
         lastPlayerColor = getComputedStyle(document.documentElement).getPropertyValue('--currentSongColorBig');
         document.documentElement.style.setProperty("--currentSongColorBig", 'rgb(28, 22, 37)');
     }else{
+        document.querySelector('.miniPlayer').classList.add('colorfulMiniPlayer');
         document.getElementsByClassName('songBackdrop')[0].style.display = 'block';
         document.documentElement.style.setProperty("--currentSongColorBig", lastPlayerColor);
     }
@@ -298,15 +300,6 @@ function redrawAppTheme(){
     }
 
 }
-
-const mpbToggle = document.getElementById('mpbToggle');
-mpbToggle.addEventListener('click', () => {
-    if(mpbToggle.checked){
-        document.querySelector('.miniPlayer').classList.add('colorfulMiniPlayer');
-    }else{
-        document.querySelector('.miniPlayer').classList.remove('colorfulMiniPlayer');
-    }
-})
 
 let nextSongBtn = 0,prevSongBtn = 0,currentSongBtn = 0;
 let isAutoPlayOn = true;
@@ -467,6 +460,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
 
     if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
         LastPlayedFromBtn.classList.remove("songPlayingLi");
+        LastPlayedFromBtn.classList.remove("songPlayingLiPaused");
     }
 
     currentSongAudio.autoplay = true;
@@ -603,12 +597,14 @@ function pausePlayCurrentSong(from){
             }else{
                 currentSongAudio.play();
                 if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
+                    LastPlayedFromBtn.classList.remove("songPlayingLiPaused");
                     LastPlayedFromBtn.classList.add("songPlayingLi");
                 }
             }
         }else{
             currentSongAudio.play();
             if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
+                LastPlayedFromBtn.classList.remove("songPlayingLiPaused");
                 LastPlayedFromBtn.classList.add("songPlayingLi");
             }
         }
@@ -628,6 +624,7 @@ function pausePlayCurrentSong(from){
 
         if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
             LastPlayedFromBtn.classList.remove("songPlayingLi");
+            LastPlayedFromBtn.classList.add("songPlayingLiPaused");
         }
 
         isSongPaused = true;
