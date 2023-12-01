@@ -907,8 +907,6 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
 
-    Haptics.vibrate(200);
-
     popupWrapper.focus();
 
     getArtistId(art.split(',')[0]);
