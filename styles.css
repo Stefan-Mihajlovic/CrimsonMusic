@@ -425,7 +425,7 @@ main{
 }
 
 .songItem{
-    background-color: rgba(141, 111, 252, 0.07);
+    background-color: rgba(172, 111, 252, 0.05);
     width: 100%;
     display: flex;
     align-items: center;
@@ -582,7 +582,7 @@ main{
 }
 
 .songPlayingLiPaused{
-    background: linear-gradient(270deg, transparent, var(--playerColor));
+    background: linear-gradient(270deg, transparent, rgba(141, 111, 252, 0.15));
 }
 
 /* ----- Ad Section ----- */
@@ -2203,7 +2203,7 @@ hr{
     display: flex;
     flex-direction: column;
     height: calc(100svh + 55px) !important;
-    transition: all .25s ease-in-out, padding-top 0s;
+    transition: all .2s ease-out, padding-top 0s;
     opacity: 0;
     pointer-events: none;
     transform: translateY(300%) translateZ(0);
