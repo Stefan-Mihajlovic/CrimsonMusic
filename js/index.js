@@ -1086,7 +1086,7 @@ function setLightTheme(clicked){
     if(isPerformanceModeOn){
         document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 1)');
     }else{
-        document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 0.6)');
+        document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 0.8)');
     }
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(192, 179, 219, 1)');
 
