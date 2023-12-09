@@ -2070,7 +2070,7 @@ export function doesSongHaveLyrics(songId, playedFrom){
     get(child(dbRef, "Songs/"+songId)).then((snapshot)=>{
         if(snapshot.exists()){
             let LYRICS = snapshot.val().Lyrics;
-            if(LYRICS == undefined){
+            if(LYRICS == undefined || LYRICS == ""){
                 playerLyricsBtn.style.display = 'none';
                 if(isLyricsOn){
                     closePlayerLyrics2(playedFrom);
