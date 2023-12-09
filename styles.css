@@ -1133,6 +1133,7 @@ main{
     position: absolute;
     top: 0;
     padding-top: calc(env(safe-area-inset-top) + 50px);
+    padding-bottom: 225px;
 }
 
 .loginForm{
@@ -1477,7 +1478,6 @@ hr{
     overflow-y: scroll;
     overflow-x: hidden;
     display: flex;
-    padding-bottom: 225px;
     flex-direction: column;
 }
 
@@ -1680,6 +1680,7 @@ hr{
 .artistWork, .playlistWork, .catWork{
     width: 100%;
     padding: 15px;
+    padding-bottom: 225px;
     display: flex;
     flex-direction: column;
     gap: 15px;
