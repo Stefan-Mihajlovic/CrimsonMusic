@@ -1566,7 +1566,7 @@ for (let i = 0; i < scrollTexts.length; i++) {
 
 function showSearchBarYours(searchOnBtn){
     document.getElementById('searchBarYours').classList.toggle('searchBarOn');
-    if(searchOnBtn.innerHTML == `<i class="fa-solid fa-xmark"></i>`){
+    if(searchOnBtn.innerHTML == `<i class="fa-solid fa-xmark" aria-hidden="true"></i>` || searchOnBtn.innerHTML == `<i class="fa-solid fa-xmark"></i>`){
         resetSearchScreenToNormal();
     }else{
         document.getElementById('searchYoursInput').focus();
