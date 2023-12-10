@@ -582,7 +582,7 @@ main{
 }
 
 .songPlayingLiPaused{
-    background: linear-gradient(270deg, transparent, rgba(141, 111, 252, 0.15));
+    background: linear-gradient(270deg, rgba(172, 111, 252, 0.05), rgba(141, 111, 252, 0.15));
 }
 
 /* ----- Ad Section ----- */
@@ -1000,7 +1000,7 @@ main{
 .categories{
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     width: calc(100% - 40px);
     margin-left: 20px;
 }
@@ -1008,7 +1008,7 @@ main{
 .catItems{
     width: 100%;
     height: 85px;
-    gap: 15px;
+    gap: 10px;
     display: flex;
     align-items: center;
 }

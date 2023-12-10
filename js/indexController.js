@@ -2063,7 +2063,6 @@ export function turnLyrics(songId){
 
 export function doesSongHaveLyrics(songId, playedFrom){
     const playerLyricsBtn = document.getElementById('playerLyricsBtn');
-    const playerPageBar = document.getElementsByClassName('player')[0].children[1];
 
     let dbRef = ref(realdb);
 
@@ -2089,7 +2088,6 @@ export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
     const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
-    const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
 
     document.querySelector('.playerClickDiv2').style.display = 'block';
 
@@ -2117,7 +2115,6 @@ function closePlayerLyrics2(playedFrom){
         const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
         const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
         const playerPageBar = document.getElementsByClassName('player')[0].children[1];
-        const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
 
         bigSongInfo.children[0].style.display = 'block';
         bigSongInfo.children[0].classList.remove('playerBannerAway');
