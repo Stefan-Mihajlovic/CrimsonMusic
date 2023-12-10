@@ -2012,7 +2012,6 @@ export function turnLyrics(songId){
     const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
     const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
-    const songBackdrop = document.getElementsByClassName('songBackdrop')[0];
     let previousPBH2text = playerPageBar.children[1].innerHTML;
     let previousPBBonclick = playerPageBar.children[0].onclick;
 

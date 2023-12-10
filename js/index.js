@@ -1132,8 +1132,8 @@ let isLyricsOn = false;
 
 playerOpenDiv.addEventListener("touchstart", (e) => {
     // console.log("touched");
-    movablePlayer.classList.add("playerOpen");
     document.getElementsByTagName("nav")[0].classList.add("navClosed");
+    movablePlayer.classList.add("playerOpen");
     if(reduceAnimations){
         document.querySelector('.bigControls').classList.add('noPointerEvents');
         setTimeout(() => {

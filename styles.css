@@ -2242,7 +2242,7 @@ hr{
     object-fit: cover;
     z-index: -1;
     pointer-events: none;
-    filter: var(--gmBackdropPlayer);
+    filter: brightness(0.5) blur(50px) saturate(2.5);
     transform: translate3d(0, 0, 0) translateZ(0);
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
