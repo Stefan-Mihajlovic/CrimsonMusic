@@ -1,3 +1,3 @@
 # Crimson Music
 
-Version 0.2.6 of Crimson Music
+> Crimson Music is dynamic web app for streaming music.
