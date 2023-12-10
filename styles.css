@@ -226,7 +226,7 @@ main{
     gap: 15px;
     display: none;
     transform: translateX(0%);
-    transition: all .35s ease-in-out;
+    transition: all .35s ease-out;
     pointer-events: all;
 }
 
@@ -1106,7 +1106,7 @@ main{
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
-    transition: all .35s ease-in-out;
+    transition: all .35s ease-out;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1467,7 +1467,7 @@ hr{
     z-index: 999;
     pointer-events: none;
     transform: translateX(110%);
-    transition: all .35s ease-in-out;
+    transition: all .35s ease-out;
     z-index: 99;
     overflow: hidden;
 }
