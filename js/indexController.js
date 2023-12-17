@@ -2015,7 +2015,7 @@ export function turnLyrics(songId){
     let previousPBH2text = playerPageBar.children[1].innerHTML;
     let previousPBBonclick = playerPageBar.children[0].onclick;
 
-    document.querySelector('.playerClickDiv2').style.display = 'none';
+    document.querySelector('.playerClickDiv2').classList.add('playerClickDiv2Lyrics');
 
     bigSongInfo.children[0].classList.add('playerBannerAway');
     setTimeout(() => {
@@ -2084,29 +2084,31 @@ export function doesSongHaveLyrics(songId, playedFrom){
 }
 
 export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
-    const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
-    const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
-    const playerPageBar = document.getElementsByClassName('player')[0].children[1];
+    if(isLyricsOn){
+        const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
+        const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
+        const playerPageBar = document.getElementsByClassName('player')[0].children[1];
 
-    document.querySelector('.playerClickDiv2').style.display = 'block';
+        document.querySelector('.playerClickDiv2').classList.remove('playerClickDiv2Lyrics');
 
-    bigSongInfo.children[0].style.display = 'block';
-    bigSongInfo.children[0].classList.remove('playerBannerAway');
-    bigSongInfo.children[3].style.display = 'flex';
+        bigSongInfo.children[0].style.display = 'block';
+        bigSongInfo.children[0].classList.remove('playerBannerAway');
+        bigSongInfo.children[3].style.display = 'flex';
 
-    playerLyrcis.classList.add('playerLyricsAway');
-    playerLyrcis.classList.remove('playerLyrcisOn');
-    setTimeout(() => {
-        playerLyrcis.style.display = 'none';
-        document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
-    }, 450);
+        playerLyrcis.classList.add('playerLyricsAway');
+        playerLyrcis.classList.remove('playerLyrcisOn');
+        setTimeout(() => {
+            playerLyrcis.style.display = 'none';
+            document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
+        }, 450);
 
-    playerPageBar.children[1].classList.remove("smallH2");
-    playerPageBar.children[1].innerHTML = previousPBH2text;
-    playerPageBar.children[0].onclick = previousPBBonclick;
-    playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
+        playerPageBar.children[1].classList.remove("smallH2");
+        playerPageBar.children[1].innerHTML = previousPBH2text;
+        playerPageBar.children[0].onclick = previousPBBonclick;
+        playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
 
-    isLyricsOn = false;
+        isLyricsOn = false;
+    }
 }
 
 function closePlayerLyrics2(playedFrom){
@@ -2114,6 +2116,8 @@ function closePlayerLyrics2(playedFrom){
         const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
         const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
         const playerPageBar = document.getElementsByClassName('player')[0].children[1];
+
+        document.querySelector('.playerClickDiv2').classList.remove('playerClickDiv2Lyrics');
 
         bigSongInfo.children[0].style.display = 'block';
         bigSongInfo.children[0].classList.remove('playerBannerAway');
@@ -2129,7 +2133,6 @@ function closePlayerLyrics2(playedFrom){
         playerPageBar.children[1].innerHTML = "Playing From " + `<span id="playingFromSpan">${playedFrom}</span>`;
         playerPageBar.children[1].classList.remove("smallH2");
         playerPageBar.children[0].onclick = () => {
-            clickEffect(this);
             closeBigPlayer();
         };
         playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
@@ -2188,7 +2191,7 @@ function generateThisMonthsFeature(){
 getUsername();
 seeIfUserIsSignedIn();
 generateSongs();
-generateArtists();
-generatePlaylists();
-generateCategories();
-generateThisMonthsFeature();
+// generateArtists();
+// generatePlaylists();
+// generateCategories();
+// generateThisMonthsFeature();
