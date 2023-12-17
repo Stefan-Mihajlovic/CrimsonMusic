@@ -2191,7 +2191,7 @@ function generateThisMonthsFeature(){
 getUsername();
 seeIfUserIsSignedIn();
 generateSongs();
-// generateArtists();
-// generatePlaylists();
-// generateCategories();
-// generateThisMonthsFeature();
+generateArtists();
+generatePlaylists();
+generateCategories();
+generateThisMonthsFeature();
