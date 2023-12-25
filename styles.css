@@ -44,8 +44,8 @@
     --gmBackdrop: blur(20px) brightness(1.2);
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
 
-    --footerBg: rgba(21, 17, 29, 0.7);
-    --footerBgHO: rgba(21, 17, 29, 1);
+    --footerBg: rgba(20, 15, 31, 0.7);
+    --footerBgHO: rgba(20, 15, 31, 1);
 
     --topInsetArea: env(safe-area-inset-top);
 }
@@ -685,6 +685,7 @@ main{
     white-space: nowrap;
     text-overflow: ellipsis;
     color: var(--offWhite);
+    margin-top: 5px;
 }
 
 /* ----- Recommended playlists Section ----- */

@@ -1060,11 +1060,11 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
     document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27))');
     if(isPerformanceModeOn){
-        document.documentElement.style.setProperty('--footerBg', 'rgba(16, 11, 27, 1)');
+        document.documentElement.style.setProperty('--footerBg', 'rgba(20, 15, 31, 1)');
     }else{
         document.documentElement.style.setProperty('--footerBg', 'rgba(21, 17, 29, 0.7)');
     }
-    document.documentElement.style.setProperty('--footerBgHO', 'rgba(16, 11, 27, 1)');
+    document.documentElement.style.setProperty('--footerBgHO', 'rgba(20, 15, 31, 1)');
 
     document.getElementsByName("accountPhoto").forEach((photo) => {
         photo.style.filter = "invert(0) brightness(1)";
