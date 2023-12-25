@@ -1407,6 +1407,9 @@ hr{
     text-align: left;
     padding: 0px !important;
     background-color: transparent !important;
+}
+
+a.toggleSection{
     text-decoration: none !important;
 }
 
@@ -1457,6 +1460,15 @@ hr{
     place-content: center;
     margin-right: 10px;
     color: var(--offWhite);
+}
+
+a.toggleSection i{
+    font-size: 20px;
+}
+
+.LicenseScreen a.toggleSection i{
+    font-size: 20px;
+    margin-right: -5px;
 }
 
 .loginScreen input[type="checkbox"]::before{
