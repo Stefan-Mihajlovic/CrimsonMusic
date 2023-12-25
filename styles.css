@@ -645,7 +645,7 @@ main{
 }
 
 .artistItem{
-    width: 35vw;
+    width: 30vw;
     max-width: 150px;
     display: flex;
     flex-direction: column;
@@ -668,6 +668,9 @@ main{
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    background-color: transparent !important;
+    padding: 5px;
+    border: 2px solid var(--offWhite);
 }
 
 .yourFArtists .artistItem img{
@@ -758,16 +761,11 @@ main{
 }
 
 .crimsonPlaylistTag{
-    color: #DCD6F7 !important;
     position: absolute;
-    font-family: 'Bebas Neue', sans-serif;
-    top: 0;
-    height: 100%;
-    right: 0;
-    text-orientation: sideways;
-    writing-mode: vertical-lr;
-    text-align: center;
-    text-shadow: 0px 0px 25px black;
+    top: 5px;
+    left: 5px;
+    width: 20px !important;
+    height: 20px;
 }
 
 /* ----- SEARCH SCREEN ----- */
@@ -1094,7 +1092,7 @@ main{
     z-index: 1;
 }
 
-.loginScreen{
+.loginScreen, .LicenseScreen{
     position: absolute;
     top: 0px;
     min-height: 100vh;
@@ -1112,27 +1110,32 @@ main{
     overflow: hidden !important;
 }
 
-.loginScreen .pageBar{
+.loginScreen .pageBar, .LicenseScreen .pageBar{
     background-color: var(--footerBg) !important;
     backdrop-filter: var(--gmBackdrop);
     -webkit-backdrop-filter: var(--gmBackdrop);
     z-index: 2;
 }
 
-.loginScreenOpen{
+.loginScreenOpen, .LicenseScreenOpen{
     transform: translateX(0%);
     pointer-events: all;
 }
 
-.loginScreenOpen .pageBar h2{
+.loginScreenOpen .pageBar h2, .LicenseScreenOpen .pageBar h2{
     transform: translateX(0%);
 }
 
-.loginScreen .screenScrollable{
+.loginScreen .screenScrollable, .LicenseScreen .screenScrollable{
     position: absolute;
     top: 0;
     padding-top: calc(env(safe-area-inset-top) + 50px);
     padding-bottom: 225px;
+}
+
+.LicenseScreen .screenScrollable{
+    padding-inline: 15px;
+    padding-top: calc(env(safe-area-inset-top) + 60px);
 }
 
 .loginForm{
@@ -1399,6 +1402,11 @@ hr{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100% !important;
+    text-align: left;
+    padding: 0px !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
 }
 
 .toggleSection .toggleText{
@@ -1406,7 +1414,9 @@ hr{
 }
 
 .toggleSection .toggleText h2{
+    font-weight: 500 !important;
     font-size: 20px;
+    color: var(--offWhite);
 }
 
 .toggleSection .toggleText h5{
@@ -1414,6 +1424,7 @@ hr{
     line-height: 10px;
     font-weight: 300;
     margin-top: 5px;
+    color: var(--offWhiteDark);
 }
 
 .loginScreen input[type="checkbox"]{
@@ -1435,6 +1446,16 @@ hr{
     place-content: center;
     margin-bottom: 10px;
     margin-right: 10px;
+}
+
+.toggleSection i{
+    font-size: 25px;
+    width: 35px;
+    height: 35px;
+    display: grid;
+    place-content: center;
+    margin-right: 10px;
+    color: var(--offWhite);
 }
 
 .loginScreen input[type="checkbox"]::before{
@@ -3319,7 +3340,7 @@ nav button i{
     color: var(--offWhite);
     font-family: 'Bebas Neue', sans-serif;
     font-size: 40px;
-    border: 1px solid var(--offWhite);
+    border: 2px solid var(--offWhite);
     text-shadow: 0px 0px 30px black;
     box-shadow: 0px 0px 60px rgba(141, 111, 252, 0.3);
     border-radius: 15px;

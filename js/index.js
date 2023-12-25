@@ -374,6 +374,25 @@ function closeLoginScreen(){
     }, 350);
 }
 
+/* ----- LicenseS SCREEN ----- */
+
+function openLicenseScreen(){
+    let LicenseScreen = document.getElementsByClassName("LicenseScreen")[0];
+    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+
+    LicenseScreen.classList.add("LicenseScreenOpen");
+}
+
+function closeLicenseScreen(){
+    let LicenseScreen = document.getElementsByClassName("LicenseScreen")[0];
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+
+    LicenseScreen.classList.remove("LicenseScreenOpen");
+    setTimeout(() => {
+        LicenseScreen.style.left = 'auto';
+    }, 350);
+}
+
 // Switch from register to login screen
 function RegToLog(){
     const titles = document.getElementsByName("regLogTitle");
@@ -1200,7 +1219,9 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
 
 let offsetX;
 const loginScreen = document.getElementsByClassName("loginScreen")[0];
+const LicenseScreen = document.getElementsByClassName("LicenseScreen")[0];
 const closeLoginScreenBtn = document.getElementById("closeLoginScreen");
+const closeLicenseScreenBtn = document.getElementById("closeLicenseScreen");
 let touchSideStarted = false;
 let currentSideCloseTouched = "";
 
@@ -1339,6 +1360,8 @@ const moveSide5 = (e) =>{
     // console.log("moved " + e.touches[0].clientX - offsetX);
 }
 
+// Bug Report Close
+
 closeBugScreenBtn.addEventListener("touchstart", (e) => {
     e.preventDefault();
     // console.log("touched");
@@ -1359,6 +1382,29 @@ const moveSide6 = (e) =>{
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     // console.log("moved " + e.touches[0].clientX - offsetX);
 }
+
+// License Screen Close
+
+const moveSide7 = (e) => {
+    currentTouchPos = (e.touches[0].clientX - offsetX);
+    moveStarted = true;
+    // Update div pos based on new cursor pos
+    LicenseScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    // console.log("moved " + (e.touches[0].clientX - offsetX));
+}
+
+closeLicenseScreenBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    // console.log("touched");
+    // Calc the initial offset Values
+    offsetX = e.touches[0].clientX - LicenseScreen.offsetLeft;
+    LicenseScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    LicenseScreen.classList.add("playerMovable");
+    document.addEventListener("touchmove", moveSide7);
+    touchSideStarted = true;
+    moveStarted = false;
+})
 
 // Popup Screen
 
@@ -1435,24 +1481,30 @@ document.addEventListener("touchend", () => {
             document.removeEventListener("touchmove", moveSide3);
             document.removeEventListener("touchmove", moveSide4);
             document.removeEventListener("touchmove", moveSide5);
+            document.removeEventListener("touchmove", moveSide6);
+            document.removeEventListener("touchmove", moveSide7);
             loginScreen.classList.remove("playerMovable");
             playlistScreen.classList.remove("playerMovable");
             artistScreen.classList.remove("playerMovable");
             categoryScreen.classList.remove("playerMovable");
             makePlaylistScreen.classList.remove("playerMovable");
             bugReportScreen.classList.remove("playerMovable");
+            LicenseScreen.classList.remove("playerMovable");
             playlistScreen.style.left = '0';
             artistScreen.style.left = '0';
             categoryScreen.style.left = '0';
             loginScreen.style.left = '0';
             makePlaylistScreen.style.left = '0';
             bugReportScreen.style.left = '0';
+            LicenseScreen.style.left = '0';
         }else{
             document.removeEventListener("touchmove", moveSide);
             document.removeEventListener("touchmove", moveSide2);
             document.removeEventListener("touchmove", moveSide3);
             document.removeEventListener("touchmove", moveSide4);
             document.removeEventListener("touchmove", moveSide5);
+            document.removeEventListener("touchmove", moveSide6);
+            document.removeEventListener("touchmove", moveSide7);
             loginScreen.classList.remove("playerMovable");
             playerTouchStarted2 = false;
             playlistScreen.classList.remove("playerMovable");
@@ -1460,12 +1512,14 @@ document.addEventListener("touchend", () => {
             categoryScreen.classList.remove("playerMovable");
             makePlaylistScreen.classList.remove("playerMovable");
             bugReportScreen.classList.remove("playerMovable");
+            LicenseScreen.classList.remove("playerMovable");
             playlistScreen.style.left = '0';
             artistScreen.style.left = '0';
             categoryScreen.style.left = '0';
             loginScreen.style.left = '0';
             makePlaylistScreen.style.left = '0';
             bugReportScreen.style.left = '0';
+            LicenseScreen.style.left = '0';
             if(currentSideCloseTouched == "closePlaylistScreen"){
                 closePlaylistPage();
             }
@@ -1483,6 +1537,9 @@ document.addEventListener("touchend", () => {
             }
             if(currentSideCloseTouched == "closeBugScreen"){
                 closeBugScreenF();
+            }
+            if(currentSideCloseTouched == "closeLicenseScreen"){
+                closeLicenseScreen();
             }
             touchSideStarted = false;
             moveStarted = false;
