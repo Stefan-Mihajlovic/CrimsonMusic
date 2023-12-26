@@ -640,8 +640,7 @@ main{
 }
 
 .yourFArtists{
-    min-height: 120px;
-    gap: 10px;
+    min-height: 125px;
 }
 
 .artistItem{
@@ -1503,6 +1502,10 @@ a.toggleSection i{
     transition: all .4s ease-out;
     z-index: 99;
     overflow: hidden;
+}
+
+.screenOpenOnTop{
+    z-index: 100 !important;
 }
 
 .screenScrollable{

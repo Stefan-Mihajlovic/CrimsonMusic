@@ -904,11 +904,13 @@ let isMakePlOpen = false;
 
 function OpenMakePlaylistScreen(){
     makePlScreen.classList.add("makePlaylistScreenOpen");
+    makePlScreen.classList.add('screenOpenOnTop');
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 }
 
 function CloseMakePlaylistScreen(){
     makePlScreen.classList.remove("makePlaylistScreenOpen");
+    makePlScreen.classList.remove('screenOpenOnTop');
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 }
 

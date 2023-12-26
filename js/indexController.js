@@ -575,6 +575,8 @@ let isCategoryPageOpen = false;
 
 export function openCategoryPage(category, color, banner){
 
+    categoryPage.classList.add('screenOpenOnTop');
+
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
@@ -612,6 +614,7 @@ export function closeCategoryPage(){
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     categoryPage.classList.remove("categoryPageOpen");
     isCategoryPageOpen = false;
+    categoryPage.classList.remove('screenOpenOnTop');
 }
 
 let closeCategoryPageBtn = document.getElementById("closeCategoryPage");
@@ -699,10 +702,14 @@ export function closeArtistPage(){
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
     artistScreen.classList.remove("artistScreenOpen");
+    artistScreen.classList.remove('screenOpenOnTop');
     isArtistPageOpen = false;
 }
 
 export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage){
+
+    let artistScreen = document.getElementsByClassName("artistScreen")[0];
+    artistScreen.classList.add('screenOpenOnTop');
 
     checkIfArtistIsFollowed(artistID);
 
@@ -713,7 +720,6 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
     }
     
     if(!isArtistPageOpen){
-        let artistScreen = document.getElementsByClassName("artistScreen")[0];
         artistScreen.classList.add("artistScreenOpen");
         isArtistPageOpen = true;
     }
@@ -739,7 +745,6 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
         GetPlaylistsArtistAppearsOn(i, artistName);
     }
 
-    let randomList = [];
     for (let i = 0; i <= brojPesama; i++) {
         GenerateOneSongFromArtist(i, artistName);
     }
@@ -1044,6 +1049,9 @@ let isPlaylistPageOpen = false;
 
 export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
+    let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+    playlistScreen.classList.add('screenOpenOnTop');
+
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     if(document.getElementById("playlistChecker").innerHTML !== pName){
@@ -1053,7 +1061,6 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
         document.getElementById("playlistLikesH5").style.display = "block";
         document.getElementById("likePlaylist").style.display = "block";
 
-        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
         playlistScreen.classList.add("playlistScreenOpen");
         isPlaylistPageOpen = true;
 
@@ -1081,7 +1088,6 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
         document.getElementById('likePlaylist').setAttribute('name',playlistID);
     }else{
-        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
         playlistScreen.classList.add("playlistScreenOpen");
         isPlaylistPageOpen = true;
     }
@@ -1132,6 +1138,8 @@ export function closePlaylistPage(){
     let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
     playlistScreen.classList.remove("playlistScreenOpen");
     isPlaylistPageOpen = false;
+
+    playlistScreen.classList.remove('screenOpenOnTop');
 }
 
 const closePlaylistBtn = document.getElementById("closePlaylistPage");
