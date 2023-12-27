@@ -290,17 +290,16 @@ main{
 
 .vibeVaultItem{
     width: calc(100% - 40px);
-    min-height: 150px;
     background-color: var(--vibeVault);
-    border-radius: 15px;
+    border-radius: 10px;
     margin-left: 20px;
     margin-top: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    padding: 15px;
+    gap: 10px;
+    padding: 10px;
     position: relative;
     box-shadow: 0px 0px 50px rgba(106, 48, 173, 0.2);
 }
@@ -314,7 +313,7 @@ main{
     width: 100%;
     object-fit: cover;
     opacity: 1;
-    border-radius: 15px;
+    border-radius: 10px;
     filter: contrast(1.5) hue-rotate(-25deg);
 }
 
@@ -330,16 +329,17 @@ main{
 .vibeVaultItem button{
     width: 50%;
     min-width: 160px;
+    max-width: 200px;
     aspect-ratio: 4 / 1 !important;
     max-height: 50px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid #DCD6F7;
-    color: #DCD6F7;
+    background-color: #DCD6F7;
+    color: black;
     font-size: 15px;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     box-shadow: 0px 0px 25px 1px rgba(104, 76, 126, 0.6);
     border-radius: 10px;
+    border: none;
     transition: all .2s ease-in-out;
     display: flex;
     justify-content: center;
@@ -350,7 +350,7 @@ main{
 .vibeVaultItem button i{
     position: relative;
     bottom: auto;
-    color: #DCD6F7;
+    color: black;
     opacity: 1;
     font-size: 20px !important;
     margin-top: 1px;
@@ -367,7 +367,6 @@ main{
 .vibeVaultItem h2{
     font-size: 25px;
     text-align: center;
-    padding-top: 5px;
     color: #DCD6F7;
     text-shadow: 0px 0px 10px rgb(0, 0, 0);
 }
@@ -612,8 +611,8 @@ main{
 .adSection img{
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     border-bottom: none;
     box-shadow: 0px 0px 50px rgba(129, 67, 200, 0.13);
 }
@@ -625,8 +624,8 @@ main{
     text-decoration: none;
     background-color: var(--offWhite);
     color: var(--bodyBg);
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     border: 1px solid var(--playerColor);
     border-top: none;
     padding: 10px;
@@ -1886,7 +1885,7 @@ a.toggleSection i{
 
 .favoritesItem{
     transition: all .1s ease-in-out;
-    border-radius: 15px !important;
+    border-radius: 10px !important;
     padding-block: 40px;
     width: calc(100% - 40px);
     margin-left: 20px;
@@ -3229,7 +3228,7 @@ nav button i{
     background-color: rgba(53, 40, 63, 0.9);
     background-image: url('videos/ThisMF.gif');
     background-size: cover;
-    border-radius: 15px;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0px 0px 50px rgba(48, 138, 173, 0.2);
     transition: all .25s ease-in-out;
@@ -3367,7 +3366,7 @@ nav button i{
     border: 2px solid var(--offWhite);
     text-shadow: 0px 0px 30px black;
     box-shadow: 0px 0px 60px rgba(141, 111, 252, 0.3);
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: transparent;
     background-image: linear-gradient(45deg, rgba(206, 194, 255, 0.5), rgb(117, 92, 209,0.5));
     overflow: hidden;
