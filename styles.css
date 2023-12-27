@@ -153,6 +153,7 @@ li{
 
 img{
     background-color: black;
+    pointer-events: none;
 }
 
 .fcenter{
@@ -327,15 +328,23 @@ main{
 }
 
 .vibeVaultItem button{
-    width: 120px;
-    aspect-ratio: 2 / 1 !important;
+    width: 50%;
+    min-width: 160px;
+    aspect-ratio: 4 / 1 !important;
+    max-height: 50px;
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid #DCD6F7;
+    color: #DCD6F7;
+    font-size: 15px;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     box-shadow: 0px 0px 25px 1px rgba(104, 76, 126, 0.6);
-    border-radius: 15px;
+    border-radius: 10px;
     transition: all .2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
 .vibeVaultItem button i{
@@ -343,7 +352,7 @@ main{
     bottom: auto;
     color: #DCD6F7;
     opacity: 1;
-    font-size: 24px;
+    font-size: 20px !important;
     margin-top: 1px;
     margin-left: 5px;
     text-shadow: none;
@@ -398,7 +407,7 @@ main{
 }
 
 .vaultItemOff2{
-    display: none;
+    display: none !important;
 }
 
 /* ----- Recommended songs Section ----- */
@@ -605,7 +614,6 @@ main{
     aspect-ratio: 16 / 9;
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
-    border: 1px solid var(--playerColor);
     border-bottom: none;
     box-shadow: 0px 0px 50px rgba(129, 67, 200, 0.13);
 }
