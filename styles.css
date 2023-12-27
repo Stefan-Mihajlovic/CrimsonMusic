@@ -327,11 +327,9 @@ main{
 }
 
 .vibeVaultItem button{
-    width: 50%;
-    min-width: 160px;
+    min-width: 140px;
     max-width: 200px;
     aspect-ratio: 4 / 1 !important;
-    max-height: 50px;
     background-color: #DCD6F7;
     color: black;
     font-size: 15px;

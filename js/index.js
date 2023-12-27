@@ -50,6 +50,7 @@ function setAppPMode(){
 /* ----- SET SCREEN ----- */
 
 let currentScreen = "homeScreen";
+let lastOpenSideScreen;
 let isLoaderOff = false;
 let startTSDValue = 0;
 
@@ -905,6 +906,13 @@ let isMakePlOpen = false;
 function OpenMakePlaylistScreen(){
     makePlScreen.classList.add("makePlaylistScreenOpen");
     makePlScreen.classList.add('screenOpenOnTop');
+    
+    if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != makePlScreen){
+        lastOpenSideScreen.classList.remove('screenOpenOnTop');
+    }
+    lastOpenSideScreen = makePlScreen;
+
+
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 }
 

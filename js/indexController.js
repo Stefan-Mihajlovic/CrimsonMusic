@@ -577,6 +577,11 @@ export function openCategoryPage(category, color, banner){
 
     categoryPage.classList.add('screenOpenOnTop');
 
+    if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != categoryPage){
+        lastOpenSideScreen.classList.remove('screenOpenOnTop');
+    }
+    lastOpenSideScreen = categoryPage;
+
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
@@ -710,6 +715,11 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
 
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
     artistScreen.classList.add('screenOpenOnTop');
+
+    if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != artistScreen){
+        lastOpenSideScreen.classList.remove('screenOpenOnTop');
+    }
+    lastOpenSideScreen = artistScreen;
 
     checkIfArtistIsFollowed(artistID);
 
@@ -1051,6 +1061,11 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
     let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
     playlistScreen.classList.add('screenOpenOnTop');
+
+    if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != playlistScreen){
+        lastOpenSideScreen.classList.remove('screenOpenOnTop');
+    }
+    lastOpenSideScreen = playlistScreen;
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
