@@ -947,6 +947,11 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     const popupSongTitle = document.getElementsByName("popupSongTitle");
     const popupArtist = document.getElementsByName("popupArtist");
 
+    if(type == "playlist"){
+        document.getElementById('deletePlaylistBtn').setAttribute('data-playlist-id', id);
+        document.getElementById('deletePlaylistBtn').setAttribute('data-playlist-name', nam);
+    }
+
     popupScreen.classList.remove("playerMovable");
     popupScreen.focus();
     popupScreen.style.top = 'auto';

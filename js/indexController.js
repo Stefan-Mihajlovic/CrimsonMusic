@@ -1380,7 +1380,7 @@ function DBMakePl(){
                         Email: setEmail,
                         LikedSongs: setLikedSongs,
                         Password: setPassword,
-                        Playlists: (setPlaylists + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}{"),
+                        Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}"),
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
                         LikedPlaylists: setLikedPlaylists
@@ -1425,7 +1425,7 @@ function LoadUserPlaylists(){
                     </div>
                     <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
                     <div class="songBtns">
-                        <button onclick="openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`','')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`',${usersPlaylists[i].split('}')[0]})"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 yourPlaylists.innerHTML += currentLi;
@@ -2214,6 +2214,80 @@ function generateThisMonthsFeature(){
         }
     })
 }
+
+// ----- DELETE PLAYLIST
+
+const deletePlaylistBtn = document.getElementById('deletePlaylistBtn');
+deletePlaylistBtn.addEventListener('click', () => {
+
+    const playlistId = deletePlaylistBtn.getAttribute('data-playlist-id');
+    const playlistNameP = deletePlaylistBtn.getAttribute('data-playlist-name');
+    let newSetPlaylists = "";
+
+    if (confirm(`Are you sure you want to delete: ${playlistNameP}?`) == true) {
+        let dbRef = ref(realdb);
+
+        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let setUsername = snapshot.val().Username;
+                let setEmail = snapshot.val().Email;
+                let setLikedSongs = snapshot.val().LikedSongs;
+                let setPassword = snapshot.val().Password;
+                let setPlaylists = snapshot.val().Playlists;
+                let setTheme = snapshot.val().AppTheme;
+                let setFollowedArtists = snapshot.val().FollowedArtists;
+                let setLikedPlaylists = snapshot.val().LikedPlaylists;
+                setFollowedArtists = snapshot.val().FollowedArtists;
+                if(setFollowedArtists == undefined){
+                    setFollowedArtists = "";
+                }
+                if(setLikedSongs == undefined){
+                    setLikedSongs = "";
+                }
+                if(setLikedPlaylists == undefined){
+                    setLikedPlaylists = "";
+                }
+                if(setPlaylists == undefined){
+                    setPlaylists = "";
+                }
+
+                let usersPlaylists = setPlaylists.split('{');
+
+                for (let i = 0; i < usersPlaylists.length; i++) {
+                    if(usersPlaylists[i].split('}')[0] != playlistId){
+                        if(i == (usersPlaylists.length-1)){
+                            newSetPlaylists += usersPlaylists[i];
+                        }else{
+                            newSetPlaylists += usersPlaylists[i] + "{";
+                        }
+                    }
+                }
+
+                newSetPlaylists = newSetPlaylists.slice(0, -1);
+
+                set(ref(realdb, "Users/"+currentUser.Username),
+                {
+                    Username: setUsername,
+                    Email: setEmail,
+                    Password: setPassword,
+                    Playlists: newSetPlaylists,
+                    LikedSongs: setLikedSongs,
+                    AppTheme: setTheme,
+                    FollowedArtists: setFollowedArtists,
+                    setLikedPlaylists: setLikedPlaylists
+                })
+                .then(()=>{
+                    LoadUserPlaylists();
+                })
+                .catch((error)=>{
+                    alert("error "+error);
+                })
+            }
+        })
+    } else {
+        
+    }
+})
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
 
