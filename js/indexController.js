@@ -1960,7 +1960,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
         clickedPlaylist.children[2].children[0].innerHTML = '<i class="fa-solid fa-circle-check checkAnim"></i>';
         clickedPlaylist.children[2].classList.add('greenCheck');
         let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
-        let newSetPlaylists = "{";
+        let newSetPlaylists = "";
         let setFollowedArtists;
 
         let dbRef = ref(realdb);
@@ -1990,18 +1990,24 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
 
                 let usersPlaylists = setPlaylists.split('{');
 
-                for (let i = 1; i < usersPlaylists.length; i++) {
-                    if(usersPlaylists[i].split('}')[0] == playlistId){
+                for (let i = 0; i < usersPlaylists.length; i++) {
+                    if(usersPlaylists[i].split('}')[0] == playlistId && i == (usersPlaylists.length-1)){
+                        if(usersPlaylists[i].split('}')[3] != ""){
+                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + "," + songId + "}";
+                        }else{
+                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + songId + "}";
+                        }
+                    }else if(usersPlaylists[i].split('}')[0] == playlistId && i != (usersPlaylists.length-1)){
                         if(usersPlaylists[i].split('}')[3] != ""){
                             newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + "," + songId + "}" + "{";
                         }else{
                             newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + songId + "}" + "{";
                         }
                     }else{
-                        if(i != (usersPlaylists.length-1)){
-                            newSetPlaylists += usersPlaylists[i] + "{";
-                        }else{
+                        if(i == (usersPlaylists.length-1)){
                             newSetPlaylists += usersPlaylists[i];
+                        }else{
+                            newSetPlaylists += usersPlaylists[i] + "{";
                         }
                     }
                 }
