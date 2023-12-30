@@ -1059,11 +1059,11 @@ function setDarkTheme(clicked){
         darkThemeInput2.checked = true;
     }
 
-    document.documentElement.style.setProperty('--bodyBg', 'rgb(13, 2, 22)');
+    document.documentElement.style.setProperty('--bodyBg', 'rgb(13, 3, 20)');
     document.documentElement.style.setProperty('--bodyBgMP', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--playerColor', '#211a27');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
-    document.documentElement.style.setProperty('--darken', 'rgb(13, 2, 22)');
+    document.documentElement.style.setProperty('--darken', 'rgb(13, 3, 20)');
     document.documentElement.style.setProperty('--allChColor', '#302A40');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
