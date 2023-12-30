@@ -903,7 +903,36 @@ function pausePlayCurrentSongVault(){
 let makePlScreen = document.getElementsByClassName("makePlaylistScreen")[0];
 let isMakePlOpen = false;
 
-function OpenMakePlaylistScreen(){
+function OpenMakePlaylistScreen(editing, playlistIdP, playlistNameP, playlistBannerP, playlistSongsP){
+
+    if(editing){
+        document.querySelector('.formImageInput').classList.add('displayNone');
+
+        makePlScreen.children[0].children[0].children[1].innerHTML = "Edit Playlist";
+
+        document.getElementById('nameInput').value = playlistNameP;
+        document.getElementById('submitMakePlaylist').value = "Save";
+
+        document.getElementById('imageUploadView').style.backgroundImage = `url("${playlistBannerP}")`;
+        document.querySelector('.currentMakePlaylistName').innerHTML = playlistNameP;
+        document.querySelector('.currentMakePlaylistName').setAttribute('data-playlist-id', playlistIdP);
+        document.querySelector('.currentMakePlaylistName').setAttribute('data-playlist-songs', playlistSongsP);
+        document.querySelector('.currentMakePlaylistName').setAttribute('data-playlist-banner', playlistBannerP);
+    }else{
+        document.querySelector('.formImageInput').classList.remove('displayNone');
+
+        makePlScreen.children[0].children[0].children[1].innerHTML = "Make Playlist";
+
+        document.getElementById('nameInput').value = "";
+        document.getElementById('submitMakePlaylist').value = "Create";
+
+        document.getElementById('imageUploadView').style.backgroundImage = "none";
+        document.querySelector('.currentMakePlaylistName').innerHTML = "My Playlist";
+        document.querySelector('.currentMakePlaylistName').removeAttribute('data-playlist-id');
+        document.querySelector('.currentMakePlaylistName').removeAttribute('data-playlist-songs');
+        document.querySelector('.currentMakePlaylistName').removeAttribute('data-playlist-banner');
+    }
+
     makePlScreen.classList.add("makePlaylistScreenOpen");
     makePlScreen.classList.add('screenOpenOnTop');
     
@@ -911,7 +940,6 @@ function OpenMakePlaylistScreen(){
         lastOpenSideScreen.classList.remove('screenOpenOnTop');
     }
     lastOpenSideScreen = makePlScreen;
-
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 }
@@ -950,6 +978,10 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     if(type == "playlist"){
         document.getElementById('deletePlaylistBtn').setAttribute('data-playlist-id', id);
         document.getElementById('deletePlaylistBtn').setAttribute('data-playlist-name', nam);
+        document.getElementById('editPlaylistBtn').setAttribute('data-playlist-id', id);
+        document.getElementById('editPlaylistBtn').setAttribute('data-playlist-name', nam);
+        document.getElementById('editPlaylistBtn').setAttribute('data-playlist-banner', src);
+        document.getElementById('editPlaylistBtn').setAttribute('data-playlist-songs', isLikedPage);
     }
 
     popupScreen.classList.remove("playerMovable");

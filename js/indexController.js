@@ -1349,9 +1349,10 @@ export async function SubmitAPlaylist(){
     }
 }
 
+let currentMakePlaylistName = document.querySelector('.currentMakePlaylistName');
 function DBMakePl(){
     const dbRef = ref(realdb);
-        if(currentUser != undefined){
+        if(currentUser != undefined && document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML != "Edit Playlist"){
             get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
                 if(snapshot.exists()){
                     let setUsername = snapshot.val().Username;
@@ -1371,8 +1372,6 @@ function DBMakePl(){
                     if(setLikedSongs == undefined){
                         setLikedSongs = "";
                     }
-
-                    let currentMakePlaylistName = document.getElementsByClassName("currentMakePlaylistName")[0];
         
                     set(ref(realdb, "Users/"+currentUser.Username),
                     {
@@ -1387,6 +1386,73 @@ function DBMakePl(){
                     })
                     .then(()=>{
                         alert("Playlist made");
+                        LoadUserPlaylists();
+                    })
+                    .catch((error)=>{
+                        alert("error "+error);
+                    })
+                }
+            })
+        }
+        else if(currentUser != undefined && document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML == "Edit Playlist"){
+            get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+                if(snapshot.exists()){
+
+                    let newSetPlaylists = "";
+
+                    let setUsername = snapshot.val().Username;
+                    let setEmail = snapshot.val().Email;
+                    let setLikedSongs = snapshot.val().LikedSongs;
+                    let setPassword = snapshot.val().Password;
+                    let setPlaylists = snapshot.val().Playlists;
+                    let setTheme = snapshot.val().AppTheme;
+                    let setFollowedArtists = snapshot.val().FollowedArtists;
+                    let setLikedPlaylists = snapshot.val().LikedPlaylists;
+                    setFollowedArtists = snapshot.val().FollowedArtists;
+                    if(setFollowedArtists == undefined){
+                        setFollowedArtists = "";
+                    }
+                    if(setLikedSongs == undefined){
+                        setLikedSongs = "";
+                    }
+                    if(setLikedPlaylists == undefined){
+                        setLikedPlaylists = "";
+                    }
+                    if(setPlaylists == undefined){
+                        setPlaylists = "";
+                    }
+    
+                    let usersPlaylists = setPlaylists.split('{');
+    
+                    for (let i = 0; i < usersPlaylists.length; i++) {
+                        if(i == (usersPlaylists.length-1)){
+                            if(usersPlaylists[i].split('}')[0] != currentMakePlaylistName.getAttribute('data-playlist-id')){
+                                newSetPlaylists += usersPlaylists[i];
+                            }else{
+                                newSetPlaylists += currentMakePlaylistName.getAttribute('data-playlist-id') + "}" + currentMakePlaylistName.innerHTML + "}" + currentMakePlaylistName.getAttribute('data-playlist-banner') + "}" + currentMakePlaylistName.getAttribute('data-playlist-songs') + "}";
+                            }
+                        }else{
+                            if(usersPlaylists[i].split('}')[0] != currentMakePlaylistName.getAttribute('data-playlist-id')){
+                                newSetPlaylists += usersPlaylists[i] + "{";
+                            }else{
+                                newSetPlaylists += currentMakePlaylistName.getAttribute('data-playlist-id') + "}" + currentMakePlaylistName.innerHTML + "}" + currentMakePlaylistName.getAttribute('data-playlist-banner') + "}" + currentMakePlaylistName.getAttribute('data-playlist-songs') + "}" + "{";
+                            }
+                        }
+                    }
+    
+                    set(ref(realdb, "Users/"+currentUser.Username),
+                    {
+                        Username: setUsername,
+                        Email: setEmail,
+                        Password: setPassword,
+                        Playlists: newSetPlaylists,
+                        LikedSongs: setLikedSongs,
+                        AppTheme: setTheme,
+                        FollowedArtists: setFollowedArtists,
+                        setLikedPlaylists: setLikedPlaylists
+                    })
+                    .then(()=>{
+                        alert("Playlist saved");
                         LoadUserPlaylists();
                     })
                     .catch((error)=>{
@@ -1425,7 +1491,7 @@ function LoadUserPlaylists(){
                     </div>
                     <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
                     <div class="songBtns">
-                        <button onclick="openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`',${usersPlaylists[i].split('}')[0]})"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`',${usersPlaylists[i].split('}')[0]},'${usersPlaylists[i].split('}')[3]}')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
                 yourPlaylists.innerHTML += currentLi;
@@ -1619,37 +1685,41 @@ function GetFileName(file){
 
 function UploadProcess(){
     return new Promise(resolve => {
-        setTimeout(() => {
-            var ImgToUpload = files[0];
-
-            var ImgName = imageFileName;
-
-            const metaData = {
-                contentType: ImgToUpload.type
-            }
-
-            const storage = getStorage();
-
-            const storageRef = sRef(storage, "Songs/"+ImgName);
-
-            const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+        if(document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML != "Edit Playlist"){
+            setTimeout(() => {
+                var ImgToUpload = files[0];
     
-            UploadTask.on('state-changed', (snapshot)=>{
-                let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            },
-            (error) =>{
-                alert("Image failed to upload!" + "<br>" + error);
-                resolve(false);
-            },
-            ()=>{
-                getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
-                    imageDownload = downloadURL;
-                    document.getElementById("imageUploadView").innerHTML = "";
-                    resolve(true);
-                });
-            }
-            );
-        }, 1000);
+                var ImgName = imageFileName;
+    
+                const metaData = {
+                    contentType: ImgToUpload.type
+                }
+    
+                const storage = getStorage();
+    
+                const storageRef = sRef(storage, "Songs/"+ImgName);
+    
+                const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+        
+                UploadTask.on('state-changed', (snapshot)=>{
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                },
+                (error) =>{
+                    alert("Image failed to upload!" + "<br>" + error);
+                    resolve(false);
+                },
+                ()=>{
+                    getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
+                        imageDownload = downloadURL;
+                        document.getElementById("imageUploadView").innerHTML = "";
+                        resolve(true);
+                    });
+                }
+                );
+            }, 1000);
+        }else{
+            resolve(true);
+        }
     })
 }
 
@@ -2287,6 +2357,21 @@ deletePlaylistBtn.addEventListener('click', () => {
     } else {
         
     }
+})
+
+// ----- EDIT PLAYLIST
+
+const editPlaylistBtn = document.getElementById('editPlaylistBtn');
+editPlaylistBtn.addEventListener('click', () => {
+
+    const playlistIdP = editPlaylistBtn.getAttribute('data-playlist-id');
+    const playlistNameP = editPlaylistBtn.getAttribute('data-playlist-name');
+    const playlistBannerP = editPlaylistBtn.getAttribute('data-playlist-banner');
+    const playlistSongsP = editPlaylistBtn.getAttribute('data-playlist-songs');
+    let newSetPlaylists = "";
+
+    closePopup();
+    OpenMakePlaylistScreen(true, playlistIdP, playlistNameP, playlistBannerP, playlistSongsP);
 })
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
