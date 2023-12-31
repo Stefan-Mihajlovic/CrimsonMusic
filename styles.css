@@ -3628,7 +3628,6 @@ nav button i{
     background-color: var(--footerBg);
     background-image: url('images/Christmas\ 2.gif');
     background-size: cover;
-    background-blend-mode: color-burn;
     border: 1px solid var(--playerColor);
     border-radius: 10px;
     margin-left: 20px;
@@ -3637,7 +3636,7 @@ nav button i{
     display: flex;
     align-items: center;
     padding-left: min(30vw, 125px);
-    position: relative;
+    overflow: hidden;
     box-shadow: 0px 0px 50px rgba(106, 48, 173, 0.2);
 }
 
@@ -3648,6 +3647,11 @@ nav button i{
     bottom: -10px;
     left: 0px;
     background-color: transparent !important;
+    z-index: 1;
+}
+
+.christmasSection div{
+    z-index: 1;
 }
 
 .christmasSection h2{
@@ -3659,4 +3663,15 @@ nav button i{
     font-size: 13px;
     color: #8a85a1;
     font-weight: 300;
+}
+
+.christmasSection span{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    opacity: 0.75;
+    z-index: 0;
 }
