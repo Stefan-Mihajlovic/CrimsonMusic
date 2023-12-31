@@ -3636,7 +3636,6 @@ nav button i{
     display: flex;
     align-items: center;
     padding-left: min(30vw, 125px);
-    overflow: hidden;
     box-shadow: 0px 0px 50px rgba(106, 48, 173, 0.2);
 }
 
@@ -3672,6 +3671,7 @@ nav button i{
     left: 0;
     right: 0;
     background-color: black;
+    border-radius: 10px;
     opacity: 0.75;
     z-index: 0;
 }
