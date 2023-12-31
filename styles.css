@@ -1115,6 +1115,10 @@ main{
     overflow: hidden !important;
 }
 
+.LicenseScreen hr{
+    margin-block: 15px;
+}
+
 .loginScreen .pageBar, .LicenseScreen .pageBar{
     background-color: var(--footerBg) !important;
     backdrop-filter: var(--gmBackdrop);
@@ -1146,20 +1150,25 @@ main{
 .loginForm{
     padding: 10px;
     margin: auto;
+    margin-top: 25px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 3px;
+    gap: 5px;
     min-width: 375px;
     max-width: 500px;
     transition: all .4s ease-in-out;
     transform: translateX(100%);
-    margin-top: 7.5vh;
 }
 
 .loginScreenOpen .loginForm{
     transform: translateX(0%);
+}
+
+.loginForm hr{
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
 .loginForm h2{
@@ -1175,8 +1184,9 @@ main{
     font-size: 13px;
     border: 1px solid var(--playerColor);
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
-    background-color: var(--mainColor);
+    background-color: var(--footerBg);
     color: var(--offWhite);
+    margin-top: 7px;
 }
 
 .loginForm h5{
@@ -1185,15 +1195,6 @@ main{
     text-align: center;
     color: var(--offWhiteDark);
     font-weight: 400;
-}
-
-.loginForm label{
-    font-size: 14px;
-    width: 100%;
-    color: var(--offWhiteDark);
-    font-weight: 400;
-    margin-top: 5px;
-    z-index: 2;
 }
 
 #alreadtAcc{
@@ -1223,14 +1224,14 @@ main{
 }
 
 .buttonField input, .buttonField button{
-    border-radius: 13px;
+    border-radius: 10px;
     background-color: var(--offWhite);
     color: var(--bodyBg);
     border: 2px solid transparent;
     padding: 15px;
     font-size: 13px;
     font-weight: 600;
-    box-shadow: 0px 10px 35px rgba(220, 214, 247, 0.2);
+    box-shadow: 0px 10px 35px rgba(239, 230, 255, 0.1);
 }
 
 #registerBtn, #loginBtn{
@@ -1409,6 +1410,7 @@ hr{
     width: 100% !important;
     text-align: left;
     padding: 0px !important;
+    border: none !important;
     background-color: transparent !important;
 }
 
@@ -3617,4 +3619,44 @@ nav button i{
 
 .displayNone{
     display: none !important;
+}
+
+.christmasSection{
+    position: relative;
+    width: calc(100% - 40px);
+    min-height: 95px;
+    background-color: var(--footerBg);
+    background-image: url('images/Christmas\ 2.gif');
+    background-size: cover;
+    background-blend-mode: color-burn;
+    border: 1px solid var(--playerColor);
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-top: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: min(30vw, 125px);
+    position: relative;
+    box-shadow: 0px 0px 50px rgba(106, 48, 173, 0.2);
+}
+
+.christmasSection img{
+    position: absolute;
+    width: 30vw;
+    max-width: 125px;
+    bottom: -10px;
+    left: 0px;
+    background-color: transparent !important;
+}
+
+.christmasSection h2{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.christmasSection h5{
+    font-size: 13px;
+    color: #8a85a1;
+    font-weight: 300;
 }

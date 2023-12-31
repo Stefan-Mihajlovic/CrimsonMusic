@@ -38,6 +38,15 @@
     </header>
 
     <main class="homeScreen">
+
+        <section class="christmasSection">
+            <img src="images/Christmas 3.svg" alt="Christmas Decor">
+            <div>
+                <h2>Happy 2024!</h2>
+                <h5>The Crimson team wishes you happiness, success and a lot of self growth!</h5>
+            </div>
+        </section>
+
         <section class="vaultSection">
             <div class="vibeVaultItem">
                 <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>
@@ -352,26 +361,32 @@
         <div class="closeCurrentScreen" id="closeLoginScreen"></div>
         <div class="pageBar">
             <button type="button" onclick="closeLoginScreen()"><i class="fa-solid fa-angle-left"></i></button>
-            <h2 name="regLogTitle">Register</h2>
+            <h2>Settings</h2>
         </div>
         <div class="screenScrollable">
             <form class="loginForm">
                 <h2 name="regLogTitle">Register</h2>
     
-                <label for="username">Username</label>
-                <input type="text" id="username" aria-describedby="usernameHelp" autocomplete="username" required>
-                <label for="email" class="emailLabel">Email</label>
-                <input type="email" id="email" aria-describedby="emailHelp" autocomplete="email" required>
-                <label for="password">Password</label>
-                <input type="password" id="password" aria-describedby="passwordHelp" autocomplete="current-password" required>
+                <input type="text" id="username" placeholder="Username" aria-describedby="usernameHelp" autocomplete="username" required>
+                <input type="email" id="email" placeholder="Email" aria-describedby="emailHelp" autocomplete="email" required>
+                <input type="password" id="password" placeholder="Password" aria-describedby="passwordHelp" autocomplete="current-password" required>
     
                 <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" id="changeLoginScreenBtn" onclick="RegToLog()">Log in!</span></h5>
     
                 <div class="buttonField">
                     <button type="button" id="registerBtn">Register</button>
                     <button type="button" id="loginBtn" style="display: none;">Login</button>
-                    <button type="button" id="regGoogleBtn"><i class="fa-brands fa-google"></i>&nbsp;Register with Google</button>
+                    <!-- <button type="button" id="regGoogleBtn"><i class="fa-brands fa-google"></i>&nbsp;Register with Google</button> -->
                 </div>
+
+                <hr>
+                <button class="toggleSection" onclick="event.preventDefault(); openLicenseScreen();">
+                    <div class="toggleText">
+                        <h2>Licenses & Attribution</h2>
+                        <h5>Includes all Licenses for the artwork used</h5>
+                    </div>
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
             </form>
             <div class="loggedInScreen">
                 <section class="logOutSection">
@@ -476,6 +491,14 @@
                 <div class="toggleText">
                     <h2>Abstract shapes (liquid 2)</h2>
                     <h5>CC BY 4.0 - by Кристина</h5>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <hr>
+            <a href="https://www.figma.com/@rlvntstudios" class="toggleSection">
+                <div class="toggleText">
+                    <h2>3D Christmas Metallic Icons</h2>
+                    <h5>CC BY 4.0 - by RLVNT Studios</h5>
                 </div>
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
