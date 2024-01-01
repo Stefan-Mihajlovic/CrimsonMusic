@@ -1987,7 +1987,7 @@ export function LoadUserPlaylistsPopup(songId){
                     if(usersPlaylists[i].split('}')[3]?.includes(',' + songId) || usersPlaylists[i].split('}')[3]?.includes(songId + ',')){
                         let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                             <div class="songInfo">
-                                <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
                                 <div class="songText">
                                     <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>
@@ -2003,7 +2003,7 @@ export function LoadUserPlaylistsPopup(songId){
                     }else{
                         let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                             <div class="songInfo">
-                                <img  src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
                                 <div class="songText">
                                     <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>

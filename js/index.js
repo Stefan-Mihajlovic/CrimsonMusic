@@ -11,8 +11,8 @@ let isPerformanceModeOn = false;
 
 window.onload = getTime();
 function getTime(){
-    var d = new Date();
-    var time = d.getHours();
+    let d = new Date();
+    let time = d.getHours();
 
     todEl = document.getElementsByName('timeOfDay');
     todEl2 = document.getElementById('timeOfDayNav');
@@ -35,6 +35,9 @@ function getTime(){
     });
         todEl2.innerHTML = 'Good Evening';
     }
+    
+    // Setting current year in settings
+    document.querySelector('.currentYear').innerHTML = d.getFullYear();
 }
 
 /* ----- SET APP MODE ----- */
@@ -304,6 +307,7 @@ function redrawAppTheme(){
 
 let nextSongBtn = 0,prevSongBtn = 0,currentSongBtn = 0;
 let isAutoPlayOn = true;
+let isShuffleOn = false;
 const autoplayBtn = document.querySelector('#autoplayBtn');
 autoplayBtn.addEventListener('click', () => {
     if (isAutoPlayOn) {
@@ -326,8 +330,12 @@ backwardBtn.addEventListener('click', () => {
 
 const forwardBtn = document.querySelector('#forward');
 forwardBtn.addEventListener('click', () => {
-    if(nextSongBtn != 0){
-        nextSongBtn.children[1].click();
+    if(isShuffleOn){
+        PlayRandomSongShuffle();
+    }else{
+        if(nextSongBtn != 0){
+            nextSongBtn.children[1].click();
+        }
     }
 })
 
@@ -345,7 +353,6 @@ function addToPlFunc(){
     }
 }
 
-let isShuffleOn = false;
 const shuffleBtn = document.getElementById('shuffleBtn');
 shuffleBtn.addEventListener('click', () => {
     isShuffleOn = !isShuffleOn;
@@ -667,32 +674,7 @@ currentSongAudio.addEventListener('ended', () => {
         }
         else if(isAutoPlayOn){
             if(isShuffleOn){
-                // console.log("ShuffleOn");
-                let currentPlaylistUl,currentPlaylistLength;
-
-                if(nextSongBtn != 0){
-                    currentPlaylistUl = nextSongBtn.parentElement.className;
-                    currentPlaylistLength = nextSongBtn.parentElement.children.length;
-                }else{
-                    currentPlaylistUl = prevSongBtn.parentElement.className;
-                    currentPlaylistLength = prevSongBtn.parentElement.children.length;
-                }
-
-                // console.log("UL: " + currentPlaylistUl);
-                // console.log("Length: " + currentPlaylistLength);
-                
-                if(randomListShuffle.length >= currentPlaylistLength){
-                    randomListShuffle = [];
-                }
-                while(true){
-                    let g = Math.floor(Math.random() * currentPlaylistLength);
-                    if(!randomListShuffle.includes(g)){
-                        // console.log(document.getElementsByClassName(currentPlaylistUl)[0]);
-                        document.getElementsByClassName(currentPlaylistUl)[0].children[g].children[1].click();
-                        randomListShuffle.push(g);
-                        break;
-                    }
-                }
+                PlayRandomSongShuffle();
             }
             else if(nextSongBtn != 0){
                 nextSongBtn.children[1].click();
@@ -723,6 +705,37 @@ repeatBtn.addEventListener('click', () => {
     }
     repeatBtn.classList.toggle("buttonTurnedOn");
 });
+
+// Play random song shuffle
+
+function PlayRandomSongShuffle(){
+    // console.log("ShuffleOn");
+    let currentPlaylistUl,currentPlaylistLength;
+
+    if(nextSongBtn != 0){
+        currentPlaylistUl = nextSongBtn.parentElement.className;
+        currentPlaylistLength = nextSongBtn.parentElement.children.length;
+    }else{
+        currentPlaylistUl = prevSongBtn.parentElement.className;
+        currentPlaylistLength = prevSongBtn.parentElement.children.length;
+    }
+
+    // console.log("UL: " + currentPlaylistUl);
+    // console.log("Length: " + currentPlaylistLength);
+    
+    if(randomListShuffle.length >= currentPlaylistLength){
+        randomListShuffle = [];
+    }
+    while(true){
+        let g = Math.floor(Math.random() * currentPlaylistLength);
+        if(!randomListShuffle.includes(g)){
+            // console.log(document.getElementsByClassName(currentPlaylistUl)[0]);
+            document.getElementsByClassName(currentPlaylistUl)[0].children[g].children[1].click();
+            randomListShuffle.push(g);
+            break;
+        }
+    }
+}
 
 // Set the seekbar and times relative to the songs current time
 currentSongAudio.addEventListener('timeupdate', () =>{
