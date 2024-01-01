@@ -1109,10 +1109,6 @@ function setDarkTheme(clicked){
     }
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(20, 15, 31, 1)');
 
-    document.getElementsByName("accountPhoto").forEach((photo) => {
-        photo.style.filter = "invert(0) brightness(1)";
-    })
-
     accountTheme = "Dark";
 }
 
@@ -1151,10 +1147,6 @@ function setLightTheme(clicked){
         document.documentElement.style.setProperty('--footerBg', 'rgba(222, 213, 255, 0.8)');
     }
     document.documentElement.style.setProperty('--footerBgHO', 'rgba(192, 179, 219, 1)');
-
-    document.getElementsByName("accountPhoto").forEach((photo) => {
-        photo.style.filter = "invert(1) brightness(0)";
-    })
 
     accountTheme = "Light";
 }
