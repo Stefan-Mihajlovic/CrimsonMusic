@@ -198,10 +198,9 @@ header button{
     border: none;
 }
 
-header button img{
-    width: 30px;
-    aspect-ratio: 1 / 1;
-    background-color: transparent;
+header button i{
+    font-size: 25px;
+    color: var(--offWhite);
 }
 
 header .buttonClicked{
