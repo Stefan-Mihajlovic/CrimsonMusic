@@ -384,21 +384,53 @@ function closeLoginScreen(){
 
 /* ----- LicenseS SCREEN ----- */
 
-function openLicenseScreen(){
-    let LicenseScreen = document.getElementsByClassName("LicenseScreen")[0];
+function openLicenseAndProfileScreen(isLicenseScreen){
+    let LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
-    LicenseScreen.classList.add("LicenseScreenOpen");
+    if(isLicenseScreen){
+        document.querySelector('.licensesSS').classList.remove('displayNone');
+        document.querySelector('.profileSS').classList.add('displayNone');
+
+        document.querySelector('.lapsTitle').innerHTML = 'Licenses';
+
+    }else{
+        document.querySelector('.licensesSS').classList.add('displayNone');
+        document.querySelector('.profileSS').classList.remove('displayNone');
+
+        document.querySelector('.lapsTitle').innerHTML = 'Profile';
+
+        document.querySelector('.photoPicker').classList.add('displayNone');
+        document.querySelector('.accPhotoWrapper').classList.remove('displayNone');
+
+    }
+
+    LicenseAndProfileScreen.classList.add("LicenseAndProfileScreenOpen");
 }
 
-function closeLicenseScreen(){
-    let LicenseScreen = document.getElementsByClassName("LicenseScreen")[0];
+function closeLicenseAndProfileScreen(){
+    let LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 
-    LicenseScreen.classList.remove("LicenseScreenOpen");
+    LicenseAndProfileScreen.classList.remove("LicenseAndProfileScreenOpen");
     setTimeout(() => {
-        LicenseScreen.style.left = 'auto';
+        LicenseAndProfileScreen.style.left = 'auto';
     }, 350);
+}
+
+function openPhotoPicker(){
+    document.querySelector('.photoPicker').classList.remove('displayNone');
+    document.querySelector('.accPhotoWrapper').classList.add('displayNone');
+}
+
+function setPPSS(src){
+    document.querySelector('.accPhotoWrapper').children[0].src = src;
+    let photoId = src.split('.png')[0].slice(-1);
+
+    document.querySelector('.accPhotoWrapper').children[0].setAttribute('data-photo-id', photoId);
+    
+    document.querySelector('.photoPicker').classList.add('displayNone');
+    document.querySelector('.accPhotoWrapper').classList.remove('displayNone');
 }
 
 // Switch from register to login screen
@@ -1267,9 +1299,9 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
 
 let offsetX;
 const loginScreen = document.getElementsByClassName("loginScreen")[0];
-const LicenseScreen = document.getElementsByClassName("LicenseScreen")[0];
+const LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
 const closeLoginScreenBtn = document.getElementById("closeLoginScreen");
-const closeLicenseScreenBtn = document.getElementById("closeLicenseScreen");
+const closeLicenseAndProfileScreenBtn = document.getElementById("closeLicenseAndProfileScreen");
 let touchSideStarted = false;
 let currentSideCloseTouched = "";
 
@@ -1437,18 +1469,18 @@ const moveSide7 = (e) => {
     currentTouchPos = (e.touches[0].clientX - offsetX);
     moveStarted = true;
     // Update div pos based on new cursor pos
-    LicenseScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    LicenseAndProfileScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     // console.log("moved " + (e.touches[0].clientX - offsetX));
 }
 
-closeLicenseScreenBtn.addEventListener("touchstart", (e) => {
+closeLicenseAndProfileScreenBtn.addEventListener("touchstart", (e) => {
     e.preventDefault();
     // console.log("touched");
     // Calc the initial offset Values
-    offsetX = e.touches[0].clientX - LicenseScreen.offsetLeft;
-    LicenseScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
-    LicenseScreen.classList.add("playerMovable");
+    offsetX = e.touches[0].clientX - LicenseAndProfileScreen.offsetLeft;
+    LicenseAndProfileScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
+    LicenseAndProfileScreen.classList.add("playerMovable");
     document.addEventListener("touchmove", moveSide7);
     touchSideStarted = true;
     moveStarted = false;
@@ -1537,14 +1569,14 @@ document.addEventListener("touchend", () => {
             categoryScreen.classList.remove("playerMovable");
             makePlaylistScreen.classList.remove("playerMovable");
             bugReportScreen.classList.remove("playerMovable");
-            LicenseScreen.classList.remove("playerMovable");
+            LicenseAndProfileScreen.classList.remove("playerMovable");
             playlistScreen.style.left = '0';
             artistScreen.style.left = '0';
             categoryScreen.style.left = '0';
             loginScreen.style.left = '0';
             makePlaylistScreen.style.left = '0';
             bugReportScreen.style.left = '0';
-            LicenseScreen.style.left = '0';
+            LicenseAndProfileScreen.style.left = '0';
         }else{
             document.removeEventListener("touchmove", moveSide);
             document.removeEventListener("touchmove", moveSide2);
@@ -1560,14 +1592,14 @@ document.addEventListener("touchend", () => {
             categoryScreen.classList.remove("playerMovable");
             makePlaylistScreen.classList.remove("playerMovable");
             bugReportScreen.classList.remove("playerMovable");
-            LicenseScreen.classList.remove("playerMovable");
+            LicenseAndProfileScreen.classList.remove("playerMovable");
             playlistScreen.style.left = '0';
             artistScreen.style.left = '0';
             categoryScreen.style.left = '0';
             loginScreen.style.left = '0';
             makePlaylistScreen.style.left = '0';
             bugReportScreen.style.left = '0';
-            LicenseScreen.style.left = '0';
+            LicenseAndProfileScreen.style.left = '0';
             if(currentSideCloseTouched == "closePlaylistScreen"){
                 closePlaylistPage();
             }
@@ -1586,8 +1618,8 @@ document.addEventListener("touchend", () => {
             if(currentSideCloseTouched == "closeBugScreen"){
                 closeBugScreenF();
             }
-            if(currentSideCloseTouched == "closeLicenseScreen"){
-                closeLicenseScreen();
+            if(currentSideCloseTouched == "closeLicenseAndProfileScreen"){
+                closeLicenseAndProfileScreen();
             }
             touchSideStarted = false;
             moveStarted = false;

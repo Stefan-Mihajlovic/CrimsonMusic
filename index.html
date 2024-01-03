@@ -381,7 +381,7 @@
                 </div>
 
                 <hr>
-                <button class="toggleSection" onclick="event.preventDefault(); openLicenseScreen();">
+                <button class="toggleSection" onclick="event.preventDefault(); openLicenseAndProfileScreen();">
                     <div class="toggleText">
                         <h2>Licenses & Attribution</h2>
                         <h5>Includes all Licenses for the artwork used</h5>
@@ -390,16 +390,16 @@
                 </button>
             </form>
             <div class="loggedInScreen">
-                <section class="logOutSection">
+                <button class="accountSection" onclick="openLicenseAndProfileScreen(false)">
                     <div class="accountInfo">
-                        <img loading="lazy" name="accountPhoto" src="images/noUserImg.png" alt="userBanner">
+                        <img name="profilePhoto" src="images/profiles/1.png" alt="userBanner">
                         <div class="accountText">
                             <h2 name="accountName">Guest</h2>
-                            <h5 name="accountEmail">youarenotsuppsedtoseethis</h5>
+                            <h5 name="accountEmail">youarenotsupposedtoseethis</h5>
                         </div>
                     </div>
-                    <button type="button" id="logoutBtn">Log Out</button>
-                </section>
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
                 <hr>
                 <section class="themeSection">
                     <h2>Theme</h2>
@@ -457,7 +457,7 @@
                     <input id="pmToggle" type="checkbox" name="pmToggle" placeholder="Performance Mode Toggle">
                 </section>
                 <hr>
-                <button class="toggleSection" onclick="openLicenseScreen()">
+                <button class="toggleSection" onclick="openLicenseAndProfileScreen(true)">
                     <div class="toggleText">
                         <h2>Licenses & Attribution</h2>
                         <h5>Includes all Licenses for the artwork used</h5>
@@ -477,17 +477,20 @@
                     <h2>VERSION</h2>
                     <h5>Copyright © <span class="currentYear"></span>  |  <span style="color: var(--accentColor);">Crimson Music®</span> Version - 0.2.6  |  All Rights Reserved</h5>
                 </section>
+                <section class="logOutSection">
+                    <button type="button" id="logoutBtn">Log out</button>
+                </section>
             </div>
         </div>
     </div>
 
-    <div class="LicenseScreen">
-        <div class="closeCurrentScreen" id="closeLicenseScreen"></div>
+    <div class="LicenseAndProfileScreen">
+        <div class="closeCurrentScreen" id="closeLicenseAndProfileScreen"></div>
         <div class="pageBar">
-            <button type="button" onclick="closeLicenseScreen()"><i class="fa-solid fa-angle-left"></i></button>
-            <h2>Licenses</h2>
+            <button type="button" onclick="closeLicenseAndProfileScreen()"><i class="fa-solid fa-angle-left"></i></button>
+            <h2 class="lapsTitle">Licenses</h2>
         </div>
-        <div class="screenScrollable">
+        <div class="screenScrollable licensesSS">
             <a href="https://www.figma.com/@kristi_k0s" class="toggleSection">
                 <div class="toggleText">
                     <h2>Abstract shapes (liquid 2)</h2>
@@ -503,6 +506,25 @@
                 </div>
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
+        </div>
+        <div class="screenScrollable profileSS">
+           <form>
+                <div class="photoPicker displayNone">
+                    <img onclick="setPPSS(this.src)" src="images/profiles/1.png" alt="Profile Photo 1">
+                    <img onclick="setPPSS(this.src)" src="images/profiles/2.png" alt="Profile Photo 2">
+                    <img onclick="setPPSS(this.src)" src="images/profiles/3.png" alt="Profile Photo 3">
+                    <img onclick="setPPSS(this.src)" src="images/profiles/4.png" alt="Profile Photo 4">
+                    <img onclick="setPPSS(this.src)" src="images/profiles/5.png" alt="Profile Photo 5">
+                    <img onclick="setPPSS(this.src)" src="images/profiles/6.png" alt="Profile Photo 6">
+                </div>
+                <div class="accPhotoWrapper" onclick="openPhotoPicker()">
+                    <img name="profilePhoto" src="images/profiles/1.png" alt="Profile Photo">
+                    <i class="fa-solid fa-pen"></i>
+                </div>
+                <h2 name="accountName" class="usernameSS">Username</h2>
+                <h5 name="accountEmail">Email</h5>
+                <input type="submit" value="Save" id="saveAccount" onclick="">
+            </form>
         </div>
     </div>
 

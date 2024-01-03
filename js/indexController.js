@@ -34,9 +34,10 @@ const loginBtn = document.getElementById('loginBtn');
 
 let accountNames = document.getElementsByName('accountName');
 let accountEmails = document.getElementsByName('accountEmail');
+let accountPhotos = document.getElementsByName('profilePhoto');
 let accountUsername;
 let accountEmail;
-let accountPhoto;
+let profilePhoto;
 export let accountTheme = "Dark";
 
 let loggedIn = false;
@@ -88,6 +89,7 @@ function RegisterUser(){
                 Email: email.value,
                 Password: encPass(),
                 Playlists: "",
+                ProfilePhoto: "1",
                 LikedSongs: "",
                 AppTheme: "Dark",
                 FollowedArtists: "",
@@ -135,6 +137,16 @@ function AuthenticateUser(){
     })
 }
 
+function reloadUserPhotoAndUsername(){
+    const dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            loginUser(snapshot.val());
+        }
+    })
+}
+
 // Dekriptuj sifru
 
 function decPass(dbpass){
@@ -156,8 +168,16 @@ function loginUser(user){
     accountEmails.forEach((email) => {
         email.innerHTML = accountEmail;
     });
+    profilePhoto = user.ProfilePhoto;
+    accountPhotos.forEach((photo) => {
+        photo.src = `images/profiles/${profilePhoto}.png`;
+    });
     accountTheme = user.AppTheme;
     setLoggedInScreen();
+
+    LoadUserPlaylists();
+    LoadLikedPlaylists();
+    LoadUserFArtists();
 }
 
 function getUsername(){
@@ -178,6 +198,10 @@ function SignOutUser(){
     });
     accountEmails.forEach((email) => {
         email.innerHTML = accountEmail;
+    });
+    profilePhoto = "1";
+    accountPhotos.forEach((photo) => {
+        photo.src = `images/profiles/${profilePhoto}.png`;
     });
     location.reload();
     return false;
@@ -202,9 +226,6 @@ function seeIfUserIsSignedIn(){
     }
     else{
         loginUser(currentUser);
-        LoadUserPlaylists();
-        LoadLikedPlaylists();
-        LoadUserFArtists();
     }
 }
 
@@ -838,6 +859,7 @@ function followArtist(artistId){
                 let setLikedSongs = snapshot.val().LikedSongs;
                 let setPassword = snapshot.val().Password;
                 let setPlaylists = snapshot.val().Playlists;
+                let setProfilePhoto = snapshot.val().ProfilePhoto;
                 let setTheme = snapshot.val().AppTheme;
                 let setFollowedArtists = snapshot.val().FollowedArtists;
                 let setLikedPlaylists = snapshot.val().LikedPlaylists;
@@ -877,6 +899,7 @@ function followArtist(artistId){
                     LikedSongs: setLikedSongs,
                     Password: setPassword,
                     Playlists: setPlaylists,
+                    ProfilePhoto: setProfilePhoto,
                     AppTheme: setTheme,
                     FollowedArtists: newFollowedArtists,
                     LikedPlaylists: setLikedPlaylists
@@ -1175,6 +1198,7 @@ likePlaylistBtn.addEventListener('click', () => {
                 let setLikedSongs = snapshot.val().LikedSongs;
                 let setPassword = snapshot.val().Password;
                 let setPlaylists = snapshot.val().Playlists;
+                let setProfilePhoto = snapshot.val().ProfilePhoto;
                 let setTheme = snapshot.val().AppTheme;
                 let setLikedPlaylists = snapshot.val().LikedPlaylists;
                 let setFollowedArtists = snapshot.val().FollowedArtists;
@@ -1203,6 +1227,7 @@ likePlaylistBtn.addEventListener('click', () => {
                         LikedSongs: setLikedSongs,
                         Password: setPassword,
                         Playlists: setPlaylists,
+                        ProfilePhoto: setProfilePhoto,
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
                         LikedPlaylists: setLikedPlaylists
@@ -1228,6 +1253,7 @@ likePlaylistBtn.addEventListener('click', () => {
                         LikedSongs: setLikedSongs,
                         Password: setPassword,
                         Playlists: setPlaylists,
+                        ProfilePhoto: setProfilePhoto,
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
                         LikedPlaylists: setLikedPlaylists
@@ -1360,6 +1386,7 @@ function DBMakePl(){
                     let setLikedSongs = snapshot.val().LikedSongs;
                     let setPassword = snapshot.val().Password;
                     let setPlaylists = snapshot.val().Playlists;
+                    let setProfilePhoto = snapshot.val().ProfilePhoto;
                     let setTheme = snapshot.val().AppTheme;
                     let setLikedPlaylists = snapshot.val().LikedPlaylists;
                     let setFollowedArtists = snapshot.val().FollowedArtists;
@@ -1380,6 +1407,7 @@ function DBMakePl(){
                         LikedSongs: setLikedSongs,
                         Password: setPassword,
                         Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}"),
+                        ProfilePhoto: setProfilePhoto,
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
                         LikedPlaylists: setLikedPlaylists
@@ -1405,6 +1433,7 @@ function DBMakePl(){
                     let setLikedSongs = snapshot.val().LikedSongs;
                     let setPassword = snapshot.val().Password;
                     let setPlaylists = snapshot.val().Playlists;
+                    let setProfilePhoto = snapshot.val().ProfilePhoto;
                     let setTheme = snapshot.val().AppTheme;
                     let setFollowedArtists = snapshot.val().FollowedArtists;
                     let setLikedPlaylists = snapshot.val().LikedPlaylists;
@@ -1446,6 +1475,7 @@ function DBMakePl(){
                         Email: setEmail,
                         Password: setPassword,
                         Playlists: newSetPlaylists,
+                        ProfilePhoto: setProfilePhoto,
                         LikedSongs: setLikedSongs,
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
@@ -1855,6 +1885,7 @@ export function addSongToLiked(id, likeBtn){
                     let setEmail = snapshot.val().Email;
                     let setPassword = snapshot.val().Password;
                     let setPlaylists = snapshot.val().Playlists;
+                    let setProfilePhoto = snapshot.val().ProfilePhoto;
                     let setLikedSongs = snapshot.val().LikedSongs;
                     let setTheme = snapshot.val().AppTheme;
                     let setLikedPlaylists = snapshot.val().LikedPlaylists;
@@ -1877,6 +1908,7 @@ export function addSongToLiked(id, likeBtn){
                             Email: setEmail,
                             Password: setPassword,
                             Playlists: setPlaylists,
+                            ProfilePhoto: setProfilePhoto,
                             LikedSongs: setLikedSongs + id + ",",
                             AppTheme: setTheme,
                             FollowedArtists: setFollowedArtists,
@@ -1911,6 +1943,7 @@ export function addSongToLiked(id, likeBtn){
                             Email: setEmail,
                             Password: setPassword,
                             Playlists: setPlaylists,
+                            ProfilePhoto: setProfilePhoto,
                             LikedSongs: likedSongsArray.toString(),
                             AppTheme: setTheme,
                             LikedPlaylists: setLikedPlaylists,
@@ -2031,7 +2064,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
         clickedPlaylist.children[2].classList.add('greenCheck');
         let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
         let newSetPlaylists = "";
-        let setFollowedArtists;
+        let setFollowedArtists, setProfilePhoto;
 
         let dbRef = ref(realdb);
 
@@ -2088,6 +2121,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                     Email: setEmail,
                     Password: setPassword,
                     Playlists: newSetPlaylists,
+                    ProfilePhoto: setProfilePhoto,
                     LikedSongs: setLikedSongs,
                     AppTheme: setTheme,
                     FollowedArtists: setFollowedArtists,
@@ -2304,6 +2338,7 @@ deletePlaylistBtn.addEventListener('click', () => {
                 let setLikedSongs = snapshot.val().LikedSongs;
                 let setPassword = snapshot.val().Password;
                 let setPlaylists = snapshot.val().Playlists;
+                let setProfilePhoto = snapshot.val().ProfilePhoto;
                 let setTheme = snapshot.val().AppTheme;
                 let setFollowedArtists = snapshot.val().FollowedArtists;
                 let setLikedPlaylists = snapshot.val().LikedPlaylists;
@@ -2341,6 +2376,7 @@ deletePlaylistBtn.addEventListener('click', () => {
                     Email: setEmail,
                     Password: setPassword,
                     Playlists: newSetPlaylists,
+                    ProfilePhoto: setProfilePhoto,
                     LikedSongs: setLikedSongs,
                     AppTheme: setTheme,
                     FollowedArtists: setFollowedArtists,
@@ -2372,6 +2408,65 @@ editPlaylistBtn.addEventListener('click', () => {
 
     closePopup();
     OpenMakePlaylistScreen(true, playlistIdP, playlistNameP, playlistBannerP, playlistSongsP);
+})
+
+const saveAccountBtn = document.getElementById('saveAccount');
+saveAccountBtn .addEventListener('click', (e) => {
+    e.preventDefault();
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setLikedSongs = snapshot.val().LikedSongs;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            let setProfilePhoto = snapshot.val().ProfilePhoto;
+            let setTheme = snapshot.val().AppTheme;
+            let setFollowedArtists = snapshot.val().FollowedArtists;
+            let setLikedPlaylists = snapshot.val().LikedPlaylists;
+            setFollowedArtists = snapshot.val().FollowedArtists;
+            if(setFollowedArtists == undefined){
+                setFollowedArtists = "";
+            }
+            if(setLikedSongs == undefined){
+                setLikedSongs = "";
+            }
+            if(setLikedPlaylists == undefined){
+                setLikedPlaylists = "";
+            }
+            if(setPlaylists == undefined){
+                setPlaylists = "";
+            }
+
+            let newProfilePhoto = document.querySelector('.accPhotoWrapper').children[0].getAttribute('data-photo-id');
+            if(newProfilePhoto == undefined || newProfilePhoto == null){
+                newProfilePhoto = setProfilePhoto;
+            }
+
+            set(ref(realdb, "Users/"+currentUser.Username),
+            {
+                Username: setUsername,
+                Email: setEmail,
+                Password: setPassword,
+                Playlists: setPlaylists,
+                ProfilePhoto: newProfilePhoto,
+                LikedSongs: setLikedSongs,
+                AppTheme: setTheme,
+                FollowedArtists: setFollowedArtists,
+                setLikedPlaylists: setLikedPlaylists
+            })
+            .then(()=>{
+                alert("Successfully saved the profile!");
+                reloadUserPhotoAndUsername();
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            })
+        }
+    })
 })
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
