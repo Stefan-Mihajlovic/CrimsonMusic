@@ -168,7 +168,18 @@ function loginUser(user){
     accountEmails.forEach((email) => {
         email.innerHTML = accountEmail;
     });
-    reloadUserPhotoAndUsername();
+    
+    let dbRef = ref(realdb);
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setProfilePhoto = snapshot.val().ProfilePhoto;
+
+            accountPhotos.forEach((photo) => {
+                photo.src = `images/profiles/${setProfilePhoto}.png`;
+            })
+        }
+    })
+
     accountTheme = user.AppTheme;
     setLoggedInScreen();
 
