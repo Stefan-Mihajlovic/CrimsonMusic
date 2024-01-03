@@ -168,10 +168,7 @@ function loginUser(user){
     accountEmails.forEach((email) => {
         email.innerHTML = accountEmail;
     });
-    profilePhoto = user.ProfilePhoto;
-    accountPhotos.forEach((photo) => {
-        photo.src = `images/profiles/${profilePhoto}.png`;
-    });
+    reloadUserPhotoAndUsername();
     accountTheme = user.AppTheme;
     setLoggedInScreen();
 
