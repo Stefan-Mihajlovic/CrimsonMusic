@@ -376,6 +376,8 @@ function closeLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 
+    loginScreen.classList.remove("playerMovable");
+
     loginScreen.classList.remove("loginScreenOpen");
     setTimeout(() => {
         loginScreen.style.left = 'auto';
@@ -411,6 +413,8 @@ function openLicenseAndProfileScreen(isLicenseScreen){
 function closeLicenseAndProfileScreen(){
     let LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+
+    LicenseAndProfileScreen.classList.remove("playerMovable");
 
     LicenseAndProfileScreen.classList.remove("LicenseAndProfileScreenOpen");
     setTimeout(() => {
@@ -988,6 +992,9 @@ function OpenMakePlaylistScreen(editing, playlistIdP, playlistNameP, playlistBan
 function CloseMakePlaylistScreen(){
     makePlScreen.classList.remove("makePlaylistScreenOpen");
     makePlScreen.classList.remove('screenOpenOnTop');
+
+    makePlaylistScreen.classList.remove("playerMovable");
+
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 }
 
@@ -1878,6 +1885,8 @@ function closeBugScreenF(){
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 
     bugReportScreen.classList.remove("bugReportScreenOpen");
+    
+    bugReportScreen.classList.remove("playerMovable");
 
     isBugReportScreenOpen = false;
 }

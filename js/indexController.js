@@ -648,6 +648,9 @@ export function closeCategoryPage(){
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
     categoryPage.classList.remove("categoryPageOpen");
     isCategoryPageOpen = false;
+
+    categoryPage.classList.remove("playerMovable");
+
     categoryPage.classList.remove('screenOpenOnTop');
 }
 
@@ -737,6 +740,9 @@ export function closeArtistPage(){
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
     artistScreen.classList.remove("artistScreenOpen");
     artistScreen.classList.remove('screenOpenOnTop');
+
+    artistScreen.classList.remove("playerMovable");
+
     isArtistPageOpen = false;
 }
 
@@ -1184,6 +1190,8 @@ export function closePlaylistPage(){
     let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
     playlistScreen.classList.remove("playlistScreenOpen");
     isPlaylistPageOpen = false;
+
+    playlistScreen.classList.remove("playerMovable");
 
     playlistScreen.classList.remove('screenOpenOnTop');
 }
