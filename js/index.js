@@ -188,6 +188,8 @@ redanimToggle.addEventListener('click', () => {
         document.querySelector('.playlistScreen').classList.add('noAnimTransitions');
         document.querySelector('.makePlaylistScreen').classList.add('noAnimTransitions');
         document.querySelector('.loginScreen').classList.add('noAnimTransitions');
+        document.querySelector('.bugReportScreen').classList.add('noAnimTransitions');
+        document.querySelector('.LicenseAndProfileScreen').classList.add('noAnimTransitions');
         document.getElementsByClassName('loggedInScreen')[0].classList.add('noAnimTransitions');
         
         const h2s = document.querySelectorAll('h2');
@@ -236,6 +238,8 @@ redanimToggle.addEventListener('click', () => {
         document.querySelector('.playlistScreen').classList.remove('noAnimTransitions');
         document.querySelector('.makePlaylistScreen').classList.remove('noAnimTransitions');
         document.querySelector('.loginScreen').classList.remove('noAnimTransitions');
+        document.querySelector('.bugReportScreen').classList.remove('noAnimTransitions');
+        document.querySelector('.LicenseAndProfileScreen').classList.remove('noAnimTransitions');
         document.getElementsByClassName('loggedInScreen')[0].classList.remove('noAnimTransitions');
         
         const h2s = document.querySelectorAll('h2');
