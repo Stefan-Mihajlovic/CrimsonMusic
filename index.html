@@ -54,19 +54,19 @@
                 <h2 class="vaultH2">VAULT</h2>
                 <button id="openTheVaultBtn"><i class="fa-solid fa-play"></i>Play<div class="blob"></div></button>
                 <ul class="vaultEmotions vaultItemOff">
-                    <li class="emotionItem" onclick="clickEffect(this)">
+                    <li class="emotionItem">
                         <h3>Party</h3>
                     </li>
-                    <li class="emotionItem" onclick="clickEffect(this)">
+                    <li class="emotionItem">
                         <h3>Focus</h3>
                     </li>
-                    <li class="emotionItem" onclick="clickEffect(this)">
+                    <li class="emotionItem">
                         <h3>Melancholy</h3>
                     </li>
-                    <li class="emotionItem" onclick="clickEffect(this)">
+                    <li class="emotionItem">
                         <h3>Chill</h3>
                     </li>
-                    <li class="emotionItem" onclick="clickEffect(this)">
+                    <li class="emotionItem">
                         <h3>Motivation</h3>
                     </li>
                 </ul>
@@ -95,7 +95,7 @@
             <h2 class="catTitle">Crimson Desktop is out!</h2>
             <h5 class="catDesc">You can download it on your Windows PC today!</h5>
             <img src="images/CrimsonMusicDesktopAd.png" alt="Crimson Music Desktop Ad">
-            <a onclick="clickEffect(this)" href="https://www.mediafire.com/file/1labefybsv14zn6/crimsonmusic-0.1.2+Setup.exe/file">Download</a>
+            <a href="https://www.mediafire.com/file/1labefybsv14zn6/crimsonmusic-0.1.2+Setup.exe/file">Download</a>
         </section>
 
         <section class="bugSection">
@@ -108,7 +108,7 @@
         <div class="searchBar" id="searchScreenBar">
             <form onsubmit="event.preventDefault()">
                 <input type="search" name="search" id="searchInput" placeholder="Search away...">
-                <input onclick="clickEffect(this)" style="font-family: FontAwesome" id="submitSearch" type="submit" value="&#xf002;">
+                <input style="font-family: FontAwesome" id="submitSearch" type="submit" value="&#xf002;">
             </form>
             <div class="SearchTypeChips">
                 <div class="searchChip">
@@ -147,7 +147,7 @@
         <div id="searchBarYours" class="searchBar">
             <form onsubmit="event.preventDefault()">
                 <input type="search" name="search" id="searchYoursInput" placeholder="Search your playlists and artists...">
-                <input onclick="clickEffect(this)" style="font-family: FontAwesome" id="submitYoursSearch" type="submit" value="&#xf002;">
+                <input style="font-family: FontAwesome" id="submitYoursSearch" type="submit" value="&#xf002;">
             </form>
         </div>
         <button class="songItem favoritesItem" onclick="openLikedSongs();">
@@ -190,7 +190,7 @@
             </div>
         </div>
         <div class="pageBar">
-            <button id="closeBigPlayerBtn" type="button" onclick="clickEffect(this); closeBigPlayer()"><i class="fa-solid fa-angle-down"></i></button>
+            <button id="closeBigPlayerBtn" type="button" onclick="closeBigPlayer()"><i class="fa-solid fa-angle-down"></i></button>
             <h2>Playing from <span id="playingFromSpan">Home</span></h2>
             <button id="miniPlayerPopupBtn"><i class="fa-solid fa-bars"></i></button>
         </div>
@@ -327,7 +327,7 @@
                     </div>
                     <div class="artistBtns">
                         <button id="likePlaylist"><i class="fa-regular fa-heart"></i></button>
-                        <button id="playPlaylistBtn" onclick="clickEffect(); playPlaylist();"><i class="fa-solid fa-play"></i> Play</button>
+                        <button id="playPlaylistBtn" onclick="playPlaylist();"><i class="fa-solid fa-play"></i> Play</button>
                     </div>
                     <div class="darken"></div>
                 </div>
@@ -555,11 +555,11 @@
                 </div>
             </div>
             <ul class="songPopupBody">
-                <li class="popupItem" onclick="clickEffect(this)" id="likeSongBtn">
+                <li class="popupItem" id="likeSongBtn">
                     <i class="fa-regular fa-heart"></i>
                     <h5>Add to favorites</h5>
                 </li>
-                <li class="popupItem" onclick="clickEffect(this)" id="seeMoreFromBtn">
+                <li class="popupItem" id="seeMoreFromBtn">
                     <i class="fa-regular fa-user"></i>
                     <h5>See more from <span name="popupArtist">SongArtist</span></h5>
                 </li>
@@ -573,11 +573,11 @@
                 </li>
             </ul>
             <ul class="playlistPopupBody">
-                <li class="popupItem" onclick="clickEffect(this)" id="deletePlaylistBtn">
+                <li class="popupItem" id="deletePlaylistBtn">
                     <i class="fa-solid fa-trash-can"></i>
                     <h5>Delete playlist</h5>
                 </li>
-                <li class="popupItem" onclick="clickEffect(this)" id="editPlaylistBtn">
+                <li class="popupItem" id="editPlaylistBtn">
                     <i class="fa-solid fa-pen-to-square"></i>
                     <h5>Edit playlist</h5>
                 </li>
