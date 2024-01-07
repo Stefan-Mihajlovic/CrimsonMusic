@@ -342,14 +342,14 @@ main{
 .vibeVaultItem button{
     min-width: 140px;
     max-width: 200px;
-    aspect-ratio: 2.7 / 1 !important;
+    aspect-ratio: 2.5 / 1 !important;
     background-color: transparent;
     color: #DCD6F7;
-    font-size: 15px;
+    font-size: 13px;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     box-shadow: 0px 0px 25px 1px rgba(104, 76, 126, 0.6);
-    border-radius: 10px;
+    border-radius: 15px;
     border: 1px solid #DCD6F7;
     transition: all .2s ease-in-out;
     display: flex;
@@ -361,6 +361,7 @@ main{
 .vibeVaultItem button i{
     position: relative;
     bottom: auto;
+    color: #DCD6F7;
     opacity: 1;
     font-size: 20px !important;
     margin-top: 1px;
@@ -428,12 +429,13 @@ main{
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding-inline: 10px;
+    padding: 20px;
+    padding-block: 0px;
 }
 
 .yourPlaylists, .yourLPlaylists{
-    width: calc(100% - 18px) !important;
-    margin-left: 10px !important;
+    width: calc(100% - 40px) !important;
+    margin-left: 20px !important;
 }
 
 .categoryRecommendedSongs, .yourPlaylists, .yourLPlaylists{
@@ -441,15 +443,15 @@ main{
 }
 
 .songItem{
-    background-color: transparent;
+    background-color: rgba(190, 141, 255, 0.06);
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 7px;
-    padding-inline: 7px;
     border-radius: 10px;
     position: relative;
+    box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.15);
     transition: all .3s ease-in-out;
     /* animation: showUp 0.3s ease-in-out; */
     overflow: hidden;
@@ -550,7 +552,7 @@ main{
 }
 
 .songVisualizer span{
-    height: 20%;
+    height: 50%;
     width: 4px;
     background-color: #DCD6F7;
     border-radius: 20px;
@@ -577,13 +579,13 @@ main{
 }
 
 @keyframes visSpanAnim {
-    0%{ height: 20%; }
-    50%{ height: 50%; }
-    100%{ height: 20%; }
+    0%{ height: 50%; }
+    50%{ height: 20%; }
+    100%{ height: 50%; }
 }
 
 .songPlayingLi{
-    background-image: linear-gradient(270deg, rgba(141, 111, 252, 0.05), rgba(141, 111, 252, 0.15));
+    background-image: linear-gradient(270deg, transparent, rgba(141, 111, 252, 0.15));
 }
 
 .songPlayingLi .songInfo img{
@@ -598,21 +600,7 @@ main{
 }
 
 .songPlayingLiPaused{
-    background: linear-gradient(270deg, rgba(0, 0, 0, 0), rgba(141, 111, 252, 0.15));
-}
-
-.songPlayingLiPaused .songVisualizer{
-    opacity: 1 !important;
-}
-
-.songPlayingLiPaused .songInfo img{
-    opacity: 0.8 !important;
-    filter: brightness(0.3) !important;
-}
-
-.songPlayingLiPaused .songVisualizer span{
-    animation: none !important;
-    height: 20%;
+    background: linear-gradient(270deg, rgba(172, 111, 252, 0.05), rgba(141, 111, 252, 0.15));
 }
 
 /* ----- Ad Section ----- */
@@ -697,6 +685,9 @@ main{
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    background-color: transparent !important;
+    padding: 5px;
+    border: 2px solid var(--offWhite);
 }
 
 .yourFArtists .artistItem img{
@@ -1159,11 +1150,14 @@ main{
 }
 
 .profileSS form .accPhotoWrapper img{
+    background-color: transparent;
     width: calc(40vw + 10px);
     aspect-ratio: 1 / 1;
     object-fit: cover;
     max-width: 250px;
     border-radius: 50%;
+    border: 2px solid var(--offWhite);
+    padding: 5px;
     filter: drop-shadow(0px 0px 50px rgba(141, 111, 252, 0.2));
 }
 
@@ -1173,8 +1167,8 @@ main{
     border-radius: 10px;
     padding: 10px;
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    bottom: 10px;
+    right: 10px;
 }
 
 .profileSS h5{
@@ -1391,7 +1385,10 @@ hr{
     width: 45px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    border: 2px solid var(--offWhite);
     border-radius: 50%;
+    background-color: transparent !important;
+    padding: 3px;
     box-shadow: 0px 0px 125px var(--accentColor);
 }
 
