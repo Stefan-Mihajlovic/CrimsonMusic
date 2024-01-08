@@ -1242,7 +1242,7 @@ main{
     padding-top: calc(env(safe-area-inset-top) + 60px);
 }
 
-.loginForm{
+.loginForm, .bugReportForm{
     padding: 10px;
     margin: auto;
     margin-top: 25px;
@@ -1251,10 +1251,18 @@ main{
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    min-width: 375px;
+    min-width: calc(100vw - 20px);
     max-width: 500px;
     transition: all .4s ease-in-out;
     transform: translateX(100%);
+}
+
+.bugReportForm{
+    transform: translateX(0%);
+    margin-top: 0px;
+    padding: 20px;
+    gap: 10px;
+    margin: 0px;
 }
 
 .loginScreenOpen .loginForm{
@@ -1271,7 +1279,7 @@ main{
     margin-bottom: 10px;
 }
 
-.loginForm input{
+.loginForm input, .bugReportForm input, .bugReportForm textarea{
     width: 100%;
     padding: 12.5px;
     border-radius: 7.5px;
@@ -1282,6 +1290,31 @@ main{
     background-color: var(--footerBg);
     color: var(--offWhite);
     margin-top: 7px;
+}
+
+.bugReportForm input, .bugReportForm textarea{
+    margin-top: 0px;
+}
+
+.bugReportForm input[type="submit"]{
+    color: var(--bodyBg);
+}
+
+.bugReportForm textarea{
+    min-width: 100%;
+    min-height: 40vh;
+    resize: none;
+}
+
+.bugReportForm i{
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-height: 550px) {
+    .bugReportForm i{
+        display: none;
+    }
 }
 
 .loginForm h5{

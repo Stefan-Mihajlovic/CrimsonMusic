@@ -2485,6 +2485,60 @@ saveAccountBtn .addEventListener('click', (e) => {
     })
 })
 
+const bugReportForm = document.querySelector('.bugReportForm');
+bugReportForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let bugSubject = document.getElementById('bugSubject').value;
+    let bugDescription = document.getElementById('bugDescription').value;
+    if(bugDescription.length < 10){
+        alert('Description is too short. Describe the issue a bit more!');
+    }else{
+        let dbRef = ref(realdb);
+
+        get(child(dbRef, "BugReports/"+currentUser.Username)).then((snapshot)=>{
+            if(snapshot.exists()){
+
+                let setBugs = snapshot.val().Bugs;
+                let bugsLength = setBugs.split('{').length;
+                if(setBugs == null || setBugs == undefined){
+                    setBugs = "";
+                }
+                bugsLength++;
+                
+                let setBugsNew = setBugs + "{" + bugsLength + "}" + bugSubject + "}" + bugDescription + "}";
+                if(setBugsNew.length > 10000){
+                    setBugsNew = "";
+                }
+
+                set(ref(realdb, "BugReports/"+currentUser.Username),
+                {
+                    Bugs: setBugsNew
+                })
+                .then(()=>{
+                    alert('Bug submitted. Thank you!');
+                })
+                .catch((error)=>{
+                    alert("error "+error);
+                })
+            }else{
+                let setBugs = 1 + "}" + bugSubject + "}" + bugDescription + "}";
+    
+                set(ref(realdb, "BugReports/"+currentUser.Username),
+                {
+                    Bugs: setBugs
+                })
+                .then(()=>{
+                    alert('Bug submitted. Thank you!');
+                })
+                .catch((error)=>{
+                    alert("error "+error);
+                })
+            }
+        })
+    }
+});
+
 // ----- CALLING ALL NECESSARY FUNCTIONS
 
 getUsername();
