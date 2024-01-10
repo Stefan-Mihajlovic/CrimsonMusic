@@ -1242,28 +1242,30 @@ let isLyricsOn = false;
 
 playerOpenDiv.addEventListener("touchstart", (e) => {
     // console.log("touched");
-    document.getElementsByTagName("nav")[0].classList.add("navClosed");
-    movablePlayer.classList.add("playerOpen");
-    if(reduceAnimations){
-        document.querySelector('.bigControls').classList.add('noPointerEvents');
-        setTimeout(() => {
-            document.querySelector('.bigControls').classList.remove('noPointerEvents');
-        }, 200);
-    }
-    // Calc the initial offset Values
     if(window.innerWidth < window.innerHeight){
+        document.getElementsByTagName("nav")[0].classList.add("navClosed");
+        movablePlayer.classList.add("playerOpen");
+        if(reduceAnimations){
+            document.querySelector('.bigControls').classList.add('noPointerEvents');
+            setTimeout(() => {
+                document.querySelector('.bigControls').classList.remove('noPointerEvents');
+            }, 200);
+        }
+
+        // Calc the initial offset Values
         offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
         movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
         movablePlayer.classList.add("playerMovable");
+
+        if(isLyricsOn){
+            document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
+        }
+        if(window.innerWidth < window.innerHeight){
+            document.addEventListener("touchmove", move);
+        }
+        playerTouchStarted = true;
+        moveStarted = false;
     }
-    if(isLyricsOn){
-        document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
-    }
-    if(window.innerWidth < window.innerHeight){
-        document.addEventListener("touchmove", move);
-    }
-    playerTouchStarted = true;
-    moveStarted = false;
 })
 
 // ----- playerDiv 2
@@ -1543,7 +1545,6 @@ document.addEventListener("touchend", () => {
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
             isPlayerOpen = true;
-            // console.log("less than 350!");
         }else{
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
             movablePlayer.classList.remove("playerOpen");
@@ -1551,7 +1552,6 @@ document.addEventListener("touchend", () => {
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }
-        // console.log("touch ended");
         playerTouchStarted = false;
         if(!moveStarted){
             movablePlayer.classList.add("playerOpen");
