@@ -1359,7 +1359,7 @@ function playerSelectedSongVault(songName){
             imageURL = snapshot.val().ImgURL;
             songColor = snapshot.val().Color;
 
-            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,songColor,"TheVault",0);
+            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,songColor,"TheVault",'',name);
         }
     })
 }
