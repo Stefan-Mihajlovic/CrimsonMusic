@@ -799,7 +799,7 @@ main{
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 5px;
+    gap: 7px;
     z-index: 9;
     transition: all .1s ease-in-out;
 }

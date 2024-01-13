@@ -44,19 +44,19 @@
                 <h2 class="vaultH2">VAULT</h2>
                 <button id="openTheVaultBtn"><i class="fa-solid fa-play"></i></button>
                 <ul class="vaultEmotions vaultItemOff">
-                    <li class="emotionItem">
+                    <li class="emotionItem" onclick="vaultEmotionLoad(this.children[0].innerHTML)">
                         <h3>Party</h3>
                     </li>
-                    <li class="emotionItem">
+                    <li class="emotionItem" onclick="vaultEmotionLoad(this.children[0].innerHTML)">
                         <h3>Focus</h3>
                     </li>
-                    <li class="emotionItem">
+                    <li class="emotionItem" onclick="vaultEmotionLoad(this.children[0].innerHTML)">
                         <h3>Melancholy</h3>
                     </li>
-                    <li class="emotionItem">
+                    <li class="emotionItem" onclick="vaultEmotionLoad(this.children[0].innerHTML)">
                         <h3>Chill</h3>
                     </li>
-                    <li class="emotionItem">
+                    <li class="emotionItem" onclick="vaultEmotionLoad(this.children[0].innerHTML)">
                         <h3>Motivation</h3>
                     </li>
                 </ul>
@@ -615,7 +615,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -637,6 +637,7 @@
         window.doesSongHaveLyrics = doesSongHaveLyrics;
         window.openArtistPageByName = openArtistPageByName;
         window.UserSignedIn = UserSignedIn;
+        window.vaultEmotionLoad = vaultEmotionLoad;
     </script>
 
     <audio src="https://firebasestorage.googleapis.com/v0/b/crimsonmusic-b97d9.appspot.com/o/Songs%2F1.mp3?alt=media&token=54e2f635-d62d-491f-aaab-44ba18c77f65" id="currentSong"></audio>

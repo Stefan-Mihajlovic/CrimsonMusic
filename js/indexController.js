@@ -49,7 +49,7 @@ function isEmptyOrSpaces(str){
 }
 
 function Validation(){
-    let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook)\.com$/;
+    let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook|icloud)\.com$/;
     let userregex = /^[a-zA-Z0-9]{4,}$/;
 
     if(isEmptyOrSpaces(username.value) || isEmptyOrSpaces(email.value) ||
@@ -64,7 +64,7 @@ function Validation(){
     }
 
     if(!userregex.test(username.value)){
-        alert('Username is not valid and\nhas to have more than 5 characters!');
+        alert('Username is not valid and has to have more than 5 characters!');
         return false;
     }
 
@@ -1318,6 +1318,8 @@ function IsPPlaylistLiked(id){
 
 // ----- THE VAULT
 
+let vaultSongArray = [];
+
 let isTheVaultOn = false;
 let vaultH2Text = ['Your Mood, Choose!','Pick Your Feels!','Moody, are we?','Mood Check: Go!','Feel Like Choosing?'];
 
@@ -1332,21 +1334,17 @@ openTheVaultBtn.addEventListener('click', () => {
 
     let g = Math.floor(Math.random() * 5);
     vaultH2.innerHTML = vaultH2Text[g];
-    for(const child of vaultEmotions.children){
-        child.addEventListener('click', () => {
-            document.getElementById("currentSong").focus();
-            playRandomSongForTheVault();
-    
-            vaultEmotions.classList.add('vaultItemOff');
-            openTheVaultBtn.classList.remove('vaultItemOff2');
-
-            vaultH2.innerHTML = `VAULT`;
-        
-            isTheVaultOn = true;
-        })
-    }
 
 });
+
+export function vaultEmotionLoad(categ){
+    playRandomSongForTheVault(categ);
+
+    document.querySelector('.vaultEmotions').classList.add('vaultItemOff');
+    openTheVaultBtn.classList.remove('vaultItemOff2');
+
+    document.querySelector('.vaultH2').innerHTML = `VAULT`;
+}
 
 function playerSelectedSongVault(songName){
     let name = songName;
@@ -1366,9 +1364,26 @@ function playerSelectedSongVault(songName){
     })
 }
 
-export function playRandomSongForTheVault(){
-    setTheVault();
-    playerSelectedSongVault();
+export function playRandomSongForTheVault(categ){
+    if(categ != undefined || categ != null){
+        setTheVault();
+
+        let dbRef = ref(realdb);
+
+        get(child(dbRef, "SongsByMoods/"+categ)).then((snapshot)=>{
+            if(snapshot.exists()){
+                let setSongs = snapshot.val().Songs;
+                setSongs += "";
+                vaultSongArray = setSongs.split(',');
+
+                let songToPlayV = Math.floor(Math.random() * vaultSongArray.length);
+                playerSelectedSongVault(vaultSongArray[songToPlayV]);
+            }
+        })
+    }else{
+        let songToPlayV = Math.floor(Math.random() * vaultSongArray.length);
+        playerSelectedSongVault(vaultSongArray[songToPlayV]);
+    }
 }
 
 // Make a playlist
