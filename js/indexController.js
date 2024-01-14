@@ -1531,7 +1531,7 @@ function DBMakePl(){
                         LikedSongs: setLikedSongs,
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
-                        setLikedPlaylists: setLikedPlaylists
+                        LikedPlaylists: setLikedPlaylists
                     })
                     .then(()=>{
                         alert("Playlist saved");
@@ -2177,7 +2177,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                     LikedSongs: setLikedSongs,
                     AppTheme: setTheme,
                     FollowedArtists: setFollowedArtists,
-                    setLikedPlaylists: setLikedPlaylists
+                    LikedPlaylists: setLikedPlaylists
                 })
                 .then(()=>{
                     LoadUserPlaylists();
@@ -2432,7 +2432,7 @@ deletePlaylistBtn.addEventListener('click', () => {
                     LikedSongs: setLikedSongs,
                     AppTheme: setTheme,
                     FollowedArtists: setFollowedArtists,
-                    setLikedPlaylists: setLikedPlaylists
+                    LikedPlaylists: setLikedPlaylists
                 })
                 .then(()=>{
                     LoadUserPlaylists();
@@ -2508,7 +2508,7 @@ saveAccountBtn .addEventListener('click', (e) => {
                 LikedSongs: setLikedSongs,
                 AppTheme: setTheme,
                 FollowedArtists: setFollowedArtists,
-                setLikedPlaylists: setLikedPlaylists
+                LikedPlaylists: setLikedPlaylists
             })
             .then(()=>{
                 alert("Successfully saved the profile!");
@@ -2578,11 +2578,12 @@ bugReportForm.addEventListener('submit', (e) => {
 async function loadApp(){
     let result = await loadAppNumbers();
 
-    generateSongs();
-    generateArtists();
-    generatePlaylists();
-    generateCategories();
-    generateThisMonthsFeature();
+    // generateSongs();
+    // generateArtists();
+    // generatePlaylists();
+    // generateCategories();
+    // generateThisMonthsFeature();
+    document.querySelector('.loaderWrapper').classList.add('displayNone');
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
