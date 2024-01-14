@@ -1,8 +1,8 @@
 setHomeScreen();
 
-let brojPesama = 52;
-let brojArtista = 25;
-let brojPlejlista = 6;
+let brojPesama;
+let brojArtista;
+let brojPlejlista;
 let brojKategorija = 14;
 
 let isPerformanceModeOn = false;

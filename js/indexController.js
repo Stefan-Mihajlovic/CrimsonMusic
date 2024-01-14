@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.3/firebase
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-analytics.js";
 import { } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-storage.js';
-import { getDatabase, ref, set, child, get, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
+import { getDatabase, ref, set, child, get, update, remove, onValue } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
 import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
 
 // Firebase Config with all IDs
@@ -23,6 +23,27 @@ const provider = new GoogleAuthProvider(app);
 const auth = getAuth(app);
 
 const realdb = getDatabase();
+
+function loadAppNumbers(){
+    return new Promise(resolve => {
+        onValue(ref(realdb, 'Songs/'), (snapshot) => {
+            const data = snapshot.val();
+            brojPesama = data.length - 1;
+
+            onValue(ref(realdb, 'Artists/'), (snapshot) => {
+                const data = snapshot.val();
+                brojArtista = data.length - 1;
+
+                onValue(ref(realdb, 'PublicPlaylists/'), (snapshot) => {
+                    const data = snapshot.val();
+                    brojPlejlista = data.length - 1;
+
+                    resolve(true);
+                })
+            })
+        });
+    })
+}
 
 /* ----- Register User ----- */
 
@@ -2554,12 +2575,18 @@ bugReportForm.addEventListener('submit', (e) => {
     }
 });
 
+async function loadApp(){
+    let result = await loadAppNumbers();
+
+    generateSongs();
+    generateArtists();
+    generatePlaylists();
+    generateCategories();
+    generateThisMonthsFeature();
+}
+
 // ----- CALLING ALL NECESSARY FUNCTIONS
 
 getUsername();
 seeIfUserIsSignedIn();
-generateSongs();
-generateArtists();
-generatePlaylists();
-generateCategories();
-generateThisMonthsFeature();
+loadApp();
