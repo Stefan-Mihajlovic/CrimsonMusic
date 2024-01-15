@@ -2575,12 +2575,12 @@ bugReportForm.addEventListener('submit', (e) => {
 async function loadApp(){
     let result = await loadAppNumbers();
 
-    // generateSongs();
+    generateSongs();
     generateArtists();
-    // generatePlaylists();
-    // generateCategories();
-    // generateThisMonthsFeature();
-    document.querySelector('.loaderWrapper').classList.add('displayNone');
+    generatePlaylists();
+    generateCategories();
+    generateThisMonthsFeature();
+    // document.querySelector('.loaderWrapper').classList.add('displayNone');
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
