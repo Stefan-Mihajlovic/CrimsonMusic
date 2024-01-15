@@ -1905,7 +1905,7 @@ a.toggleSection i{
     box-shadow: none !important;
 }
 
-.artistTopTracks, .playlistSongsList{
+.artistSongs, .playlistSongsList{
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -747,7 +747,6 @@ function findSongOfCategory(songName, inputText){
 
 // ----- ARTIST PAGE SHANANIGANS
 
-let latestReleaseLi = "";
 let isArtistPageOpen = false;
 let screenScrollables = document.getElementsByClassName("screenScrollable");
 
@@ -995,11 +994,11 @@ function followArtist(artistId){
 }
 
 function SetTheLatestRelease(artist){
-    latestReleaseLi = "";
+    let latestReleaseLi = "";
     let dbRef = ref(realdb);
 
-    for (let i = brojPesama; i > 0; i--) {
-        while(latestReleaseLi === ""){
+    for (let i = 0; i < brojPesama; i++) {
+            // console.log(i);
             get(child(dbRef, "Songs/"+i)).then((snapshot)=>{
                 if(snapshot.exists()){
                     songCreator = snapshot.val().Creator;
@@ -1033,8 +1032,6 @@ function SetTheLatestRelease(artist){
                     }
                 }
             })
-            break;
-        }    
     }
 }
 
@@ -1067,12 +1064,12 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
     })
 }
 
-let artistTopTracksList = document.getElementsByClassName("artistTopTracks")[0];
+let artistSongs = document.getElementsByClassName("artistSongs")[0];
 
 function GenerateOneSongFromArtist(songName,artist){
     let name = songName;
 
-    artistTopTracksList.innerHTML = "";
+    artistSongs.innerHTML = "";
 
     let dbRef = ref(realdb);
 
@@ -1103,7 +1100,7 @@ function GenerateOneSongFromArtist(songName,artist){
                         <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                 </li>`;
-                artistTopTracksList.innerHTML += currentLI;
+                artistSongs.innerHTML += currentLI;
             }
         }
     })
@@ -2578,12 +2575,12 @@ bugReportForm.addEventListener('submit', (e) => {
 async function loadApp(){
     let result = await loadAppNumbers();
 
-    generateSongs();
+    // generateSongs();
     generateArtists();
-    generatePlaylists();
-    generateCategories();
-    generateThisMonthsFeature();
-    // document.querySelector('.loaderWrapper').classList.add('displayNone');
+    // generatePlaylists();
+    // generateCategories();
+    // generateThisMonthsFeature();
+    document.querySelector('.loaderWrapper').classList.add('displayNone');
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
