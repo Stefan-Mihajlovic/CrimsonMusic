@@ -2396,7 +2396,7 @@ a.toggleSection i{
     transition: all .2s ease-out, padding-top 0s;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(300%) translateZ(0);
+    transform: translateZ(0);
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
     -ms-transform: translateZ(0);
@@ -2897,10 +2897,10 @@ a.toggleSection i{
     align-items: center;
     justify-content: center;
     z-index: 2;
-    transform: translateY(50%);
     transition: all .1s linear;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), transparent);
     opacity: 0;
+    pointer-events: none;
 }
 
 .playerOpen .bigPlayer .bigControls{
@@ -2908,7 +2908,7 @@ a.toggleSection i{
 }
 
 .playerOpen .bigPlayer .bigControls{
-    transform: translateY(0%);
+    pointer-events: all;
 }
 
 .bigControls .bipCC{
