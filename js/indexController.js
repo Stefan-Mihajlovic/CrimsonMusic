@@ -21,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
 const realdb = getDatabase();
 
@@ -2581,6 +2582,46 @@ async function loadApp(){
     generateCategories();
     generateThisMonthsFeature();
     // document.querySelector('.loaderWrapper').classList.add('displayNone');
+}
+
+export function setSongBanner(imageURL){
+    // Get a reference to the canvas element
+    const canvas = document.getElementById('songBannerCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const imagePath = imageURL;
+
+    const storageRef = sRef(storage, imagePath);
+
+    getDownloadURL(storageRef)
+    .then((url) => {
+        const img = new Image();
+        img.src = url;
+
+        img.onload = function() {
+        const imageAspectRatio = img.width / img.height;
+        const canvasAspectRatio = canvas.width / canvas.height;
+  
+        let drawWidth, drawHeight, offsetX, offsetY;
+  
+        if (imageAspectRatio > canvasAspectRatio) {
+            drawWidth = canvas.width;
+            drawHeight = canvas.width / imageAspectRatio;
+            offsetX = 0;
+            offsetY = (canvas.height - drawHeight) / 2;
+        } else {
+            drawWidth = canvas.height * imageAspectRatio;
+            drawHeight = canvas.height;
+            offsetX = (canvas.width - drawWidth) / 2;
+            offsetY = 0;
+        }
+  
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+        }
+    })
+    .catch((error) => {
+        console.error('Error getting download URL:', error);
+    });
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS

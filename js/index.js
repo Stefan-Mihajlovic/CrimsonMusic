@@ -553,6 +553,9 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     songBanners.forEach((banner) => {
         banner.src = imageURL;
     });
+
+    setSongBanner(imageURL);
+
     songTitles.forEach((title) => {
         title.innerHTML = songTitle;
     });

@@ -2730,7 +2730,7 @@ a.toggleSection i{
     transition: all .4s ease-in-out;
 }
 
-.bigSongInfo img{
+.bigSongInfo canvas{
     width: 87vw;
     aspect-ratio: 1 / 1;
     object-fit: cover;

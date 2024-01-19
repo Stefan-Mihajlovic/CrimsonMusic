@@ -191,7 +191,7 @@
             <img loading="lazy" class="songBackdrop" src="images/CrimsonLogo.png" alt="playerBackdrop" name="songBanner">
             <div class="bigControls">
                 <div class="bigSongInfo">
-                    <img loading="lazy" src="images/CrimsonLogo.png" alt="songBanner" name="songBanner">
+                    <canvas id="songBannerCanvas"></canvas>
                     <div class="playerClickDiv2"></div>
                     <div class="playerLyrcis"></div>
                     <div class="playerSongText">
@@ -615,7 +615,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js';
+        import { setSongBanner,openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -638,6 +638,7 @@
         window.openArtistPageByName = openArtistPageByName;
         window.UserSignedIn = UserSignedIn;
         window.vaultEmotionLoad = vaultEmotionLoad;
+        window.setSongBanner = setSongBanner;
     </script>
 
     <audio src="https://firebasestorage.googleapis.com/v0/b/crimsonmusic-b97d9.appspot.com/o/Songs%2F1.mp3?alt=media&token=54e2f635-d62d-491f-aaab-44ba18c77f65" id="currentSong"></audio>
