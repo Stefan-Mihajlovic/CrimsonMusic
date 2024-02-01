@@ -2123,6 +2123,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                 setPlaylists = snapshot.val().Playlists;
                 setLikedSongs = snapshot.val().LikedSongs;
                 setTheme = snapshot.val().AppTheme;
+                setProfilePhoto = snapshot.val().ProfilePhoto;
                 let setLikedPlaylists = snapshot.val().LikedPlaylists;
                 setFollowedArtists = snapshot.val().FollowedArtists;
                 if(setFollowedArtists == undefined){
