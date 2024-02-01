@@ -1098,7 +1098,6 @@ main{
 
 .pageBar h2{
     transition: all .25s ease-in-out;
-    transform: translateX(3vw);
 }
 
 .closeCurrentScreen{
@@ -1121,7 +1120,7 @@ main{
     z-index: 999;
     pointer-events: none;
     transform: translateX(100%);
-    transition: all .4s ease-out;
+    transition: all .3s ease-out;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1226,10 +1225,6 @@ main{
     pointer-events: all;
 }
 
-.loginScreenOpen .pageBar h2, .LicenseAndProfileScreenOpen .pageBar h2{
-    transform: translateX(0%);
-}
-
 .loginScreen .screenScrollable, .LicenseAndProfileScreen .screenScrollable{
     position: absolute;
     top: 0;
@@ -1254,19 +1249,13 @@ main{
     min-width: calc(100vw - 20px);
     max-width: 500px;
     transition: all .4s ease-in-out;
-    transform: translateX(100%);
 }
 
 .bugReportForm{
-    transform: translateX(0%);
     margin-top: 0px;
     padding: 20px;
     gap: 10px;
     margin: 0px;
-}
-
-.loginScreenOpen .loginForm{
-    transform: translateX(0%);
 }
 
 .loginForm hr{
@@ -1378,7 +1367,6 @@ main{
     width: 100%;
     min-width: 275px;
     transition: all .4s ease-in-out;
-    transform: translateX(100%);
     display: flex;
     gap: 15px;
     flex-direction: column;
@@ -1402,10 +1390,6 @@ hr{
     background-color: transparent;
     color: var(--offWhite);
     text-align: left;
-}
-
-.loginScreenOpen .loggedInScreen{
-    transform: translateX(0%);
 }
 
 .accountInfo{

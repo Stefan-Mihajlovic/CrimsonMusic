@@ -316,8 +316,6 @@ function GenerateOneSong(songName){
     })
 }
 
-let niz = [];
-
 function generateSongs(){
 
     let randomList = [];
@@ -2206,16 +2204,8 @@ export function turnLyrics(songId){
     }, 450);
     bigSongInfo.children[3].style.display = 'none';
 
-    playerPageBar.children[1].classList.add("smallH2");
     playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-xmark"></i>';
     let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
-    let titlePB;
-    if(bigSongInfo.children[3].children[0].children[0].children[0] != undefined){
-        titlePB = bigSongInfo.children[3].children[0].children[0].children[0].innerHTML
-    }else{
-        titlePB = bigSongInfo.children[3].children[0].children[0].innerHTML;
-    }
-    playerPageBar.children[1].innerHTML = `<span id="playingFromSpan">` + titlePB + '</span>' + artistPB;
 
     playerLyrcis.style.display = 'block';
     playerLyrcis.scrollTop = 0;
