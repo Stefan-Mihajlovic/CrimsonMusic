@@ -1904,3 +1904,7 @@ function closeBugScreenF(){
 function noStorage(){
     document.querySelector('.noStorageMessage').style.display = 'flex';
 }
+
+function playArtist(){
+    document.querySelector('.artistSongs').children[0].children[1].click();
+}
