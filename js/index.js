@@ -1,5 +1,13 @@
 setHomeScreen();
 
+// Checking if the user is accessing from mobile
+let regexp = /android|iphone|kindle|ipad/i;
+let isMobileDevice = regexp.test(navigator.userAgent);
+
+if (!isMobileDevice) {
+    window.location.href = `https://crimsonmusicpc.netlify.app/`;
+}
+
 let brojPesama;
 let brojArtista;
 let brojPlejlista;
@@ -1281,9 +1289,9 @@ const move2 = (e) => {
     moveStarted = true;
     // console.log(currentTouchPos);
     // Update div pos based on new cursor pos
-    if(currentTouchPos > -50){
+    if(currentTouchPos > -10){
         movablePlayer.classList.add("playerMovable");
-        movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 40}px`;
 
         let opa = ((e.touches[0].clientY - offsetY) / window.outerWidth - 0.1);
 
@@ -1306,12 +1314,10 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
         offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
         movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
         movablePlayer.classList.add("playerMovable");
-    }
-    if(window.innerWidth < window.innerHeight){
         document.addEventListener("touchmove", move2);
+        playerTouchStarted2 = true;
+        moveStarted = false;
     }
-    playerTouchStarted2 = true;
-    moveStarted = false;
 })
 
 // ----- SIDE PAGES CLOSE
