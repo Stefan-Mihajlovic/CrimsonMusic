@@ -1310,9 +1310,7 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
     // console.log("touched");
     // Calc the initial offset Values
     if(window.innerWidth < window.innerHeight){
-        movablePlayer.classList.add("playerOpen");
         offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
-        movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
         movablePlayer.classList.add("playerMovable");
         document.addEventListener("touchmove", move2);
         playerTouchStarted2 = true;
