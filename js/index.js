@@ -3,15 +3,9 @@ setHomeScreen();
 // Checking if the user is accessing from mobile
 let regexp = /android|iphone|kindle|ipad/i;
 let isMobileDevice = regexp.test(navigator.userAgent);
-let isIphonePlayerMove = 50;
 
 if (!isMobileDevice) {
     window.location.href = `https://crimsonmusicpc.netlify.app/`;
-}else{
-    regexIphone = /iphone/i;
-    if(regexIphone.test(navigator.userAgent)){
-        isIphonePlayerMove = 0;
-    }
 }
 
 let brojPesama;
@@ -1301,9 +1295,9 @@ const move2 = (e) => {
     if(currentTouchPos > 0 && !isPopupOpen){
         moveStarted = true;
         movablePlayer.classList.add("playerMovable");
-        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - isIphonePlayerMove}px`;
+        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 50}px`;
 
-        let opa = ((e.touches[0].clientY - offsetY - isIphonePlayerMove) / window.outerWidth - 0.1);
+        let opa = ((e.touches[0].clientY - offsetY - 50) / window.outerWidth - 0.1);
 
         // Setting the transition to none on main and header
         document.getElementsByClassName(currentScreen)[0].classList.add("playerMovable");
