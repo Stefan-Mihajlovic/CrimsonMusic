@@ -3,9 +3,15 @@ setHomeScreen();
 // Checking if the user is accessing from mobile
 let regexp = /android|iphone|kindle|ipad/i;
 let isMobileDevice = regexp.test(navigator.userAgent);
+let isIphonePlayerMove = 50;
 
 if (!isMobileDevice) {
     window.location.href = `https://crimsonmusicpc.netlify.app/`;
+}else{
+    regexIphone = /iphone/i;
+    if(regexIphone.test(navigator.userAgent)){
+        isIphonePlayerMove = 0;
+    }
 }
 
 let brojPesama;
@@ -1026,11 +1032,13 @@ function changeMakePlaylistName(text){
 
 // ----- Close Popup
 
+let isPopupOpen = false;
 function openPopup(type,src,art,nam,id,isLikedPage){
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
 
     popupWrapper.focus();
+    isPopupOpen = true;
 
     getArtistId(art.split(',')[0]);
 
@@ -1096,6 +1104,8 @@ function openPopup(type,src,art,nam,id,isLikedPage){
 function closePopup(){
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.remove("popupOpen");
+
+    isPopupOpen = false;
 
     const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
     popupScreen.classList.remove('popupPl');
@@ -1286,14 +1296,14 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
 
 const move2 = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
-    moveStarted = true;
     // console.log(currentTouchPos);
     // Update div pos based on new cursor pos
-    if(currentTouchPos > -10){
+    if(currentTouchPos > 0 && !isPopupOpen){
+        moveStarted = true;
         movablePlayer.classList.add("playerMovable");
-        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 40}px`;
+        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - isIphonePlayerMove}px`;
 
-        let opa = ((e.touches[0].clientY - offsetY) / window.outerWidth - 0.1);
+        let opa = ((e.touches[0].clientY - offsetY - isIphonePlayerMove) / window.outerWidth - 0.1);
 
         // Setting the transition to none on main and header
         document.getElementsByClassName(currentScreen)[0].classList.add("playerMovable");

@@ -2686,8 +2686,8 @@ a.toggleSection i{
 
 .playerClickDiv2{
     position: fixed;
-    top: -50vh;
-    bottom: 0;
+    top: 0vh;
+    bottom: 10vh;
     z-index: 1;
     left: -5vw;
     width: 120vw;
