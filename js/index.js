@@ -1296,9 +1296,9 @@ const move2 = (e) => {
     if(currentTouchPos > 0 && !isPopupOpen){
         moveStarted = true;
         movablePlayer.classList.add("playerMovable");
-        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 50 - topInsetNumber}px`;
+        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 50 + topInsetNumber}px`;
 
-        let opa = ((e.touches[0].clientY - offsetY - 50 - topInsetNumber) / window.outerWidth - 0.1);
+        let opa = ((e.touches[0].clientY - offsetY - 50 + topInsetNumber) / window.outerWidth - 0.1);
 
         // Setting the transition to none on main and header
         document.getElementsByClassName(currentScreen)[0].classList.add("playerMovable");
