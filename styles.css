@@ -16,7 +16,7 @@
 }
 
 :root{
-    --bodyBg: rgb(13, 3, 20);
+    --bodyBg: #141119;
     --bodyBgMP: rgb(18, 14, 24);
     --mainColor: #242027;
     --mainColorLighter: rgba(21, 19, 23, 0.6);
@@ -24,13 +24,12 @@
     --secondaryColor: rgba(19, 19, 19, 0.45);
     --offWhite: #DCD6F7;
     --offWhiteDark: #8a85a1;
-    --accentColor: #8d6ffc;
+    --accentColor: #a566e0;
     --playerColor: #211a27;
-    --darken: rgb(21, 17, 27);
+    --darken: #141119;
     --yoursBubbleColor: rgba(90, 0, 27, 0.7);
     --latestReleaseBox: black;
     --allChColor: rgba(255, 255, 255, 0.2);
-    --vibeVault: rgba(27, 12, 52, 0.5);
     --popupScreenBg: linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27));
 
     --artistSearch: rgba(0, 128, 0, 0.3);
@@ -45,8 +44,8 @@
     --gmBackdrop: blur(20px) brightness(1.2);
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
 
-    --footerBg: rgba(20, 15, 31, 0.7);
-    --footerBgHO: rgba(20, 15, 31, 1);
+    --footerBg: rgba(20, 17, 25, 0.7);
+    --footerBgHO: rgb(20, 17, 25);
 
     --topInsetArea: env(safe-area-inset-top);
 }
@@ -299,127 +298,6 @@ main{
     padding-top: calc(85px + env(safe-area-inset-top));
 }
 
-/* ----- VibeVault Section ----- */
-
-.vibeVaultItem{
-    width: calc(100% - 40px);
-    background-color: var(--vibeVault);
-    border-radius: 10px;
-    margin-left: 20px;
-    margin-top: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    position: relative;
-    box-shadow: 0px 0px 50px rgba(106, 48, 173, 0.2);
-}
-
-.vibeVaultItem video{
-    z-index: -1;
-    position: absolute;
-    top: 0;
-    height: 100%;
-    left: 0;
-    width: 100%;
-    object-fit: cover;
-    opacity: 1;
-    border-radius: 10px;
-    filter: contrast(1.5) hue-rotate(-25deg);
-}
-
-.vibeVaultItem i{
-    font-size: 75px;
-    bottom: -19px;
-    position: absolute;
-    color: #DCD6F7;
-    text-shadow: 0px 0px 15px black;
-    animation: speakerPulse 2.5s ease-in-out infinite;
-}
-
-.vibeVaultItem button{
-    min-width: 140px;
-    max-width: 200px;
-    aspect-ratio: 2.5 / 1 !important;
-    background-color: transparent;
-    color: #DCD6F7;
-    font-size: 13px;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    box-shadow: 0px 0px 25px 1px rgba(104, 76, 126, 0.6);
-    border-radius: 15px;
-    border: 1px solid #DCD6F7;
-    transition: all .2s ease-in-out;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.vibeVaultItem button i{
-    position: relative;
-    bottom: auto;
-    color: #DCD6F7;
-    opacity: 1;
-    font-size: 20px !important;
-    margin-top: 1px;
-    margin-left: 5px;
-    text-shadow: none;
-    animation: none !important;
-}
-
-.openedVaultBtn{
-    padding-right: 3px;
-    padding-left: 0px;
-}
-
-.vibeVaultItem h2{
-    font-size: 25px;
-    text-align: center;
-    color: #DCD6F7;
-    text-shadow: 0px 0px 10px rgb(0, 0, 0);
-}
-
-.vaultEmotions{
-    width: 100%;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    opacity: 1;
-    pointer-events: all;
-}
-
-.emotionItem{
-    width: 100%;
-    text-align: center;
-    padding-block: 10px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid #DCD6F7;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    box-shadow: 0px 0px 25px 1px rgba(104, 76, 126, 0.6);
-    border-radius: 7.5px;
-}
-
-.emotionItem h3{
-    color: #DCD6F7;
-}
-
-.vaultItemOff{
-    height: 0px;
-    opacity: 0;
-    pointer-events: none;
-    padding: 0px !important; 
-}
-
-.vaultItemOff2{
-    display: none !important;
-}
-
 /* ----- Recommended songs Section ----- */
 
 .recSongs, .categoryRecommendedSongs, .yourPlaylists, .yourLPlaylists{
@@ -448,7 +326,7 @@ main{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 7px;
+    padding: 10px;
     border-radius: 10px;
     position: relative;
     box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.15);
@@ -521,6 +399,7 @@ main{
 
 .songBtns button{
     background: none;
+    padding: 10px;
     border: none;
 }
 
@@ -728,6 +607,7 @@ main{
 }
 
 .playlistItem{
+    position: relative;
     width: calc(40vw + 7.5px);
     max-width: 200px;
     display: flex;
@@ -738,6 +618,32 @@ main{
     padding-top: 5px;
     transition: all .2s ease-in-out;
     /* animation: showUp 0.3s ease-in-out; */
+}
+
+.vaultPlItem h3{
+    margin-top: 10px !important;
+}
+
+.vaultPlItem img{
+    border: 2px solid white;
+}
+
+.vaultPlItem i{
+    display: grid;
+    border-radius: 50%;
+    border: 5px solid white;
+    place-items: center;
+    margin: 20px;
+    padding-left: 6px;
+    position: absolute;
+    width: calc(100% - 40px);
+    aspect-ratio: 1 / 1;
+    top: 5px;
+    pointer-events: none;
+    font-size: 25px;
+    color: #DCD6F7;
+    backdrop-filter: brightness(0.5) blur(2px);
+    -webkit-backdrop-filter: brightness(0.5) blur(2px);
 }
 
 .playlistItem div{

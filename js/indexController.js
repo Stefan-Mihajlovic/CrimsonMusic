@@ -1337,29 +1337,9 @@ function IsPPlaylistLiked(id){
 let vaultSongArray = [];
 
 let isTheVaultOn = false;
-let vaultH2Text = ['Your Mood, Choose!','Pick Your Feels!','Moody, are we?','Mood Check: Go!','Feel Like Choosing?'];
-
-let openTheVaultBtn = document.getElementById("openTheVaultBtn");
-openTheVaultBtn.addEventListener('click', () => {
-
-    const vaultEmotions = document.querySelector('.vaultEmotions');
-    vaultEmotions.classList.remove('vaultItemOff');
-    openTheVaultBtn.classList.add('vaultItemOff2');
-
-    const vaultH2 = document.querySelector('.vaultH2');
-
-    let g = Math.floor(Math.random() * 5);
-    vaultH2.innerHTML = vaultH2Text[g];
-
-});
 
 export function vaultEmotionLoad(categ){
     playRandomSongForTheVault(categ);
-
-    document.querySelector('.vaultEmotions').classList.add('vaultItemOff');
-    openTheVaultBtn.classList.remove('vaultItemOff2');
-
-    document.querySelector('.vaultH2').innerHTML = `VAULT`;
 }
 
 function playerSelectedSongVault(songName){

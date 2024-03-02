@@ -1161,11 +1161,11 @@ function setDarkTheme(clicked){
         darkThemeInput2.checked = true;
     }
 
-    document.documentElement.style.setProperty('--bodyBg', 'rgb(13, 3, 20)');
+    document.documentElement.style.setProperty('--bodyBg', '#141119');
     document.documentElement.style.setProperty('--bodyBgMP', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--playerColor', '#211a27');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
-    document.documentElement.style.setProperty('--darken', 'rgb(13, 3, 20)');
+    document.documentElement.style.setProperty('--darken', '#141119');
     document.documentElement.style.setProperty('--allChColor', '#302A40');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
@@ -1174,14 +1174,13 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(21, 19, 23, 0.6)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
-    document.documentElement.style.setProperty('--vibeVault', 'rgba(27, 12, 52, 0.5)');
     document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27))');
     if(isPerformanceModeOn){
-        document.documentElement.style.setProperty('--footerBg', 'rgba(20, 15, 31, 1)');
+        document.documentElement.style.setProperty('--footerBg', 'rgb(20, 17, 25)');
     }else{
-        document.documentElement.style.setProperty('--footerBg', 'rgba(21, 17, 29, 0.7)');
+        document.documentElement.style.setProperty('--footerBg', 'rgba(20, 17, 25, 0.7)');
     }
-    document.documentElement.style.setProperty('--footerBgHO', 'rgba(20, 15, 31, 1)');
+    document.documentElement.style.setProperty('--footerBgHO', 'rgb(20, 17, 25)');
 
     accountTheme = "Dark";
 }
