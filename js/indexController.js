@@ -203,10 +203,6 @@ function loginUser(user){
 
     accountTheme = user.AppTheme;
     setLoggedInScreen();
-
-    LoadUserPlaylists();
-    LoadLikedPlaylists();
-    LoadUserFArtists();
 }
 
 function getUsername(){
@@ -454,25 +450,24 @@ searchBtn.addEventListener('click', () => {
     searchList.classList.add("searchListOpen");
 
     if(searchedTextLower != ""){
-        const searchTypeChips = document.querySelector('.SearchTypeChips');
-        searchTypeChips.style.display = 'flex';
-
-        
-        for (let i = 1; i <= brojPesama; i++) {
-            findSearchedSong(i,searchedTextLower);
+        if(isAllCh || isSongsCh){
+            for (let i = 1; i <= brojPesama; i++) {
+                findSearchedSong(i,searchedTextLower);
+            }
         }
     
-        for (let i = 1; i <= brojArtista; i++) {
-            findSearchedArtist(i,searchedTextLower);
+        if(isAllCh || isArtistsCh){
+            for (let i = 1; i <= brojArtista; i++) {
+                findSearchedArtist(i,searchedTextLower);
+            }
         }
 
-        for (let i = 1; i <= brojPlejlista; i++) {
-            findSearchedPlaylist(i,searchedTextLower);
+        if(isAllCh || isPlaylistsCh){
+            for (let i = 1; i <= brojPlejlista; i++) {
+                findSearchedPlaylist(i,searchedTextLower);
+            }
         }
     }else{
-        const searchTypeChips = document.querySelector('.SearchTypeChips');
-        searchTypeChips.style.display = 'none';
-
         searchList.classList.remove("searchListOpen");
     }
 });
@@ -2552,6 +2547,10 @@ async function loadApp(){
     generateCategories();
     generateThisMonthsFeature();
     // document.querySelector('.loaderWrapper').classList.add('displayNone');
+
+    LoadUserPlaylists();
+    LoadLikedPlaylists();
+    LoadUserFArtists();
 }
 
 // ----- CALLING ALL NECESSARY FUNCTIONS

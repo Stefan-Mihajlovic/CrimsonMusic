@@ -18,18 +18,18 @@
 :root{
     --bodyBg: #141119;
     --bodyBgMP: rgb(18, 14, 24);
-    --mainColor: #242027;
+    --mainColor: #251e2c;
     --mainColorLighter: rgba(21, 19, 23, 0.6);
     --mainColorLighter2:rgb(139, 135, 146);
     --secondaryColor: rgba(19, 19, 19, 0.45);
     --offWhite: #DCD6F7;
     --offWhiteDark: #8a85a1;
     --accentColor: #a566e0;
-    --playerColor: #211a27;
+    --playerColor: #251e2c;
     --darken: #141119;
     --yoursBubbleColor: rgba(90, 0, 27, 0.7);
     --latestReleaseBox: black;
-    --allChColor: rgba(255, 255, 255, 0.2);
+    --allChColor: rgba(215, 154, 255, 0.2);
     --popupScreenBg: linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27));
 
     --artistSearch: rgba(0, 128, 0, 0.3);
@@ -397,9 +397,13 @@ main{
     z-index: 2;
 }
 
+.songItemSearch .songBtns{
+    padding-right: 8px;
+}
+
 .songBtns button{
     background: none;
-    padding: 10px;
+    padding: 0px;
     border: none;
 }
 
@@ -858,15 +862,14 @@ main{
 }
 
 .SearchTypeChips{
-    display: none;
+    display: flex;
     width: 100%;
     overflow-x: scroll;
     align-items: center;
     gap: 10px;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-inline: 15px;
     animation: none;
     transition: all .25s ease-in-out;
 }

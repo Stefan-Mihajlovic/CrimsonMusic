@@ -835,31 +835,15 @@ songTime.addEventListener('change', ()=>{
 let allChips = document.getElementsByName("allChip");
 
 function checkTheChip(chipName){
-
-    const searchListUl = document.querySelector('.searchList').children;
-
     allChips.forEach((chip) => {
         if(chip.checked){
             chip.classList.add("allchipCh");
-            if(chipName == 'All'){
-                for (let i = 0; i < searchListUl.length; i++) {
-                    searchListUl[i].style.display = 'flex';
-                }
-            }
-            else{
-                let fullClassChip = chipName + 'ItemSearch';
-                for (let i = 0; i < searchListUl.length; i++) {
-                    if(searchListUl[i].classList.contains(fullClassChip)){
-                        searchListUl[i].style.display = 'flex';
-                    }else{
-                        searchListUl[i].style.display = 'none';
-                    }
-                }
-            }
         }else{
             chip.classList.remove("allchipCh");
         }
     })
+
+    document.getElementById('submitSearch').click();
 }
 
 
@@ -1166,11 +1150,11 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--playerColor', '#211a27');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
     document.documentElement.style.setProperty('--darken', '#141119');
-    document.documentElement.style.setProperty('--allChColor', '#302A40');
+    document.documentElement.style.setProperty('--allChColor', 'rgba(215, 154, 255, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
     document.documentElement.style.setProperty('--sidePageback', 'black');
-    document.documentElement.style.setProperty('--mainColor', '#1A1724');
+    document.documentElement.style.setProperty('--mainColor', '#251e2c');
     document.documentElement.style.setProperty('--mainColorLighter', 'rgba(21, 19, 23, 0.6)');
     document.documentElement.style.setProperty('--secondaryColor', 'rgba(19, 19, 19, 0.45)');
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
@@ -1772,9 +1756,6 @@ function resetSearchScreenToNormal(){
     yourFArtists.forEach((artist) => {
         artist.classList.remove('displayNone');
     })
-
-    const searchTypeChips = document.querySelector('.SearchTypeChips');
-    searchTypeChips.style.display = 'none';
 }
 
 const submitYoursSearchBtn = document.getElementById("submitYoursSearch");
