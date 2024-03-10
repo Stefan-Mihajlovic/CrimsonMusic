@@ -16,7 +16,7 @@ const firebaseConfig = {
     measurementId: "G-V7HPY7PHBR"
 };
 
-// Initialize Firebase
+// ----- FIREBASE INIT
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider(app);
@@ -44,8 +44,6 @@ function loadAppNumbers(){
         });
     })
 }
-
-/* ----- Register User ----- */
 
 const username = document.getElementById('username');
 const email = document.getElementById('email');
@@ -92,7 +90,8 @@ function Validation(){
     return true;
 }
 
-// Register the user
+// ----- REGISTER USER
+
 function RegisterUser(){
     if(!Validation()){
         return;
@@ -138,7 +137,7 @@ function encPass(){
 registerBtn.addEventListener('click', RegisterUser);
 loginBtn.addEventListener('click', AuthenticateUser);
 
-/* ----- Login User ----- */
+// ----- AUTHENTICATE USER
 
 function AuthenticateUser(){
     const dbRef = ref(realdb);
@@ -168,14 +167,14 @@ function reloadUserPhotoAndUsername(){
     })
 }
 
-// Dekriptuj sifru
+// ----- DECRYPT PASSWORD
 
 function decPass(dbpass){
     let pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
     return pass12.toString(CryptoJS.enc.Utf8);
 }
 
-// Login user
+// ----- LOGIN USER
 
 function loginUser(user){
     localStorage.setItem('keepLoggedIn', 'yes');
@@ -212,6 +211,8 @@ function getUsername(){
         currentUser = JSON.parse(localStorage.getItem('user'));
     }
 }
+
+// ----- SIGN OUT USER
 
 function SignOutUser(){
     localStorage.removeItem('user');
@@ -264,7 +265,7 @@ export function UserSignedIn(){
     }
 }
 
-// Generate a song based on the input number ( SongID )
+// ----- Generate a song based on the songID
 
 let songToBePlayed,songTitle,songCreator,imageURL,songColor;
 
@@ -328,7 +329,7 @@ function generateSongs(){
     }
 }
 
-/* ----- GENERATE ARTISTS ----- */
+// ----- GENERATE ARTISTS
 let artistImage,artistFollowers,artistListens,artistAboutImage;
 let recArtists = document.getElementsByClassName("recArtists")[0];
 
@@ -371,7 +372,7 @@ console.log();
     }
 }
 
-/* ----- GENERATE PLAYLISTS ----- */
+// ----- GENERATE PLAYLISTS
 let playlistBanner,playlistLikes,playlistSongs,playlistArtists,playlistOwners;
 let recPlaylists = document.getElementsByClassName("recPlaylists")[0];
 
@@ -607,7 +608,7 @@ function GetCategories(name){
     })
 }
 
-// CATEGORY PAGE
+// ----- CATEGORY PAGE
 
 let categoryPage = document.getElementsByClassName("categoryScreen")[0];
 let categoryRecommendedPlaylistsList = document.getElementsByClassName("categoryRecommendedPlaylists")[0];
@@ -738,7 +739,7 @@ function findSongOfCategory(songName, inputText){
     })
 }
 
-// ----- ARTIST PAGE SHANANIGANS
+// ----- ARTIST PAGE
 
 let isArtistPageOpen = false;
 let screenScrollables = document.getElementsByClassName("screenScrollable");
@@ -1377,7 +1378,7 @@ export function playRandomSongForTheVault(categ){
     }
 }
 
-// Make a playlist
+// ----- Make a playlist
 
 let numberOfPlaylists = 0;
 
@@ -2080,6 +2081,8 @@ export function LoadUserPlaylistsPopup(songId){
     }
 }
 
+// ----- ADDING SONG TO A SPECIFIC PLAYLIST
+
 export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
     if(!clickedPlaylist.children[2].classList.contains('greenCheck')){
         clickedPlaylist.children[2].children[0].innerHTML = '<i class="fa-solid fa-circle-check checkAnim"></i>';
@@ -2162,7 +2165,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
     }
 }
 
-// ----- BIG PLAYER LYRICS
+// ----- PLAYER LYRICS
 
 export function turnLyrics(songId){
     const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
@@ -2484,6 +2487,8 @@ saveAccountBtn .addEventListener('click', (e) => {
     })
 })
 
+// ----- BUG REPORTING
+
 const bugReportForm = document.querySelector('.bugReportForm');
 bugReportForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -2538,6 +2543,8 @@ bugReportForm.addEventListener('submit', (e) => {
     }
 });
 
+// ----- APP LOADING
+
 async function loadApp(){
     let result = await loadAppNumbers();
 
@@ -2546,6 +2553,7 @@ async function loadApp(){
     generatePlaylists();
     generateCategories();
     generateThisMonthsFeature();
+    // Removing the loader after init
     // document.querySelector('.loaderWrapper').classList.add('displayNone');
 
     LoadUserPlaylists();
