@@ -48,6 +48,8 @@
     --footerBgHO: rgb(20, 17, 25);
 
     --topInsetArea: env(safe-area-inset-top);
+    --sortPopupTop: 0px;
+    --sortPopupLeft: 0px;
 }
 
 html{
@@ -257,12 +259,14 @@ main{
     font-size: 20px;
     margin-left: 20px;
     width: calc(100% - 40px);
+    font-weight: 600;
 }
 
 .catTitleNoMargin{
     font-size: 20px;
-    margin-left: 0px;
-    width: calc(100% - 40px);
+    margin-left: 0px !important;
+    width: calc(100% - 10px) !important;
+    font-weight: 600;
 }
 
 .catTitleAlone{
@@ -270,6 +274,53 @@ main{
     margin-bottom: 15px;
     margin-left: 20px;
     width: calc(100% - 40px);
+    font-weight: 600;
+}
+
+.catTitleRightBtn{
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 40px);
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.catTitleRightBtn div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+    margin-top: -7px;
+}
+
+.catTitleRightBtn button{
+    width: 40px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+}
+
+.artistWork .catTitleRightBtn button{
+    width: 30px;
+}
+
+.catTitleRightBtn button i{
+    font-size: 24px;
+    color: var(--offWhite);
+    margin-left: 12px;
+}
+
+.artistWork .catTitleRightBtn button i{
+    font-size: 20px !important;
+}
+
+.yoursScreen h1 button:nth-child(1) i{
+    font-size: 18px;
+    margin-top: 2px;
 }
 
 .catDesc{
@@ -1656,8 +1707,8 @@ a.toggleSection i{
 .darken{
     position: absolute;
     width: 100%;
-    height: calc(100% + 20px);
-    bottom: 0px;
+    height: 60%;
+    bottom: -1px;
     background: linear-gradient(0deg, var(--darken), transparent);
     z-index: 1;
 }
@@ -1712,12 +1763,9 @@ a.toggleSection i{
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 7.5px;
     gap: 10px;
     padding-inline: 15px;
-    font-size: 14px;
     font-weight: 500;
-    min-width: 120px;
 }
 
 .artistBtns button i{
@@ -1806,23 +1854,14 @@ a.toggleSection i{
     min-height: 50px;
 }
 
-#likePlaylist{
-    min-width: 0px !important;
-    width: auto !important;
-    aspect-ratio: 1 / 1 !important;
-    padding-inline: 8px !important;
-    padding-top: 5.5px !important;
-    padding-bottom: 4.5px !important;
+.smallSideScreenBtn{
+    width: 35px;
+    height: 35px;
 }
 
-#addToPlaylistBtn{
-    min-width: 0px !important;
-    width: 30px !important;
-    aspect-ratio: 1 / 1 !important;
-    padding-inline: 8px !important;
-    padding-left: 7px !important;
-    padding-block: 0px !important;
-    display: none;
+.bigSideScreenBtn{
+    width: 130px;
+    height: 35px;
 }
 
 .categoryAccentBubble{
@@ -1869,44 +1908,6 @@ a.toggleSection i{
 
 /* ----- LIBRARY / YOURS SCREEN ----- */
 
-.yoursScreen h1{
-    display: flex;
-    justify-content: space-between;
-    width: calc(100% - 40px);
-    margin-left: 20px;
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.yoursScreen h1 div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0px;
-    margin-top: -7px;
-}
-
-.yoursScreen h1 button{
-    width: 40px;
-    aspect-ratio: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-}
-
-.yoursScreen h1 button i{
-    font-size: 24px;
-    color: var(--offWhite);
-    margin-left: 12px;
-}
-
-.yoursScreen h1 button:nth-child(1) i{
-    font-size: 18px;
-    margin-top: 2px;
-}
-
 .yoursScreen .searchBar{
     display: none;
     transition: all .3s ease-in-out;
@@ -1914,6 +1915,8 @@ a.toggleSection i{
     top: auto !important;
     margin-bottom: 0px !important;
     padding-block: 0px;
+    width: calc(100% - 10px) !important;
+    margin-left: 5px !important;
 }
 
 .favoritesItem{
@@ -2272,6 +2275,68 @@ a.toggleSection i{
         background-color: rgba(255, 0, 0, 0);
         filter: brightness(1);
     }
+}
+
+/* ----- SORT POPUP ----- */
+
+.sortPopup{
+    position: absolute;
+    top: var(--sortPopupTop);
+    left: var(--sortPopupLeft);
+    width: 30%;
+    min-width: 120px;
+    height: auto;
+    background: var(--popupScreenBg);
+    border-radius: 10px;
+    border: 1px solid var(--playerColor);
+    box-shadow: 0px 0px 20px black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    list-style: none;
+    z-index: 9999;
+    transition: all .25s ease-in-out, top 0s, left 0s;
+    transform: scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sortPopupOpen .sortPopup{
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.sortPopup li{
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid #242027;
+}
+
+.sortPopup li:last-child{
+    border-bottom: none;
+}
+
+.popupBackgroundBlur{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all .25s ease-in-out;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.sortPopupOpen .popupBackgroundBlur{
+    opacity: 1;
+    pointer-events: all;
 }
 
 /* ----- PLAYER ----- */

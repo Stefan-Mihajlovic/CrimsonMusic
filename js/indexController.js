@@ -1123,7 +1123,7 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
         playlistSongsList.innerHTML = "";
 
         document.getElementById("playlistLikesH5").style.display = "block";
-        document.getElementById("likePlaylist").style.display = "block";
+        document.getElementById("likePlaylist").style.display = "flex";
 
         playlistScreen.classList.add("playlistScreenOpen");
         isPlaylistPageOpen = true;

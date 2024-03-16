@@ -111,7 +111,7 @@
     </main>
 
     <main class="yoursScreen">
-        <h1>Library
+        <h1 class="catTitleRightBtn">Library
             <div>
                 <button class="searchOnYoursBtn" onclick="showSearchBarYours(this)"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
@@ -131,15 +131,15 @@
                 </div>
             </div>
         </button>
-        <h1 class="yourPlaylistsH1">Your Playlists
+        <h1 class="yourPlaylistsH1 catTitleRightBtn">Your Playlists
             <div>
                 <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>
             </div>
         </h1>
         <ul class="yourPlaylists"></ul>
-        <h1 class="yourLPlaylistsH1">Liked Playlists</h1>
+        <h1 class="yourLPlaylistsH1 catTitle">Liked Playlists</h1>
         <ul class="yourLPlaylists"></ul>
-        <h1 class="yourFArtistsH1">Followed Artists</h1>
+        <h1 class="yourFArtistsH1 catTitle">Followed Artists</h1>
         <ul class="yourFArtists"></ul>
     </main>
 
@@ -257,8 +257,8 @@
                         <h5><span name="artistFollowers" id="artistFollowers">0</span>&nbsp;Followers</h5>
                     </div>
                     <div class="artistBtns">
-                        <button id="followArtistBtn"><i class="fa-solid fa-plus"></i> Follow</button>
-                        <button onclick="playArtist()"><i class="fa-solid fa-play"></i> Play</button>
+                        <button class="bigSideScreenBtn" id="followArtistBtn"><i class="fa-solid fa-plus"></i> Follow</button>
+                        <button class="bigSideScreenBtn" onclick="playArtist()"><i class="fa-solid fa-play"></i> Play</button>
                     </div>
                     <div class="darken"></div>
                 </div>
@@ -267,7 +267,10 @@
             <section class="artistWork" name="Artists">
                 <h2 class="catTitleNoMargin">Latest Release</h2>
                 <article class="latestRelease" name="Artists"></article>
-                <h2 class="catTitleNoMargin">All of <span name="artistName"></span>'s tracks</h2>
+                <h2 class="catTitleNoMargin catTitleRightBtn">
+                    <span>All of <span name="artistName"></span>'s tracks</span>
+                    <button class="sortBtn" data-playlisttosort="artistSongs"><i class="fa-solid fa-sort"></i></button>
+                </h2>
                 <ul class="artistSongs" name="Top Tracks"></ul>
                 <h2 class="catTitleNoMargin">About <span name="artistName"></span></h2>
                 <div id="aboutTheArtist">
@@ -298,8 +301,9 @@
                         <h5 id="playlistLikesH5"><span name="playlistLikes" id="playlistLikes">0</span>&nbsp;Likes</h5>
                     </div>
                     <div class="artistBtns">
-                        <button id="likePlaylist"><i class="fa-regular fa-heart"></i></button>
-                        <button id="playPlaylistBtn" onclick="playPlaylist();"><i class="fa-solid fa-play"></i> Play</button>
+                        <button class="smallSideScreenBtn" id="likePlaylist"><i class="fa-regular fa-heart"></i></button>
+                        <button class="bigSideScreenBtn" id="playPlaylistBtn" onclick="playPlaylist();"><i class="fa-solid fa-play"></i> Play</button>
+                        <button class="smallSideScreenBtn sortBtn" data-playlisttosort="playlistSongsList"><i class="fa-solid fa-sort"></i></button>
                     </div>
                     <div class="darken"></div>
                 </div>
@@ -560,6 +564,15 @@
             </ul>
         </div>
         <div class="closePopup" onclick="closePopup()"></div>
+    </div>
+
+    <div class="sortPopupWrapper">
+        <ul class="sortPopup">
+            <li>Default</li>
+            <li>A - Z</li>
+            <li>Z - A</li>
+        </ul>
+        <div class="popupBackgroundBlur" onclick="closeSortPopup()"></div>
     </div>
 
     <div class="loginPopup">

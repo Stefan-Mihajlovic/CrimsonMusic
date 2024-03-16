@@ -1897,3 +1897,26 @@ function noStorage(){
 function playArtist(){
     document.querySelector('.artistSongs').children[0].children[1].click();
 }
+
+// ----- PLAYLIST SORTING
+
+const sortBtns = document.querySelectorAll('.sortBtn');
+sortBtns.forEach((sortBtn) => {
+    sortBtn.addEventListener("click", () => {
+        let sortPopup = document.querySelector('.sortPopup');
+
+        let sortBtnRect = sortBtn.getBoundingClientRect();
+        let offsetX = sortBtnRect.left - document.body.getBoundingClientRect().left;
+        let offsetY = sortBtnRect.top - document.body.getBoundingClientRect().top;
+        offsetX = Math.round(offsetX - sortPopup.getBoundingClientRect().width);
+        offsetY = Math.round(offsetY + sortBtnRect.height + 5);
+
+        document.querySelector('.sortPopupWrapper').classList.add('sortPopupOpen');
+        document.documentElement.style.setProperty('--sortPopupTop', `${offsetY}px`);
+        document.documentElement.style.setProperty('--sortPopupLeft', `${offsetX}px`);
+    })
+})
+
+function closeSortPopup(){
+    document.querySelector('.sortPopupWrapper').classList.remove('sortPopupOpen');
+}
