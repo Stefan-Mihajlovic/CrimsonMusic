@@ -1900,9 +1900,12 @@ function playArtist(){
 
 // ----- PLAYLIST SORTING
 
+let playlistToSort = null;
 const sortBtns = document.querySelectorAll('.sortBtn');
 sortBtns.forEach((sortBtn) => {
     sortBtn.addEventListener("click", () => {
+        playlistToSort = document.querySelector(`.${sortBtn.getAttribute('data-playlisttosort')}`);
+
         let sortPopup = document.querySelector('.sortPopup');
 
         let sortBtnRect = sortBtn.getBoundingClientRect();
@@ -1919,4 +1922,26 @@ sortBtns.forEach((sortBtn) => {
 
 function closeSortPopup(){
     document.querySelector('.sortPopupWrapper').classList.remove('sortPopupOpen');
+}
+
+function sortPlaylist(sortType){
+    if(playlistToSort == null){
+        return;
+    }
+    if(sortType == "Default"){
+        
+    }else if(sortType == "A-Z"){
+        sortUlAtoZ(true);
+    }else{
+        sortUlAtoZ(false);
+    }
+    closeSortPopup();
+}
+
+function sortUlAtoZ(AtoZ){
+    if(AtoZ){
+        
+    }else{
+        
+    }
 }

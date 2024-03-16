@@ -2283,7 +2283,7 @@ a.toggleSection i{
     position: absolute;
     top: var(--sortPopupTop);
     left: var(--sortPopupLeft);
-    width: 30%;
+    width: 40%;
     min-width: 120px;
     height: auto;
     background: var(--popupScreenBg);
@@ -2296,22 +2296,30 @@ a.toggleSection i{
     overflow: hidden;
     list-style: none;
     z-index: 9999;
-    transition: all .25s ease-in-out, top 0s, left 0s;
-    transform: scale(0.8);
+    transition: all .15s ease-in-out, top 0s, left 0s;
+    transform: translateY(20px);
     opacity: 0;
     pointer-events: none;
 }
 
 .sortPopupOpen .sortPopup{
-    transform: scale(1);
+    transform: translateY(0);
     opacity: 1;
     pointer-events: all;
+}
+
+.sortPopup h4{
+    width: 100%;
+    background-color: var(--bodyBgMP);
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid #242027;
 }
 
 .sortPopup li{
     text-align: center;
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     border-bottom: 1px solid #242027;
 }
 
@@ -2328,7 +2336,7 @@ a.toggleSection i{
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    transition: all .25s ease-in-out;
+    transition: all .15s ease-in-out;
     z-index: 9998;
     pointer-events: none;
     opacity: 0;
