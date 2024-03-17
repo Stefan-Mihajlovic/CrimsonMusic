@@ -1900,7 +1900,7 @@ function playArtist(){
 
 // ----- PLAYLIST SORTING
 
-let playlistToSort = null;
+let playlistToSort = null, defaultPlaylistSort = null;
 const sortBtns = document.querySelectorAll('.sortBtn');
 sortBtns.forEach((sortBtn) => {
     sortBtn.addEventListener("click", () => {
@@ -1925,11 +1925,11 @@ function closeSortPopup(){
 }
 
 function sortPlaylist(sortType){
-    if(playlistToSort == null){
+    if(playlistToSort == null || defaultPlaylistSort == null){
         return;
     }
     if(sortType == "Default"){
-        
+        playlistToSort.innerHTML = defaultPlaylistSort;
     }else if(sortType == "A-Z"){
         sortUlAtoZ(true);
     }else{
@@ -1939,9 +1939,36 @@ function sortPlaylist(sortType){
 }
 
 function sortUlAtoZ(AtoZ){
+    let songsToSort = playlistToSort.children;
     if(AtoZ){
-        
+        try {
+            for (let i = 0; i < playlistToSort.children.length - 1; i++) {
+                for (let j = i + 1; j < playlistToSort.children.length; j++) {
+                    if(songsToSort[i].children[0].children[2].children[0].innerHTML > 
+                        songsToSort[j].children[0].children[2].children[0].innerHTML){
+                            let temp = songsToSort[j].innerHTML;
+                            songsToSort[j].innerHTML = songsToSort[i].innerHTML;
+                            songsToSort[i].innerHTML = temp;
+                    }
+                }
+            }
+        } catch (error) {
+            
+        }
     }else{
-        
+        try {
+            for (let i = 0; i < playlistToSort.children.length - 1; i++) {
+                for (let j = i + 1; j < playlistToSort.children.length; j++) {
+                    if(songsToSort[i].children[0].children[2].children[0].innerHTML < 
+                        songsToSort[j].children[0].children[2].children[0].innerHTML){
+                            let temp = songsToSort[j].innerHTML;
+                            songsToSort[j].innerHTML = songsToSort[i].innerHTML;
+                            songsToSort[i].innerHTML = temp;
+                    }
+                }
+            }
+        } catch (error) {
+            
+        }
     }
 }

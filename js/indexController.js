@@ -291,7 +291,7 @@ function GenerateOneSong(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" onError="noStorage()" src="`+imageURL+`" alt="songBanner">
+                    <img onError="noStorage()" src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -494,7 +494,7 @@ function findSearchedSong(songName, inputText){
                             <span></span>
                             <span></span>
                         </div>
-                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
+                        <img src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -722,7 +722,7 @@ function findSongOfCategory(songName, inputText){
                             <span></span>
                             <span></span>
                         </div>
-                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
+                        <img src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -760,7 +760,7 @@ export function closeArtistPage(){
     isArtistPageOpen = false;
 }
 
-export function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage){
+export async function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage){
 
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
     artistScreen.classList.add('screenOpenOnTop');
@@ -820,6 +820,10 @@ export function openArtistPage(artistID, artistName, artistImage, artistFollower
     if(artistAImage != undefined){
         document.getElementById("artistAboutBanner").src = artistAImage;
     }
+
+    setTimeout(() => {
+        defaultPlaylistSort = document.querySelector('.artistSongs').innerHTML;
+    }, 500);
 }
 
 export function openArtistPageByName(artistName2){
@@ -1009,7 +1013,7 @@ function SetTheLatestRelease(artist){
                                     <span></span>
                                     <span></span>
                                 </div>
-                                <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
+                                <img src="`+imageURL+`" alt="songBanner">
                                 <div class="songText">
                                     <h2>`+ songTitle +`</h2>
                                     <h3>`+ songCreator +`</h3>
@@ -1083,7 +1087,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <span></span>
                             <span></span>
                         </div>
-                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
+                        <img src="`+imageURL+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -1151,6 +1155,10 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
         }
 
         document.getElementById('likePlaylist').setAttribute('name',playlistID);
+
+        setTimeout(() => {
+            defaultPlaylistSort = document.querySelector('.playlistSongsList').innerHTML;
+        }, 500);
     }else{
         playlistScreen.classList.add("playlistScreenOpen");
         isPlaylistPageOpen = true;
@@ -1179,7 +1187,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
+                    <img src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -1536,7 +1544,7 @@ function LoadUserPlaylists(){
             for (let i = numberOfPlaylists; i > 0; i--) {
                 let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                     <div class="songInfo">
-                        <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                        <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
                         <div class="songText">
                             <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
                             <h3>`+ "by " + currentUser.Username +`</h3>
@@ -1649,6 +1657,10 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
         }else{
             playlistSongsList.innerHTML = "";
         }
+
+        setTimeout(() => {
+            defaultPlaylistSort = document.querySelector('.playlistSongsList').innerHTML;
+        }, 500);
 }
 
 
@@ -1798,7 +1810,7 @@ function GenerateOneSongFromLiked(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img onload="buttonClickAnim(this.parentElement.parentElement.children[2].children[0])" src="`+imageURL+`" alt="songBanner">
+                    <img src="`+imageURL+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -2043,7 +2055,7 @@ export function LoadUserPlaylistsPopup(songId){
                     if(usersPlaylists[i].split('}')[3]?.includes(',' + songId) || usersPlaylists[i].split('}')[3]?.includes(songId + ',')){
                         let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                             <div class="songInfo">
-                                <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
                                 <div class="songText">
                                     <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>
@@ -2059,7 +2071,7 @@ export function LoadUserPlaylistsPopup(songId){
                     }else{
                         let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
                             <div class="songInfo">
-                                <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
                                 <div class="songText">
                                     <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>
