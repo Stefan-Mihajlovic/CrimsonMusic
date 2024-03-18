@@ -16,7 +16,7 @@
 }
 
 :root{
-    --bodyBg: #141119;
+    --bodyBg: #070608;
     --bodyBgMP: rgb(18, 14, 24);
     --mainColor: #251e2c;
     --mainColorLighter: rgba(21, 19, 23, 0.6);
@@ -26,7 +26,6 @@
     --offWhiteDark: #8a85a1;
     --accentColor: #a566e0;
     --playerColor: #251e2c;
-    --darken: #141119;
     --yoursBubbleColor: rgba(90, 0, 27, 0.7);
     --latestReleaseBox: black;
     --allChColor: rgba(215, 154, 255, 0.2);
@@ -255,6 +254,17 @@ main{
     opacity: 0 !important;
 }
 
+.homeAccentBubble{
+    position: absolute;
+    z-index: -1;
+    background-color: var(--accentColor);
+    filter: blur(250px);
+    width: 100%;
+    height: 50%;
+    top: -25%;
+    left: -25%;
+}
+
 .catTitle{
     font-size: 20px;
     margin-left: 20px;
@@ -372,7 +382,8 @@ main{
 }
 
 .songItem{
-    background-color: rgba(190, 141, 255, 0.06);
+    background-color: var(--footerBg);
+    border: 1px solid var(--playerColor);
     width: 100%;
     display: flex;
     align-items: center;
@@ -439,6 +450,7 @@ main{
     aspect-ratio: 1 / 1;
     object-fit: cover;
     margin-left: 2px;
+    border: 1px solid var(--playerColor);
 }
 
 .songBtns{
@@ -493,23 +505,23 @@ main{
 }
 
 .songVisualizer span:nth-child(1){
-    animation: visSpanAnim .6s ease-in-out infinite;
+    animation: visSpanAnim .75s ease-in-out infinite;
     animation-delay: 0s;
 }
 
 .songVisualizer span:nth-child(2){
-    animation: visSpanAnim .6s ease-in-out infinite;
-    animation-delay: 0.2s;
+    animation: visSpanAnim .75s ease-in-out infinite;
+    animation-delay: 0.25s;
 }
 
 .songVisualizer span:nth-child(3){
-    animation: visSpanAnim .6s ease-in-out infinite;
-    animation-delay: 0.4s;
+    animation: visSpanAnim .75s ease-in-out infinite;
+    animation-delay: 0.5s;
 }
 
 .songVisualizer span:nth-child(4){
-    animation: visSpanAnim .6s ease-in-out infinite;
-    animation-delay: 0.6s;
+    animation: visSpanAnim .75s ease-in-out infinite;
+    animation-delay: 0.75s;
 }
 
 @keyframes visSpanAnim {
@@ -828,7 +840,7 @@ main{
     padding-right: 15px;
     padding-left: 5px;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--mainColorLighter);
+    border: 1px solid var(--playerColor);
     border-bottom: 1px solid var(--artistSearch);
     border-radius: 30px;
 }
@@ -873,7 +885,7 @@ main{
     padding-right: 15px;
     padding-left: 5px;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--mainColorLighter);
+    border: 1px solid var(--playerColor);
     border-bottom: 1px solid var(--playlistSearch);
     border-radius: 10px;
 }
@@ -1586,7 +1598,7 @@ a.toggleSection i{
     min-height: 100vh;
     left: 0;
     width: 100vw;
-    background-color: var(--darken);
+    background-color: var(--bodyBg);
     z-index: 999;
     pointer-events: none;
     transform: translateX(100%);
@@ -1709,7 +1721,7 @@ a.toggleSection i{
     width: 100%;
     height: 60%;
     bottom: -1px;
-    background: linear-gradient(0deg, var(--darken), transparent);
+    background: linear-gradient(0deg, var(--bodyBg), transparent);
     z-index: 1;
 }
 
@@ -1817,7 +1829,7 @@ a.toggleSection i{
 }
 
 #catH3Title{
-    text-shadow: 0px 0px 50px var(--darken), 0px 0px 1px var(--darken);
+    text-shadow: 0px 0px 50px var(--bodyBg), 0px 0px 1px var(--bodyBg);
 }
 
 .latestRelease{
