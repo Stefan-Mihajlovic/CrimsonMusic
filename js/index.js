@@ -1544,6 +1544,8 @@ document.addEventListener("touchend", () => {
             movablePlayer.classList.add("playerOpen");
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
+            document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
+            document.querySelector('header').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
