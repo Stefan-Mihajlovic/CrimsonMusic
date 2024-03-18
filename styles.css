@@ -2384,10 +2384,6 @@ a.toggleSection i{
     border-top-right-radius: 30px;
 }
 
-.playerMovable{
-    transition: none;
-}
-
 .darkenPlayer{
     position: fixed;
     top: 0px;
@@ -2720,6 +2716,32 @@ a.toggleSection i{
     animation: popInBanner .45s ease-in-out;
 }
 
+.bannerFromRight{
+    animation: bannerFromRight 0.5s ease-in-out;
+}
+
+.bannerFromLeft{
+    animation: bannerFromLeft 0.5s ease-in-out;
+}
+
+@keyframes bannerFromRight {
+    from{
+        transform: translateX(100vw);
+    }
+    to{
+        transform: translateX(0);
+    }
+}
+
+@keyframes bannerFromLeft {
+    from{
+        transform: translateX(-100vw);
+    }
+    to{
+        transform: translateX(0);
+    }
+}
+
 .playerBannerAway{
     position: absolute;
     transform: translateX(200%);
@@ -2728,6 +2750,10 @@ a.toggleSection i{
 @keyframes popInBanner {
     0%{ transform: translateX(200%); }
     1000%{ transform: translateX(0%); }
+}
+
+.playerMovable{
+    transition: none !important;
 }
 
 /* ---- ORIENT - LANDSCAPE PLAYER */

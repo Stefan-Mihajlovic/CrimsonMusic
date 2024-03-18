@@ -1259,30 +1259,63 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
 
 // ----- playerDiv 2
 
+const bigSongBanner = document.getElementById("bigSongBanner");
 let topInsetNumber = Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]);
+let bigSongBannerMoved = false, playerMovedDown = false;
+
 const move2 = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY - topInsetNumber);
     // console.log(currentTouchPos);
     // Update div pos based on new cursor pos
     if(currentTouchPos > 0 && !isPopupOpen){
-        moveStarted = true;
-        movablePlayer.classList.add("playerMovable");
-        movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 50}px`;
+        if(!bigSongBannerMoved){
+            moveStarted = true;
+            playerMovedDown = true;
+            movablePlayer.classList.add("playerMovable");
+            movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 50}px`;
+        }
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
 playerOpenDiv2.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     // console.log("touched");
     // Calc the initial offset Values
     if(window.innerWidth < window.innerHeight){
         offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+        offsetX = e.touches[0].clientX - movablePlayer.offsetLeft;
         movablePlayer.classList.add("playerMovable");
+        bigSongBanner.classList.add("playerMovable");
         document.addEventListener("touchmove", move2);
+        document.addEventListener("touchmove", moveSideSkip);
         playerTouchStarted2 = true;
         moveStarted = false;
     }
 })
+
+// ----- PLAYER SONG SKIPPING
+
+let currentTouchPosSkip;
+const moveSideSkip = (e) =>{
+    if(!playerMovedDown){
+        currentTouchPosSkip = e.touches[0].clientX - offsetX;
+        if(Math.abs(currentTouchPosSkip) > 30){
+            bigSongBannerMoved = true;
+            // Update div pos based on new cursor pos
+            let dragDelay;
+            if(currentTouchPosSkip > 0){
+                dragDelay = 30;
+            }else{
+                dragDelay = -30;
+            }
+            bigSongBanner.style.transform = `translateX(${e.touches[0].clientX - offsetX - dragDelay}px)`;
+        }
+    }else{
+        currentTouchPosSkip = 0;
+    }
+    // console.log("moved " + e.touches[0].clientX - offsetX);
+}
 
 // ----- SIDE PAGES CLOSE
 
@@ -1536,51 +1569,28 @@ document.addEventListener("touchend", () => {
         }
     }
     if(touchSideStarted && moveStarted){
-        if(currentTouchPos < sidePageNormalPos + 75){
-            document.removeEventListener("touchmove", moveSide);
-            document.removeEventListener("touchmove", moveSide2);
-            document.removeEventListener("touchmove", moveSide3);
-            document.removeEventListener("touchmove", moveSide4);
-            document.removeEventListener("touchmove", moveSide5);
-            document.removeEventListener("touchmove", moveSide6);
-            document.removeEventListener("touchmove", moveSide7);
-            loginScreen.classList.remove("playerMovable");
-            playlistScreen.classList.remove("playerMovable");
-            artistScreen.classList.remove("playerMovable");
-            categoryScreen.classList.remove("playerMovable");
-            makePlaylistScreen.classList.remove("playerMovable");
-            bugReportScreen.classList.remove("playerMovable");
-            LicenseAndProfileScreen.classList.remove("playerMovable");
-            playlistScreen.style.left = '0';
-            artistScreen.style.left = '0';
-            categoryScreen.style.left = '0';
-            loginScreen.style.left = '0';
-            makePlaylistScreen.style.left = '0';
-            bugReportScreen.style.left = '0';
-            LicenseAndProfileScreen.style.left = '0';
-        }else{
-            document.removeEventListener("touchmove", moveSide);
-            document.removeEventListener("touchmove", moveSide2);
-            document.removeEventListener("touchmove", moveSide3);
-            document.removeEventListener("touchmove", moveSide4);
-            document.removeEventListener("touchmove", moveSide5);
-            document.removeEventListener("touchmove", moveSide6);
-            document.removeEventListener("touchmove", moveSide7);
-            loginScreen.classList.remove("playerMovable");
-            playerTouchStarted2 = false;
-            playlistScreen.classList.remove("playerMovable");
-            artistScreen.classList.remove("playerMovable");
-            categoryScreen.classList.remove("playerMovable");
-            makePlaylistScreen.classList.remove("playerMovable");
-            bugReportScreen.classList.remove("playerMovable");
-            LicenseAndProfileScreen.classList.remove("playerMovable");
-            playlistScreen.style.left = '0';
-            artistScreen.style.left = '0';
-            categoryScreen.style.left = '0';
-            loginScreen.style.left = '0';
-            makePlaylistScreen.style.left = '0';
-            bugReportScreen.style.left = '0';
-            LicenseAndProfileScreen.style.left = '0';
+        document.removeEventListener("touchmove", moveSide);
+        document.removeEventListener("touchmove", moveSide2);
+        document.removeEventListener("touchmove", moveSide3);
+        document.removeEventListener("touchmove", moveSide4);
+        document.removeEventListener("touchmove", moveSide5);
+        document.removeEventListener("touchmove", moveSide6);
+        document.removeEventListener("touchmove", moveSide7);
+        loginScreen.classList.remove("playerMovable");
+        playlistScreen.classList.remove("playerMovable");
+        artistScreen.classList.remove("playerMovable");
+        categoryScreen.classList.remove("playerMovable");
+        makePlaylistScreen.classList.remove("playerMovable");
+        bugReportScreen.classList.remove("playerMovable");
+        LicenseAndProfileScreen.classList.remove("playerMovable");
+        playlistScreen.style.left = '0';
+        artistScreen.style.left = '0';
+        categoryScreen.style.left = '0';
+        loginScreen.style.left = '0';
+        makePlaylistScreen.style.left = '0';
+        bugReportScreen.style.left = '0';
+        LicenseAndProfileScreen.style.left = '0';
+        if(currentTouchPos >= sidePageNormalPos + 75){
             if(currentSideCloseTouched == "closePlaylistScreen"){
                 closePlaylistPage();
             }
@@ -1624,6 +1634,39 @@ document.addEventListener("touchend", () => {
             isPlayerOpen = true;
         }
     }
+    if(bigSongBannerMoved){
+        document.removeEventListener("touchmove", moveSideSkip);
+        if(currentTouchPosSkip > 130){
+            bigSongBanner.classList.remove("playerMovable");
+            bigSongBanner.style.transform = "translateX(100vw)";
+            setTimeout(() => {
+                backwardBtn.click();
+                bigSongBanner.classList.add("playerMovable");
+                setTimeout(() => {
+                    bigSongBanner.style.transform = "translateX(-100vw)";
+                    setTimeout(() => {
+                        bigSongBanner.classList.remove("playerMovable");
+                        bigSongBanner.style.transform = "translateX(0)";
+                    }, 200);
+                }, 100);
+            }, 400);
+        }
+        if(currentTouchPosSkip < 130){
+            bigSongBanner.classList.remove("playerMovable");
+            bigSongBanner.style.transform = "translateX(-100vw)";
+            setTimeout(() => {
+                forwardBtn.click();
+                bigSongBanner.classList.add("playerMovable");
+                setTimeout(() => {
+                    bigSongBanner.style.transform = "translateX(100vw)";
+                    setTimeout(() => {
+                        bigSongBanner.classList.remove("playerMovable");
+                        bigSongBanner.style.transform = "translateX(0)";
+                    }, 200);
+                }, 100);
+            }, 400);
+        }
+    }
     if(playerTouchStarted3){
         popupScreen.classList.remove("playerMovable");
         document.removeEventListener("touchmove", move3);
@@ -1635,6 +1678,8 @@ document.addEventListener("touchend", () => {
             }
         }
     }
+    playerMovedDown = false;
+    bigSongBannerMoved = false;
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
