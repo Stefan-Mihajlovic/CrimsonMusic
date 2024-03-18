@@ -1231,10 +1231,6 @@ const move = (e) => {
     // Setting the transition to none on main and header
     document.getElementsByClassName(currentScreen)[0].classList.add("playerMovable");
     document.querySelector('header').classList.add("playerMovable");
-
-    // Setting the opacity of main and header
-    document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
-    document.querySelector('header').style.opacity = opa;
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -1285,10 +1281,6 @@ const move2 = (e) => {
         // Setting the transition to none on main and header
         document.getElementsByClassName(currentScreen)[0].classList.add("playerMovable");
         document.querySelector('header').classList.add("playerMovable");
-
-        // Setting the opacity of main and header
-        document.getElementsByClassName(currentScreen)[0].style.opacity = opa;
-        document.querySelector('header').style.opacity = opa;
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
@@ -1536,8 +1528,6 @@ document.addEventListener("touchend", () => {
         document.querySelector('header').classList.remove("playerMovable");
         if(currentTouchPos < playerNormalPos - 125){
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
-            document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
-            document.querySelector('header').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1554,8 +1544,6 @@ document.addEventListener("touchend", () => {
             movablePlayer.classList.add("playerOpen");
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
-            document.getElementsByClassName(currentScreen)[0].style.opacity = '0';
-            document.querySelector('header').style.opacity = '0';
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -1640,10 +1628,6 @@ document.addEventListener("touchend", () => {
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
             document.removeEventListener("touchmove", move2);
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
-            document.getElementsByClassName(currentScreen)[0].classList.remove("playerMovable");
-            document.querySelector('header').classList.remove("playerMovable");
-            document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
-            document.querySelector('header').style.opacity = '1';
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }else{
