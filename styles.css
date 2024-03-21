@@ -2712,7 +2712,7 @@ a.toggleSection i{
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 0.7);
     z-index: 0;
     margin-bottom: 2.5vh;
-    transition: all .45s ease-in-out;
+    transition: all .35s ease-in-out;
     animation: popInBanner .45s ease-in-out;
 }
 
@@ -2744,7 +2744,7 @@ a.toggleSection i{
 
 .playerBannerAway{
     position: absolute;
-    transform: translateX(200%);
+    transform: translateX(200%) !important;
 }
 
 @keyframes popInBanner {
@@ -2837,7 +2837,7 @@ a.toggleSection i{
     line-height: 2.2rem;
     font-weight: 500;
     text-align: left;
-    transition: all .45s ease-in-out;
+    transition: all .35s ease-in-out;
     animation: popInLyrics .45s ease-in-out;
     color: #DCD6F7 !important;
 }
@@ -2852,32 +2852,6 @@ a.toggleSection i{
     0%{ opacity: 0; }
     100%{ opacity: 1; }
 }
-
-/* .playerLyrcisOn:after {
-    content: "";
-    position: fixed;
-    z-index: 1;
-    bottom: 24px;
-    left: 0;
-    pointer-events: none;
-    background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgb(0, 0, 0) 90%);
-    width: 100%;
-    height: 4em;
-    animation: appear .3s ease-in-out;
-}
-
-.playerLyrcisOn:before {
-    content: "";
-    position: fixed;
-    z-index: 1;
-    top: 99px;
-    left: 0;
-    pointer-events: none;
-    background-image: linear-gradient(to top, rgba(255,255,255,0), rgb(0, 0, 0) 90%);
-    width: 100%;
-    height: 4em;
-    animation: appear .3s ease-in-out;
-} */
 
 .playerLyricsAway{
     position: absolute;

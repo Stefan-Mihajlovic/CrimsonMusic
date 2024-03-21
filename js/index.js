@@ -651,11 +651,11 @@ function openMiniPlayer(){
 
 // PAUSE / PLAY THE CURRENT SONG
 
-function pausePlayCurrentSong(from){
+let songPlayBtns = document.getElementsByName("songPlayButton");
+let playPlaylistBtn = document.getElementById("playPlaylistBtn");
+let playlistQueue = document.getElementsByClassName("playlistSongsList")[0].children;
 
-    let songPlayBtns = document.getElementsByName("songPlayButton");
-    let playPlaylistBtn = document.getElementById("playPlaylistBtn");
-    let playlistQueue = document.getElementsByClassName("playlistSongsList")[0].children;
+function pausePlayCurrentSong(from){
 
     if(from === "Playlist"){
         playlistQueue[0].classList.add("songPlayingLi");
@@ -715,7 +715,6 @@ let isRepeatOn = false;
 function setTheVault(){
     isTheVaultOn = true;
 }
-
 
 let randomListShuffle = [];
 currentSongAudio.addEventListener('ended', () => {
@@ -828,7 +827,25 @@ currentSongAudio.addEventListener('timeupdate', () =>{
 songTime.addEventListener('change', ()=>{
     var seekto = currentSongAudio.duration * (songTime.value / 100);
     currentSongAudio.currentTime = seekto;
-})
+});
+
+// Pausing the audio outside of the app
+currentSongAudio.addEventListener('pause', () =>{
+    songPlayBtns.forEach((button) => {
+        button.children[0].classList.remove("fa-circle-pause");
+        button.children[0].classList.add("fa-circle-play");
+    });
+    isSongPaused = true;
+});
+
+// Playing the audio outside of the app
+currentSongAudio.addEventListener('play', () =>{
+    songPlayBtns.forEach((button) => {
+        button.children[0].classList.remove("fa-circle-play");
+        button.children[0].classList.add("fa-circle-pause");
+    });
+    isSongPaused = false;
+});
 
 // CHECK THE CHIPS ON SEARCH
 
@@ -1234,6 +1251,7 @@ let isLyricsOn = false;
 playerOpenDiv.addEventListener("touchstart", (e) => {
     // console.log("touched");
     if(window.innerWidth < window.innerHeight){
+        playerMovedDown = true;
         document.getElementsByTagName("nav")[0].classList.add("navClosed");
         movablePlayer.classList.add("playerOpen");
         if(reduceAnimations){
@@ -1272,6 +1290,7 @@ const move2 = (e) => {
             moveStarted = true;
             playerMovedDown = true;
             movablePlayer.classList.add("playerMovable");
+            bigSongBanner.classList.remove("playerMovable");
             movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 50}px`;
         }
     }
@@ -1636,35 +1655,36 @@ document.addEventListener("touchend", () => {
     }
     if(bigSongBannerMoved){
         document.removeEventListener("touchmove", moveSideSkip);
+        movablePlayer.classList.remove("playerMovable");
         if(currentTouchPosSkip > 130){
             bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(100vw)";
+            bigSongBanner.style.transform = "translateX(200%)";
             setTimeout(() => {
                 backwardBtn.click();
                 bigSongBanner.classList.add("playerMovable");
                 setTimeout(() => {
-                    bigSongBanner.style.transform = "translateX(-100vw)";
+                    bigSongBanner.style.transform = "translateX(-200%)";
                     setTimeout(() => {
                         bigSongBanner.classList.remove("playerMovable");
                         bigSongBanner.style.transform = "translateX(0)";
-                    }, 200);
-                }, 100);
-            }, 400);
+                    }, 10);
+                }, 10);
+            }, 350);
         }
         if(currentTouchPosSkip < 130){
             bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(-100vw)";
+            bigSongBanner.style.transform = "translateX(-200%)";
             setTimeout(() => {
                 forwardBtn.click();
                 bigSongBanner.classList.add("playerMovable");
                 setTimeout(() => {
-                    bigSongBanner.style.transform = "translateX(100vw)";
+                    bigSongBanner.style.transform = "translateX(200%)";
                     setTimeout(() => {
                         bigSongBanner.classList.remove("playerMovable");
                         bigSongBanner.style.transform = "translateX(0)";
-                    }, 200);
-                }, 100);
-            }, 400);
+                    }, 10);
+                }, 10);
+            }, 350);
         }
     }
     if(playerTouchStarted3){

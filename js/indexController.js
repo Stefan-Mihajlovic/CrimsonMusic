@@ -2180,6 +2180,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
 // ----- PLAYER LYRICS
 
 export function turnLyrics(songId){
+    isLyricsOn = true;
     const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
     const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
     const playerPageBar = document.getElementsByClassName('player')[0].children[1];
@@ -2219,8 +2220,6 @@ export function turnLyrics(songId){
     playerPageBar.children[0].onclick = () => {
         closePlayerLyrics(previousPBH2text, previousPBBonclick);
     }
-
-    isLyricsOn = true;
 }
 
 export function doesSongHaveLyrics(songId, playedFrom){
