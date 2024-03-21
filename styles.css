@@ -52,8 +52,8 @@
 }
 
 html{
-    touch-action: none;
     -ms-touch-action: none;
+    touch-action: none;
     overscroll-behavior-y: none;
     overflow-x: hidden !important;
 }
@@ -64,8 +64,8 @@ body{
     font-family: 'Outfit', sans-serif !important;
     min-height: 100vh;
     color: var(--offWhite);
-    touch-action: none;
     -ms-touch-action: none;
+    touch-action: none;
     overflow: hidden !important;
     overscroll-behavior-y: none;
 }
@@ -88,8 +88,8 @@ body{
     background-size: 500%;
     background-position: left;
     font-size: 20px;
-    background-clip: text;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0px 0px 25px rgba(141, 111, 252, 0.4);
     animation: textPulse 1.5s ease-in-out infinite;
@@ -593,7 +593,7 @@ main{
 
 .recArtists, .yourFArtists{
     width: 100%;
-    height: fit-content;
+    height: auto;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -655,7 +655,7 @@ main{
 
 .recPlaylists, .categoryRecommendedPlaylists{
     width: 100%;
-    height: fit-content;
+    height: auto;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -2374,11 +2374,11 @@ a.toggleSection i{
     transition: all .2s ease-out, padding-top 0s;
     opacity: 0;
     pointer-events: none;
-    transform: translateZ(0);
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
     -ms-transform: translateZ(0);
     -o-transform: translateZ(0);
+    transform: translateZ(0);
     background-color: transparent;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
@@ -2406,11 +2406,11 @@ a.toggleSection i{
     z-index: -1;
     pointer-events: none;
     filter: brightness(0.5) blur(50px) saturate(2.5);
+    -webkit-transform: translate3d(0, 0, 0) translateZ(0);
+    -moz-transform: translate3d(0, 0, 0) translateZ(0);
+    -ms-transform: translate3d(0, 0, 0) translateZ(0);
+    -o-transform: translate3d(0, 0, 0) translateZ(0);
     transform: translate3d(0, 0, 0) translateZ(0);
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
     transition: all 0s !important;
 }
 

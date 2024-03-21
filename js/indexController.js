@@ -402,7 +402,7 @@ function GetPlaylists(playlistName){
                 currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div>
                         <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
-                        <img class="crimsonPlaylistTag" src="../images/CrimsonLogo.png"></img>
+                        <img class="crimsonPlaylistTag" src="../images/CrimsonLogo.png" alt="Crimson Tag"></img>
                     </div>
                     <h3>`+ playlistName +`</h3>
                     <h5>`+ playlistArtists +`</h5>
