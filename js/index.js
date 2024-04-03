@@ -1317,7 +1317,6 @@ let currentTouchPosSkip;
 const moveSideSkip = (e) =>{
     if(!playerMovedDown){
         currentTouchPosSkip = e.touches[0].clientX - offsetX;
-        console.log(currentTouchPosSkip);
         if(Math.abs(currentTouchPosSkip) > 30){
             bigSongBannerMoved = true;
             // Update div pos based on new cursor pos
