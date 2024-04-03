@@ -1161,7 +1161,7 @@ function setDarkTheme(clicked){
         darkThemeInput2.checked = true;
     }
 
-    document.documentElement.style.setProperty('--bodyBg', '#111016');
+    document.documentElement.style.setProperty('--bodyBg', '#0e0d13');
     document.documentElement.style.setProperty('--bodyBgMP', 'rgb(18, 14, 24)');
     document.documentElement.style.setProperty('--playerColor', '#1f1d23');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
