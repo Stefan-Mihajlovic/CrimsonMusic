@@ -2017,4 +2017,5 @@ function openTheVault(){
 
 function closeTheVault(){
     document.querySelector('.vaultSection').classList.remove('vaultSectionOn');
+    document.querySelector('.vaultPlayBtn').innerHTML = `<i class="fa-solid fa-play"></i>`;
 }
