@@ -1344,6 +1344,7 @@ let isTheVaultOn = false;
 
 export function vaultEmotionLoad(categ){
     playRandomSongForTheVault(categ);
+    closeTheVault();
 }
 
 function playerSelectedSongVault(songName){

@@ -16,7 +16,7 @@
 }
 
 :root{
-    --bodyBg: #070608;
+    --bodyBg: #111016;
     --bodyBgMP: rgb(18, 14, 24);
     --mainColor: #251e2c;
     --mainColorLighter: rgba(21, 19, 23, 0.6);
@@ -24,11 +24,12 @@
     --secondaryColor: rgba(19, 19, 19, 0.45);
     --offWhite: #DCD6F7;
     --offWhiteDark: #8a85a1;
-    --accentColor: #a566e0;
-    --playerColor: #251e2c;
-    --yoursBubbleColor: rgba(90, 0, 27, 0.7);
+    --accentColor: #8f59f5;
+    --accentColorLO: rgba(144, 89, 245, 0.5);
+    --playerColor: #1f1d23;
+    --vaultTransparentBG: rgba(22, 20, 28, 0.4);
     --latestReleaseBox: black;
-    --allChColor: rgba(215, 154, 255, 0.2);
+    --allChColor: rgba(172, 121, 255, 0.15);
     --popupScreenBg: linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27));
 
     --artistSearch: rgba(0, 128, 0, 0.3);
@@ -43,7 +44,7 @@
     --gmBackdrop: blur(20px) brightness(1.2);
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
 
-    --footerBg: rgba(20, 17, 25, 0.7);
+    --footerBg: #16141c;
     --footerBgHO: rgb(20, 17, 25);
 
     --topInsetArea: env(safe-area-inset-top);
@@ -106,6 +107,7 @@ ul::-webkit-scrollbar, div::-webkit-scrollbar{
 }
 
 ul, div{
+    list-style: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -357,6 +359,83 @@ main{
 
 .homeScreen, .yoursScreen{
     padding-top: calc(85px + env(safe-area-inset-top));
+}
+
+/* ----- The Vault Section ----- */
+
+.vaultSection{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+    width: calc(100% - 40px) !important;
+    margin-left: 20px !important;
+    background-color: var(--footerBg);
+    background-image: url('images/VaultBannerBg.gif');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--offWhite);
+    border-radius: 15px;
+    box-shadow: 0px 25px 150px var(--accentColorLO);
+    margin-top: 5px;
+    padding: 15px;
+    transition: all .3s ease-in-out;
+}
+
+.vaultSection h2{
+    color: #DCD6F7;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.6);
+}
+
+.vaultPlayBtn{
+    font-size: 20px;
+    color: #DCD6F7;
+    background-color: var(--vaultTransparentBG);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid #DCD6F7;
+    padding-block: 10px;
+    padding-inline: 60px;
+    border-radius: 10px;
+    transition: all .4s ease-in-out;
+    transition-delay: .4s;
+}
+
+.vaultPlayBtn i{
+    margin-left: 3px;
+}
+
+.vaultCatsHolder{
+    width: 100%;
+    height: 0px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: -5px;
+    transition: all .4s ease-in-out;
+}
+
+.vaultCat{
+    color: #DCD6F7;
+    text-align: center;
+    width: 100%;
+    padding-block: 10px;
+    background-color: var(--vaultTransparentBG);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid #DCD6F7;
+    border-radius: 7px;
+}
+
+.vaultSectionOn .vaultCatsHolder{
+    height: 251px;
+}
+
+.vaultSectionOn .vaultPlayBtn i{
+    margin-left: 0px;
 }
 
 /* ----- Recommended songs Section ----- */
@@ -798,7 +877,7 @@ main{
     flex-grow: 1;
     border-radius: 10px;
     border: none;
-    background-color: var(--mainColor);
+    background-color: var(--bodyBg);
     border: 1px solid var(--playerColor);
     font-size: 15px;
     color: var(--offWhite);
@@ -958,7 +1037,7 @@ main{
     margin-block: 2px;
     position: absolute;
     border-radius: 10px !important;
-    background-color: var(--mainColor);
+    background-color: var(--bodyBg);
     z-index: 1;
     transition: all .1s ease-in-out;
     cursor: pointer;
@@ -2503,7 +2582,7 @@ a.toggleSection i{
     box-shadow: none;
     border: none;
     transition: all .2s ease-in-out;
-    padding-top: 40px !important;
+    padding-top: max(var(--topInsetArea), 45px) !important;
     padding-bottom: 20px !important;
     z-index: 4;
     height: 50px;

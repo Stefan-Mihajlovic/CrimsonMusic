@@ -38,6 +38,20 @@
     </header>
 
     <main class="homeScreen">
+        <section class="vaultSection">
+            <h2>VAULT</h2>
+            <button class="vaultPlayBtn" onclick="openTheVault()">
+                <i class="fa-solid fa-play"></i>
+            </button>
+            <ul class="vaultCatsHolder">
+                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Chill</li>
+                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Focus</li>
+                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Melancholy</li>
+                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Motivation</li>
+                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Party</li>
+            </ul>
+        </section>
+
         <section class="recSongsSection">
             <h2 class="catTitle">New songs, new you</h2>
             <h5 class="catDesc">Looking for something fresh? Here's 5 random excellent tunes!</h5>

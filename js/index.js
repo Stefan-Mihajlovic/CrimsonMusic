@@ -430,7 +430,6 @@ function openLicenseAndProfileScreen(isLicenseScreen){
 
 function closeLicenseAndProfileScreen(){
     let LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
-    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 
     LicenseAndProfileScreen.classList.remove("playerMovable");
 
@@ -1162,11 +1161,10 @@ function setDarkTheme(clicked){
         darkThemeInput2.checked = true;
     }
 
-    document.documentElement.style.setProperty('--bodyBg', '#070608');
+    document.documentElement.style.setProperty('--bodyBg', '#111016');
     document.documentElement.style.setProperty('--bodyBgMP', 'rgb(18, 14, 24)');
-    document.documentElement.style.setProperty('--playerColor', '#211a27');
+    document.documentElement.style.setProperty('--playerColor', '#1f1d23');
     document.documentElement.style.setProperty('--offWhite', '#DCD6F7');
-    document.documentElement.style.setProperty('--allChColor', 'rgba(215, 154, 255, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(90, 0, 27, 0.7)');
     document.documentElement.style.setProperty('--offWhiteDark', '#8a85a1');
     document.documentElement.style.setProperty('--sidePageback', 'black');
@@ -1176,9 +1174,9 @@ function setDarkTheme(clicked){
     document.documentElement.style.setProperty('--latestReleaseBox', '#100e1c');
     document.documentElement.style.setProperty('--popupScreenBg', 'linear-gradient(0deg, rgb(14, 11, 19), rgb(21, 17, 27))');
     if(isPerformanceModeOn){
-        document.documentElement.style.setProperty('--footerBg', 'rgb(20, 17, 25)');
+        document.documentElement.style.setProperty('--footerBg', '#16141c');
     }else{
-        document.documentElement.style.setProperty('--footerBg', 'rgba(20, 17, 25, 0.7)');
+        document.documentElement.style.setProperty('--footerBg', '#16141c');
     }
     document.documentElement.style.setProperty('--footerBgHO', 'rgb(20, 17, 25)');
 
@@ -1205,7 +1203,6 @@ function setLightTheme(clicked){
     document.documentElement.style.setProperty('--offWhite', '#100e1c');
     document.documentElement.style.setProperty('--offWhiteDark', '#100e1c');
     document.documentElement.style.setProperty('--darken', '#ede7ff');
-    document.documentElement.style.setProperty('--allChColor', 'rgba(0, 0, 0, 0.2)');
     document.documentElement.style.setProperty('--yoursBubbleColor', 'rgba(134, 69, 255, 0.5)');
     document.documentElement.style.setProperty('--sidePageback', 'linear-gradient(0deg, #ece8ff, rgba(134, 69, 255, 0.1))');
     document.documentElement.style.setProperty('--mainColor', '#d3cdee');
@@ -2004,4 +2001,19 @@ function sortUlAtoZ(AtoZ){
             
         }
     }
+}
+
+// ----- VAULT
+
+function openTheVault(){
+    document.querySelector('.vaultSection').classList.toggle('vaultSectionOn');
+    if(document.querySelector('.vaultSection').classList.contains('vaultSectionOn')){
+        document.querySelector('.vaultPlayBtn').innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    }else{
+        document.querySelector('.vaultPlayBtn').innerHTML = `<i class="fa-solid fa-play"></i>`;
+    }
+}
+
+function closeTheVault(){
+    document.querySelector('.vaultSection').classList.remove('vaultSectionOn');
 }
