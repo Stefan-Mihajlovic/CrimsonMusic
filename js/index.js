@@ -1176,7 +1176,7 @@ function setDarkTheme(clicked){
     if(isPerformanceModeOn){
         document.documentElement.style.setProperty('--footerBg', '#16141c');
     }else{
-        document.documentElement.style.setProperty('--footerBg', '#16141c');
+        document.documentElement.style.setProperty('--footerBg', 'rgba(22, 20, 28, 0.7)');
     }
     document.documentElement.style.setProperty('--footerBgHO', 'rgb(20, 17, 25)');
 
@@ -1221,7 +1221,7 @@ function setLightTheme(clicked){
     accountTheme = "Light";
 }
 
-// ----- PLAYER OPEN / CLOSE
+// ----- ELEMENTS OPEN / CLOSE
 
 const movablePlayer = document.getElementsByClassName("player")[0];
 const playerOpenDiv = document.getElementsByClassName("playerClickDiv")[0];
@@ -1299,6 +1299,7 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
     // console.log("touched");
     // Calc the initial offset Values
     if(window.innerWidth < window.innerHeight){
+        currentTouchPosSkip = 0;
         offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
         offsetX = e.touches[0].clientX - movablePlayer.offsetLeft;
         movablePlayer.classList.add("playerMovable");
@@ -1316,6 +1317,7 @@ let currentTouchPosSkip;
 const moveSideSkip = (e) =>{
     if(!playerMovedDown){
         currentTouchPosSkip = e.touches[0].clientX - offsetX;
+        console.log(currentTouchPosSkip);
         if(Math.abs(currentTouchPosSkip) > 30){
             bigSongBannerMoved = true;
             // Update div pos based on new cursor pos
@@ -1650,8 +1652,8 @@ document.addEventListener("touchend", () => {
             isPlayerOpen = true;
         }
     }
+    document.removeEventListener("touchmove", moveSideSkip);
     if(bigSongBannerMoved){
-        document.removeEventListener("touchmove", moveSideSkip);
         movablePlayer.classList.remove("playerMovable");
         if(currentTouchPosSkip > 130){
             bigSongBanner.classList.remove("playerMovable");

@@ -44,7 +44,7 @@
     --gmBackdrop: blur(20px) brightness(1.2);
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
 
-    --footerBg: #16141c;
+    --footerBg: rgba(22, 20, 28, 0.7);
     --footerBgHO: rgb(20, 17, 25);
 
     --topInsetArea: env(safe-area-inset-top);
