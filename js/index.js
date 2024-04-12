@@ -1584,7 +1584,7 @@ document.addEventListener("touchend", () => {
             }
             isPlayerOpen = true;
         }else{
-            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
+            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom))`;
             movablePlayer.classList.remove("playerOpen");
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
@@ -1653,7 +1653,7 @@ document.addEventListener("touchend", () => {
         if(currentTouchPos > 100){
             movablePlayer.classList.remove("playerMovable");
             movablePlayer.classList.remove("playerOpen");
-            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom) * 0.6)`;
+            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom))`;
             document.removeEventListener("touchmove", move2);
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
