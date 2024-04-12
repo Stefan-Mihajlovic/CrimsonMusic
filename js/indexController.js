@@ -1537,6 +1537,8 @@ function LoadUserPlaylists(){
 
     let dbRef = ref(realdb);
 
+    if(currentUser == null || currentUser == undefined)
+        return;
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
             let usersPlaylists = (snapshot.val().Playlists).split('{');
@@ -1671,6 +1673,8 @@ function LoadLikedPlaylists(){
 
     let dbRef = ref(realdb);
 
+    if(currentUser == null || currentUser == undefined)
+        return;
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
             let usersLikedPlaylists
