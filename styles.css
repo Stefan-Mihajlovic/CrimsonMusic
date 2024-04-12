@@ -2461,7 +2461,7 @@ a.toggleSection i{
     left: 0;
     right: 0;
     top: auto;
-    bottom: calc(-100svh + 80px + calc(env(safe-area-inset-bottom) * 0.6));
+    bottom: calc(-100svh + 80px + env(safe-area-inset-bottom));
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -3315,7 +3315,7 @@ nav button i{
         display: none !important;
     }
     .player{
-        bottom: calc(-100svh + 15px + calc(env(safe-area-inset-bottom) * 0.6));
+        bottom: calc(-100svh + 15px + env(safe-area-inset-bottom));
     }
     .playerOpen{
         height: calc(100svh);
