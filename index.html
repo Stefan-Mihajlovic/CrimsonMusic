@@ -29,15 +29,15 @@
 <body>
     <div class="bodyHolder">
 
-    <header>
-        <div class="greeting">
-            <h2 name="timeOfDay">Good Afternoon</h2>
-            <h2 class="accountName" name="accountName">Guest</h2>
-        </div>
-        <button type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
-    </header>
-
     <main class="homeScreen">
+        <header>
+            <div class="greeting">
+                <h2 name="timeOfDay">Good Afternoon</h2>
+                <h2 class="accountName" name="accountName">Guest</h2>
+            </div>
+            <button type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
+        </header>
+        <h2 class="catTitle">Home</h2>
         <section class="vaultSection">
             <h2>VAULT</h2>
             <button class="vaultPlayBtn" onclick="openTheVault()">
@@ -94,7 +94,7 @@
         <div class="searchBar" id="searchScreenBar">
             <form onsubmit="event.preventDefault()">
                 <input type="search" name="search" id="searchInput" placeholder="Search away...">
-                <input style="font-family: FontAwesome" id="submitSearch" type="submit" value="&#xf002;">
+                <input style="font-family: Bootstrap-icons" id="submitSearch" type="submit" value="&#xF52A;">
             </form>
             <div class="SearchTypeChips">
                 <div class="searchChip">
@@ -125,6 +125,13 @@
     </main>
 
     <main class="yoursScreen">
+        <header>
+            <div class="greeting">
+                <h2 name="timeOfDay">Good Afternoon</h2>
+                <h2 class="accountName" name="accountName">Guest</h2>
+            </div>
+            <button type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
+        </header>
         <h1 class="catTitleRightBtn">Library
             <div>
                 <button class="searchOnYoursBtn" onclick="showSearchBarYours(this)"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -133,7 +140,7 @@
         <div id="searchBarYours" class="searchBar">
             <form onsubmit="event.preventDefault()">
                 <input type="search" name="search" id="searchYoursInput" placeholder="Search your playlists and artists...">
-                <input style="font-family: FontAwesome" id="submitYoursSearch" type="submit" value="&#xf002;">
+                <input style="font-family: Bootstrap-icons" id="submitYoursSearch" type="submit" value="&#xF52A;">
             </form>
         </div>
         <button class="songItem favoritesItem" onclick="openLikedSongs();">
@@ -599,9 +606,10 @@
     </div>
 
     <nav id="mobileNav" class="navNoPlayer">
-        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i><span>&nbsp;Home&nbsp;</span></button>
-        <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></button>
-        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-regular fa-folder"></i><span>Library</span></button>
+        <button class="HomeBtnNav activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i style="font-size: 20px !important;" class="bi bi-house"></i></button>
+        <button class="SearchBtnNav" type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i></button>
+        <button class="LibraryBtnNav" type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i></button>
+        <button class="settingsBtnNav" type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
     </nav>
 
     <nav class="navBig">
@@ -609,9 +617,9 @@
             <img loading="lazy" src="images/CrimsonLogo.png" alt="logo">
             <h2 id="timeOfDayNav"></h2>
         </div>
-        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i>Home</button>
-        <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-regular fa-folder"></i>Library</button>
+        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="bi bi-house"></i>Home</button>
+        <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i>Search</button>
+        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i>Library</button>
         <button type="button" onclick="openLoginScreen();"><i class="fa-solid fa-gear"></i>Settings</button>
     </nav>
 

@@ -181,12 +181,11 @@ img{
 /* ----- HEADER ----- */
 
 header{
-    position: fixed;
-    top: 0;
-    border-bottom: 1px solid var(--playerColor);
+
     background-color: var(--footerBg);
-    backdrop-filter: var(--gmBackdrop);
-    -webkit-backdrop-filter: var(--gmBackdrop);
+    border-bottom: 1px solid var(--playerColor);
+    backdrop-filter: blur(20px) brightness(1);
+    -webkit-backdrop-filter: blur(20px) brightness(1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -194,7 +193,6 @@ header{
     padding: 20px;
     padding-bottom: 15px;
     padding-top: calc(var(--topInsetArea) + 15px);
-    z-index: 80;
     transition: all .3s ease-in-out;
 }
 
@@ -357,10 +355,6 @@ main{
     100%{ transform: translateX(-10%); }
 }
 
-.homeScreen, .yoursScreen{
-    padding-top: calc(85px + env(safe-area-inset-top));
-}
-
 /* ----- The Vault Section ----- */
 
 .vaultSection{
@@ -377,7 +371,7 @@ main{
     background-position: center;
     border: 1px solid var(--offWhite);
     border-radius: 15px;
-    box-shadow: 0px 25px 150px var(--accentColorLO);
+    box-shadow: 0px -50px 200px var(--accentColorLO);
     margin-top: 5px;
     padding: 15px;
     transition: all .3s ease-in-out;
@@ -2040,6 +2034,7 @@ a.toggleSection i{
     width: calc(100% - 40px);
     margin-left: 20px;
     background: linear-gradient(45deg,rgba(0, 0, 0, 1),rgba(0, 0, 0, 1) ,rgba(97, 0, 40, 1));
+    box-shadow: 0px -50px 200px rgba(97, 0, 40, 0.5);
 }
 
 .favoritesItem .songInfo img{
@@ -3086,26 +3081,32 @@ a.toggleSection i{
 nav{
     position: fixed;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    width: 100%;
+    background-color: var(--footerBg);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
+    width: calc(100% - 20px);
+    margin-left: 10px;
     gap: 10px;
     flex-shrink: 0;
     bottom: -1px;
     left: 0;
     right: 0;
     padding: 15px;
-    padding-bottom: calc(calc(env(safe-area-inset-bottom) * 0.6) + 16px);
+    margin-bottom: calc(env(safe-area-inset-bottom) + 10px);
     z-index: 1001;
     transition: all 0.4s ease-in-out;
-    border: none;
+    border: 1px solid var(--playerColor);
+    border-radius: 10px 10px 30px 30px;
+    box-shadow: none;
 }
 
 .navNoPlayer{
-    border-top: 1px solid var(--playerColor);
-    background-color: var(--footerBg);
-    backdrop-filter: var(--gmBackdrop);
-    -webkit-backdrop-filter: var(--gmBackdrop);
+    border-radius: 50px;
+    box-shadow: 0px 50px 50px 75px var(--bodyBg) !important;
+    backdrop-filter: blur(20px) brightness(0.3);
+    -webkit-backdrop-filter: blur(20px) brightness(0.3);
 }
 
 .navClosed{

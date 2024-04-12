@@ -387,12 +387,27 @@ function openLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
+    let buttons = document.querySelectorAll("nav > button");
+    buttons.forEach((button) => {
+        button.classList.remove("activeScreen");
+    });
+    document.querySelector('.settingsBtnNav').classList.add("activeScreen");
+
     loginScreen.classList.add("loginScreenOpen");
 }
 
 function closeLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+
+    document.querySelector('.settingsBtnNav').classList.remove("activeScreen");
+    if(currentScreen == "homeScreen"){
+        document.querySelector('.HomeBtnNav').classList.add("activeScreen");
+    }else if(currentScreen == "searchScreen"){
+        document.querySelector('.SearchBtnNav').classList.add("activeScreen");
+    }else if(currentScreen == "yoursScreen"){
+        document.querySelector('.LibraryBtnNav').classList.add("activeScreen");
+    }
 
     loginScreen.classList.remove("playerMovable");
 
