@@ -2461,7 +2461,7 @@ a.toggleSection i{
     left: 0;
     right: 0;
     top: auto;
-    bottom: calc(-100svh + 80px + env(safe-area-inset-bottom));
+    bottom: calc(-100svh + 83px + env(safe-area-inset-bottom));
     z-index: 1000;
     display: flex;
     flex-direction: column;
