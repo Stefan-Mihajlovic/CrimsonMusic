@@ -181,11 +181,8 @@ img{
 /* ----- HEADER ----- */
 
 header{
-
-    background-color: var(--footerBg);
+    background: var(--bodyBg);
     border-bottom: 1px solid var(--playerColor);
-    backdrop-filter: blur(20px) brightness(1);
-    -webkit-backdrop-filter: blur(20px) brightness(1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -3298,9 +3295,6 @@ nav button i{
 /* ----- MIN WIDTH 500px ----- */
 
 @media (min-width: 500px){
-    header{
-        display: none;
-    }
     main{
         padding-top: calc(env(safe-area-inset-top) + 60px);
     }
