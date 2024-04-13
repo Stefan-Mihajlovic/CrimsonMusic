@@ -45,7 +45,7 @@
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
 
     --footerBg: rgba(22, 20, 28, 0.7);
-    --footerBgHO: rgb(20, 17, 25);
+    --footerBgHO: rgb(30, 27, 37);
 
     --topInsetArea: env(safe-area-inset-top);
     --sortPopupTop: 0px;
@@ -181,7 +181,8 @@ img{
 /* ----- HEADER ----- */
 
 header{
-    background: var(--bodyBg);
+    background-color: var(--footerBg);
+    opacity: 1;
     border-bottom: 1px solid var(--playerColor);
     display: flex;
     align-items: center;
@@ -191,6 +192,7 @@ header{
     padding-bottom: 15px;
     padding-top: calc(var(--topInsetArea) + 15px);
     transition: all .3s ease-in-out;
+    z-index: 2;
 }
 
 header h2{
@@ -609,7 +611,6 @@ main{
 .songPlayingLi .songInfo img{
     filter: brightness(0.3);
     opacity: 0.8;
-    box-shadow: 0px 0px 60px var(--offWhite);
     transition: box-shadow .5s ease-in-out;
 }
 
@@ -3093,9 +3094,9 @@ nav{
     padding: 15px;
     margin-bottom: calc(env(safe-area-inset-bottom) + 10px);
     z-index: 1001;
-    transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out, backdrop-filter 0s, -webkit-backdrop-filter 0s;
     border: 1px solid var(--playerColor);
-    border-radius: 10px 10px 30px 30px;
+    border-radius: 10px;
     box-shadow: none;
 }
 
@@ -3107,7 +3108,10 @@ nav{
 }
 
 .navClosed{
+    background-color: var(--footerBgHO);
     transform: translateY(200%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .navBig{

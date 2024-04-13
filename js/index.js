@@ -1194,7 +1194,7 @@ function setDarkTheme(clicked){
     }else{
         document.documentElement.style.setProperty('--footerBg', 'rgba(22, 20, 28, 0.7)');
     }
-    document.documentElement.style.setProperty('--footerBgHO', 'rgb(20, 17, 25)');
+    document.documentElement.style.setProperty('--footerBgHO', 'rgb(30, 27, 37)');
 
     accountTheme = "Dark";
 }
