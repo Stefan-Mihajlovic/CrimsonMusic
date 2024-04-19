@@ -379,12 +379,21 @@
                 </div>
 
                 <hr>
-                <button class="toggleSection" onclick="event.preventDefault(); openLicenseAndProfileScreen();">
+                <button class="toggleSection" onclick="event.preventDefault(); openLicenseAndProfileScreen(true);">
                     <div class="toggleText">
                         <h2>Licenses & Attribution</h2>
                         <h5>Includes all Licenses for the artwork used</h5>
                     </div>
                     <i class="fa-solid fa-angle-right"></i>
+                </button>
+
+                <hr>
+                <button href="https://github.com/Stefan-Mihajlovic/CrimsonMusicV2" class="toggleSection">
+                    <div class="toggleText">
+                        <h2>GitHub</h2>
+                        <h5>View this project on github</h5>
+                    </div>
+                    <i style="font-size: 20px;" class="fa-solid fa-arrow-up-right-from-square"></i>
                 </button>
             </form>
             <div class="loggedInScreen">
@@ -606,10 +615,10 @@
     </div>
 
     <nav id="mobileNav" class="navNoPlayer">
-        <button class="HomeBtnNav activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i style="font-size: 20px !important;" class="bi bi-house"></i></button>
-        <button class="SearchBtnNav" type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i></button>
-        <button class="LibraryBtnNav" type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i></button>
-        <button class="settingsBtnNav" type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
+        <button class="HomeBtnNav activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i style="font-size: 17px !important;" class="bi bi-house"></i>Home</button>
+        <button class="SearchBtnNav" type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i>Search</button>
+        <button class="LibraryBtnNav" type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i>Library</button>
+        <button class="settingsBtnNav" type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i>Settings</button>
     </nav>
 
     <nav class="navBig">

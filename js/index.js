@@ -423,6 +423,7 @@ function openLicenseAndProfileScreen(isLicenseScreen){
     let LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
+    console.log(isLicenseScreen);
     if(isLicenseScreen){
         document.querySelector('.licensesSS').classList.remove('displayNone');
         document.querySelector('.profileSS').classList.add('displayNone');

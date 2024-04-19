@@ -2569,6 +2569,7 @@ async function loadApp(){
     generatePlaylists();
     generateCategories();
     generateThisMonthsFeature();
+    RegToLog();
     // Removing the loader after init
     // document.querySelector('.loaderWrapper').classList.add('displayNone');
 
