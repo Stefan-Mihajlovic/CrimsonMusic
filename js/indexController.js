@@ -2236,12 +2236,12 @@ export function doesSongHaveLyrics(songId, playedFrom){
         if(snapshot.exists()){
             let LYRICS = snapshot.val().Lyrics;
             if(LYRICS == undefined || LYRICS == ""){
-                playerLyricsBtn.style.display = 'none';
+                playerLyricsBtn.classList.add("disabledBtn");
                 if(isLyricsOn){
                     closePlayerLyrics2(playedFrom);
                 }
             }else{
-                playerLyricsBtn.style.display = 'inline';
+                playerLyricsBtn.classList.remove("disabledBtn");
                 if(isLyricsOn){
                     turnLyrics(songId);
                 }

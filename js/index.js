@@ -1299,7 +1299,7 @@ const move2 = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY - topInsetNumber);
     // console.log(currentTouchPos);
     // Update div pos based on new cursor pos
-    if(currentTouchPos > 0 && !isPopupOpen){
+    if(currentTouchPos > 0 && !isPopupOpen && !isLyricsOn){
         if(!bigSongBannerMoved){
             moveStarted = true;
             playerMovedDown = true;

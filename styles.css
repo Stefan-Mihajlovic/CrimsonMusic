@@ -150,6 +150,11 @@ input{
     filter: brightness(0.5);
 }
 
+.disabledBtn{
+    opacity: 0.4;
+    pointer-events: none !important;
+}
+
 li{
     transition: all .15s ease-in-out;
     cursor: pointer;
