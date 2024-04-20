@@ -3105,7 +3105,7 @@ nav{
     right: 0;
     padding-block: 10px;
     padding-inline: 15px;
-    margin-bottom: calc(env(safe-area-inset-bottom) + 8px);
+    margin-bottom: calc(env(safe-area-inset-bottom)*0.6 + 8px);
     z-index: 1001;
     transition: all 0.4s ease-in-out, backdrop-filter 0s, -webkit-backdrop-filter 0s;
     border: 1px solid var(--playerColor);
