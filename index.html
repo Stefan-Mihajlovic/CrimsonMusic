@@ -37,7 +37,6 @@
             </div>
             <button type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
         </header>
-        <h2 class="catTitle">Home</h2>
         <section class="vaultSection">
             <h2>VAULT</h2>
             <button class="vaultPlayBtn" onclick="openTheVault()">
@@ -165,7 +164,7 @@
     </main>
 
     <div class="player">
-        <div class="miniPlayer colorfulMiniPlayer">
+        <div class="miniPlayer">
             <div class="miniSeek">
                 <div id="miniSeekBar"></div>
             </div>
@@ -388,7 +387,7 @@
                 </button>
 
                 <hr>
-                <button href="https://github.com/Stefan-Mihajlovic/CrimsonMusicV2" class="toggleSection">
+                <button onclick="window.location = `https://github.com/Stefan-Mihajlovic/CrimsonMusicV2`;" class="toggleSection">
                     <div class="toggleText">
                         <h2>GitHub</h2>
                         <h5>View this project on github</h5>
@@ -442,14 +441,6 @@
                 <hr>
                 <section class="toggleSection">
                     <div class="toggleText">
-                        <h2>Colorless Player</h2>
-                        <h5>Sets the player background to a single color, instead of the dynamic backdrop</h5>
-                    </div>
-                    <input id="monopToggle" type="checkbox" name="monopToggle" placeholder="Monochrome-Player Toggle">
-                </section>
-                <hr>
-                <section class="toggleSection">
-                    <div class="toggleText">
                         <h2>Reduce Motion</h2>
                         <h5>This setting minimizes visual motion effects and transitions for a smoother and less distracting user experience.</h5>
                     </div>
@@ -472,13 +463,13 @@
                     <i class="fa-solid fa-angle-right"></i>
                 </button>
                 <hr>
-                <a href="https://github.com/Stefan-Mihajlovic/CrimsonMusicV2" class="toggleSection">
+                <button onclick="window.location = `https://github.com/Stefan-Mihajlovic/CrimsonMusicV2`;" class="toggleSection">
                     <div class="toggleText">
                         <h2>GitHub</h2>
                         <h5>View this project on github</h5>
                     </div>
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </a>
+                    <i style="font-size: 20px;" class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
                 <hr>
                 <section class="versionSection">
                     <h2>VERSION</h2>

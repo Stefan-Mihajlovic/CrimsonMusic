@@ -840,13 +840,10 @@ main{
 /* ----- SEARCH SCREEN ----- */
 
 .searchBar{
-    position: sticky;
-    top: -1px;
-    margin-block: -10px;
+    margin-bottom: -10px;
     padding-bottom: 10px;
-    padding-top: calc(env(safe-area-inset-top) + 10px);
+    padding-top: calc(env(safe-area-inset-top) + 20px);
     border-bottom: 1px solid transparent;
-    margin-bottom: 5px;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -855,18 +852,11 @@ main{
     transition: all .1s ease-in-out;
 }
 
-.searchBar.isSticky{
-    background-color: var(--footerBg);
-    backdrop-filter: blur(15px) brightness(1.2);
-    border-bottom: 1px solid var(--playerColor);
-    -webkit-backdrop-filter: blur(15px) brightness(1.2);
-}
-
 .searchBar form{
-    width: calc(100% - 30px);
+    width: calc(100% - 40px);
     display: flex;
     gap: 10px;
-    margin-left: 15px;
+    margin-left: 20px;
     z-index: 9;
 }
 
@@ -893,9 +883,9 @@ main{
 .searchList{
     flex-direction: column;
     gap: 10px;
-    width: calc(100% - 30px);
+    width: calc(100% - 40px);
     display: none;
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 .searchListOpen{
@@ -1010,7 +1000,7 @@ main{
     gap: 10px;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding-inline: 15px;
+    padding-inline: 20px;
     animation: none;
     transition: all .25s ease-in-out;
 }
@@ -1090,6 +1080,7 @@ main{
     background-color: #000000;
     background-image: url("data:image/svg+xml,%3Csvg width='32' height='26' viewBox='0 12 32 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 0v3.994C14 7.864 10.858 11 7 11c-3.866 0-7-3.138-7-7.006V0h2v4.005C2 6.765 4.24 9 7 9c2.756 0 5-2.236 5-4.995V0h2zm0 26v-5.994C14 16.138 10.866 13 7 13c-3.858 0-7 3.137-7 7.006V26h2v-6.005C2 17.235 4.244 15 7 15c2.76 0 5 2.236 5 4.995V26h2zm2-18.994C16 3.136 19.142 0 23 0c3.866 0 7 3.138 7 7.006v9.988C30 20.864 26.858 24 23 24c-3.866 0-7-3.138-7-7.006V7.006zm2-.01C18 4.235 20.244 2 23 2c2.76 0 5 2.236 5 4.995v10.01C28 19.765 25.756 22 23 22c-2.76 0-5-2.236-5-4.995V6.995z' fill='%23000000' fill-opacity='0.1' fill-rule='even'/%3E%3C/svg%3E");
     background-size: 75px 100px;
+    border: 1px solid var(--playerColor);
     overflow: hidden;
     box-shadow: inset 0px 0px 200px 0px rgba(0, 0, 0, 0.2);
     transition: all .2s ease-in-out;
@@ -1104,7 +1095,6 @@ main{
     padding-left: 10px;
     bottom: 4px;
     color: #DCD6F7;
-    opacity: 0.7;
 }
 
 .darkenCat{
@@ -2471,7 +2461,7 @@ a.toggleSection i{
     left: 0;
     right: 0;
     top: auto;
-    bottom: calc(-100svh + 83px + env(safe-area-inset-bottom)*0.6);
+    bottom: calc(-100svh + 85px + env(safe-area-inset-bottom)*0.6);
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -2669,14 +2659,6 @@ a.toggleSection i{
     border-radius: 10px;
     border: 1px solid var(--playerColor);
     box-shadow: 0px calc(110px + env(safe-area-inset-bottom)*0.6) 60px 100px var(--bodyBg);
-}
-
-.colorfulMiniPlayer{
-    background-color: var(--bodyBgMP) !important;
-    background-image: linear-gradient(45deg, var(--bodyBg) 1%, var(--currentSongColor));
-    background-blend-mode: lighten;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
 }
 
 .playerOpen .miniPlayer .playerClickDiv{
@@ -3096,24 +3078,29 @@ nav{
     background-color: var(--footerBg);
     backdrop-filter: var(--gmBackdrop);
     -webkit-backdrop-filter: var(--gmBackdrop);
-    width: calc(100% - 20px);
-    margin-left: 10px;
+    width: 100%;
+    margin-left: 0px;
     gap: 10px;
     flex-shrink: 0;
     bottom: -1px;
     left: 0;
     right: 0;
     padding-block: 10px;
+    padding-bottom: calc(env(safe-area-inset-bottom)*0.6 + 15px);
     padding-inline: 15px;
-    margin-bottom: calc(env(safe-area-inset-bottom)*0.6 + 8px);
+    margin-bottom: 0px;
     z-index: 1001;
-    transition: all 0.4s ease-in-out, backdrop-filter 0s, -webkit-backdrop-filter 0s;
+    transition: all 0.4s ease-in-out, backdrop-filter 0s, -webkit-backdrop-filter 0s, background-color 0s;
     border: 1px solid var(--playerColor);
-    border-radius: 10px;
     box-shadow: none;
+    border-radius: 0px;
 }
 
 .navNoPlayer{
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    border-radius: 10px;
+    margin-bottom: calc(env(safe-area-inset-bottom)*0.6 + 8px);
     box-shadow: 0px 50px 50px 75px var(--bodyBg) !important;
     backdrop-filter: blur(20px) brightness(0.3);
     -webkit-backdrop-filter: blur(20px) brightness(0.3);

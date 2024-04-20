@@ -152,25 +152,6 @@ function clickEffect(button){
     }
 }
 
-const monopToggle = document.getElementById('monopToggle');
-let isMonopOn = false;
-let lastPlayerColor;
-monopToggle.addEventListener('click', () => {
-    isMonopOn = monopToggle.checked;
-    if(monopToggle.checked){
-        document.querySelector('.miniPlayer').classList.remove('colorfulMiniPlayer');
-        document.getElementsByClassName('songBackdrop')[0].style.display = 'none';
-        lastPlayerColor = getComputedStyle(document.documentElement).getPropertyValue('--currentSongColorBig');
-        document.documentElement.style.setProperty("--currentSongColorBig", 'rgb(28, 22, 37)');
-    }else{
-        document.querySelector('.miniPlayer').classList.add('colorfulMiniPlayer');
-        if(!isPerformanceModeOn){
-            document.getElementsByClassName('songBackdrop')[0].style.display = 'block';
-        }
-        document.documentElement.style.setProperty("--currentSongColorBig", lastPlayerColor);
-    }
-})
-
 let reduceAnimations = false;
 
 const redanimToggle = document.getElementById('redanimToggle');
@@ -299,9 +280,7 @@ function turnPerformanceModeOn(){
 function turnPerformanceModeOff(){
     document.documentElement.style.setProperty("--gmBackdrop", "blur(20px) brightness(1.2)");
     document.documentElement.style.setProperty("--gmBackdropPlayer", "brightness(0.5) blur(50px) saturate(2.5)");
-    if(!isMonopOn){
-        document.querySelector('.songBackdrop').style.display = 'block';
-    }
+    document.querySelector('.songBackdrop').style.display = 'block';
     pmToggle.checked = false;
     isPerformanceModeOn = false;
     redrawAppTheme();
