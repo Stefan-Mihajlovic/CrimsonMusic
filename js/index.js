@@ -1274,7 +1274,7 @@ let topInsetNumber = Number(getComputedStyle(document.documentElement).getProper
 let bigSongBannerMoved = false, playerMovedDown = false;
 
 const move2 = (e) => {
-    currentTouchPos = (e.touches[0].clientY - offsetY - topInsetNumber);
+    currentTouchPos = (e.touches[0].clientY - offsetY + topInsetNumber);
     // console.log(currentTouchPos);
     // Update div pos based on new cursor pos
     if(currentTouchPos > 0 && !isPopupOpen && !isLyricsOn){
