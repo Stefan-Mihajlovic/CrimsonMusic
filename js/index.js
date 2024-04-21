@@ -402,7 +402,6 @@ function openLicenseAndProfileScreen(isLicenseScreen){
     let LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
-    console.log(isLicenseScreen);
     if(isLicenseScreen){
         document.querySelector('.licensesSS').classList.remove('displayNone');
         document.querySelector('.profileSS').classList.add('displayNone');
@@ -1284,7 +1283,7 @@ const move2 = (e) => {
             playerMovedDown = true;
             movablePlayer.classList.add("playerMovable");
             bigSongBanner.classList.remove("playerMovable");
-            movablePlayer.style.top = `${e.touches[0].clientY - offsetY - 50}px`;
+            movablePlayer.style.top = `${currentTouchPos - 50}px`;
         }
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));

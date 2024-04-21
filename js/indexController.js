@@ -355,9 +355,6 @@ function GetArtists(artistName){
 }
 
 function generateArtists(){
-
-console.log();
-
     let randomList = [];
 
     for (let i = 0; i < 10; i++) {

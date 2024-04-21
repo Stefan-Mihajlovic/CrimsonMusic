@@ -364,7 +364,7 @@ main{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     width: calc(100% - 40px) !important;
     margin-left: 20px !important;
     background-color: var(--footerBg);
@@ -375,7 +375,7 @@ main{
     border-radius: 15px;
     box-shadow: 0px -50px 200px var(--accentColorLO);
     margin-top: 5px;
-    padding: 15px;
+    padding: 12px;
     transition: all .3s ease-in-out;
 }
 
@@ -2197,6 +2197,7 @@ a.toggleSection i{
     .popupScreen{
         position: relative;
         width: 40%;
+        border: 1px solid var(--playerColor);
         border-radius: 30px;
         transition: all 0.3s ease-in-out;
     }
@@ -3184,10 +3185,6 @@ nav button{
     background-color: transparent;
 }
 
-.activeScreen i{
-    color: var(--accentColor) !important;
-}
-
 .navBig button i{
     font-size: 20px;
 }
@@ -3195,10 +3192,20 @@ nav button{
 nav button i{
     font-size: 15px;
     color: var(--offWhite);
+    animation: none;
 }
 
-.navBig .activeScreen i{
+.activeScreen i{
     color: var(--accentColor) !important;
+    animation: navBtnAnim 0.5s ease-in-out;
+}
+
+@keyframes navBtnAnim {
+    0%{ transform: translateY(0px); }
+    25%{ transform: translateY(3px); }
+    50%{ transform: translateY(0px); }
+    75%{ transform: translateY(-1px); }
+    100%{ transform: translateY(0px); }
 }
 
 /* ----- MAX WIDTH 450px ----- */
