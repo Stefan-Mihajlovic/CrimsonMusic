@@ -1274,7 +1274,7 @@ let topInsetNumber = Number(getComputedStyle(document.documentElement).getProper
 let bigSongBannerMoved = false, playerMovedDown = false;
 
 const move2 = (e) => {
-    currentTouchPos = (e.touches[0].clientY - offsetY);
+    currentTouchPos = (e.touches[0].clientY - offsetY + topInsetNumber);
     // console.log(currentTouchPos);
     // Update div pos based on new cursor pos
     if(currentTouchPos > 0 && !isPopupOpen && !isLyricsOn){
@@ -1283,7 +1283,7 @@ const move2 = (e) => {
             playerMovedDown = true;
             movablePlayer.classList.add("playerMovable");
             bigSongBanner.classList.remove("playerMovable");
-            movablePlayer.style.top = `${currentTouchPos + topInsetNumber - 50}px`;
+            movablePlayer.style.top = `${currentTouchPos - 50}px`;
         }
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
