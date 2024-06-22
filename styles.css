@@ -44,7 +44,7 @@
     --gmBackdrop: blur(20px) brightness(1.2);
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
 
-    --footerBg: rgba(22, 20, 28, 0.7);
+    --footerBg: rgba(26, 21, 34, 0.7);
     --footerBgHO: rgb(30, 27, 37);
 
     --topInsetArea: env(safe-area-inset-top);
@@ -399,7 +399,7 @@ main{
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid #DCD6F7;
-    padding-block: 10px;
+    padding-block: 13px;
     padding-inline: 60px;
     border-radius: 10px;
     transition: all .4s ease-in-out;
@@ -473,7 +473,7 @@ main{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
+    padding: 7px;
     border-radius: 10px;
     position: relative;
     box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.15);
@@ -534,7 +534,7 @@ main{
     width: 45px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    margin-left: 2px;
+    margin-left: 0px;
     border: 1px solid var(--playerColor);
 }
 
@@ -572,7 +572,7 @@ main{
     position: absolute;
     width: 45px;
     aspect-ratio: 1 / 1;
-    margin-left: 2px;
+    margin-left: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -810,6 +810,7 @@ main{
     aspect-ratio: 1 / 1.25;
     object-fit: cover;
     box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--playerColor);
     border-radius: 13px;
 }
 
@@ -1151,7 +1152,7 @@ main{
 
 .closeCurrentScreen{
     position: absolute;
-    top: 45px;
+    top: 50px;
     bottom: 0;
     left: 0;
     width: 7vw;
@@ -2050,6 +2051,7 @@ a.toggleSection i{
     background-color: black !important;
     width: 60px !important;
     border-radius: 0px !important;
+    border: none;
     filter: hue-rotate(-20deg) saturate(0.6) brightness(0.7);
 }
 

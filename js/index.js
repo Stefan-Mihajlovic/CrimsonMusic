@@ -1171,7 +1171,7 @@ function setDarkTheme(clicked){
     if(isPerformanceModeOn){
         document.documentElement.style.setProperty('--footerBg', '#16141c');
     }else{
-        document.documentElement.style.setProperty('--footerBg', 'rgba(22, 20, 28, 0.7)');
+        document.documentElement.style.setProperty('--footerBg', 'rgba(26, 21, 34, 0.7)');
     }
     document.documentElement.style.setProperty('--footerBgHO', 'rgb(30, 27, 37)');
 
