@@ -1,9 +1,8 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-analytics.js";
-import { } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
-import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-storage.js';
-import { getDatabase, ref, set, child, get, update, remove, onValue } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js';
-import { getAuth, signInWithRedirect, getRedirectResult , GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
+import { getDatabase, ref, set, child, get, update, remove, onValue, query, orderByChild, equalTo } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js';
+import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 
 // Firebase Config with all IDs
 const firebaseConfig = {
@@ -19,7 +18,8 @@ const firebaseConfig = {
 // ----- FIREBASE INIT
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const provider = new GoogleAuthProvider(app);
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: "select_account" });
 const auth = getAuth(app);
 
 const realdb = getDatabase();
@@ -50,6 +50,7 @@ const email = document.getElementById('email');
 const password = document.getElementById('password');
 const registerBtn = document.getElementById('registerBtn');
 const loginBtn = document.getElementById('loginBtn');
+const googleLoginBtn = document.getElementById('googleLoginBtn');
 
 let accountNames = document.getElementsByName('accountName');
 let accountEmails = document.getElementsByName('accountEmail');
@@ -103,18 +104,11 @@ function RegisterUser(){
             alert('Account already exists!');
         }
         else{
+            const newUser = createDefaultUser(username.value, email.value);
+            newUser.Password = encPass();
+
             set(ref(realdb, "Users/"+username.value),
-            {
-                Username: username.value,
-                Email: email.value,
-                Password: encPass(),
-                Playlists: "",
-                ProfilePhoto: "1",
-                LikedSongs: "",
-                AppTheme: "Dark",
-                FollowedArtists: "",
-                LikedPlaylists: ""
-            })
+            newUser)
             .then(()=>{
                 alert(`Welcome to Crimson ${username.value}!`);
                 AuthenticateUser();
@@ -124,6 +118,22 @@ function RegisterUser(){
             })
         }
     })
+}
+
+function createDefaultUser(usernameValue, emailValue, authUser = null){
+    return {
+        Username: usernameValue,
+        Email: emailValue,
+        Password: "",
+        Playlists: "",
+        ProfilePhoto: "1",
+        LikedSongs: "",
+        AppTheme: "Dark",
+        FollowedArtists: "",
+        LikedPlaylists: "",
+        AuthProvider: authUser ? "google" : "password",
+        GoogleUid: authUser ? authUser.uid : ""
+    };
 }
 
 // Encrypt the password using AES
@@ -136,6 +146,7 @@ function encPass(){
 // Call the register user on click
 registerBtn.addEventListener('click', RegisterUser);
 loginBtn.addEventListener('click', AuthenticateUser);
+googleLoginBtn.addEventListener('click', SignInWithGoogle);
 
 // ----- AUTHENTICATE USER
 
@@ -156,6 +167,83 @@ function AuthenticateUser(){
         }
     })
 }
+
+function sanitizeGoogleUsername(authUser){
+    const rawName = authUser.displayName || (authUser.email ? authUser.email.split("@")[0] : "crimsonuser");
+    const baseName = rawName.replace(/[^a-zA-Z0-9]/g, "").slice(0, 18) || "crimsonuser";
+    return baseName.length >= 4 ? baseName : `${baseName}${authUser.uid.slice(0, 4)}`;
+}
+
+function getFirstSnapshotValue(snapshot){
+    let foundUser = null;
+    snapshot.forEach((childSnapshot) => {
+        if(!foundUser){
+            foundUser = childSnapshot.val();
+        }
+    });
+    return foundUser;
+}
+
+async function ensureGoogleUser(authUser){
+    const usersRef = ref(realdb, "Users");
+    const existingGoogleUserSnapshot = await get(query(usersRef, orderByChild("GoogleUid"), equalTo(authUser.uid)));
+    const existingGoogleUser = getFirstSnapshotValue(existingGoogleUserSnapshot);
+
+    if(existingGoogleUser){
+        return existingGoogleUser;
+    }
+
+    const baseUsername = sanitizeGoogleUsername(authUser);
+    let nextUsername = baseUsername;
+    let usernameSnapshot = await get(child(ref(realdb), "Users/"+nextUsername));
+
+    if(usernameSnapshot.exists() && usernameSnapshot.val().GoogleUid !== authUser.uid){
+        nextUsername = `${baseUsername}${authUser.uid.slice(0, 6)}`;
+        usernameSnapshot = await get(child(ref(realdb), "Users/"+nextUsername));
+    }
+
+    if(usernameSnapshot.exists()){
+        return usernameSnapshot.val();
+    }
+
+    const newUser = createDefaultUser(nextUsername, authUser.email || "", authUser);
+    await set(ref(realdb, "Users/"+nextUsername), newUser);
+    return newUser;
+}
+
+async function handleGoogleCredential(authUser){
+    const user = await ensureGoogleUser(authUser);
+    loginUser(user);
+    LoadUserPlaylists();
+    LoadLikedPlaylists();
+    LoadUserFArtists();
+}
+
+async function SignInWithGoogle(){
+    try{
+        const result = await signInWithPopup(auth, provider);
+        await handleGoogleCredential(result.user);
+    }catch(error){
+        if(error.code === "auth/popup-blocked"){
+            await signInWithRedirect(auth, provider);
+            return;
+        }
+        if(error.code === "auth/popup-closed-by-user" || error.code === "auth/cancelled-popup-request"){
+            return;
+        }
+        alert("Google login failed: " + error.message);
+    }
+}
+
+getRedirectResult(auth)
+.then((result) => {
+    if(result && result.user){
+        handleGoogleCredential(result.user);
+    }
+})
+.catch((error) => {
+    alert("Google login failed: " + error.message);
+});
 
 function reloadUserPhotoAndUsername(){
     const dbRef = ref(realdb);
@@ -192,7 +280,7 @@ function loginUser(user){
     let dbRef = ref(realdb);
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
-            let setProfilePhoto = snapshot.val().ProfilePhoto;
+            let setProfilePhoto = snapshot.val().ProfilePhoto || "1";
 
             accountPhotos.forEach((photo) => {
                 photo.src = `images/profiles/${setProfilePhoto}.png`;

@@ -30,7 +30,9 @@
                 <h2 name="timeOfDay">Good Afternoon</h2>
                 <h2 class="accountName" name="accountName">Guest</h2>
             </div>
-            <button type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
+            <button class="headerProfileBtn" type="button" onclick="openLoginScreen()" aria-label="Open profile and settings">
+                <img name="profilePhoto" src="images/profiles/1.png" alt="Profile">
+            </button>
         </header>
         <section class="vaultSection">
             <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>
@@ -125,7 +127,9 @@
                 <h2 name="timeOfDay">Good Afternoon</h2>
                 <h2 class="accountName" name="accountName">Guest</h2>
             </div>
-            <button type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i></button>
+            <button class="headerProfileBtn" type="button" onclick="openLoginScreen()" aria-label="Open profile and settings">
+                <img name="profilePhoto" src="images/profiles/1.png" alt="Profile">
+            </button>
         </header>
         <h1 class="catTitleRightBtn">Library
             <div>
@@ -359,18 +363,21 @@
         <div class="screenScrollable">
             <img class="loginCrimsonLogo" src="images/CrimsonLogoSmall.png" alt="Crimson Logo">
             <form class="loginForm">
-                <h2 name="regLogTitle">Register</h2>
-    
+                <div class="loginFormHeader">
+                    <h2 name="regLogTitle">Register</h2>
+                    <h5>Save your library, playlists and profile across devices.</h5>
+                </div>
+
                 <input type="text" id="username" placeholder="Username" aria-describedby="usernameHelp" autocomplete="username" required>
                 <input type="email" id="email" placeholder="Email" aria-describedby="emailHelp" autocomplete="email" required>
                 <input type="password" id="password" placeholder="Password" aria-describedby="passwordHelp" autocomplete="current-password" required>
-    
+
                 <h5 id="alreadtAcc">Already have an account? <span class="highlightSpan" id="changeLoginScreenBtn" onclick="RegToLog()">Log in!</span></h5>
     
                 <div class="buttonField">
                     <button type="button" id="registerBtn">Register</button>
                     <button type="button" id="loginBtn" style="display: none;">Login</button>
-                    <!-- <button type="button" id="regGoogleBtn"><i class="fa-brands fa-google"></i>&nbsp;Register with Google</button> -->
+                    <button type="button" id="googleLoginBtn"><i class="fa-brands fa-google"></i>Continue with Google</button>
                 </div>
 
                 <hr>
@@ -605,7 +612,6 @@
         <button class="HomeBtnNav activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i style="font-size: 17px !important;" class="bi bi-house"></i>Home</button>
         <button class="SearchBtnNav" type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i>Search</button>
         <button class="LibraryBtnNav" type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i>Library</button>
-        <button class="settingsBtnNav" type="button" onclick="openLoginScreen()"><i class="bi bi-gear"></i>Settings</button>
     </nav>
 
     <nav class="navBig">
@@ -616,7 +622,7 @@
         <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="bi bi-house"></i>Home</button>
         <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i>Search</button>
         <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i>Library</button>
-        <button type="button" onclick="openLoginScreen();"><i class="fa-solid fa-gear"></i>Settings</button>
+        <button class="settingsBtnNav" type="button" onclick="openLoginScreen();"><i class="fa-solid fa-gear"></i>Settings</button>
     </nav>
 
     <div class="loaderWrapper">

@@ -370,7 +370,10 @@ function openLoginScreen(){
     buttons.forEach((button) => {
         button.classList.remove("activeScreen");
     });
-    document.querySelector('.settingsBtnNav').classList.add("activeScreen");
+    const settingsNavBtn = document.querySelector('.settingsBtnNav');
+    if(settingsNavBtn){
+        settingsNavBtn.classList.add("activeScreen");
+    }
 
     loginScreen.classList.add("loginScreenOpen");
 }
@@ -379,7 +382,10 @@ function closeLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 
-    document.querySelector('.settingsBtnNav').classList.remove("activeScreen");
+    const settingsNavBtn = document.querySelector('.settingsBtnNav');
+    if(settingsNavBtn){
+        settingsNavBtn.classList.remove("activeScreen");
+    }
     if(currentScreen == "homeScreen"){
         document.querySelector('.HomeBtnNav').classList.add("activeScreen");
     }else if(currentScreen == "searchScreen"){
@@ -459,7 +465,7 @@ function RegToLog(){
     titles.forEach((title) => {
         title.innerHTML = "Login";
     });
-    email.style.display = "none";
+    emailInput.style.display = "none";
     alreadyAcc.innerHTML = `Don't have an account? <span class="highlightSpan" onclick="LogToReg()">Register here!</span>`;
     registerBtn.style.display = "none";
     loginBtn.style.display = "block";
@@ -474,7 +480,7 @@ function LogToReg(){
     titles.forEach((title) => {
         title.innerHTML = "Register";
     });
-    email.style.display = "block";
+    emailInput.style.display = "block";
     alreadyAcc.innerHTML = `Already have an account? <span class="highlightSpan" onclick="RegToLog()">Log in!</span>`;
     registerBtn.style.display = "block";
     loginBtn.style.display = "none";
