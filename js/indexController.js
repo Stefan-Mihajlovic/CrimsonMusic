@@ -55,6 +55,7 @@ const googleLoginBtn = document.getElementById('googleLoginBtn');
 let accountNames = document.getElementsByName('accountName');
 let accountEmails = document.getElementsByName('accountEmail');
 let accountPhotos = document.getElementsByName('profilePhoto');
+const profilePhotoUpload = document.getElementById('profilePhotoUpload');
 let accountUsername;
 let accountEmail;
 let profilePhoto;
@@ -63,9 +64,100 @@ export let accountTheme = "Dark";
 let loggedIn = false;
 
 let currentUser;
+let selectedProfilePhotoFile = null;
 
 function isEmptyOrSpaces(str){
     return str == null || str.match(/^ *$/) !== null;
+}
+
+function getProfilePhotoSrc(photoValue){
+    if(!photoValue){
+        return "images/profiles/1.png";
+    }
+    photoValue = String(photoValue);
+    if(photoValue.startsWith("http") || photoValue.startsWith("blob:") || photoValue.startsWith("data:") || photoValue.includes("/")){
+        return photoValue;
+    }
+    return `images/profiles/${photoValue}.png`;
+}
+
+function setAccountPhotoSrc(photoValue){
+    const photoSrc = getProfilePhotoSrc(photoValue);
+    accountPhotos.forEach((photo) => {
+        photo.src = photoSrc;
+    });
+
+    const editablePhoto = document.querySelector('.accPhotoWrapper img');
+    if(editablePhoto){
+        editablePhoto.setAttribute('data-photo-url', photoValue || "1");
+        editablePhoto.removeAttribute('data-photo-id');
+        editablePhoto.removeAttribute('data-photo-upload');
+    }
+}
+
+function getSafeFileName(file){
+    const extension = GetFileExt(file).toLowerCase();
+    const baseName = GetFileName(file).replace(/[^a-zA-Z0-9_-]/g, "-").slice(0, 40) || "profile-photo";
+    return `${baseName}-${Date.now()}${extension}`;
+}
+
+function uploadProfilePhoto(file){
+    return new Promise(resolve => {
+        if(!file){
+            resolve(null);
+            return;
+        }
+
+        const storage = getStorage();
+        const storageRef = sRef(storage, `ProfilePhotos/${currentUser.Username}/${getSafeFileName(file)}`);
+        const uploadTask = uploadBytesResumable(storageRef, file, { contentType: file.type });
+
+        uploadTask.on('state-changed', () => {},
+        (error) => {
+            alert("Profile photo failed to upload: " + error.message);
+            resolve(null);
+        },
+        () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                resolve(downloadURL);
+            });
+        });
+    });
+}
+
+if(profilePhotoUpload){
+    profilePhotoUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(!file){
+            return;
+        }
+        if(!file.type.startsWith("image/")){
+            alert("Please choose an image file.");
+            profilePhotoUpload.value = "";
+            return;
+        }
+        if(file.size > 3 * 1024 * 1024){
+            alert("Profile photo has to be under 3MB.");
+            profilePhotoUpload.value = "";
+            return;
+        }
+
+        selectedProfilePhotoFile = file;
+        const previewUrl = URL.createObjectURL(file);
+        const editablePhoto = document.querySelector('.accPhotoWrapper img');
+        editablePhoto.src = previewUrl;
+        editablePhoto.setAttribute('data-photo-upload', 'true');
+        editablePhoto.removeAttribute('data-photo-id');
+        editablePhoto.removeAttribute('data-photo-url');
+        document.querySelector('.photoPicker').classList.add('displayNone');
+        document.querySelector('.presetPhotoGrid').classList.add('displayNone');
+        window.dispatchEvent(new CustomEvent('profilePhotoPickerClosed'));
+    });
+
+    window.addEventListener('profilePresetSelected', () => {
+        selectedProfilePhotoFile = null;
+        profilePhotoUpload.value = "";
+    });
 }
 
 function Validation(){
@@ -281,10 +373,7 @@ function loginUser(user){
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
             let setProfilePhoto = snapshot.val().ProfilePhoto || "1";
-
-            accountPhotos.forEach((photo) => {
-                photo.src = `images/profiles/${setProfilePhoto}.png`;
-            })
+            setAccountPhotoSrc(setProfilePhoto);
         }
     })
 
@@ -314,9 +403,7 @@ function SignOutUser(){
         email.innerHTML = accountEmail;
     });
     profilePhoto = "1";
-    accountPhotos.forEach((photo) => {
-        photo.src = `images/profiles/${profilePhoto}.png`;
-    });
+    setAccountPhotoSrc(profilePhoto);
     location.reload();
     return false;
 }
@@ -2530,12 +2617,12 @@ editPlaylistBtn.addEventListener('click', () => {
 })
 
 const saveAccountBtn = document.getElementById('saveAccount');
-saveAccountBtn .addEventListener('click', (e) => {
+saveAccountBtn .addEventListener('click', async (e) => {
     e.preventDefault();
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+    get(child(dbRef, "Users/"+currentUser.Username)).then(async (snapshot)=>{
         if(snapshot.exists()){
             let setUsername = snapshot.val().Username;
             let setEmail = snapshot.val().Email;
@@ -2560,7 +2647,29 @@ saveAccountBtn .addEventListener('click', (e) => {
                 setPlaylists = "";
             }
 
-            let newProfilePhoto = document.querySelector('.accPhotoWrapper').children[0].getAttribute('data-photo-id');
+            const editablePhoto = document.querySelector('.accPhotoWrapper').children[0];
+            let newProfilePhoto = editablePhoto.getAttribute('data-photo-id');
+
+            if(editablePhoto.getAttribute('data-photo-upload') === 'true'){
+                saveAccountBtn.value = "Uploading...";
+                saveAccountBtn.classList.add('disabledBtn');
+                const uploadedPhotoUrl = await uploadProfilePhoto(selectedProfilePhotoFile);
+                saveAccountBtn.value = "Save";
+                saveAccountBtn.classList.remove('disabledBtn');
+
+                if(!uploadedPhotoUrl){
+                    return;
+                }
+
+                newProfilePhoto = uploadedPhotoUrl;
+                selectedProfilePhotoFile = null;
+                if(profilePhotoUpload){
+                    profilePhotoUpload.value = "";
+                }
+            }else if(newProfilePhoto == undefined || newProfilePhoto == null){
+                newProfilePhoto = editablePhoto.getAttribute('data-photo-url');
+            }
+
             if(newProfilePhoto == undefined || newProfilePhoto == null){
                 newProfilePhoto = setProfilePhoto;
             }
@@ -2579,6 +2688,9 @@ saveAccountBtn .addEventListener('click', (e) => {
             })
             .then(()=>{
                 alert("Successfully saved the profile!");
+                editablePhoto.setAttribute('data-photo-url', newProfilePhoto);
+                editablePhoto.removeAttribute('data-photo-id');
+                editablePhoto.removeAttribute('data-photo-upload');
                 reloadUserPhotoAndUsername();
             })
             .catch((error)=>{

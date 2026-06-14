@@ -440,19 +440,45 @@ function closeLicenseAndProfileScreen(){
 }
 
 function openPhotoPicker(){
-    document.querySelector('.photoPicker').classList.remove('displayNone');
-    document.querySelector('.accPhotoWrapper').classList.add('displayNone');
+    const photoPicker = document.querySelector('.photoPicker');
+    const presetGrid = document.querySelector('.presetPhotoGrid');
+    const pickerIcon = document.querySelector('.accPhotoWrapper i');
+    const shouldOpen = photoPicker.classList.contains('displayNone');
+
+    photoPicker.classList.toggle('displayNone', !shouldOpen);
+    presetGrid.classList.add('displayNone');
+
+    pickerIcon.classList.toggle('fa-pen', !shouldOpen);
+    pickerIcon.classList.toggle('fa-xmark', shouldOpen);
+}
+
+function showPresetPhotoPicker(){
+    document.querySelector('.presetPhotoGrid').classList.toggle('displayNone');
 }
 
 function setPPSS(src){
-    document.querySelector('.accPhotoWrapper').children[0].src = src;
+    const accountPhoto = document.querySelector('.accPhotoWrapper').children[0];
+    accountPhoto.src = src;
     let photoId = src.split('.png')[0].slice(-1);
 
-    document.querySelector('.accPhotoWrapper').children[0].setAttribute('data-photo-id', photoId);
-    
+    accountPhoto.setAttribute('data-photo-id', photoId);
+    accountPhoto.removeAttribute('data-photo-url');
+    accountPhoto.removeAttribute('data-photo-upload');
+
+    window.dispatchEvent(new CustomEvent('profilePresetSelected'));
+
     document.querySelector('.photoPicker').classList.add('displayNone');
-    document.querySelector('.accPhotoWrapper').classList.remove('displayNone');
+    document.querySelector('.presetPhotoGrid').classList.add('displayNone');
+    document.querySelector('.accPhotoWrapper i').classList.remove('fa-xmark');
+    document.querySelector('.accPhotoWrapper i').classList.add('fa-pen');
 }
+
+window.addEventListener('profilePhotoPickerClosed', () => {
+    document.querySelector('.photoPicker').classList.add('displayNone');
+    document.querySelector('.presetPhotoGrid').classList.add('displayNone');
+    document.querySelector('.accPhotoWrapper i').classList.remove('fa-xmark');
+    document.querySelector('.accPhotoWrapper i').classList.add('fa-pen');
+});
 
 // Switch from register to login screen
 function RegToLog(){

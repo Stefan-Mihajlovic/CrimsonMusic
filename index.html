@@ -510,17 +510,30 @@
         </div>
         <div class="screenScrollable profileSS">
            <form>
-                <div class="photoPicker displayNone">
-                    <img onclick="setPPSS(this.src)" src="images/profiles/1.png" alt="Profile Photo 1">
-                    <img onclick="setPPSS(this.src)" src="images/profiles/2.png" alt="Profile Photo 2">
-                    <img onclick="setPPSS(this.src)" src="images/profiles/3.png" alt="Profile Photo 3">
-                    <img onclick="setPPSS(this.src)" src="images/profiles/4.png" alt="Profile Photo 4">
-                    <img onclick="setPPSS(this.src)" src="images/profiles/5.png" alt="Profile Photo 5">
-                    <img onclick="setPPSS(this.src)" src="images/profiles/6.png" alt="Profile Photo 6">
-                </div>
                 <div class="accPhotoWrapper" onclick="openPhotoPicker()">
                     <img name="profilePhoto" src="images/profiles/1.png" alt="Profile Photo">
                     <i class="fa-solid fa-pen"></i>
+                </div>
+                <div class="photoPicker displayNone">
+                    <div class="profilePhotoActions">
+                        <button type="button" onclick="document.getElementById('profilePhotoUpload').click()">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                            <span>Upload photo</span>
+                        </button>
+                        <button type="button" onclick="showPresetPhotoPicker()">
+                            <i class="fa-solid fa-images"></i>
+                            <span>Choose ours</span>
+                        </button>
+                    </div>
+                    <input class="profilePhotoUploadInput" type="file" id="profilePhotoUpload" accept="image/png,image/jpeg,image/webp">
+                    <div class="presetPhotoGrid displayNone">
+                        <img onclick="setPPSS(this.src)" src="images/profiles/1.png" alt="Profile Photo 1">
+                        <img onclick="setPPSS(this.src)" src="images/profiles/2.png" alt="Profile Photo 2">
+                        <img onclick="setPPSS(this.src)" src="images/profiles/3.png" alt="Profile Photo 3">
+                        <img onclick="setPPSS(this.src)" src="images/profiles/4.png" alt="Profile Photo 4">
+                        <img onclick="setPPSS(this.src)" src="images/profiles/5.png" alt="Profile Photo 5">
+                        <img onclick="setPPSS(this.src)" src="images/profiles/6.png" alt="Profile Photo 6">
+                    </div>
                 </div>
                 <h2 name="accountName" class="usernameSS">Username</h2>
                 <h5 name="accountEmail">Email</h5>
