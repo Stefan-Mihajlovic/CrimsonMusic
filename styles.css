@@ -38,6 +38,10 @@
 
     --currentSongColor: rgb(28, 22, 37);
     --currentSongColorBig: rgb(28, 22, 37);
+    --currentSongGradient1: #2a1938;
+    --currentSongGradient2: #6c2253;
+    --currentSongGradient3: #17131f;
+    --currentSongGradient4: #9a4d75;
 
     --sidePageback: black;
 
@@ -2583,7 +2587,7 @@ a.toggleSection i{
     display: flex;
     flex-direction: column;
     height: calc(100svh + 55px) !important;
-    transition: all .2s ease-out, padding-top 0s;
+    transition: top .2s ease-out, bottom .2s ease-out, opacity .2s ease-out, transform .2s ease-out, background-color .2s ease-out, border-radius .2s ease-out, padding-top 0s;
     opacity: 0;
     pointer-events: none;
     -webkit-transform: translateZ(0);
@@ -2614,20 +2618,34 @@ a.toggleSection i{
     top: -60px;
     left: -60px;
     width: calc(100vw + 120px);
-    object-fit: cover;
     z-index: -1;
     pointer-events: none;
-    filter: brightness(0.5) blur(50px) saturate(2.5);
+    background:
+        radial-gradient(circle at 20% 18%, var(--currentSongGradient4), transparent 34%),
+        radial-gradient(circle at 82% 12%, var(--currentSongGradient2), transparent 32%),
+        radial-gradient(circle at 72% 84%, var(--currentSongGradient1), transparent 38%),
+        linear-gradient(135deg, var(--currentSongGradient3), var(--currentSongGradient1) 43%, var(--currentSongGradient2));
+    background-size: 140% 140%;
     -webkit-transform: translate3d(0, 0, 0) translateZ(0);
     -moz-transform: translate3d(0, 0, 0) translateZ(0);
     -ms-transform: translate3d(0, 0, 0) translateZ(0);
     -o-transform: translate3d(0, 0, 0) translateZ(0);
     transform: translate3d(0, 0, 0) translateZ(0);
-    transition: all 0s !important;
+    transition: opacity .2s ease-out !important;
+    animation: playerGradientDrift 14s ease-in-out infinite alternate;
 }
 
 .playerOpen .songBackdrop{
     opacity: 1;
+}
+
+@keyframes playerGradientDrift {
+    from{
+        background-position: 0% 45%;
+    }
+    to{
+        background-position: 100% 55%;
+    }
 }
 
 .playerSongInfo img{
@@ -2664,6 +2682,21 @@ a.toggleSection i{
     background-color: var(--currentSongColorBig);
     border-top: 1px solid #242027;
     overflow: hidden;
+}
+
+.playerClosing{
+    background-color: transparent !important;
+    border-top-color: transparent !important;
+    transition: top .2s ease-out, bottom .2s ease-out, opacity .2s ease-out, transform .2s ease-out, padding-top 0s !important;
+}
+
+.playerClosing .songBackdrop,
+.playerClosing .bigControls,
+.playerClosing .pageBar,
+.playerClosing .draggableBarTop{
+    opacity: 0 !important;
+    transition: none !important;
+    pointer-events: none !important;
 }
 
 .player .draggableBarTop{
@@ -2916,16 +2949,16 @@ a.toggleSection i{
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 0.7);
     z-index: 0;
     margin-bottom: 2.5vh;
-    transition: all .35s ease-in-out;
+    transition: transform .22s ease-out, opacity .22s ease-out;
     animation: popInBanner .45s ease-in-out;
 }
 
 .bannerFromRight{
-    animation: bannerFromRight 0.5s ease-in-out;
+    animation: bannerFromRight 0.34s ease-out;
 }
 
 .bannerFromLeft{
-    animation: bannerFromLeft 0.5s ease-in-out;
+    animation: bannerFromLeft 0.34s ease-out;
 }
 
 @keyframes bannerFromRight {
