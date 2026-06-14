@@ -322,6 +322,8 @@ const backwardBtn = document.querySelector('#backward');
 backwardBtn.addEventListener('click', () => {
     if(prevSongBtn != 0){
         prevSongBtn.children[1].click();
+    }else if(songQueue.history.length > 0){
+        playQueueSong(songQueue.history[songQueue.history.length - 1]);
     }
 })
 
@@ -330,9 +332,7 @@ forwardBtn.addEventListener('click', () => {
     if(isShuffleOn){
         PlayRandomSongShuffle();
     }else{
-        if(nextSongBtn != 0){
-            nextSongBtn.children[1].click();
-        }
+        playNextQueuedSong();
     }
 })
 
@@ -359,6 +359,295 @@ shuffleBtn.addEventListener('click', () => {
         repeatBtn.classList.toggle('buttonTurnedOn');
     }
 })
+
+const queuePanel = document.getElementById("queuePanel");
+const queueList = document.getElementById("queueList");
+const queueSourceName = document.getElementById("queueSourceName");
+const playerPopupBackdrop = document.getElementById("playerPopupBackdrop");
+const queuePlayingFrom = document.getElementById("queuePlayingFrom");
+const queueLyricsBody = document.getElementById("queueLyricsBody");
+const queueRelatedBody = document.getElementById("queueRelatedBody");
+let isQueueOpen = false;
+let currentPlayerPopupTab = "queue";
+let currentPlayerSongId = null;
+let songQueue = {
+    sourceName: "Your queue",
+    current: null,
+    history: [],
+    upcoming: []
+};
+
+function setPlayerPopupTab(tabName){
+    currentPlayerPopupTab = tabName || "queue";
+    document.querySelectorAll("[data-player-tab]").forEach((button) => {
+        button.classList.toggle("queueTabActive", button.getAttribute("data-player-tab") === currentPlayerPopupTab);
+    });
+    document.querySelectorAll(".playerPopupContent").forEach((content) => {
+        content.classList.remove("playerPopupContentActive");
+    });
+
+    if(queuePlayingFrom){
+        queuePlayingFrom.style.display = currentPlayerPopupTab === "queue" ? "flex" : "none";
+    }
+
+    if(currentPlayerPopupTab === "lyrics"){
+        queueLyricsBody?.classList.add("playerPopupContentActive");
+        if(currentPlayerSongId != null && typeof window.crimsonLoadLyricsIntoPlayerPopup === "function"){
+            window.crimsonLoadLyricsIntoPlayerPopup(currentPlayerSongId);
+        }
+    }else if(currentPlayerPopupTab === "related"){
+        queueRelatedBody?.classList.add("playerPopupContentActive");
+    }else{
+        queueList?.classList.add("playerPopupContentActive");
+        renderSongQueue();
+    }
+}
+
+function openPlayerPopup(tabName = "queue"){
+    if(!queuePanel){
+        return;
+    }
+
+    isQueueOpen = true;
+    queuePanel.classList.add("queuePanelOpen");
+    queuePanel.setAttribute("aria-hidden", "false");
+    playerPopupBackdrop?.classList.add("playerPopupBackdropOpen");
+    setPlayerPopupTab(tabName);
+}
+
+function closePlayerPopup(){
+    if(!queuePanel){
+        return;
+    }
+
+    isQueueOpen = false;
+    queuePanel.classList.remove("queuePanelOpen");
+    queuePanel.classList.remove("playerPopupFull");
+    queuePanel.setAttribute("aria-hidden", "true");
+    queuePanel.style.top = "";
+    playerPopupBackdrop?.classList.remove("playerPopupBackdropOpen");
+}
+
+window.openPlayerPopup = openPlayerPopup;
+window.closePlayerPopup = closePlayerPopup;
+
+function getSongDurationText(){
+    if(!Number.isFinite(currentSongAudio.duration)){
+        return "";
+    }
+
+    let min = Math.floor(currentSongAudio.duration / 60);
+    let sec = Math.floor(currentSongAudio.duration % 60);
+    if(sec < 10){
+        sec = `0${sec}`;
+    }
+    return `${min}:${sec}`;
+}
+
+function parseSongItem(songLi, fallbackSource){
+    if(!songLi || !songLi.querySelector){
+        return null;
+    }
+
+    const clickDiv = songLi.querySelector(".songClickDiv");
+    const clickHandler = clickDiv ? clickDiv.getAttribute("onclick") : "";
+    const args = [...clickHandler.matchAll(/'([^']*)'/g)].map((match) => match[1]);
+
+    if(args.length < 7){
+        return null;
+    }
+
+    const title = songLi.querySelector(".songText h2")?.textContent || args[1];
+    const creator = songLi.querySelector(".songText h3")?.textContent || args[2];
+    const image = songLi.querySelector(".songInfo img")?.src || args[3];
+
+    return {
+        url: args[0],
+        title: title,
+        creator: creator,
+        image: image,
+        color: args[4],
+        source: args[5] || fallbackSource || "Your queue",
+        id: args[6],
+        element: songLi
+    };
+}
+
+function getCurrentSongItem(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id){
+    return {
+        url: songURL,
+        title: songTitle,
+        creator: songCreator,
+        image: imageURL,
+        color: songColor,
+        source: playedFrom || "Your queue",
+        id: id,
+        element: playedFromBtn && playedFromBtn.querySelector ? playedFromBtn : null
+    };
+}
+
+function buildQueueFromSongList(currentItem, playedFromBtn, playedFrom){
+    let history = [];
+    let upcoming = [];
+
+    if(playedFromBtn && playedFromBtn.parentElement){
+        const songList = Array.from(playedFromBtn.parentElement.children);
+        const currentIndex = songList.indexOf(playedFromBtn);
+
+        history = songList.slice(0, currentIndex).map((item) => parseSongItem(item, playedFrom)).filter(Boolean);
+        upcoming = songList.slice(currentIndex + 1).map((item) => parseSongItem(item, playedFrom)).filter(Boolean);
+    }
+
+    songQueue = {
+        sourceName: playedFrom || currentItem.source || "Your queue",
+        current: currentItem,
+        history: history,
+        upcoming: upcoming
+    };
+
+    fillQueueWithRandomSongs();
+    renderSongQueue();
+}
+
+function randomSongId(excludedIds = []){
+    const songCount = window.crimsonSongCount || 0;
+    if(songCount < 1){
+        return null;
+    }
+
+    let attempts = 0;
+    while(attempts < 40){
+        const id = String(Math.floor(Math.random() * songCount) + 1);
+        if(!excludedIds.includes(id)){
+            return id;
+        }
+        attempts++;
+    }
+
+    return String(Math.floor(Math.random() * songCount) + 1);
+}
+
+async function fillQueueWithRandomSongs(){
+    if(typeof window.crimsonGetSongById !== "function"){
+        renderSongQueue();
+        return;
+    }
+
+    const excludedIds = [
+        ...songQueue.history.map((song) => String(song.id)),
+        songQueue.current ? String(songQueue.current.id) : "",
+        ...songQueue.upcoming.map((song) => String(song.id))
+    ];
+
+    while(songQueue.upcoming.length < 12){
+        const id = randomSongId(excludedIds);
+        if(!id){
+            break;
+        }
+
+        excludedIds.push(id);
+        const song = await window.crimsonGetSongById(id);
+        if(song){
+            songQueue.upcoming.push({
+                url: song.songURL,
+                title: song.title,
+                creator: song.creator,
+                image: song.image,
+                color: song.color,
+                source: "Autoplay",
+                id: id,
+                element: null
+            });
+            renderSongQueue();
+        }
+    }
+}
+
+function renderSongQueue(){
+    if(!queuePanel || !queueList){
+        return;
+    }
+
+    queueSourceName.textContent = songQueue.sourceName || "Your queue";
+    queueList.innerHTML = "";
+
+    const queueRows = [
+        ...songQueue.history.map((song) => ({...song, state: "played"})),
+        ...(songQueue.current ? [{...songQueue.current, state: "current"}] : []),
+        ...songQueue.upcoming.map((song) => ({...song, state: "upcoming"}))
+    ];
+
+    if(queueRows.length === 0){
+        queueList.innerHTML = `<li class="queueEmpty">Your queue is empty.</li>`;
+        return;
+    }
+
+    queueRows.forEach((song) => {
+        const row = document.createElement("li");
+        row.className = `queueSong queueSong-${song.state}`;
+        row.innerHTML = `
+            <img src="${song.image}" alt="songBanner">
+            <div class="queueSongText">
+                <h3>${song.title}</h3>
+                <p>${song.creator}</p>
+            </div>
+            <span>${song.state === "current" ? getSongDurationText() : ""}</span>
+        `;
+        row.onclick = () => {
+            playQueueSong(song);
+        }
+        queueList.appendChild(row);
+    });
+}
+
+function toggleQueuePanel(tabName = "queue"){
+    if(isQueueOpen && currentPlayerPopupTab === tabName){
+        closePlayerPopup();
+    }else{
+        openPlayerPopup(tabName);
+    }
+}
+
+function playQueueSong(song){
+    if(!song){
+        return;
+    }
+
+    if(song.element){
+        song.element.querySelector(".songClickDiv")?.click();
+        return;
+    }
+
+    const sourceName = songQueue.sourceName || song.source || "Your queue";
+    playerSelectedSong(song.url,song.title,song.creator,song.image,song.color,sourceName,0,song.id,{
+        sourceName: sourceName,
+        preserveQueue: true
+    });
+}
+
+function playNextQueuedSong(){
+    if(nextSongBtn != 0){
+        nextSongBtn.children[1].click();
+        return;
+    }
+
+    if(songQueue.upcoming.length > 0){
+        playQueueSong(songQueue.upcoming[0]);
+        return;
+    }
+
+    fillQueueWithRandomSongs().then(() => {
+        if(songQueue.upcoming.length > 0){
+            playQueueSong(songQueue.upcoming[0]);
+        }
+    });
+}
+
+document.querySelectorAll("[data-player-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+        setPlayerPopupTab(button.getAttribute("data-player-tab"));
+    });
+});
 
 /* ----- LOGIN SCREEN ----- */
 
@@ -537,6 +826,7 @@ function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
     player.classList.remove("playerOpen");
+    closePlayerPopup();
     player.style.top = 'auto';
     document.getElementsByTagName("nav")[0].classList.remove("navClosed");
     // Setting the opacity to 1 on main and header
@@ -554,7 +844,8 @@ let playingFrom = document.getElementById("playingFromSpan");
 let isTheVaultOn = false;
 let LastPlayedFromBtn;
 
-function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id){
+function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id,queueOptions = {}){
+    currentPlayerSongId = id;
 
     document.documentElement.style.setProperty("--currentSongColor", songColor);
     document.documentElement.style.setProperty("--currentSongColorBig", songColor);
@@ -609,6 +900,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     }
 
     LastPlayedFromBtn = playedFromBtn;
+    const currentQueueItem = getCurrentSongItem(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id);
 
     if(playedFromBtn != 0){
         let songList = playedFromBtn.parentElement;
@@ -624,6 +916,31 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
                 }
             }
         }
+        buildQueueFromSongList(currentQueueItem, playedFromBtn, playedFrom);
+    }else if(queueOptions.preserveQueue){
+        if(songQueue.current){
+            songQueue.history.push(songQueue.current);
+        }
+        songQueue.upcoming = songQueue.upcoming.filter((song) => String(song.id) !== String(id) || song.url !== songURL);
+        songQueue.current = currentQueueItem;
+        songQueue.sourceName = queueOptions.sourceName || playedFrom || songQueue.sourceName || "Your queue";
+        nextSongBtn = 0;
+        prevSongBtn = 0;
+        currentSongBtn = 0;
+        fillQueueWithRandomSongs();
+        renderSongQueue();
+    }else{
+        songQueue = {
+            sourceName: playedFrom || "Your queue",
+            current: currentQueueItem,
+            history: [],
+            upcoming: []
+        };
+        nextSongBtn = 0;
+        prevSongBtn = 0;
+        currentSongBtn = 0;
+        fillQueueWithRandomSongs();
+        renderSongQueue();
     }
 
     seeIfSongIsLiked(id);
@@ -632,7 +949,9 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     checkLyrics.click();
 
     const playerLyricsBtn = document.getElementById("playerLyricsBtn");
-    playerLyricsBtn.setAttribute('onclick', `turnLyrics(`+ id +`)`);
+    playerLyricsBtn.onclick = () => {
+        openPlayerPopup("lyrics");
+    }
 
     const playerLikeBtn = document.getElementById("playerLikeBtn");
     playerLikeBtn.onclick = () => {
@@ -651,7 +970,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
 
     const miniPlayerPopupBtn = document.getElementById("miniPlayerPopupBtn");
     miniPlayerPopupBtn.onclick = () => {
-        openPopup('song',imageURL,songCreator,songTitle,id);
+        toggleQueuePanel("queue");
     }
 }
 
@@ -755,8 +1074,8 @@ currentSongAudio.addEventListener('ended', () => {
             if(isShuffleOn){
                 PlayRandomSongShuffle();
             }
-            else if(nextSongBtn != 0){
-                nextSongBtn.children[1].click();
+            else{
+                playNextQueuedSong();
             }
         }
         else{
@@ -767,8 +1086,10 @@ currentSongAudio.addEventListener('ended', () => {
                 button.children[0].classList.add("fa-circle-play");
             });
             
-            currentSongBtn.classList.remove("songPlayingLi");
-            currentSongBtn.classList.remove("songPlayingLiPaused");
+            if(currentSongBtn != 0){
+                currentSongBtn.classList.remove("songPlayingLi");
+                currentSongBtn.classList.remove("songPlayingLiPaused");
+            }
 
             isSongPaused = true;
         }
@@ -848,6 +1169,10 @@ currentSongAudio.addEventListener('timeupdate', () =>{
     miniSeekBar.style.width = progressBar + "%";
 
 
+});
+
+currentSongAudio.addEventListener('loadedmetadata', () => {
+    renderSongQueue();
 });
 
 songTime.addEventListener('change', ()=>{
@@ -1742,6 +2067,87 @@ closePopupPlBtn.addEventListener('click', () => {
         addToPlBtn.addEventListener('click', addToPlFunc);
     }, 100);
 })
+
+let playerPopupTouchStarted = false;
+let playerPopupStartY = 0;
+let playerPopupCurrentY = 0;
+let playerPopupStartTop = 0;
+
+function startPlayerPopupDrag(clientY){
+    if(!queuePanel || window.innerWidth > window.innerHeight){
+        return;
+    }
+
+    playerPopupTouchStarted = true;
+    moveStarted = false;
+    playerPopupStartY = clientY;
+    playerPopupCurrentY = playerPopupStartY;
+    playerPopupStartTop = queuePanel.getBoundingClientRect().top;
+}
+
+function movePlayerPopupTo(clientY){
+    if(!playerPopupTouchStarted || !queuePanel || window.innerWidth > window.innerHeight){
+        return;
+    }
+
+    playerPopupCurrentY = clientY;
+    const deltaY = playerPopupCurrentY - playerPopupStartY;
+    const nextTop = Math.max(0, playerPopupStartTop + deltaY);
+    queuePanel.classList.add("playerMovable");
+    queuePanel.style.top = `${nextTop}px`;
+    moveStarted = true;
+}
+
+function finishPlayerPopupDrag(){
+    if(!playerPopupTouchStarted || !queuePanel){
+        return;
+    }
+
+    queuePanel.classList.remove("playerMovable");
+
+    const deltaY = playerPopupCurrentY - playerPopupStartY;
+    if(moveStarted && deltaY < -70){
+        queuePanel.classList.add("playerPopupFull");
+        queuePanel.style.top = "0px";
+    }else if(moveStarted && deltaY > 110){
+        closePlayerPopup();
+    }else{
+        queuePanel.style.top = "";
+    }
+
+    playerPopupTouchStarted = false;
+    moveStarted = false;
+}
+
+const movePlayerPopup = (e) => {
+    movePlayerPopupTo(e.touches[0].clientY);
+}
+
+const movePlayerPopupMouse = (e) => {
+    movePlayerPopupTo(e.clientY);
+}
+
+if(queuePanel){
+    queuePanel.addEventListener("touchstart", (e) => {
+        startPlayerPopupDrag(e.touches[0].clientY);
+        document.addEventListener("touchmove", movePlayerPopup);
+    });
+
+    queuePanel.addEventListener("touchend", () => {
+        document.removeEventListener("touchmove", movePlayerPopup);
+        finishPlayerPopupDrag();
+    });
+
+    queuePanel.addEventListener("mousedown", (e) => {
+        startPlayerPopupDrag(e.clientY);
+        document.addEventListener("mousemove", movePlayerPopupMouse);
+    });
+
+    document.addEventListener("mouseup", () => {
+        document.removeEventListener("mousemove", movePlayerPopupMouse);
+        finishPlayerPopupDrag();
+    });
+}
 
 // ----- TEXT SCROLL ON OVERFLOW
 

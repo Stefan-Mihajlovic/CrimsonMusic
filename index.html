@@ -226,6 +226,26 @@
                     <button id="autoplayBtn">AUTOPLAY ON<i class="bi bi-collection-play-fill"></i></button>
                 </div>
             </div>
+            <div class="playerPopupBackdrop" id="playerPopupBackdrop" onclick="closePlayerPopup()"></div>
+            <aside class="queuePanel" id="queuePanel" aria-hidden="true">
+                <div class="queueHandle"></div>
+                <div class="queueTabs" role="tablist" aria-label="Player details">
+                    <button class="queueTabActive" data-player-tab="queue" type="button">UP NEXT</button>
+                    <button data-player-tab="lyrics" type="button">LYRICS</button>
+                    <button data-player-tab="related" type="button">RELATED</button>
+                </div>
+                <div class="queuePlayingFrom" id="queuePlayingFrom">
+                    <span>Playing from</span>
+                    <strong id="queueSourceName">Your queue</strong>
+                </div>
+                <ul class="queueList playerPopupContent playerPopupContentActive" id="queueList"></ul>
+                <div class="queueLyricsBody playerPopupContent" id="queueLyricsBody">
+                    <p>No lyrics loaded.</p>
+                </div>
+                <div class="queueRelatedBody playerPopupContent" id="queueRelatedBody">
+                    <p>Related songs are coming soon.</p>
+                </div>
+            </aside>
             <div class="darkenPlayer"></div>
         </div>
     </div>

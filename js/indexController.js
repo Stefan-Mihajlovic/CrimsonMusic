@@ -24,11 +24,47 @@ const auth = getAuth(app);
 
 const realdb = getDatabase();
 
+window.crimsonGetSongById = async function(songId){
+    const dbRef = ref(realdb);
+    const snapshot = await get(child(dbRef, "Songs/"+songId));
+
+    if(!snapshot.exists()){
+        return null;
+    }
+
+    return {
+        songURL: snapshot.val().SongURL,
+        title: snapshot.val().SongName,
+        creator: snapshot.val().Creator,
+        image: snapshot.val().ImgURL,
+        color: snapshot.val().Color
+    };
+}
+
+window.crimsonLoadLyricsIntoPlayerPopup = async function(songId){
+    const lyricsBody = document.getElementById("queueLyricsBody");
+    if(!lyricsBody){
+        return;
+    }
+
+    lyricsBody.innerHTML = "<p>Loading lyrics...</p>";
+
+    const dbRef = ref(realdb);
+    const snapshot = await get(child(dbRef, "Songs/"+songId));
+
+    if(snapshot.exists() && snapshot.val().Lyrics){
+        lyricsBody.innerHTML = snapshot.val().Lyrics;
+    }else{
+        lyricsBody.innerHTML = "<p>No lyrics available for this song.</p>";
+    }
+}
+
 function loadAppNumbers(){
     return new Promise(resolve => {
         onValue(ref(realdb, 'Songs/'), (snapshot) => {
             const data = snapshot.val();
             brojPesama = data.length - 1;
+            window.crimsonSongCount = brojPesama;
 
             onValue(ref(realdb, 'Artists/'), (snapshot) => {
                 const data = snapshot.val();
@@ -2358,44 +2394,11 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
 
 export function turnLyrics(songId){
     isLyricsOn = true;
-    const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
-    const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
-    const playerPageBar = document.getElementsByClassName('player')[0].children[1];
-    let previousPBH2text = playerPageBar.children[1].innerHTML;
-    let previousPBBonclick = playerPageBar.children[0].onclick;
-
-    document.querySelector('.playerClickDiv2').classList.add('playerClickDiv2Lyrics');
-
-    bigSongInfo.children[0].classList.add('playerBannerAway');
-    setTimeout(() => {
-        bigSongInfo.children[0].style.display = 'none';
-        document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
-    }, 450);
-    bigSongInfo.children[3].style.display = 'none';
-
-    playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    let artistPB = bigSongInfo.children[3].children[0].children[1].innerHTML;
-
-    playerLyrcis.style.display = 'block';
-    playerLyrcis.scrollTop = 0;
-    playerLyrcis.classList.remove('playerLyricsAway');
-    setTimeout(() => {
-        playerLyrcis.classList.add('playerLyrcisOn');
-    }, 600);
-
-    let dbRef = ref(realdb);
-
-        get(child(dbRef, "Songs/"+songId)).then((snapshot)=>{
-            if(snapshot.exists()){
-                let LYRICS = snapshot.val().Lyrics;
-                if(LYRICS != undefined){
-                    playerLyrcis.innerHTML = LYRICS;
-                }
-            }
-        })
-
-    playerPageBar.children[0].onclick = () => {
-        closePlayerLyrics(previousPBH2text, previousPBBonclick);
+    if(typeof window.openPlayerPopup === "function"){
+        window.openPlayerPopup("lyrics");
+    }
+    if(typeof window.crimsonLoadLyricsIntoPlayerPopup === "function"){
+        window.crimsonLoadLyricsIntoPlayerPopup(songId);
     }
 }
 
@@ -2415,7 +2418,7 @@ export function doesSongHaveLyrics(songId, playedFrom){
             }else{
                 playerLyricsBtn.classList.remove("disabledBtn");
                 if(isLyricsOn){
-                    turnLyrics(songId);
+                    window.crimsonLoadLyricsIntoPlayerPopup(songId);
                 }
             }
         }
@@ -2424,58 +2427,18 @@ export function doesSongHaveLyrics(songId, playedFrom){
 
 export function closePlayerLyrics(previousPBH2text, previousPBBonclick){
     if(isLyricsOn){
-        const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
-        const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
-        const playerPageBar = document.getElementsByClassName('player')[0].children[1];
-
-        document.querySelector('.playerClickDiv2').classList.remove('playerClickDiv2Lyrics');
-
-        bigSongInfo.children[0].style.display = 'block';
-        bigSongInfo.children[0].classList.remove('playerBannerAway');
-        bigSongInfo.children[3].style.display = 'flex';
-
-        playerLyrcis.classList.add('playerLyricsAway');
-        playerLyrcis.classList.remove('playerLyrcisOn');
-        setTimeout(() => {
-            playerLyrcis.style.display = 'none';
-            document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
-        }, 450);
-
-        playerPageBar.children[1].classList.remove("smallH2");
-        playerPageBar.children[1].innerHTML = previousPBH2text;
-        playerPageBar.children[0].onclick = previousPBBonclick;
-        playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
-
+        if(typeof window.closePlayerPopup === "function"){
+            window.closePlayerPopup();
+        }
         isLyricsOn = false;
     }
 }
 
 function closePlayerLyrics2(playedFrom){
     if(isLyricsOn){
-        const bigSongInfo = document.getElementsByClassName('bigSongInfo')[0];
-        const playerLyrcis = document.getElementsByClassName('playerLyrcis')[0];
-        const playerPageBar = document.getElementsByClassName('player')[0].children[1];
-
-        document.querySelector('.playerClickDiv2').classList.remove('playerClickDiv2Lyrics');
-
-        bigSongInfo.children[0].style.display = 'block';
-        bigSongInfo.children[0].classList.remove('playerBannerAway');
-        bigSongInfo.children[3].style.display = 'flex';
-
-        playerLyrcis.classList.add('playerLyricsAway');
-        playerLyrcis.classList.remove('playerLyrcisOn');
-        setTimeout(() => {
-            playerLyrcis.style.display = 'none';
-            document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
-        }, 450);
-
-        playerPageBar.children[1].innerHTML = "Playing From " + `<span id="playingFromSpan">${playedFrom}</span>`;
-        playerPageBar.children[1].classList.remove("smallH2");
-        playerPageBar.children[0].onclick = () => {
-            closeBigPlayer();
-        };
-        playerPageBar.children[0].innerHTML = '<i class="fa-solid fa-angle-down"></i>';
-
+        if(typeof window.closePlayerPopup === "function"){
+            window.closePlayerPopup();
+        }
         isLyricsOn = false;
     }
 }
