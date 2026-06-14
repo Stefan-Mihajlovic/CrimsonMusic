@@ -57,6 +57,7 @@ window.crimsonLoadLyricsIntoPlayerPopup = async function(songId){
     }else{
         lyricsBody.innerHTML = "<p>No lyrics available for this song.</p>";
     }
+    lyricsBody.scrollTo(0, 0);
 }
 
 function loadAppNumbers(){
@@ -972,6 +973,7 @@ export async function openArtistPage(artistID, artistName, artistImage, artistFo
 
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
     artistScreen.classList.add('screenOpenOnTop');
+    artistSongs.setAttribute("name", artistName);
 
     if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != artistScreen){
         lastOpenSideScreen.classList.remove('screenOpenOnTop');
@@ -1008,6 +1010,7 @@ export async function openArtistPage(artistID, artistName, artistImage, artistFo
     });
 
     SetTheLatestRelease(artistName);
+    document.getElementsByClassName("latestRelease")[0].setAttribute("name", artistName);
     for (let i = 1; i <= brojPlejlista; i++) {
         GetPlaylistsArtistAppearsOn(i, artistName);
     }
@@ -1227,7 +1230,7 @@ function SetTheLatestRelease(artist){
                                     <h3>`+ songCreator +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Latest Release',this.parentElement,'`+ i +`');"></div>
+                            <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','',this.parentElement,'`+ i +`');"></div>
                             <div class="songBtns">
                                 <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ i +`')"><i class="fa-solid fa-bars"></i></button>
                             </div>
@@ -1301,7 +1304,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <h3>`+ songCreator +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Artists',this.parentElement,'`+ name +`');"></div>
+                    <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','',this.parentElement,'`+ name +`');"></div>
                     <div class="songBtns">
                         <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
@@ -1322,6 +1325,7 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
     let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
     playlistScreen.classList.add('screenOpenOnTop');
+    playlistSongsList.setAttribute("name", pName);
 
     if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != playlistScreen){
         lastOpenSideScreen.classList.remove('screenOpenOnTop');
@@ -1401,7 +1405,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Playlists',this.parentElement,'`+ name +`');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
@@ -1835,6 +1839,7 @@ function DeLoadUserFArtists(){
 export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+    playlistSongsList.setAttribute("name", pName);
 
         document.getElementById("playlistLikesH5").style.display = "none";
         document.getElementById("likePlaylist").style.display = "none";
@@ -2029,7 +2034,7 @@ function GenerateOneSongFromLiked(songName){
                         <h3>`+ songCreator +`</h3>
                     </div>
                 </div>
-                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','Playlists',this.parentElement,'`+ name +`');"></div>
+                <div class="songClickDiv" onclick="playerSelectedSong('`+ songToBePlayed +`','`+ songTitle +`','`+ songCreator +`','`+ imageURL +`','`+ songColor +`','',this.parentElement,'`+ name +`');"></div>
                 <div class="songBtns">
                     <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`',true)"><i class="fa-solid fa-bars"></i></button>
                 </div>

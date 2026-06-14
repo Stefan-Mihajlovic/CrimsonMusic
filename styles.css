@@ -3219,6 +3219,8 @@ a.toggleSection i{
     z-index: 5;
     overflow: hidden;
     pointer-events: none;
+    will-change: transform, top, height;
+    contain: layout paint;
 }
 
 .queuePanelOpen{
@@ -3226,12 +3228,25 @@ a.toggleSection i{
     pointer-events: all;
 }
 
+.queuePanelOpen:not(.playerPopupFull) .playerPopupContent{
+    overflow: hidden !important;
+}
+
 .playerPopupFull{
-    top: 0px !important;
-    height: 100% !important;
     border-radius: 0px;
     border-top: 1px solid transparent;
     padding-top: env(safe-area-inset-top);
+}
+
+.queuePanelDragging{
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.queuePanelDragging .playerPopupContent{
+    overflow: hidden !important;
+    pointer-events: none;
 }
 
 .queueHandle{
@@ -3313,6 +3328,25 @@ a.toggleSection i{
 
 .queueSong-played{
     opacity: .55;
+}
+
+.queueSongBanner{
+    position: relative;
+    width: 44px;
+    aspect-ratio: 1 / 1;
+}
+
+.queueSongBanner .songVisualizer{
+    width: 44px;
+}
+
+.queueSong-current .songVisualizer{
+    opacity: 1;
+}
+
+.queueSong-current img{
+    filter: brightness(0.3);
+    opacity: 0.8;
 }
 
 .queueSong img{
