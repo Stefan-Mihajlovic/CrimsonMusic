@@ -857,27 +857,10 @@ function setLoggedOutScreen(){
 
 let isPlayerOpen = false;
 let isSongPaused = true;
-let playerCloseCleanupTimeout;
-
-function cancelPlayerClose(player){
-    clearTimeout(playerCloseCleanupTimeout);
-    player.classList.remove("playerClosing");
-}
-
-function finishPlayerClose(player){
-    clearTimeout(playerCloseCleanupTimeout);
-    playerCloseCleanupTimeout = setTimeout(() => {
-        if(!player.classList.contains("playerOpen")){
-            player.classList.remove("playerClosing");
-            player.style.top = 'auto';
-        }
-    }, 220);
-}
 
 function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
-    player.classList.add("playerClosing");
     player.classList.remove("playerOpen");
     closePlayerPopup();
     player.style.top = 'auto';
@@ -887,7 +870,6 @@ function closeBigPlayer(){
     document.querySelector('header').style.opacity = '1';
     document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
     isPlayerOpen = false;
-    finishPlayerClose(player);
 }
 
 const currentSongAudio = document.getElementById("currentSong");
@@ -966,88 +948,6 @@ function updateMediaSessionMetadata(songTitle, songCreator, imageURL, playedFrom
     updateMediaSessionPlaybackState();
 }
 
-function clampNumber(value, min, max){
-    return Math.min(Math.max(value, min), max);
-}
-
-function parseSongColorToRgb(color){
-    const fallback = { r: 45, g: 28, b: 58 };
-    if(!color || typeof color !== "string"){
-        return fallback;
-    }
-
-    const trimmedColor = color.trim();
-    const hexMatch = trimmedColor.match(/^#?([a-f\d]{3}|[a-f\d]{6})$/i);
-    if(hexMatch){
-        let hex = hexMatch[1];
-        if(hex.length === 3){
-            hex = hex.split("").map((part) => part + part).join("");
-        }
-        const numberValue = parseInt(hex, 16);
-        return {
-            r: (numberValue >> 16) & 255,
-            g: (numberValue >> 8) & 255,
-            b: numberValue & 255
-        };
-    }
-
-    const rgbMatch = trimmedColor.match(/rgba?\(([^)]+)\)/i);
-    if(rgbMatch){
-        const values = rgbMatch[1].split(",").map((value) => Number.parseFloat(value.trim()));
-        if(values.length >= 3 && values.slice(0, 3).every(Number.isFinite)){
-            return {
-                r: clampNumber(values[0], 0, 255),
-                g: clampNumber(values[1], 0, 255),
-                b: clampNumber(values[2], 0, 255)
-            };
-        }
-    }
-
-    return fallback;
-}
-
-function rgbToHsl({ r, g, b }){
-    r /= 255;
-    g /= 255;
-    b /= 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    let h = 0;
-    let s = 0;
-    const l = (max + min) / 2;
-
-    if(max !== min){
-        const delta = max - min;
-        s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
-        if(max === r){
-            h = (g - b) / delta + (g < b ? 6 : 0);
-        }else if(max === g){
-            h = (b - r) / delta + 2;
-        }else{
-            h = (r - g) / delta + 4;
-        }
-        h /= 6;
-    }
-
-    return { h: h * 360, s: s * 100, l: l * 100 };
-}
-
-function hslToCss(h, s, l){
-    const normalizedHue = ((h % 360) + 360) % 360;
-    return `hsl(${Math.round(normalizedHue)} ${Math.round(clampNumber(s, 0, 100))}% ${Math.round(clampNumber(l, 0, 100))}%)`;
-}
-
-function setPlayerGradientFromSongColor(songColor){
-    const hsl = rgbToHsl(parseSongColorToRgb(songColor));
-    const saturation = clampNumber(hsl.s + 10, 38, 82);
-    const lightness = clampNumber(hsl.l, 18, 52);
-
-    document.documentElement.style.setProperty("--currentSongGradient1", hslToCss(hsl.h - 8, saturation, clampNumber(lightness + 4, 18, 56)));
-    document.documentElement.style.setProperty("--currentSongGradient2", hslToCss(hsl.h + 28, saturation + 8, clampNumber(lightness - 3, 14, 48)));
-    document.documentElement.style.setProperty("--currentSongGradient3", hslToCss(hsl.h - 24, saturation - 12, clampNumber(lightness - 18, 8, 28)));
-    document.documentElement.style.setProperty("--currentSongGradient4", hslToCss(hsl.h + 58, saturation + 4, clampNumber(lightness + 15, 26, 64)));
-}
-
 function setupMediaSessionControls(){
     if(!mediaSessionIsAvailable()){
         return;
@@ -1117,7 +1017,6 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
 
     document.documentElement.style.setProperty("--currentSongColor", songColor);
     document.documentElement.style.setProperty("--currentSongColorBig", songColor);
-    setPlayerGradientFromSongColor(songColor);
 
     openMiniPlayer();
 
@@ -1862,12 +1761,6 @@ let playerTouchStarted = false, playerTouchStarted2 = false;
 let moveStarted = true;
 let playerNormalPos = movablePlayer.offsetTop;
 let sidePageNormalPos = document.getElementsByClassName("loginScreen")[0].offsetLeft;
-const playerGestureThreshold = 12;
-const playerSwipeDistance = 95;
-let playerGestureStartX = 0;
-let playerGestureStartY = 0;
-let playerGestureDirection = null;
-let playerDragStartTop = 0;
 
 const move = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
@@ -1887,7 +1780,6 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
     if(window.innerWidth < window.innerHeight){
         playerMovedDown = true;
         document.getElementsByTagName("nav")[0].classList.add("navClosed");
-        cancelPlayerClose(movablePlayer);
         movablePlayer.classList.add("playerOpen");
         if(reduceAnimations){
             document.querySelector('.bigControls').classList.add('noPointerEvents');
@@ -1917,25 +1809,19 @@ let topInsetNumber = Number(getComputedStyle(document.documentElement).getProper
 let bigSongBannerMoved = false, playerMovedDown = false;
 
 const move2 = (e) => {
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - playerGestureStartX;
-    const deltaY = touch.clientY - playerGestureStartY;
-
-    if(!playerGestureDirection && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= playerGestureThreshold){
-        playerGestureDirection = Math.abs(deltaY) > Math.abs(deltaX) * 1.12 ? "vertical" : "horizontal";
+    currentTouchPos = (e.touches[0].clientY - offsetY + topInsetNumber);
+    // console.log(currentTouchPos);
+    // Update div pos based on new cursor pos
+    if(currentTouchPos > 0 && !isPopupOpen && !isLyricsOn){
+        if(!bigSongBannerMoved){
+            moveStarted = true;
+            playerMovedDown = true;
+            movablePlayer.classList.add("playerMovable");
+            bigSongBanner.classList.remove("playerMovable");
+            movablePlayer.style.top = `${currentTouchPos - 50}px`;
+        }
     }
-
-    if(playerGestureDirection !== "vertical" || deltaY <= 0 || isPopupOpen || isLyricsOn){
-        return;
-    }
-
-    e.preventDefault();
-    currentTouchPos = deltaY;
-    moveStarted = true;
-    playerMovedDown = true;
-    movablePlayer.classList.add("playerMovable");
-    bigSongBanner.classList.remove("playerMovable");
-    movablePlayer.style.top = `${Math.max(playerDragStartTop + deltaY, playerDragStartTop)}px`;
+    // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
 playerOpenDiv2.addEventListener("touchstart", (e) => {
@@ -1944,13 +1830,9 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
     // Calc the initial offset Values
     if(window.innerWidth < window.innerHeight){
         currentTouchPosSkip = 0;
-        currentTouchPos = 0;
-        playerGestureStartX = e.touches[0].clientX;
-        playerGestureStartY = e.touches[0].clientY;
-        playerGestureDirection = null;
-        playerDragStartTop = movablePlayer.getBoundingClientRect().top;
-        offsetY = playerGestureStartY - movablePlayer.offsetTop;
-        offsetX = playerGestureStartX;
+        offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+        offsetX = e.touches[0].clientX - movablePlayer.offsetLeft;
+        movablePlayer.classList.add("playerMovable");
         bigSongBanner.classList.add("playerMovable");
         document.addEventListener("touchmove", move2);
         document.addEventListener("touchmove", moveSideSkip);
@@ -1963,28 +1845,21 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
 
 let currentTouchPosSkip;
 const moveSideSkip = (e) =>{
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - playerGestureStartX;
-    const deltaY = touch.clientY - playerGestureStartY;
-
-    if(!playerGestureDirection && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= playerGestureThreshold){
-        playerGestureDirection = Math.abs(deltaX) >= Math.abs(deltaY) * 0.9 ? "horizontal" : "vertical";
-    }
-
-    if(playerMovedDown || playerGestureDirection !== "horizontal"){
+    if(!playerMovedDown){
+        currentTouchPosSkip = e.touches[0].clientX - offsetX;
+        if(Math.abs(currentTouchPosSkip) > 30){
+            bigSongBannerMoved = true;
+            // Update div pos based on new cursor pos
+            let dragDelay;
+            if(currentTouchPosSkip > 0){
+                dragDelay = 30;
+            }else{
+                dragDelay = -30;
+            }
+            bigSongBanner.style.transform = `translateX(${e.touches[0].clientX - offsetX - dragDelay}px)`;
+        }
+    }else{
         currentTouchPosSkip = 0;
-        return;
-    }
-
-    e.preventDefault();
-    currentTouchPosSkip = deltaX;
-    moveStarted = true;
-
-    if(Math.abs(currentTouchPosSkip) > playerGestureThreshold){
-        bigSongBannerMoved = true;
-        const visualDistance = (Math.abs(currentTouchPosSkip) - playerGestureThreshold) * 0.96;
-        const direction = currentTouchPosSkip > 0 ? 1 : -1;
-        bigSongBanner.style.transform = `translateX(${visualDistance * direction}px)`;
     }
     // console.log("moved " + e.touches[0].clientX - offsetX);
 }
@@ -2231,7 +2106,6 @@ document.addEventListener("touchend", () => {
         }
         playerTouchStarted = false;
         if(!moveStarted){
-            cancelPlayerClose(movablePlayer);
             movablePlayer.classList.add("playerOpen");
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
@@ -2290,69 +2164,56 @@ document.addEventListener("touchend", () => {
         }
     }
     if(playerTouchStarted2 && moveStarted){
-        document.removeEventListener("touchmove", move2);
-        if(playerGestureDirection === "vertical" && currentTouchPos > 100){
+        if(currentTouchPos > 100){
             movablePlayer.classList.remove("playerMovable");
-            movablePlayer.classList.add("playerClosing");
             movablePlayer.classList.remove("playerOpen");
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
+            document.removeEventListener("touchmove", move2);
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
-            finishPlayerClose(movablePlayer);
-        }else if(playerGestureDirection === "vertical"){
+        }else{
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
             movablePlayer.classList.remove("playerMovable");
-            cancelPlayerClose(movablePlayer);
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
             isPlayerOpen = true;
         }
     }
-    if(playerTouchStarted2 && !moveStarted){
-        document.removeEventListener("touchmove", move2);
-    }
     document.removeEventListener("touchmove", moveSideSkip);
     if(bigSongBannerMoved){
         movablePlayer.classList.remove("playerMovable");
-        if(currentTouchPosSkip > playerSwipeDistance){
+        if(currentTouchPosSkip > 130){
             bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(125%)";
+            bigSongBanner.style.transform = "translateX(200%)";
             setTimeout(() => {
                 backwardBtn.click();
                 bigSongBanner.classList.add("playerMovable");
                 setTimeout(() => {
-                    bigSongBanner.style.transform = "translateX(-125%)";
+                    bigSongBanner.style.transform = "translateX(-200%)";
                     setTimeout(() => {
                         bigSongBanner.classList.remove("playerMovable");
                         bigSongBanner.style.transform = "translateX(0)";
                     }, 10);
                 }, 10);
-            }, 210);
+            }, 350);
         }
-        if(currentTouchPosSkip < -playerSwipeDistance){
+        if(currentTouchPosSkip < 130){
             bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(-125%)";
+            bigSongBanner.style.transform = "translateX(-200%)";
             setTimeout(() => {
                 forwardBtn.click();
                 bigSongBanner.classList.add("playerMovable");
                 setTimeout(() => {
-                    bigSongBanner.style.transform = "translateX(125%)";
+                    bigSongBanner.style.transform = "translateX(200%)";
                     setTimeout(() => {
                         bigSongBanner.classList.remove("playerMovable");
                         bigSongBanner.style.transform = "translateX(0)";
                     }, 10);
                 }, 10);
-            }, 210);
+            }, 350);
         }
-        if(Math.abs(currentTouchPosSkip) <= playerSwipeDistance){
-            bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(0)";
-        }
-    }else if(playerTouchStarted2){
-        bigSongBanner.classList.remove("playerMovable");
-        bigSongBanner.style.transform = "translateX(0)";
     }
     if(playerTouchStarted3){
         popupScreen.classList.remove("playerMovable");
@@ -2367,7 +2228,6 @@ document.addEventListener("touchend", () => {
     }
     playerMovedDown = false;
     bigSongBannerMoved = false;
-    playerGestureDirection = null;
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
