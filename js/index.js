@@ -15,6 +15,103 @@ let brojKategorija = 14;
 
 let isPerformanceModeOn = false;
 
+const crimsonDefaultImages = {
+    song: "images/defaultSong.webp",
+    artist: "images/defaultArtist.webp",
+    playlist: "images/defaultPlaylist.webp"
+};
+
+function isMissingImageSrc(src){
+    const normalized = String(src || "").trim().toLowerCase();
+    return !normalized || normalized === "undefined" || normalized === "null" || normalized.endsWith("/undefined") || normalized.endsWith("/null");
+}
+
+function getCrimsonImageType(element, preferredType){
+    if(preferredType && crimsonDefaultImages[preferredType]){
+        return preferredType;
+    }
+
+    const imageContext = [
+        element?.getAttribute?.("alt"),
+        element?.getAttribute?.("name"),
+        element?.className,
+        element?.id,
+        element?.closest?.(".artistItem, .artistItemSearch") ? "artist" : "",
+        element?.closest?.(".playlistItem, .playlistItemSearch, .favoritesItem") ? "playlist" : ""
+    ].join(" ").toLowerCase();
+
+    if(imageContext.includes("artist")){
+        return "artist";
+    }
+    if(imageContext.includes("playlist") || imageContext.includes("vault")){
+        return "playlist";
+    }
+
+    return "song";
+}
+
+function getCrimsonImageSrc(src, type = "song"){
+    if(isMissingImageSrc(src)){
+        return crimsonDefaultImages[type] || crimsonDefaultImages.song;
+    }
+
+    return src;
+}
+
+function applyCrimsonImageFallback(image, preferredType){
+    if(!image || image.tagName !== "IMG"){
+        return;
+    }
+
+    const imageType = getCrimsonImageType(image, preferredType);
+    image.dataset.crimsonFallbackType = imageType;
+    if(isMissingImageSrc(image.getAttribute("src"))){
+        image.src = crimsonDefaultImages[imageType];
+    }
+}
+
+function setupCrimsonImageFallbacks(){
+    document.querySelectorAll("img").forEach((image) => applyCrimsonImageFallback(image));
+
+    document.addEventListener("error", (event) => {
+        const image = event.target;
+        if(!image || image.tagName !== "IMG"){
+            return;
+        }
+
+        const imageType = image.dataset.crimsonFallbackType || getCrimsonImageType(image);
+        if(image.getAttribute("src") !== crimsonDefaultImages[imageType]){
+            image.src = crimsonDefaultImages[imageType];
+        }
+    }, true);
+
+    const imageObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if(mutation.type === "attributes"){
+                applyCrimsonImageFallback(mutation.target);
+                return;
+            }
+
+            mutation.addedNodes.forEach((node) => {
+                if(node.tagName === "IMG"){
+                    applyCrimsonImageFallback(node);
+                }
+                node.querySelectorAll?.("img").forEach((image) => applyCrimsonImageFallback(image));
+            });
+        });
+    });
+
+    imageObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["src"]
+    });
+}
+
+setupCrimsonImageFallbacks();
+window.getCrimsonImageSrc = getCrimsonImageSrc;
+
 /* ----- GET THE TIME ----- */
 
 window.onload = getTime();
@@ -271,7 +368,6 @@ pmToggle.addEventListener('click', () => {
 function turnPerformanceModeOn(){
     document.documentElement.style.setProperty("--gmBackdrop", "none");
     document.documentElement.style.setProperty("--gmBackdropPlayer", "none");
-    document.querySelector('.songBackdrop').style.display = 'none';
     pmToggle.checked = true;
     isPerformanceModeOn = true;
     redrawAppTheme();
@@ -279,8 +375,7 @@ function turnPerformanceModeOn(){
 
 function turnPerformanceModeOff(){
     document.documentElement.style.setProperty("--gmBackdrop", "blur(20px) brightness(1.2)");
-    document.documentElement.style.setProperty("--gmBackdropPlayer", "brightness(0.5) blur(50px) saturate(2.5)");
-    document.querySelector('.songBackdrop').style.display = 'block';
+    document.documentElement.style.setProperty("--gmBackdropPlayer", "none");
     pmToggle.checked = false;
     isPerformanceModeOn = false;
     redrawAppTheme();
@@ -337,13 +432,13 @@ forwardBtn.addEventListener('click', () => {
 })
 
 const addToPlBtn = document.querySelector('#addToPlBtn');
-addToPlBtn.addEventListener('click', addToPlFunc);
+addToPlBtn.onclick = addToPlFunc;
 
 function addToPlFunc(){
     if(UserSignedIn()){
         popupScreen.classList.add("popupPl");
+        document.querySelector('.popupMyPlaylists').innerHTML = `<li class="popupPlaylistLoading">Loading playlists...</li>`;
         LoadUserPlaylistsPopup(addToPlBtn.getAttribute('name'));
-        this.removeEventListener('click', addToPlFunc);
         addToPlBtn.onclick = () => {};
     }else{
         openLoginPopup();
@@ -370,6 +465,7 @@ const queueRelatedBody = document.getElementById("queueRelatedBody");
 let isQueueOpen = false;
 let currentPlayerPopupTab = "queue";
 let currentPlayerSongId = null;
+let currentPlayerSongPopup = null;
 let songQueue = {
     sourceName: "Your queue",
     current: null,
@@ -437,6 +533,7 @@ function closePlayerPopup(){
     queuePanel.style.top = "";
     queuePanel.style.height = "";
     playerPopupBackdrop?.classList.remove("playerPopupBackdropOpen");
+    setInteractionActive(false);
 }
 
 window.openPlayerPopup = openPlayerPopup;
@@ -642,6 +739,20 @@ function toggleQueuePanel(tabName = "queue"){
     }else{
         openPlayerPopup(tabName);
     }
+}
+
+function openCurrentSongOptionsPopup(){
+    if(!currentPlayerSongPopup){
+        return;
+    }
+
+    openPopup(
+        "song",
+        currentPlayerSongPopup.image,
+        currentPlayerSongPopup.creator,
+        currentPlayerSongPopup.title,
+        currentPlayerSongPopup.id
+    );
 }
 
 function playQueueSong(song){
@@ -1012,11 +1123,190 @@ setupMediaSessionControls();
 let isTheVaultOn = false;
 let LastPlayedFromBtn;
 
+function clampColorChannel(value){
+    return Math.max(0, Math.min(255, Math.round(value)));
+}
+
+function hexToRgb(color){
+    const fallback = { r: 28, g: 22, b: 37 };
+    if(!color || typeof color !== "string"){
+        return fallback;
+    }
+
+    const normalized = color.trim();
+    if(normalized.startsWith("#")){
+        const hex = normalized.slice(1);
+        const fullHex = hex.length === 3 ? hex.split("").map((char) => char + char).join("") : hex;
+        const number = Number.parseInt(fullHex.slice(0, 6), 16);
+        if(Number.isNaN(number)){
+            return fallback;
+        }
+
+        return {
+            r: (number >> 16) & 255,
+            g: (number >> 8) & 255,
+            b: number & 255
+        };
+    }
+
+    const rgbMatch = normalized.match(/rgba?\(([^)]+)\)/i);
+    if(rgbMatch){
+        const channels = rgbMatch[1].split(",").map((part) => Number.parseFloat(part));
+        if(channels.length >= 3 && channels.every((channel) => !Number.isNaN(channel))){
+            return {
+                r: clampColorChannel(channels[0]),
+                g: clampColorChannel(channels[1]),
+                b: clampColorChannel(channels[2])
+            };
+        }
+    }
+
+    return fallback;
+}
+
+function rgbToCss(color){
+    return `rgb(${clampColorChannel(color.r)}, ${clampColorChannel(color.g)}, ${clampColorChannel(color.b)})`;
+}
+
+function mixRgb(color, target, amount){
+    return {
+        r: color.r + (target.r - color.r) * amount,
+        g: color.g + (target.g - color.g) * amount,
+        b: color.b + (target.b - color.b) * amount
+    };
+}
+
+function getColorStats(color){
+    const max = Math.max(color.r, color.g, color.b);
+    const min = Math.min(color.r, color.g, color.b);
+    return {
+        brightness: (color.r + color.g + color.b) / 3,
+        saturation: max - min
+    };
+}
+
+function buildPlayerGradient(colors){
+    const primary = colors[0] || { r: 28, g: 22, b: 37 };
+    const secondary = colors[1] || mixRgb(primary, { r: 180, g: 180, b: 180 }, 0.28);
+    const tertiary = colors[2] || mixRgb(primary, { r: 255, g: 255, b: 255 }, 0.14);
+    const base = mixRgb(primary, { r: 18, g: 12, b: 22 }, 0.34);
+    const softBase = mixRgb(base, secondary, 0.12);
+
+    return `
+        linear-gradient(180deg, rgba(8, 6, 12, 0.62) 0%, rgba(8, 6, 12, 0.38) 12%, rgba(8, 6, 12, 0) 28%),
+        radial-gradient(circle at 22% 8%, ${rgbToCss(mixRgb(primary, { r: 255, g: 255, b: 255 }, 0.08))} 0%, transparent 34%),
+        radial-gradient(circle at 82% 22%, ${rgbToCss(mixRgb(secondary, tertiary, 0.18))} 0%, transparent 40%),
+        linear-gradient(165deg, ${rgbToCss(primary)} 0%, ${rgbToCss(secondary)} 30%, ${rgbToCss(softBase)} 64%, rgb(18, 12, 22) 100%)
+    `;
+}
+
+function setFallbackPlayerGradient(songColor){
+    const base = hexToRgb(songColor);
+    document.documentElement.style.setProperty("--playerGradientBg", buildPlayerGradient([
+        mixRgb(base, { r: 255, g: 255, b: 255 }, 0.08),
+        mixRgb(base, { r: 0, g: 0, b: 0 }, 0.22),
+        mixRgb(base, { r: 160, g: 95, b: 255 }, 0.18)
+    ]));
+}
+
+function getDominantImageColors(imageURL, fallbackColor){
+    setFallbackPlayerGradient(fallbackColor);
+    if(!imageURL){
+        return;
+    }
+
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => {
+        try{
+            const canvas = document.createElement("canvas");
+            const size = 32;
+            canvas.width = size;
+            canvas.height = size;
+            const context = canvas.getContext("2d", { willReadFrequently: true });
+            context.drawImage(image, 0, 0, size, size);
+            const data = context.getImageData(0, 0, size, size).data;
+            const buckets = new Map();
+
+            for(let i = 0; i < data.length; i += 4){
+                const alpha = data[i + 3];
+                if(alpha < 180){
+                    continue;
+                }
+
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const stats = getColorStats({ r, g, b });
+                if(stats.brightness < 18 || stats.brightness > 245){
+                    continue;
+                }
+
+                const key = `${Math.round(r / 28) * 28},${Math.round(g / 28) * 28},${Math.round(b / 28) * 28}`;
+                const bucket = buckets.get(key) || { r: 0, g: 0, b: 0, score: 0, count: 0, vibrantScore: 0, neutralScore: 0, darkScore: 0 };
+                const weight = 1 + stats.saturation / 110;
+                bucket.r += r * weight;
+                bucket.g += g * weight;
+                bucket.b += b * weight;
+                bucket.score += weight;
+                bucket.count += 1;
+                bucket.vibrantScore += Math.max(0, stats.saturation - 24) * weight * (stats.brightness > 52 ? 1.3 : 0.8);
+                bucket.neutralScore += Math.max(0, 72 - stats.saturation) * weight * (stats.brightness > 70 && stats.brightness < 210 ? 1.2 : 0.55);
+                bucket.darkScore += Math.max(0, 150 - stats.brightness) * weight;
+                buckets.set(key, bucket);
+            }
+
+            const colors = Array.from(buckets.values()).map((bucket) => ({
+                    r: bucket.r / bucket.score,
+                    g: bucket.g / bucket.score,
+                    b: bucket.b / bucket.score,
+                    count: bucket.count,
+                    score: bucket.score,
+                    vibrantScore: bucket.vibrantScore,
+                    neutralScore: bucket.neutralScore,
+                    darkScore: bucket.darkScore
+                }));
+
+            const primary = colors
+                .filter((color) => getColorStats(color).saturation > 34)
+                .sort((a, b) => b.vibrantScore - a.vibrantScore)[0] || colors.sort((a, b) => b.score - a.score)[0];
+            const neutral = colors
+                .filter((color) => color !== primary && getColorStats(color).brightness > 58)
+                .sort((a, b) => b.neutralScore - a.neutralScore)[0];
+            const dark = colors
+                .filter((color) => color !== primary && color !== neutral)
+                .sort((a, b) => b.darkScore - a.darkScore)[0];
+
+            const gradientColors = [
+                primary,
+                neutral || mixRgb(primary, { r: 170, g: 170, b: 170 }, 0.22),
+                dark || mixRgb(primary, { r: 18, g: 12, b: 22 }, 0.4)
+            ].filter(Boolean);
+
+            if(gradientColors.length){
+                document.documentElement.style.setProperty("--playerGradientBg", buildPlayerGradient(gradientColors));
+            }
+        }catch(error){
+            setFallbackPlayerGradient(fallbackColor);
+        }
+    };
+    image.onerror = () => setFallbackPlayerGradient(fallbackColor);
+    image.src = imageURL;
+}
+
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id,queueOptions = {}){
     currentPlayerSongId = id;
+    imageURL = getCrimsonImageSrc(imageURL, "song");
+    currentPlayerSongPopup = {
+        id,
+        image: imageURL,
+        creator: songCreator,
+        title: songTitle
+    };
 
     document.documentElement.style.setProperty("--currentSongColor", songColor);
     document.documentElement.style.setProperty("--currentSongColorBig", songColor);
+    getDominantImageColors(imageURL, songColor);
 
     openMiniPlayer();
 
@@ -1136,7 +1426,12 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
 
     const miniPlayerPopupBtn = document.getElementById("miniPlayerPopupBtn");
     miniPlayerPopupBtn.onclick = () => {
-        toggleQueuePanel("queue");
+        openCurrentSongOptionsPopup();
+    }
+
+    const playingFromBtn = document.getElementById("playingFromBtn");
+    playingFromBtn.onclick = () => {
+        openPlayerPopup("queue");
     }
 }
 
@@ -1506,11 +1801,11 @@ function OpenMakePlaylistScreen(editing, playlistIdP, playlistNameP, playlistBan
         document.getElementById('nameInput').value = playlistNameP;
         document.getElementById('submitMakePlaylist').value = "Save";
 
-        document.getElementById('imageUploadView').style.backgroundImage = `url("${playlistBannerP}")`;
+        document.getElementById('imageUploadView').style.backgroundImage = `url("${getCrimsonImageSrc(playlistBannerP, "playlist")}")`;
         document.querySelector('.currentMakePlaylistName').innerHTML = playlistNameP;
         document.querySelector('.currentMakePlaylistName').setAttribute('data-playlist-id', playlistIdP);
         document.querySelector('.currentMakePlaylistName').setAttribute('data-playlist-songs', playlistSongsP);
-        document.querySelector('.currentMakePlaylistName').setAttribute('data-playlist-banner', playlistBannerP);
+        document.querySelector('.currentMakePlaylistName').setAttribute('data-playlist-banner', getCrimsonImageSrc(playlistBannerP, "playlist"));
     }else{
         document.querySelector('.formImageInput').classList.remove('displayNone');
 
@@ -1518,8 +1813,9 @@ function OpenMakePlaylistScreen(editing, playlistIdP, playlistNameP, playlistBan
 
         document.getElementById('nameInput').value = "";
         document.getElementById('submitMakePlaylist').value = "Create";
+        document.getElementById('imageInput').value = "";
 
-        document.getElementById('imageUploadView').style.backgroundImage = "none";
+        document.getElementById('imageUploadView').style.backgroundImage = `url("images/defaultPlaylist.webp")`;
         document.querySelector('.currentMakePlaylistName').innerHTML = "My Playlist";
         document.querySelector('.currentMakePlaylistName').removeAttribute('data-playlist-id');
         document.querySelector('.currentMakePlaylistName').removeAttribute('data-playlist-songs');
@@ -1557,7 +1853,37 @@ function changeMakePlaylistName(text){
 // ----- Close Popup
 
 let isPopupOpen = false;
+
+function getCachedPopupLikeState(id){
+    const likedSongs = window.crimsonLikedSongIds;
+    if(!likedSongs || typeof likedSongs.has !== "function"){
+        return null;
+    }
+
+    return likedSongs.has(String(id));
+}
+
+function setPopupLikeState(id, isLiked){
+    const likeSongBtn = document.getElementById("likeSongBtn");
+    if(!likeSongBtn){
+        return;
+    }
+
+    likeSongBtn.setAttribute("data-song-id", id);
+    if(isLiked === null){
+        likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Checking favorites...</h5>`;
+        likeSongBtn.classList.add("popupItemLoading");
+        return;
+    }
+
+    likeSongBtn.classList.remove("popupItemLoading");
+    likeSongBtn.innerHTML = isLiked
+        ? `<i class="fa-solid fa-heart"></i><h5>Remove from favorites</h5>`
+        : `<i class="fa-regular fa-heart"></i><h5>Add to favorites</h5>`;
+}
+
 function openPopup(type,src,art,nam,id,isLikedPage){
+    src = getCrimsonImageSrc(src, type === "playlist" ? "playlist" : "song");
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
 
@@ -1568,6 +1894,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
 
     const songPopupBody = document.getElementsByClassName("songPopupBody")[0];
     const playlistPopupBody = document.getElementsByClassName("playlistPopupBody")[0];
+    const likeSongBtn = document.getElementById("likeSongBtn");
 
     const popupImages = document.getElementsByName("popupImage");
     const popupSongTitle = document.getElementsByName("popupSongTitle");
@@ -1587,6 +1914,8 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     popupScreen.style.top = 'auto';
 
     addToPlBtn.setAttribute('name', id);
+    addToPlBtn.onclick = addToPlFunc;
+    document.querySelector('.popupMyPlaylists').innerHTML = "";
 
     popupImages.forEach((image) => {
         image.src = src;
@@ -1604,6 +1933,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     if(type === 'song'){
         songPopupBody.style.display = "block";
         playlistPopupBody.style.display = "none";
+        setPopupLikeState(id, getCachedPopupLikeState(id));
     }else{
         songPopupBody.style.display = "none";
         playlistPopupBody.style.display = "block";
@@ -1611,8 +1941,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
 
     seeIfSongIsLiked(id);
 
-    let likeSongBtn = document.getElementById("likeSongBtn");
-    likeSongBtn.addEventListener('click', () => {
+    likeSongBtn.onclick = () => {
         if(UserSignedIn()){
             addSongToLiked(id);
             likeSongBtn.classList.add("likeBtnAnim2");
@@ -1622,7 +1951,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
         }else{
             openLoginPopup();
         }
-    })
+    }
 }
 
 function closePopup(){
@@ -1634,7 +1963,7 @@ function closePopup(){
     const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
     popupScreen.classList.remove('popupPl');
     popupMyPlaylists.innerHTML = "";
-    addToPlBtn.addEventListener('click', addToPlFunc);
+    addToPlBtn.onclick = addToPlFunc;
 }
 
 // ----- SET APP THEME
@@ -1761,6 +2090,20 @@ let playerTouchStarted = false, playerTouchStarted2 = false;
 let moveStarted = true;
 let playerNormalPos = movablePlayer.offsetTop;
 let sidePageNormalPos = document.getElementsByClassName("loginScreen")[0].offsetLeft;
+let playerMoveFrame = null;
+let playerMoveTop = null;
+let popupMoveFrame = null;
+let popupMoveTop = null;
+
+function setInteractionActive(isActive){
+    document.body.classList.toggle("playerInteractionActive", isActive);
+}
+
+function cancelScheduledMove(frame){
+    if(frame){
+        cancelAnimationFrame(frame);
+    }
+}
 
 const move = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
@@ -1769,7 +2112,13 @@ const move = (e) => {
     }
     moveStarted = true;
     // Update div pos based on new cursor pos
-    movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+    playerMoveTop = e.touches[0].clientY - offsetY;
+    if(!playerMoveFrame){
+        playerMoveFrame = requestAnimationFrame(() => {
+            movablePlayer.style.top = `${playerMoveTop}px`;
+            playerMoveFrame = null;
+        });
+    }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
 
@@ -1792,6 +2141,7 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
         offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
         movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
         movablePlayer.classList.add("playerMovable");
+        setInteractionActive(true);
 
         if(isLyricsOn){
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
@@ -1818,7 +2168,13 @@ const move2 = (e) => {
             playerMovedDown = true;
             movablePlayer.classList.add("playerMovable");
             bigSongBanner.classList.remove("playerMovable");
-            movablePlayer.style.top = `${currentTouchPos - 50}px`;
+            playerMoveTop = currentTouchPos - 50;
+            if(!playerMoveFrame){
+                playerMoveFrame = requestAnimationFrame(() => {
+                    movablePlayer.style.top = `${playerMoveTop}px`;
+                    playerMoveFrame = null;
+                });
+            }
         }
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
@@ -1834,6 +2190,7 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
         offsetX = e.touches[0].clientX - movablePlayer.offsetLeft;
         movablePlayer.classList.add("playerMovable");
         bigSongBanner.classList.add("playerMovable");
+        setInteractionActive(true);
         document.addEventListener("touchmove", move2);
         document.addEventListener("touchmove", moveSideSkip);
         playerTouchStarted2 = true;
@@ -2067,7 +2424,13 @@ const move3 = (e) => {
     // Update div pos based on new cursor pos
     if(currentTouchPos > startPopupOffsetTop){
         popupScreen.classList.add("playerMovable");
-        popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
+        popupMoveTop = e.touches[0].clientY - offsetY;
+        if(!popupMoveFrame){
+            popupMoveFrame = requestAnimationFrame(() => {
+                popupScreen.style.top = `${popupMoveTop}px`;
+                popupMoveFrame = null;
+            });
+        }
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
 }
@@ -2079,6 +2442,7 @@ popupScreen.addEventListener("touchstart", (e) => {
         offsetY = e.touches[0].clientY - popupScreen.offsetTop;
         popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
         popupScreen.classList.add("playerMovable");
+        setInteractionActive(true);
         document.addEventListener("touchmove", move3);
         playerTouchStarted3 = true;
         moveStarted = false;
@@ -2090,6 +2454,8 @@ popupScreen.addEventListener("touchstart", (e) => {
 document.addEventListener("touchend", () => {
     if(playerTouchStarted){
         document.removeEventListener("touchmove", move);
+        cancelScheduledMove(playerMoveFrame);
+        playerMoveFrame = null;
         movablePlayer.classList.remove("playerMovable");
         if(currentTouchPos < playerNormalPos - 125){
             movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
@@ -2163,16 +2529,19 @@ document.addEventListener("touchend", () => {
             moveStarted = false;
         }
     }
-    if(playerTouchStarted2 && moveStarted){
-        if(currentTouchPos > 100){
+    if(playerTouchStarted2){
+        document.removeEventListener("touchmove", move2);
+        cancelScheduledMove(playerMoveFrame);
+        playerMoveFrame = null;
+
+        if(moveStarted && currentTouchPos > 100){
             movablePlayer.classList.remove("playerMovable");
             movablePlayer.classList.remove("playerOpen");
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
-            document.removeEventListener("touchmove", move2);
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
-        }else{
+        }else if(moveStarted){
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -2218,6 +2587,8 @@ document.addEventListener("touchend", () => {
     if(playerTouchStarted3){
         popupScreen.classList.remove("playerMovable");
         document.removeEventListener("touchmove", move3);
+        cancelScheduledMove(popupMoveFrame);
+        popupMoveFrame = null;
         if(moveStarted){
             if(currentTouchPos <= startPopupOffsetTop + 100){
                 popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
@@ -2231,6 +2602,9 @@ document.addEventListener("touchend", () => {
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
+    if(!playerPopupTouchStarted){
+        setInteractionActive(false);
+    }
 })
 
 // ----- CLOSE THE POPUP ADD TO PLAYLIST UL
@@ -2242,7 +2616,7 @@ closePopupPlBtn.addEventListener('click', () => {
         popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
     }
     setTimeout(() => {
-        addToPlBtn.addEventListener('click', addToPlFunc);
+        addToPlBtn.onclick = addToPlFunc;
     }, 100);
 })
 
@@ -2256,7 +2630,7 @@ let playerPopupStartedFull = false;
 const playerPopupDragThreshold = 8;
 
 function getPlayerPopupContainerRect(){
-    return queuePanel?.offsetParent?.getBoundingClientRect() || document.documentElement.getBoundingClientRect();
+    return queuePanel?.closest(".player")?.getBoundingClientRect() || document.documentElement.getBoundingClientRect();
 }
 
 function getPlayerPopupViewportHeight(){
@@ -2281,7 +2655,14 @@ function applyPlayerPopupPosition(top){
 }
 
 function applyPlayerPopupFullscreenPosition(){
-    applyPlayerPopupPosition(getPlayerPopupFullscreenTop());
+    if(!queuePanel){
+        return;
+    }
+
+    const fullscreenTop = getPlayerPopupFullscreenTop();
+    playerPopupCurrentTop = fullscreenTop;
+    queuePanel.style.top = `${fullscreenTop}px`;
+    queuePanel.style.height = `${window.visualViewport?.height || window.innerHeight}px`;
 }
 
 function clearPlayerPopupDragStyles(){
@@ -2310,6 +2691,14 @@ function startPlayerPopupDrag(clientY){
         return;
     }
 
+    document.removeEventListener("touchmove", move2);
+    document.removeEventListener("touchmove", moveSideSkip);
+    cancelScheduledMove(playerMoveFrame);
+    playerMoveFrame = null;
+    playerTouchStarted2 = false;
+    playerMovedDown = false;
+    bigSongBannerMoved = false;
+
     playerPopupTouchStarted = true;
     moveStarted = false;
     playerPopupStartedFull = queuePanel.classList.contains("playerPopupFull");
@@ -2321,6 +2710,7 @@ function startPlayerPopupDrag(clientY){
     playerPopupCurrentTop = playerPopupStartTop;
     queuePanel.classList.add("playerMovable");
     queuePanel.classList.add("queuePanelDragging");
+    setInteractionActive(true);
 }
 
 function movePlayerPopupTo(clientY){
@@ -2356,6 +2746,7 @@ function finishPlayerPopupDrag(){
     if(!moveStarted){
         playerPopupTouchStarted = false;
         playerPopupStartedFull = false;
+        setInteractionActive(false);
         return;
     }
 
@@ -2374,6 +2765,7 @@ function finishPlayerPopupDrag(){
     playerPopupTouchStarted = false;
     playerPopupStartedFull = false;
     moveStarted = false;
+    setInteractionActive(false);
 }
 
 const movePlayerPopup = (e) => {
@@ -2391,6 +2783,7 @@ const movePlayerPopupMouse = (e) => {
 
 if(queuePanel){
     queuePanel.addEventListener("touchstart", (e) => {
+        e.stopPropagation();
         if(!canStartPlayerPopupDrag(e.target)){
             return;
         }
@@ -2398,17 +2791,20 @@ if(queuePanel){
         document.addEventListener("touchmove", movePlayerPopup, { passive: false });
     });
 
-    queuePanel.addEventListener("touchend", () => {
+    queuePanel.addEventListener("touchend", (e) => {
+        e.stopPropagation();
         document.removeEventListener("touchmove", movePlayerPopup);
         finishPlayerPopupDrag();
     });
 
-    queuePanel.addEventListener("touchcancel", () => {
+    queuePanel.addEventListener("touchcancel", (e) => {
+        e.stopPropagation();
         document.removeEventListener("touchmove", movePlayerPopup);
         finishPlayerPopupDrag();
     });
 
     queuePanel.addEventListener("mousedown", (e) => {
+        e.stopPropagation();
         if(!canStartPlayerPopupDrag(e.target)){
             return;
         }

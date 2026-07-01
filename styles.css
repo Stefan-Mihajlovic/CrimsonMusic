@@ -43,6 +43,7 @@
 
     --gmBackdrop: blur(20px) brightness(1.2);
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
+    --playerGradientBg: linear-gradient(160deg, rgb(28, 22, 37), rgb(13, 10, 18));
 
     --footerBg: rgba(26, 21, 34, 0.7);
     --footerBgHO: rgb(30, 27, 37);
@@ -1833,6 +1834,13 @@ a.toggleSection i{
     padding-top: env(safe-area-inset-top);
 }
 
+.makePlaylistScreen .screenScrollable{
+    height: 100svh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 96px);
+}
+
 .artistScreen .closeCurrentScreen, .playlistScreen .closeCurrentScreen, .categoryScreen .closeCurrentScreen, .makePlaylistScreen .closeCurrentScreen, .bugReportScreen .closeCurrentScreen{
     z-index: 3;
 }
@@ -2184,40 +2192,78 @@ a.toggleSection i{
 /* ----- MAKE A PLAYLIST ----- */
 
 .makePlaylistForm{
-    height: calc(100% - 50px);
+    min-height: auto;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 15px;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: calc(74px + env(safe-area-inset-top)) 0 calc(env(safe-area-inset-bottom) + 120px);
 }
 
 .formImageInput{
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
-.formImageInput div{
-    background-color: rgb(26, 14, 20);
-    width: 70vw;
-    max-width: 250px;
+#imageUploadView{
+    background-color: rgb(18, 14, 24);
+    background-image: url("images/defaultPlaylist.webp");
+    width: min(82vw, 310px);
+    max-height: 290px;
     aspect-ratio: 1 / 1;
     display: flex;
+    align-items: flex-end;
+    justify-content: stretch;
+    border: 1px solid rgba(220, 214, 247, 0.16);
+    border-radius: 18px;
+    color: var(--offWhite);
+    box-shadow: none;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    position: relative;
+}
+
+#imageUploadView::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(8, 6, 12, 0.02) 35%, rgba(8, 6, 12, 0.76) 100%);
+    pointer-events: none;
+}
+
+.formImageInput .playlistCoverOverlay{
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 74px;
+    aspect-ratio: auto;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--playerColor);
-    border-radius: 10px;
-    color: var(--playerColor);
-    box-shadow: 0px 0px 20px black;
-    background-size: cover;
+    gap: 10px;
+    box-shadow: none;
+    color: var(--offWhite);
+    font-weight: 700;
 }
 
 .formImageInput div i{
-    font-size: 50px;
-    color: var(--playerColor);
-    text-shadow: 0px 0px 20px black;
+    font-size: 18px;
+    color: var(--offWhite);
+    text-shadow: none;
+}
+
+.formImageInput div span{
+    font-size: 15px;
+    color: var(--offWhite);
 }
 
 .formImageInput input{
@@ -2225,25 +2271,65 @@ a.toggleSection i{
 }
 
 #nameInput{
-    padding: 10px;
-    width: 70vw;
-    max-width: 250px;
-    border-radius: 10px;
-    border: 1px solid var(--playerColor);
+    padding: 15px 16px;
+    width: min(82vw, 310px);
+    border-radius: 12px;
+    border: 1px solid rgba(220, 214, 247, 0.12);
     background-color: var(--mainColorLighter);
     color: var(--offWhite);
+    font-size: 16px;
+    outline: none;
+}
+
+#nameInput:focus{
+    border-color: rgba(220, 214, 247, 0.42);
 }
 
 #submitMakePlaylist{
-    width: 70vw;
-    max-width: 250px;
+    width: min(82vw, 310px);
     background-color: var(--offWhite);
-    border: 1px solid var(--playerColor);
-    padding: 15px;
-    border-radius: 10px;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
     color: var(--bodyBg) !important;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 16px;
+}
+
+.currentMakePlaylistName{
+    width: min(82vw, 310px);
+    margin-top: 4px;
+    text-align: left;
+    color: var(--offWhite);
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-height: 620px) {
+    .makePlaylistForm{
+        gap: 12px;
+        padding-top: calc(66px + env(safe-area-inset-top));
+    }
+
+    #imageUploadView{
+        width: min(72vw, 230px);
+        max-height: 230px;
+    }
+
+    #nameInput,
+    #submitMakePlaylist,
+    .currentMakePlaylistName{
+        width: min(82vw, 310px);
+    }
+
+    .currentMakePlaylistName{
+        font-size: 24px;
+        line-height: 28px;
+    }
 }
 
 /* ----- POPUP ----- */
@@ -2373,6 +2459,28 @@ a.toggleSection i{
     position: relative;
 }
 
+.popupPlaylistItem{
+    opacity: 0;
+    transform: translateY(10px);
+    animation: popupPlaylistIn 0.28s ease-out forwards;
+    animation-delay: calc(var(--popup-item-index, 0) * 45ms);
+}
+
+.popupPlaylistLoading{
+    color: #8a85a1;
+    list-style: none;
+    padding: 18px 5px;
+    font-size: 15px;
+    text-align: center;
+}
+
+@keyframes popupPlaylistIn {
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .popupMyPlaylists .songItem .songInfo{
     width: calc(100% - 45px);
 }
@@ -2416,42 +2524,50 @@ a.toggleSection i{
 
 .popupInfo{
     align-items: center;
-    padding-bottom: 10px;
-    justify-content: center;
+    justify-content: flex-start;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 14px;
     border-bottom: 1px solid #242027;
-    padding: 20px;
-    padding-top: 35px;
+    padding: 24px 20px 18px;
+    padding-top: 34px;
     color: #DCD6F7;
 }
 
 .popupInfo img{
-    width: 75px;
-    border-radius: 10px;
+    width: 58px;
+    border-radius: 8px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
 .popupText{
+    min-width: 0;
     flex-grow: 1;
     color: #DCD6F7;
 }
 
 .popupText h2{
-    font-size: 22px;
+    font-size: 19px;
     line-height: 22px;
     font-weight: 500;
     color: var(--offWhite);
-    text-align: center;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .popupText h3{
-    font-size: 13px;
-    line-height: 13px;
+    font-size: 14px;
+    line-height: 18px;
     font-weight: 300;
     color: #8a85a1;
-    text-align: center;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .popupInfo i{
@@ -2475,6 +2591,10 @@ a.toggleSection i{
     font-weight: 500;
     transition: none;
     color: var(--offWhite);
+}
+
+.popupItemLoading{
+    opacity: .72;
 }
 
 .popupItem i{
@@ -2583,7 +2703,7 @@ a.toggleSection i{
     display: flex;
     flex-direction: column;
     height: calc(100svh + 55px) !important;
-    transition: all .2s ease-out, padding-top 0s;
+    transition: top .2s ease-out, bottom .2s ease-out, opacity .2s ease-out, padding-top 0s, background-color .2s ease-out, border-color .2s ease-out;
     opacity: 0;
     pointer-events: none;
     -webkit-transform: translateZ(0);
@@ -2594,6 +2714,8 @@ a.toggleSection i{
     background-color: transparent;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
+    will-change: top, transform;
+    contain: layout paint;
 }
 
 .darkenPlayer{
@@ -2608,6 +2730,7 @@ a.toggleSection i{
 }
 
 .songBackdrop{
+    display: none;
     opacity: 0;
     position: absolute;
     height: calc(100vh + 120px);
@@ -2617,7 +2740,7 @@ a.toggleSection i{
     object-fit: cover;
     z-index: -1;
     pointer-events: none;
-    filter: brightness(0.5) blur(50px) saturate(2.5);
+    filter: var(--gmBackdropPlayer);
     -webkit-transform: translate3d(0, 0, 0) translateZ(0);
     -moz-transform: translate3d(0, 0, 0) translateZ(0);
     -ms-transform: translate3d(0, 0, 0) translateZ(0);
@@ -2662,6 +2785,8 @@ a.toggleSection i{
     bottom: 0;
     padding-top: 50px;
     background-color: var(--currentSongColorBig);
+    background-image: var(--playerGradientBg);
+    background-size: cover;
     border-top: 1px solid #242027;
     overflow: hidden;
 }
@@ -2725,7 +2850,8 @@ a.toggleSection i{
     display: flex;
 }
 
-.player .pageBar h2{
+.player .pageBar h2,
+#playingFromBtn{
     font-weight: 200 !important;
     color: #8a85a1;
     transform: translateX(0%) !important;
@@ -2733,10 +2859,14 @@ a.toggleSection i{
     line-height: 17px;
     text-shadow: 0px 0px 20px black;
     flex-grow: 1;
-    pointer-events: none;
+    pointer-events: all;
     margin-bottom: 8px;
     margin-right: 2px;
     text-align: center;
+    width: auto;
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
 .smallH2{
@@ -2761,6 +2891,10 @@ a.toggleSection i{
     width: 30px;
 }
 
+.player .pageBar #playingFromBtn{
+    width: auto;
+}
+
 /* MINIPLAYER */
 .miniPlayer{
     display: flex;
@@ -2775,7 +2909,7 @@ a.toggleSection i{
     margin: 10px;
     border-radius: 10px;
     border: 1px solid var(--playerColor);
-    box-shadow: 0px calc(110px + env(safe-area-inset-bottom)*0.6) 60px 100px var(--bodyBg);
+    box-shadow: none;
 }
 
 .playerOpen .miniPlayer .playerClickDiv{
@@ -2958,6 +3092,19 @@ a.toggleSection i{
 
 .playerMovable{
     transition: none !important;
+}
+
+.playerInteractionActive .miniPlayer,
+.playerInteractionActive nav,
+.playerInteractionActive .playerPopupBackdropOpen{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.playerInteractionActive .queuePanel,
+.playerInteractionActive .popupScreen,
+.playerInteractionActive .player{
+    box-shadow: none !important;
 }
 
 /* ---- ORIENT - LANDSCAPE PLAYER */
@@ -3189,17 +3336,13 @@ a.toggleSection i{
     position: absolute;
     inset: 0;
     background-color: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-    transition: background-color 0.18s ease-out, backdrop-filter 0.18s ease-out, -webkit-backdrop-filter 0.18s ease-out;
+    transition: background-color 0.18s ease-out;
     pointer-events: none;
     z-index: 4;
 }
 
 .playerPopupBackdropOpen{
     background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(2px) brightness(0.65);
-    -webkit-backdrop-filter: blur(2px) brightness(0.8);
     pointer-events: all;
 }
 
@@ -3213,7 +3356,7 @@ a.toggleSection i{
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     border-top: 1px solid #242027;
-    box-shadow: 0px -35px 75px rgba(0, 0, 0, 0.45);
+    box-shadow: none;
     transform: translateY(112%);
     transition: transform 0.22s cubic-bezier(0.2, 0.85, 0.25, 1), top 0.22s ease-out, height 0.22s ease-out, border-radius 0.22s ease-out;
     z-index: 5;
@@ -3233,12 +3376,14 @@ a.toggleSection i{
 }
 
 .playerPopupFull{
+    height: 100%;
     border-radius: 0px;
     border-top: 1px solid transparent;
     padding-top: env(safe-area-inset-top);
 }
 
 .queuePanelDragging{
+    transition: none !important;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;

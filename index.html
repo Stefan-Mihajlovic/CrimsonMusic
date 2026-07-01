@@ -183,7 +183,7 @@
         </div>
         <div class="pageBar">
             <button id="closeBigPlayerBtn" type="button" onclick="closeBigPlayer()"><i class="fa-solid fa-angle-down"></i></button>
-            <h2>Playing from <span id="playingFromSpan">Home</span></h2>
+            <button id="playingFromBtn" type="button">Playing from <span id="playingFromSpan">Home</span></button>
             <button id="miniPlayerPopupBtn"><i class="fa-solid fa-bars"></i></button>
         </div>
         <div class="draggableBarTop">
@@ -363,8 +363,13 @@
             </div>
             <form class="makePlaylistForm" onsubmit="event.preventDefault()">
                 <div class="formImageInput">
-                    <div id="imageUploadView" onclick="document.getElementById('imageInput').click()"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
-                    <input type="file" name="imageInput" id="imageInput">
+                    <div id="imageUploadView" onclick="document.getElementById('imageInput').click()">
+                        <div class="playlistCoverOverlay">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                            <span>Choose cover</span>
+                        </div>
+                    </div>
+                    <input type="file" name="imageInput" id="imageInput" accept="image/png,image/jpeg,image/webp">
                 </div>
                 <h2 class="currentMakePlaylistName">My Playlist</h2>
                 <input onkeyup="changeMakePlaylistName(this.value)" onkeydown="changeMakePlaylistName(this.value)" type="text" name="nameInput" id="nameInput" placeholder="Enter the name">
@@ -587,6 +592,7 @@
                 <div></div>
             </div>
             <div class="popupInfo">
+                <img name="popupImage" src="images/CrimsonLogo.png" alt="songBanner">
                 <div class="popupText">
                     <h2 name="popupSongTitle">SongTitle</h2>
                     <h3 name="popupArtist">SongArtist</h3>

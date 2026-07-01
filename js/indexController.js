@@ -1941,6 +1941,11 @@ let imageInput = document.getElementById("imageInput");
 
 imageInput.onchange = e => {
     files = e.target.files;
+    if(!files || !files[0]){
+        imageDownload = "images/defaultPlaylist.webp";
+        document.getElementById("imageUploadView").style.backgroundImage = `url("images/defaultPlaylist.webp")`;
+        return;
+    }
 
     let extension = GetFileExt(files[0]);
     let name = GetFileName(files[0]);
@@ -1969,6 +1974,13 @@ function GetFileName(file){
 function UploadProcess(){
     return new Promise(resolve => {
         if(document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML != "Edit Playlist"){
+            files = imageInput.files;
+            if(!files || !files[0]){
+                imageDownload = "images/defaultPlaylist.webp";
+                resolve(true);
+                return;
+            }
+
             setTimeout(() => {
                 var ImgToUpload = files[0];
     
@@ -1994,7 +2006,6 @@ function UploadProcess(){
                 ()=>{
                     getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
                         imageDownload = downloadURL;
-                        document.getElementById("imageUploadView").innerHTML = "";
                         resolve(true);
                     });
                 }
@@ -2093,6 +2104,7 @@ export function openLikedSongs(){
 export function seeIfSongIsLiked(id){
 
     const dbRef = ref(realdb);
+    const requestedId = String(id);
 
     if(currentUser != undefined){
         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
@@ -2106,20 +2118,28 @@ export function seeIfSongIsLiked(id){
                 if(setLikedSongs === undefined){
                     setLikedSongs = "";
                 }
-                let likedSongsArray = setLikedSongs.split(',');
+                let likedSongsArray = setLikedSongs.split(',').filter(Boolean);
+                window.crimsonLikedSongIds = new Set(likedSongsArray.map(String));
     
                 const likeSongBtn = document.getElementById("likeSongBtn");
                 const playerLikeBtn = document.getElementById("playerLikeBtn");
                 const miniPlayerLikeBtn = document.getElementById("miniPlayerLikeBtn");
+                const shouldUpdatePopup = likeSongBtn?.getAttribute("data-song-id") === requestedId;
     
-                if(likedSongsArray.includes(id)){
+                if(likedSongsArray.includes(requestedId)){
                     miniPlayerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
                     playerLikeBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
-                    likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favorites</h5>`;
+                    if(shouldUpdatePopup){
+                        likeSongBtn.classList.remove("popupItemLoading");
+                        likeSongBtn.innerHTML = `<i class="fa-solid fa-heart"></i><h5>Remove from favorites</h5>`;
+                    }
                 }else{
                     miniPlayerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
                     playerLikeBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
-                    likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favorites</h5>`;
+                    if(shouldUpdatePopup){
+                        likeSongBtn.classList.remove("popupItemLoading");
+                        likeSongBtn.innerHTML = `<i class="fa-regular fa-heart"></i><h5>Add to favorites</h5>`;
+                    }
                 }
             }
         })
@@ -2130,6 +2150,7 @@ export function seeIfSongIsLiked(id){
 
 export function addSongToLiked(id, likeBtn){
     const dbRef = ref(realdb);
+    const songId = String(id);
         if(currentUser != undefined){
 
             get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
@@ -2154,7 +2175,9 @@ export function addSongToLiked(id, likeBtn){
                         setLikedPlaylists = "";
                     }
                     let likedSongsArray = setLikedSongs.split(',');
-                    if(!likedSongsArray.includes(id)){
+                    if(!likedSongsArray.includes(songId)){
+                        window.crimsonLikedSongIds = window.crimsonLikedSongIds || new Set();
+                        window.crimsonLikedSongIds.add(songId);
                         set(ref(realdb, "Users/"+currentUser.Username),
                         {
                             Username: setUsername,
@@ -2162,7 +2185,7 @@ export function addSongToLiked(id, likeBtn){
                             Password: setPassword,
                             Playlists: setPlaylists,
                             ProfilePhoto: setProfilePhoto,
-                            LikedSongs: setLikedSongs + id + ",",
+                            LikedSongs: setLikedSongs + songId + ",",
                             AppTheme: setTheme,
                             FollowedArtists: setFollowedArtists,
                             LikedPlaylists: setLikedPlaylists
@@ -2186,8 +2209,10 @@ export function addSongToLiked(id, likeBtn){
                             alert("error "+error);
                         })
                     }else{
+                        window.crimsonLikedSongIds = window.crimsonLikedSongIds || new Set();
+                        window.crimsonLikedSongIds.delete(songId);
                         likedSongsArray = likedSongsArray.filter(function(item) {
-                            return item !== id;
+                            return item !== songId;
                         });
         
                         set(ref(realdb, "Users/"+currentUser.Username),
@@ -2259,51 +2284,62 @@ export function getArtistId(artistName){
 const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
 
 export function LoadUserPlaylistsPopup(songId){
-    popupMyPlaylists.innerHTML = "";
+    popupMyPlaylists.innerHTML = `<li class="popupPlaylistLoading">Loading playlists...</li>`;
 
     let dbRef = ref(realdb);
 
     if(currentUser != undefined){
         get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
             if(snapshot.exists()){
-                let usersPlaylists = (snapshot.val().Playlists).split('{');
+                let usersPlaylists = (snapshot.val().Playlists || "").split('{');
                 numberOfPlaylists = usersPlaylists.length - 1;
+                const playlistRows = [];
     
                 for (let i = numberOfPlaylists; i > 0; i--) {
-                    if(usersPlaylists[i].split('}')[3]?.includes(',' + songId) || usersPlaylists[i].split('}')[3]?.includes(songId + ',')){
-                        let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                    const playlistParts = usersPlaylists[i].split('}');
+                    const playlistId = playlistParts[0];
+                    const playlistName = playlistParts[1];
+                    const playlistBanner = playlistParts[2];
+                    const playlistSongs = playlistParts[3] || "";
+                    const rowIndex = playlistRows.length;
+                    if(!playlistId || !playlistName){
+                        continue;
+                    }
+
+                    if(playlistSongs.split(',').includes(String(songId))){
+                        playlistRows.push(`<li class="songItem popupPlaylistItem" style="--popup-item-index: `+ rowIndex +`" id="`+ playlistId +`">
                             <div class="songInfo">
-                                <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <img src="`+ playlistBanner +`" alt="playlistBanner">
                                 <div class="songText">
-                                    <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                                    <h2>`+ playlistName +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
+                            <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ playlistId +`)"></div>
                             <div class="songBtns greenCheck">
-                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-circle-check checkAnim"></i></button>
+                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ playlistId +`)"><i class="fa-solid fa-circle-check checkAnim"></i></button>
                                 <div class="greenSidePl"></div>
                             </div>
-                        </li>`;
-                        popupMyPlaylists.innerHTML += currentLi;
+                        </li>`);
                     }else{
-                        let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                        playlistRows.push(`<li class="songItem popupPlaylistItem" style="--popup-item-index: `+ rowIndex +`" id="`+ playlistId +`">
                             <div class="songInfo">
-                                <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                                <img src="`+ playlistBanner +`" alt="playlistBanner">
                                 <div class="songText">
-                                    <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                                    <h2>`+ playlistName +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>
                                 </div>
                             </div>
-                            <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"></div>
+                            <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ playlistId +`)"></div>
                             <div class="songBtns">
-                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ usersPlaylists[i].split('}')[0] +`)"><i class="fa-solid fa-plus checkAnim"></i></button>
+                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ playlistId +`)"><i class="fa-solid fa-plus checkAnim"></i></button>
                                 <div class="greenSidePl"></div>
                             </div>
-                        </li>`;
-                        popupMyPlaylists.innerHTML += currentLi;
+                        </li>`);
                     }
                 }
+
+                popupMyPlaylists.innerHTML = playlistRows.length ? playlistRows.join("") : `<li class="popupPlaylistLoading">No playlists yet.</li>`;
             }
         })
     }else{
