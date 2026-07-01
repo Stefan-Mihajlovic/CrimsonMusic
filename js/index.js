@@ -1084,20 +1084,8 @@ function setupMediaSessionControls(){
     setMediaSessionAction("nexttrack", () => {
         forwardBtn.click();
     });
-    setMediaSessionAction("seekbackward", (details = {}) => {
-        const seekOffset = details.seekOffset || 10;
-        currentSongAudio.currentTime = Math.max(currentSongAudio.currentTime - seekOffset, 0);
-        setMediaSessionPosition();
-    });
-    setMediaSessionAction("seekforward", (details = {}) => {
-        const seekOffset = details.seekOffset || 10;
-        if(Number.isFinite(currentSongAudio.duration)){
-            currentSongAudio.currentTime = Math.min(currentSongAudio.currentTime + seekOffset, currentSongAudio.duration);
-        }else{
-            currentSongAudio.currentTime += seekOffset;
-        }
-        setMediaSessionPosition();
-    });
+    setMediaSessionAction("seekbackward", null);
+    setMediaSessionAction("seekforward", null);
     setMediaSessionAction("seekto", (details = {}) => {
         if(!Number.isFinite(details.seekTime)){
             return;
