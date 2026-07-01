@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
-import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
+import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 import { getDatabase, ref, set, child, get, update, remove, onValue, query, orderByChild, equalTo } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js';
 import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 
@@ -1326,6 +1326,7 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
     let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
     playlistScreen.classList.add('screenOpenOnTop');
     playlistSongsList.setAttribute("name", pName);
+    document.getElementById("editOwnedPlaylistBtn").style.display = "none";
 
     if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != playlistScreen){
         lastOpenSideScreen.classList.remove('screenOpenOnTop');
@@ -1608,22 +1609,71 @@ export function MakeAPlaylist(){
 }
 
 export async function SubmitAPlaylist(){
-    let result = await UploadProcess();
+    if(document.getElementById("submitMakePlaylist").disabled){
+        return;
+    }
 
-    if(result){
-        DBMakePl();
-    }else{
-        setTimeout(() => {
-            DBMakePl();
-        }, 1500);
+    try{
+        setMakePlaylistLoading(true, isEditingPlaylist() ? "Saving playlist..." : "Creating playlist...");
+        let result = await UploadProcess();
+
+        if(result){
+            await DBMakePl();
+        }
+    }catch(error){
+        alert("error " + error);
+        setMakePlaylistLoading(false);
     }
 }
 
 let currentMakePlaylistName = document.querySelector('.currentMakePlaylistName');
-function DBMakePl(){
+function isEditingPlaylist(){
+    return document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML == "Edit Playlist";
+}
+
+function setMakePlaylistLoading(isLoading, text){
+    const form = document.querySelector('.makePlaylistForm');
+    const button = document.getElementById("submitMakePlaylist");
+    const statusText = document.getElementById("makePlaylistStatusText");
+    const editing = isEditingPlaylist();
+
+    form.classList.toggle("makePlaylistSubmitting", isLoading);
+    button.disabled = isLoading;
+    button.value = isLoading ? (editing ? "Saving..." : "Creating...") : (editing ? "Save" : "Create");
+
+    if(statusText != null && text != undefined){
+        statusText.innerHTML = text;
+    }
+}
+
+function shouldDeleteStorageImage(url){
+    return url != undefined && url != null && url != "" && !url.includes("defaultPlaylist.webp") && (url.includes("firebasestorage.googleapis.com") || url.startsWith("gs://"));
+}
+
+function deleteReplacedPlaylistCover(oldUrl, newUrl){
+    if(!shouldDeleteStorageImage(oldUrl) || oldUrl == newUrl){
+        return;
+    }
+
+    try{
+        deleteObject(sRef(getStorage(), oldUrl)).catch(() => {});
+    }catch(error){}
+}
+
+function closeMakePlaylistAfterSave(){
+    if(typeof window.CloseMakePlaylistScreen == "function"){
+        window.CloseMakePlaylistScreen();
+    }
+}
+
+async function DBMakePl(){
     const dbRef = ref(realdb);
-        if(currentUser != undefined && document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML != "Edit Playlist"){
-            get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(currentUser == undefined){
+            setMakePlaylistLoading(false);
+            return;
+        }
+        if(currentUser != undefined && !isEditingPlaylist()){
+            await get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
                 if(snapshot.exists()){
                     let setUsername = snapshot.val().Username;
                     let setEmail = snapshot.val().Email;
@@ -1643,34 +1693,49 @@ function DBMakePl(){
                     if(setLikedSongs == undefined){
                         setLikedSongs = "";
                     }
+                    if(setPlaylists == undefined){
+                        setPlaylists = "";
+                    }
+
+                    const newPlaylistId = numberOfPlaylists + 1;
+                    const newPlaylistName = currentMakePlaylistName.innerHTML;
         
-                    set(ref(realdb, "Users/"+currentUser.Username),
+                    return set(ref(realdb, "Users/"+currentUser.Username),
                     {
                         Username: setUsername,
                         Email: setEmail,
                         LikedSongs: setLikedSongs,
                         Password: setPassword,
-                        Playlists: (setPlaylists + "{" + (numberOfPlaylists+1) + "}" + currentMakePlaylistName.innerHTML + "}" + imageDownload + "}}"),
+                        Playlists: (setPlaylists + "{" + newPlaylistId + "}" + newPlaylistName + "}" + imageDownload + "}}"),
                         ProfilePhoto: setProfilePhoto,
                         AppTheme: setTheme,
                         FollowedArtists: setFollowedArtists,
                         LikedPlaylists: setLikedPlaylists
                     })
                     .then(()=>{
-                        alert("Playlist made");
+                        setMakePlaylistLoading(false);
                         LoadUserPlaylists();
+                        closeMakePlaylistAfterSave();
+                        openMyPlaylistPage(newPlaylistId, newPlaylistName, imageDownload, "0", "");
                     })
                     .catch((error)=>{
+                        setMakePlaylistLoading(false);
                         alert("error "+error);
                     })
+                }else{
+                    setMakePlaylistLoading(false);
                 }
             })
         }
-        else if(currentUser != undefined && document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML == "Edit Playlist"){
-            get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        else if(currentUser != undefined && isEditingPlaylist()){
+            await get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
                 if(snapshot.exists()){
 
                     let newSetPlaylists = "";
+                    const editedPlaylistId = currentMakePlaylistName.getAttribute('data-playlist-id');
+                    const editedPlaylistName = currentMakePlaylistName.innerHTML;
+                    const editedPlaylistSongs = currentMakePlaylistName.getAttribute('data-playlist-songs') || "";
+                    const oldPlaylistBanner = currentMakePlaylistName.getAttribute('data-playlist-banner') || "images/defaultPlaylist.webp";
 
                     let setUsername = snapshot.val().Username;
                     let setEmail = snapshot.val().Email;
@@ -1699,21 +1764,21 @@ function DBMakePl(){
     
                     for (let i = 0; i < usersPlaylists.length; i++) {
                         if(i == (usersPlaylists.length-1)){
-                            if(usersPlaylists[i].split('}')[0] != currentMakePlaylistName.getAttribute('data-playlist-id')){
+                            if(usersPlaylists[i].split('}')[0] != editedPlaylistId){
                                 newSetPlaylists += usersPlaylists[i];
                             }else{
-                                newSetPlaylists += currentMakePlaylistName.getAttribute('data-playlist-id') + "}" + currentMakePlaylistName.innerHTML + "}" + currentMakePlaylistName.getAttribute('data-playlist-banner') + "}" + currentMakePlaylistName.getAttribute('data-playlist-songs') + "}";
+                                newSetPlaylists += editedPlaylistId + "}" + editedPlaylistName + "}" + imageDownload + "}" + editedPlaylistSongs + "}";
                             }
                         }else{
-                            if(usersPlaylists[i].split('}')[0] != currentMakePlaylistName.getAttribute('data-playlist-id')){
+                            if(usersPlaylists[i].split('}')[0] != editedPlaylistId){
                                 newSetPlaylists += usersPlaylists[i] + "{";
                             }else{
-                                newSetPlaylists += currentMakePlaylistName.getAttribute('data-playlist-id') + "}" + currentMakePlaylistName.innerHTML + "}" + currentMakePlaylistName.getAttribute('data-playlist-banner') + "}" + currentMakePlaylistName.getAttribute('data-playlist-songs') + "}" + "{";
+                                newSetPlaylists += editedPlaylistId + "}" + editedPlaylistName + "}" + imageDownload + "}" + editedPlaylistSongs + "}" + "{";
                             }
                         }
                     }
     
-                    set(ref(realdb, "Users/"+currentUser.Username),
+                    return set(ref(realdb, "Users/"+currentUser.Username),
                     {
                         Username: setUsername,
                         Email: setEmail,
@@ -1726,12 +1791,18 @@ function DBMakePl(){
                         LikedPlaylists: setLikedPlaylists
                     })
                     .then(()=>{
-                        alert("Playlist saved");
+                        deleteReplacedPlaylistCover(oldPlaylistBanner, imageDownload);
+                        setMakePlaylistLoading(false);
                         LoadUserPlaylists();
+                        closeMakePlaylistAfterSave();
+                        openMyPlaylistPage(editedPlaylistId, editedPlaylistName, imageDownload, "0", editedPlaylistSongs);
                     })
                     .catch((error)=>{
+                        setMakePlaylistLoading(false);
                         alert("error "+error);
                     })
+                }else{
+                    setMakePlaylistLoading(false);
                 }
             })
         }
@@ -1843,6 +1914,17 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
         document.getElementById("playlistLikesH5").style.display = "none";
         document.getElementById("likePlaylist").style.display = "none";
+        const editPlaylistBtn = document.getElementById("editOwnedPlaylistBtn");
+        if(playlistID == 0 || pName == "Favorites"){
+            editPlaylistBtn.style.display = "none";
+        }else{
+            editPlaylistBtn.style.display = "flex";
+            editPlaylistBtn.onclick = () => {
+                if(typeof window.OpenMakePlaylistScreen == "function"){
+                    window.OpenMakePlaylistScreen(true, playlistID, pName, pBanner, pSongs);
+                }
+            };
+        }
 
         let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
         playlistScreen.classList.add("playlistScreenOpen");
@@ -1942,8 +2024,9 @@ let imageInput = document.getElementById("imageInput");
 imageInput.onchange = e => {
     files = e.target.files;
     if(!files || !files[0]){
-        imageDownload = "images/defaultPlaylist.webp";
-        document.getElementById("imageUploadView").style.backgroundImage = `url("images/defaultPlaylist.webp")`;
+        const fallbackCover = isEditingPlaylist() ? currentMakePlaylistName.getAttribute('data-playlist-banner') : "images/defaultPlaylist.webp";
+        imageDownload = fallbackCover || "images/defaultPlaylist.webp";
+        document.getElementById("imageUploadView").style.backgroundImage = `url("${imageDownload}")`;
         return;
     }
 
@@ -1954,9 +2037,9 @@ imageInput.onchange = e => {
 
     reader.readAsDataURL(files[0]);
 
-    reader.addEventListener('load', function () {
+    reader.onload = function () {
         document.getElementById("imageUploadView").style.backgroundImage = `url('`+ this.result +`')`;
-    });
+    };
 }
 
 function GetFileExt(file){
@@ -1973,47 +2056,41 @@ function GetFileName(file){
 
 function UploadProcess(){
     return new Promise(resolve => {
-        if(document.querySelector('.makePlaylistScreen').children[0].children[0].children[1].innerHTML != "Edit Playlist"){
-            files = imageInput.files;
-            if(!files || !files[0]){
-                imageDownload = "images/defaultPlaylist.webp";
-                resolve(true);
-                return;
-            }
+        files = imageInput.files;
 
-            setTimeout(() => {
-                var ImgToUpload = files[0];
-    
-                var ImgName = imageFileName;
-    
-                const metaData = {
-                    contentType: ImgToUpload.type
-                }
-    
-                const storage = getStorage();
-    
-                const storageRef = sRef(storage, "Songs/"+ImgName);
-    
-                const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
-        
-                UploadTask.on('state-changed', (snapshot)=>{
-                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                },
-                (error) =>{
-                    alert("Image failed to upload!" + "<br>" + error);
-                    resolve(false);
-                },
-                ()=>{
-                    getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
-                        imageDownload = downloadURL;
-                        resolve(true);
-                    });
-                }
-                );
-            }, 1000);
-        }else{
+        if(!files || !files[0]){
+            imageDownload = isEditingPlaylist() ? (currentMakePlaylistName.getAttribute('data-playlist-banner') || "images/defaultPlaylist.webp") : "images/defaultPlaylist.webp";
             resolve(true);
+            return;
         }
+
+        var ImgToUpload = files[0];
+        var ImgName = Date.now() + "-" + (imageFileName || ImgToUpload.name);
+
+        const metaData = {
+            contentType: ImgToUpload.type
+        }
+
+        const storage = getStorage();
+        const storageRef = sRef(storage, "Playlists/"+ImgName);
+        const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+
+        UploadTask.on('state-changed', (snapshot)=>{
+            let progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            setMakePlaylistLoading(true, "Uploading cover " + progress + "%...");
+        },
+        (error) =>{
+            setMakePlaylistLoading(false);
+            alert("Image failed to upload! " + error);
+            resolve(false);
+        },
+        ()=>{
+            getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
+                imageDownload = downloadURL;
+                resolve(true);
+            });
+        }
+        );
     })
 }
 

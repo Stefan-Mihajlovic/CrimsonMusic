@@ -1781,9 +1781,12 @@ let isMakePlOpen = false;
 
 function OpenMakePlaylistScreen(editing, playlistIdP, playlistNameP, playlistBannerP, playlistSongsP){
 
-    if(editing){
-        document.querySelector('.formImageInput').classList.add('displayNone');
+    document.getElementById('imageInput').value = "";
+    document.querySelector('.formImageInput').classList.remove('displayNone');
+    document.querySelector('.makePlaylistForm').classList.remove('makePlaylistSubmitting');
+    document.getElementById('submitMakePlaylist').disabled = false;
 
+    if(editing){
         makePlScreen.children[0].children[0].children[1].innerHTML = "Edit Playlist";
 
         document.getElementById('nameInput').value = playlistNameP;
@@ -1801,7 +1804,6 @@ function OpenMakePlaylistScreen(editing, playlistIdP, playlistNameP, playlistBan
 
         document.getElementById('nameInput').value = "";
         document.getElementById('submitMakePlaylist').value = "Create";
-        document.getElementById('imageInput').value = "";
 
         document.getElementById('imageUploadView').style.backgroundImage = `url("images/defaultPlaylist.webp")`;
         document.querySelector('.currentMakePlaylistName').innerHTML = "My Playlist";

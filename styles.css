@@ -2296,6 +2296,45 @@ a.toggleSection i{
     font-size: 16px;
 }
 
+#submitMakePlaylist:disabled{
+    opacity: 0.7;
+}
+
+.makePlaylistStatus{
+    width: min(82vw, 310px);
+    min-height: 24px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: rgba(220, 214, 247, 0.76);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.makePlaylistForm.makePlaylistSubmitting .makePlaylistStatus{
+    display: flex;
+}
+
+.makePlaylistSpinner{
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(220, 214, 247, 0.24);
+    border-top-color: var(--offWhite);
+    animation: makePlaylistSpin 0.72s linear infinite;
+}
+
+@keyframes makePlaylistSpin{
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+#editOwnedPlaylistBtn{
+    display: none;
+}
+
 .currentMakePlaylistName{
     width: min(82vw, 310px);
     margin-top: 4px;
