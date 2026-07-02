@@ -51,6 +51,7 @@
     --topInsetArea: env(safe-area-inset-top);
     --sortPopupTop: 0px;
     --sortPopupLeft: 0px;
+    --screenEase: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html{
@@ -1196,7 +1197,7 @@ main{
     z-index: 999;
     pointer-events: none;
     transform: translateX(100%);
-    transition: all .3s ease-out;
+    transition: transform .32s var(--screenEase), opacity .24s ease-out;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1812,7 +1813,7 @@ a.toggleSection i{
     z-index: 999;
     pointer-events: none;
     transform: translateX(100%);
-    transition: all .3s ease-out;
+    transition: transform .32s var(--screenEase), opacity .24s ease-out;
     z-index: 99;
     overflow: hidden;
 }
@@ -2415,7 +2416,7 @@ a.toggleSection i{
     bottom: 0px;
     left: 0px;
     transform: translateY(112%);
-    transition: transform 0.22s cubic-bezier(0.2, 0.85, 0.25, 1), top 0.22s ease-out, height 0.22s ease-out;
+    transition: transform .32s var(--screenEase), top .32s var(--screenEase), height .32s var(--screenEase);
     overflow: scroll;
 }
 
@@ -2442,7 +2443,7 @@ a.toggleSection i{
         width: 40%;
         border: 1px solid var(--playerColor);
         border-radius: 30px;
-        transition: transform 0.2s cubic-bezier(0.2, 0.85, 0.25, 1), top 0.2s ease-out, height 0.2s ease-out;
+        transition: transform .3s var(--screenEase), top .3s var(--screenEase), height .3s var(--screenEase);
     }
     main{
         padding-left: env(safe-area-inset-left, 20px) !important;
@@ -2742,7 +2743,7 @@ a.toggleSection i{
     display: flex;
     flex-direction: column;
     height: calc(100svh + 55px) !important;
-    transition: top .2s ease-out, bottom .2s ease-out, opacity .2s ease-out, padding-top 0s, background-color .2s ease-out, border-color .2s ease-out;
+    transition: top .32s var(--screenEase), bottom .32s var(--screenEase), opacity .22s ease-out, padding-top 0s, background-color .28s ease-out, border-color .28s ease-out;
     opacity: 0;
     pointer-events: none;
     -webkit-transform: translateZ(0);
@@ -3414,7 +3415,7 @@ a.toggleSection i{
     border-top: 1px solid #242027;
     box-shadow: none;
     transform: translateY(112%);
-    transition: transform 0.22s cubic-bezier(0.2, 0.85, 0.25, 1), top 0.22s ease-out, height 0.22s ease-out, border-radius 0.22s ease-out;
+    transition: transform .32s var(--screenEase), top .32s var(--screenEase), height .32s var(--screenEase), border-radius .32s var(--screenEase);
     z-index: 5;
     overflow: hidden;
     pointer-events: none;

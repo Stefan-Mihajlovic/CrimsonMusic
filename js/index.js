@@ -2576,7 +2576,7 @@ document.addEventListener("touchend", () => {
         cancelScheduledMove(playerMoveFrame);
         playerMoveFrame = null;
 
-        if(moveStarted && currentTouchPos > 100){
+        if(moveStarted && currentTouchPos > 70){
             movablePlayer.classList.remove("playerMovable");
             movablePlayer.classList.remove("playerOpen");
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
