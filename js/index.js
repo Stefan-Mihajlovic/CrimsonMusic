@@ -1083,10 +1083,25 @@ function setLoggedOutScreen(){
 let isPlayerOpen = false;
 let isSongPaused = true;
 
+function triggerPlayerMiniBounce(){
+    const player = document.getElementsByClassName("player")[0];
+    if(!player || reduceAnimations){
+        return;
+    }
+
+    player.classList.remove("playerMiniBounce");
+    void player.offsetWidth;
+    player.classList.add("playerMiniBounce");
+    setTimeout(() => {
+        player.classList.remove("playerMiniBounce");
+    }, 480);
+}
+
 function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
     player.classList.remove("playerOpen");
+    triggerPlayerMiniBounce();
     closePlayerPopup();
     player.style.top = 'auto';
     document.getElementsByTagName("nav")[0].classList.remove("navClosed");
@@ -2617,6 +2632,7 @@ document.addEventListener("touchend", () => {
         }else{
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
             movablePlayer.classList.remove("playerOpen");
+            triggerPlayerMiniBounce();
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
@@ -2689,6 +2705,7 @@ document.addEventListener("touchend", () => {
             movablePlayer.classList.remove("playerMovable");
             movablePlayer.classList.remove("playerOpen");
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
+            triggerPlayerMiniBounce();
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
