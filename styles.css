@@ -2822,6 +2822,8 @@ a.toggleSection i{
 
 .playerOpen{
     bottom: 0;
+    height: calc(100svh + 50px + env(safe-area-inset-bottom)) !important;
+    height: calc(100dvh + 50px + env(safe-area-inset-bottom)) !important;
     padding-top: 50px;
     background-color: var(--currentSongColorBig);
     background-image: var(--playerGradientBg);
@@ -2844,7 +2846,7 @@ a.toggleSection i{
 
 @media screen and (orientation: landscape) {
     .playerOpen{
-        height: calc(100svh);
+        height: calc(100svh) !important;
     }
     .player{
         top: auto !important;
@@ -2876,13 +2878,15 @@ a.toggleSection i{
 .player .pageBar{
     display: none;
     justify-content: space-between;
+    align-items: flex-end;
     box-shadow: none;
     border: none;
     transition: all .2s ease-in-out;
     padding-top: max(var(--topInsetArea), 45px) !important;
     padding-bottom: 20px !important;
     z-index: 4;
-    height: 50px;
+    height: auto;
+    min-height: calc(max(var(--topInsetArea), 45px) + 50px);
 }
 
 .playerOpen .pageBar{
