@@ -3082,7 +3082,8 @@ a.toggleSection i{
 }
 
 .bigSongInfo img{
-    width: 87vw;
+    width: min(87vw, 420px);
+    height: min(87vw, 420px);
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 10px;
@@ -3091,6 +3092,13 @@ a.toggleSection i{
     margin-bottom: 2.5vh;
     transition: all .35s ease-in-out;
     animation: popInBanner .45s ease-in-out;
+}
+
+#bigSongBanner{
+    width: min(87vw, calc(100vw - 60px), 420px) !important;
+    height: min(87vw, calc(100vw - 60px), 420px) !important;
+    object-fit: cover !important;
+    object-position: center;
 }
 
 .bannerFromRight{
@@ -3154,6 +3162,11 @@ a.toggleSection i{
     }
     .bigSongInfo img{
         width: 30% !important;
+        height: auto !important;
+    }
+    #bigSongBanner{
+        width: 30% !important;
+        height: auto !important;
     }
 }
 
@@ -3868,6 +3881,11 @@ nav button i{
     }
     .bigSongInfo img{
         width: 57.5vw !important;
+        height: 57.5vw !important;
+    }
+    #bigSongBanner{
+        width: 57.5vw !important;
+        height: 57.5vw !important;
     }
     .artistScreen, .playlistScreen, .categoryScreen{
         top: 60px;
@@ -3913,7 +3931,12 @@ nav button i{
 @media screen and (max-height: 570px){
     .bigSongInfo img{
         width: 100%;
+        height: auto;
         aspect-ratio: 1 / 1;
+    }
+    #bigSongBanner{
+        width: 100% !important;
+        height: auto !important;
     }
     .loginForm{
         margin-top: 10px;

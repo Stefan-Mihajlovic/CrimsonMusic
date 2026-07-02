@@ -2100,6 +2100,27 @@ function cancelScheduledMove(frame){
     }
 }
 
+function getOpenPlayerTop(){
+    return "-50px";
+}
+
+function getGestureDirection(deltaX, deltaY, threshold = 10){
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+
+    if(absX < threshold && absY < threshold){
+        return null;
+    }
+    if(absX > absY * 1.15){
+        return "horizontal";
+    }
+    if(absY > absX * 1.15){
+        return "vertical";
+    }
+
+    return null;
+}
+
 const move = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
     if(currentTouchPos <= (-50)){
@@ -2150,20 +2171,32 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
 // ----- playerDiv 2
 
 const bigSongBanner = document.getElementById("bigSongBanner");
-let topInsetNumber = Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]);
 let bigSongBannerMoved = false, playerMovedDown = false;
+let playerGestureStartX = 0;
+let playerGestureStartY = 0;
+let playerGestureDirection = null;
+let playerDragStartTop = 0;
 
 const move2 = (e) => {
-    currentTouchPos = (e.touches[0].clientY - offsetY + topInsetNumber);
-    // console.log(currentTouchPos);
+    const deltaX = e.touches[0].clientX - playerGestureStartX;
+    const deltaY = e.touches[0].clientY - playerGestureStartY;
+    if(!playerGestureDirection){
+        playerGestureDirection = getGestureDirection(deltaX, deltaY);
+    }
+    if(playerGestureDirection !== "vertical"){
+        return;
+    }
+
+    e.preventDefault();
+    currentTouchPos = e.touches[0].clientY - offsetY;
     // Update div pos based on new cursor pos
-    if(currentTouchPos > 0 && !isPopupOpen && !isLyricsOn){
+    if(currentTouchPos > playerDragStartTop && !isPopupOpen && !isLyricsOn){
         if(!bigSongBannerMoved){
             moveStarted = true;
             playerMovedDown = true;
             movablePlayer.classList.add("playerMovable");
             bigSongBanner.classList.remove("playerMovable");
-            playerMoveTop = currentTouchPos - 50;
+            playerMoveTop = currentTouchPos;
             if(!playerMoveFrame){
                 playerMoveFrame = requestAnimationFrame(() => {
                     movablePlayer.style.top = `${playerMoveTop}px`;
@@ -2181,13 +2214,17 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
     // Calc the initial offset Values
     if(window.innerWidth < window.innerHeight){
         currentTouchPosSkip = 0;
+        playerGestureStartX = e.touches[0].clientX;
+        playerGestureStartY = e.touches[0].clientY;
+        playerGestureDirection = null;
+        playerDragStartTop = movablePlayer.offsetTop;
         offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
         offsetX = e.touches[0].clientX - movablePlayer.offsetLeft;
         movablePlayer.classList.add("playerMovable");
         bigSongBanner.classList.add("playerMovable");
         setInteractionActive(true);
-        document.addEventListener("touchmove", move2);
-        document.addEventListener("touchmove", moveSideSkip);
+        document.addEventListener("touchmove", move2, { passive: false });
+        document.addEventListener("touchmove", moveSideSkip, { passive: false });
         playerTouchStarted2 = true;
         moveStarted = false;
     }
@@ -2197,9 +2234,19 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
 
 let currentTouchPosSkip;
 const moveSideSkip = (e) =>{
+    const deltaX = e.touches[0].clientX - playerGestureStartX;
+    const deltaY = e.touches[0].clientY - playerGestureStartY;
+    if(!playerGestureDirection){
+        playerGestureDirection = getGestureDirection(deltaX, deltaY);
+    }
+    if(playerGestureDirection === "vertical"){
+        currentTouchPosSkip = 0;
+        return;
+    }
     if(!playerMovedDown){
         currentTouchPosSkip = e.touches[0].clientX - offsetX;
         if(Math.abs(currentTouchPosSkip) > 30){
+            e.preventDefault();
             bigSongBannerMoved = true;
             // Update div pos based on new cursor pos
             let dragDelay;
@@ -2453,7 +2500,7 @@ document.addEventListener("touchend", () => {
         playerMoveFrame = null;
         movablePlayer.classList.remove("playerMovable");
         if(currentTouchPos < playerNormalPos - 125){
-            movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
+            movablePlayer.style.top = getOpenPlayerTop();
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -2468,7 +2515,7 @@ document.addEventListener("touchend", () => {
         playerTouchStarted = false;
         if(!moveStarted){
             movablePlayer.classList.add("playerOpen");
-            movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
+            movablePlayer.style.top = getOpenPlayerTop();
             document.getElementsByTagName("nav")[0].classList.add("navClosed");
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
@@ -2541,8 +2588,11 @@ document.addEventListener("touchend", () => {
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
             movablePlayer.classList.remove("playerMovable");
-            movablePlayer.style.top = `calc(env(safe-area-inset-top) - 50px)`;
+            movablePlayer.style.top = getOpenPlayerTop();
             isPlayerOpen = true;
+        }else{
+            movablePlayer.classList.remove("playerMovable");
+            bigSongBanner.classList.remove("playerMovable");
         }
     }
     document.removeEventListener("touchmove", moveSideSkip);
@@ -2563,7 +2613,7 @@ document.addEventListener("touchend", () => {
                 }, 10);
             }, 350);
         }
-        if(currentTouchPosSkip < 130){
+        if(currentTouchPosSkip < -130){
             bigSongBanner.classList.remove("playerMovable");
             bigSongBanner.style.transform = "translateX(-200%)";
             setTimeout(() => {
@@ -2577,6 +2627,9 @@ document.addEventListener("touchend", () => {
                     }, 10);
                 }, 10);
             }, 350);
+        }else if(currentTouchPosSkip <= 130){
+            bigSongBanner.classList.remove("playerMovable");
+            bigSongBanner.style.transform = "translateX(0)";
         }
     }
     if(playerTouchStarted3){
@@ -2597,6 +2650,7 @@ document.addEventListener("touchend", () => {
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
+    playerGestureDirection = null;
     if(!playerPopupTouchStarted){
         setInteractionActive(false);
     }
@@ -2622,6 +2676,8 @@ let playerPopupStartTop = 0;
 let playerPopupCurrentTop = 0;
 let playerPopupFrame = null;
 let playerPopupStartedFull = false;
+let playerPopupStartX = 0;
+let playerPopupGestureDirection = null;
 const playerPopupDragThreshold = 8;
 
 function getPlayerPopupContainerRect(){
@@ -2681,7 +2737,7 @@ function canStartPlayerPopupDrag(target){
     return !!target?.closest(".queueHandle, .queueTabs, .queuePlayingFrom");
 }
 
-function startPlayerPopupDrag(clientY){
+function startPlayerPopupDrag(clientX, clientY){
     if(!queuePanel || window.innerWidth > window.innerHeight){
         return;
     }
@@ -2697,28 +2753,34 @@ function startPlayerPopupDrag(clientY){
     playerPopupTouchStarted = true;
     moveStarted = false;
     playerPopupStartedFull = queuePanel.classList.contains("playerPopupFull");
+    playerPopupStartX = clientX;
     playerPopupStartY = clientY;
     playerPopupCurrentY = playerPopupStartY;
+    playerPopupGestureDirection = null;
     const panelRect = queuePanel.getBoundingClientRect();
     const containerRect = getPlayerPopupContainerRect();
     playerPopupStartTop = panelRect.top - containerRect.top;
     playerPopupCurrentTop = playerPopupStartTop;
-    queuePanel.classList.add("playerMovable");
-    queuePanel.classList.add("queuePanelDragging");
-    setInteractionActive(true);
 }
 
-function movePlayerPopupTo(clientY){
+function movePlayerPopupTo(clientX, clientY){
     if(!playerPopupTouchStarted || !queuePanel || window.innerWidth > window.innerHeight){
         return;
     }
 
     playerPopupCurrentY = clientY;
+    const deltaX = clientX - playerPopupStartX;
     const deltaY = playerPopupCurrentY - playerPopupStartY;
-    if(!moveStarted && Math.abs(deltaY) < playerPopupDragThreshold){
+    if(!playerPopupGestureDirection){
+        playerPopupGestureDirection = getGestureDirection(deltaX, deltaY, playerPopupDragThreshold);
+    }
+    if(playerPopupGestureDirection !== "vertical"){
         return;
     }
 
+    queuePanel.classList.add("playerMovable");
+    queuePanel.classList.add("queuePanelDragging");
+    setInteractionActive(true);
     moveStarted = true;
     const nextTop = Math.max(0, playerPopupStartTop + deltaY);
     if(playerPopupFrame){
@@ -2741,6 +2803,7 @@ function finishPlayerPopupDrag(){
     if(!moveStarted){
         playerPopupTouchStarted = false;
         playerPopupStartedFull = false;
+        playerPopupGestureDirection = null;
         setInteractionActive(false);
         return;
     }
@@ -2759,21 +2822,25 @@ function finishPlayerPopupDrag(){
 
     playerPopupTouchStarted = false;
     playerPopupStartedFull = false;
+    playerPopupGestureDirection = null;
     moveStarted = false;
     setInteractionActive(false);
 }
 
 const movePlayerPopup = (e) => {
+    const nextX = e.touches[0].clientX;
     const nextY = e.touches[0].clientY;
-    const dragDistance = Math.abs(nextY - playerPopupStartY);
-    if(playerPopupTouchStarted && (moveStarted || dragDistance >= playerPopupDragThreshold)){
+    const deltaX = nextX - playerPopupStartX;
+    const deltaY = nextY - playerPopupStartY;
+    const dragDirection = playerPopupGestureDirection || getGestureDirection(deltaX, deltaY, playerPopupDragThreshold);
+    if(playerPopupTouchStarted && (moveStarted || dragDirection === "vertical")){
         e.preventDefault();
     }
-    movePlayerPopupTo(nextY);
+    movePlayerPopupTo(nextX, nextY);
 }
 
 const movePlayerPopupMouse = (e) => {
-    movePlayerPopupTo(e.clientY);
+    movePlayerPopupTo(e.clientX, e.clientY);
 }
 
 if(queuePanel){
@@ -2782,7 +2849,7 @@ if(queuePanel){
         if(!canStartPlayerPopupDrag(e.target)){
             return;
         }
-        startPlayerPopupDrag(e.touches[0].clientY);
+        startPlayerPopupDrag(e.touches[0].clientX, e.touches[0].clientY);
         document.addEventListener("touchmove", movePlayerPopup, { passive: false });
     });
 
@@ -2804,7 +2871,7 @@ if(queuePanel){
             return;
         }
         e.preventDefault();
-        startPlayerPopupDrag(e.clientY);
+        startPlayerPopupDrag(e.clientX, e.clientY);
         document.addEventListener("mousemove", movePlayerPopupMouse);
     });
 
