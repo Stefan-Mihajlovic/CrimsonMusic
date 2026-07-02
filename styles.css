@@ -2882,11 +2882,11 @@ a.toggleSection i{
     box-shadow: none;
     border: none;
     transition: all .2s ease-in-out;
-    padding-top: max(var(--topInsetArea), 45px) !important;
+    padding-top: calc(max(var(--topInsetArea), 45px) + 10px) !important;
     padding-bottom: 20px !important;
     z-index: 4;
     height: auto;
-    min-height: calc(max(var(--topInsetArea), 45px) + 50px);
+    min-height: calc(max(var(--topInsetArea), 45px) + 60px);
 }
 
 .playerOpen .pageBar{
