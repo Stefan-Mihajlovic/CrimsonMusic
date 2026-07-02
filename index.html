@@ -93,6 +93,7 @@
                 <input type="search" name="search" id="searchInput" placeholder="Search away...">
                 <input style="font-family: Bootstrap-icons" id="submitSearch" type="submit" value="&#xF52A;">
             </form>
+            <div class="searchHistory" id="searchHistorySearch" aria-label="Recent searches"></div>
             <div class="SearchTypeChips">
                 <div class="searchChip">
                     <input type="radio" name="allChip" id="allInput" class="allchipCh" checked onchange="checkTheChip('All')">
@@ -141,6 +142,7 @@
                 <input type="search" name="search" id="searchYoursInput" placeholder="Search your playlists and artists...">
                 <input style="font-family: Bootstrap-icons" id="submitYoursSearch" type="submit" value="&#xF52A;">
             </form>
+            <div class="searchHistory" id="searchHistoryYours" aria-label="Recent library searches"></div>
         </div>
         <button class="songItem favoritesItem" onclick="openLikedSongs();">
             <div class="songInfo">

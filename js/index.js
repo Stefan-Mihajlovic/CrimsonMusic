@@ -162,6 +162,111 @@ let lastOpenSideScreen;
 let isLoaderOff = false;
 let startTSDValue = 0;
 
+const crimsonSearchHistoryLimit = 6;
+const crimsonSearchHistoryScopes = {
+    search: {
+        key: "crimsonSearchHistory:search",
+        inputId: "searchInput",
+        submitId: "submitSearch",
+        containerId: "searchHistorySearch"
+    },
+    yours: {
+        key: "crimsonSearchHistory:yours",
+        inputId: "searchYoursInput",
+        submitId: "submitYoursSearch",
+        containerId: "searchHistoryYours"
+    }
+};
+
+function getCrimsonSearchHistory(scope){
+    try {
+        const scopeConfig = crimsonSearchHistoryScopes[scope];
+        if(!scopeConfig){
+            return [];
+        }
+        const parsedHistory = JSON.parse(localStorage.getItem(scopeConfig.key) || "[]");
+        return Array.isArray(parsedHistory) ? parsedHistory.filter(Boolean).slice(0, crimsonSearchHistoryLimit) : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function setCrimsonSearchHistory(scope, terms){
+    const scopeConfig = crimsonSearchHistoryScopes[scope];
+    if(!scopeConfig){
+        return;
+    }
+
+    try {
+        localStorage.setItem(scopeConfig.key, JSON.stringify(terms.slice(0, crimsonSearchHistoryLimit)));
+    } catch (error) {
+    }
+}
+
+function renderCrimsonSearchHistory(scope){
+    const scopeConfig = crimsonSearchHistoryScopes[scope];
+    if(!scopeConfig){
+        return;
+    }
+
+    const historyContainer = document.getElementById(scopeConfig.containerId);
+    if(!historyContainer){
+        return;
+    }
+
+    const terms = getCrimsonSearchHistory(scope);
+    historyContainer.innerHTML = "";
+    historyContainer.classList.toggle("searchHistoryOpen", terms.length > 0);
+
+    terms.forEach((term) => {
+        const historyBtn = document.createElement("button");
+        historyBtn.type = "button";
+        historyBtn.textContent = term;
+        historyBtn.addEventListener("click", () => {
+            const input = document.getElementById(scopeConfig.inputId);
+            const submit = document.getElementById(scopeConfig.submitId);
+            if(input && submit){
+                input.value = term;
+                input.focus();
+                submit.click();
+            }
+        });
+        historyContainer.appendChild(historyBtn);
+    });
+}
+
+function saveCrimsonSearchHistory(scope, term){
+    const cleanTerm = (term || "").trim();
+    if(cleanTerm.length === 0){
+        return;
+    }
+
+    const terms = getCrimsonSearchHistory(scope).filter((savedTerm) => savedTerm.toLowerCase() !== cleanTerm.toLowerCase());
+    terms.unshift(cleanTerm);
+    setCrimsonSearchHistory(scope, terms);
+    renderCrimsonSearchHistory(scope);
+}
+
+function initializeCrimsonSearchHistory(){
+    renderCrimsonSearchHistory("search");
+    renderCrimsonSearchHistory("yours");
+}
+
+function animateSearchCategories(){
+    const categories = document.querySelector(".categories");
+    if(!categories){
+        return;
+    }
+
+    categories.classList.remove("categoriesStagger");
+    void categories.offsetWidth;
+    categories.classList.add("categoriesStagger");
+}
+
+window.crimsonSaveSearchHistory = saveCrimsonSearchHistory;
+window.crimsonRenderSearchHistory = renderCrimsonSearchHistory;
+window.crimsonAnimateSearchCategories = animateSearchCategories;
+
 function setScreen(screenToSet, clickedBtn, activeScreen){
 
     if(!isLoaderOff && (activeScreen == "searchScreen" || activeScreen == "yoursScreen")){
@@ -215,6 +320,8 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
         searchList.innerHTML = "";
         searchInput.value = "";
         header.style.display = 'none';
+        renderCrimsonSearchHistory("search");
+        requestAnimationFrame(animateSearchCategories);
     }else{
         let header = document.querySelector('header');
         
@@ -225,6 +332,8 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
 function setHomeScreen(){
     document.getElementsByClassName("homeScreen")[0].classList.add("activeMain");
 }
+
+initializeCrimsonSearchHistory();
 
 /* ----- Button clicks ----- */
 
@@ -2912,6 +3021,7 @@ function showSearchBarYours(searchOnBtn){
         resetSearchScreenToNormal();
     }else{
         document.getElementById('searchYoursInput').focus();
+        renderCrimsonSearchHistory("yours");
         searchOnBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
         document.querySelector('.favoritesItem').classList.add('displayNone');
         document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
@@ -2928,7 +3038,7 @@ function resetSearchScreenToNormal(){
 
     document.getElementById('searchBarYours').classList.remove('searchBarOn');
 
-    searchOnBtn = document.querySelector('.searchOnYoursBtn');
+    const searchOnBtn = document.querySelector('.searchOnYoursBtn');
     searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
     document.querySelector('.favoritesItem').classList.remove('displayNone');
     document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
@@ -2963,6 +3073,7 @@ submitYoursSearchBtn.addEventListener('click', () => {
 
     let brP = 0, brL = 0, brA = 0;
     if(searchInput != "" && searchInput != undefined){
+        saveCrimsonSearchHistory("yours", searchInput);
 
         yourPlaylists.forEach((playlist) => {
             if(playlist.children[0].children[1].children[0].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(playlist.children[0].children[1].children[0].innerHTML.toLowerCase())){
@@ -3105,14 +3216,17 @@ sortBtns.forEach((sortBtn) => {
         let sortPopup = document.querySelector('.sortPopup');
 
         let sortBtnRect = sortBtn.getBoundingClientRect();
-        let offsetX = sortBtnRect.left - document.body.getBoundingClientRect().left;
-        let offsetY = sortBtnRect.top - document.body.getBoundingClientRect().top;
-        offsetX = Math.round(offsetX - sortPopup.getBoundingClientRect().width);
-        offsetY = Math.round(offsetY + sortBtnRect.height + 5);
+        const popupRect = sortPopup.getBoundingClientRect();
+        let offsetX = Math.round(sortBtnRect.right - popupRect.width);
+        let offsetY = Math.round(sortBtnRect.bottom + 8);
+        offsetX = Math.max(14, Math.min(offsetX, window.innerWidth - popupRect.width - 14));
+        offsetY = Math.max(14, Math.min(offsetY, window.innerHeight - popupRect.height - 14));
 
-        document.querySelector('.sortPopupWrapper').classList.add('sortPopupOpen');
         document.documentElement.style.setProperty('--sortPopupTop', `${offsetY}px`);
         document.documentElement.style.setProperty('--sortPopupLeft', `${offsetX}px`);
+        requestAnimationFrame(() => {
+            document.querySelector('.sortPopupWrapper').classList.add('sortPopupOpen');
+        });
     })
 })
 

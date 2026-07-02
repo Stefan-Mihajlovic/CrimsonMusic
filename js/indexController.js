@@ -693,6 +693,8 @@ searchBtn.addEventListener('click', () => {
     searchList.classList.add("searchListOpen");
 
     if(searchedTextLower != ""){
+        window.crimsonSaveSearchHistory?.("search", searchedText);
+
         if(isAllCh || isSongsCh){
             for (let i = 1; i <= brojPesama; i++) {
                 findSearchedSong(i,searchedTextLower);
@@ -836,7 +838,7 @@ function GetCategories(name){
             catBanner = getCategoryImage(snapshot.val(), "large");
             catBannerSmall = getCategoryImage(snapshot.val(), "small");
 
-            currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`', '`+ catBanner +`')" style="background-color: `+ catColor +`">
+            currentLi += `<li class="catItems" style="--cat-row-index: `+ Math.floor((name - 1) / 2) +`"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`', '`+ catBanner +`')" style="background-color: `+ catColor +`">
             <h3>`+ catName +`</h3><div class="darkenCat"></div>
             </div>`;
         }
@@ -854,6 +856,9 @@ function GetCategories(name){
             </div></li>`;
 
             categoriesList.innerHTML += currentLi;
+            if(document.querySelector(".searchScreen.activeMain")){
+                window.crimsonAnimateSearchCategories?.();
+            }
         }
     })
 }

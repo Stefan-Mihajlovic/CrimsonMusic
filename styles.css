@@ -886,7 +886,7 @@ main{
     width: 100%;
     gap: 7px;
     z-index: 9;
-    transition: all .1s ease-in-out;
+    transition: transform .32s var(--screenEase), opacity .24s ease-out, border-color .24s ease-out, background-color .24s ease-out;
 }
 
 .searchBar form{
@@ -915,6 +915,50 @@ main{
     color: var(--offWhite);
     transition: all .3s ease-in-out;
     font-size: 15px !important;
+}
+
+.searchHistory{
+    width: calc(100% - 40px);
+    margin-left: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: max-height .34s var(--screenEase), opacity .24s ease-out, transform .34s var(--screenEase), margin .34s var(--screenEase);
+}
+
+.searchHistoryOpen{
+    max-height: 78px;
+    opacity: 1;
+    margin-top: 2px;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.searchHistory button{
+    border: 1px solid rgba(220, 214, 247, 0.12);
+    background: rgba(220, 214, 247, 0.07);
+    color: var(--offWhite);
+    border-radius: 999px;
+    padding: 8px 11px;
+    font-size: 12px;
+    line-height: 12px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: transform .18s var(--screenEase), background-color .18s ease-out, border-color .18s ease-out;
+}
+
+.searchHistory button:active{
+    transform: scale(.94);
+    background: rgba(143, 89, 245, 0.18);
+    border-color: rgba(143, 89, 245, 0.28);
 }
 
 .searchList{
@@ -1835,6 +1879,20 @@ a.toggleSection i{
     padding-top: env(safe-area-inset-top);
 }
 
+.categoriesStagger .catItems{
+    opacity: 0;
+    transform: translateY(16px) scale(.98);
+    animation: categoryRowIn .42s var(--screenEase) forwards;
+    animation-delay: calc(var(--cat-row-index, 0) * 70ms);
+}
+
+@keyframes categoryRowIn{
+    to{
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .makePlaylistScreen .screenScrollable{
     height: 100svh;
     overflow-y: auto;
@@ -1858,7 +1916,7 @@ a.toggleSection i{
     border-bottom: 2px solid transparent;
     box-shadow: none;
     position: fixed;
-    transition: all 0.3s ease-in-out;
+    transition: background-color .32s var(--screenEase), border-color .32s ease-out, backdrop-filter .32s ease-out, -webkit-backdrop-filter .32s ease-out, box-shadow .32s ease-out;
 }
 
 .makePlaylistScreen .pageBar, .bugReportScreen .pageBar{
@@ -1874,8 +1932,9 @@ a.toggleSection i{
 
 .artistScreen .pageBar h2, .playlistScreen .pageBar h2, .categoryScreen .pageBar h2{
     opacity: 0;
-    transition: all 0.35s ease-in-out;
+    transition: opacity .28s ease-out, transform .52s cubic-bezier(.2, 1.35, .34, 1);
     font-weight: 500;
+    transform: translate3d(16px, 8px, 0) scale(.96);
 }
 
 .pageBarOn{
@@ -1883,15 +1942,18 @@ a.toggleSection i{
     backdrop-filter: var(--gmBackdrop);
     -webkit-backdrop-filter: var(--gmBackdrop);
     border-bottom: 1px solid var(--playerColor) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
 }
 
 .pageBarOn2{
     opacity: 0;
+    transform: translateY(-8px) scale(.985);
+    transition: opacity .28s ease-out, transform .42s var(--screenEase);
 }
 
 .pageBarOn h2{
     opacity: 1 !important;
-    transform: translateX(0%) !important;
+    transform: translate3d(0, 0, 0) scale(1) !important;
 }
 
 .artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryScreenOpen .pageBar h2{
@@ -2139,8 +2201,13 @@ a.toggleSection i{
 /* ----- LIBRARY / YOURS SCREEN ----- */
 
 .yoursScreen .searchBar{
-    display: none;
-    transition: all .3s ease-in-out;
+    display: flex;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transform: translateY(-10px) scale(.98);
+    transition: max-height .38s var(--screenEase), opacity .24s ease-out, transform .38s var(--screenEase), padding .38s var(--screenEase), margin .38s var(--screenEase);
     position: relative !important;
     top: auto !important;
     margin-bottom: 0px !important;
@@ -2186,8 +2253,11 @@ a.toggleSection i{
 }
 
 .yoursScreen .searchBarOn{
-    display: flex;
-    /* animation: showUp .3s ease-in-out; */
+    max-height: 150px;
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0) scale(1);
+    padding-bottom: 10px;
 }
 
 /* ----- MAKE A PLAYLIST ----- */
@@ -2667,44 +2737,69 @@ a.toggleSection i{
     position: absolute;
     top: var(--sortPopupTop);
     left: var(--sortPopupLeft);
-    width: 40%;
-    min-width: 120px;
+    width: min(190px, calc(100vw - 32px));
+    min-width: 165px;
     height: auto;
-    background: var(--popupScreenBg);
-    border-radius: 10px;
-    border: 1px solid var(--playerColor);
-    box-shadow: 0px 0px 20px black;
+    padding: 6px;
+    background: linear-gradient(180deg, rgba(24, 18, 31, 0.95), rgba(11, 8, 15, 0.96));
+    border-radius: 16px;
+    border: 1px solid rgba(220, 214, 247, 0.14);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(18px) brightness(1.12);
+    -webkit-backdrop-filter: blur(18px) brightness(1.12);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     overflow: hidden;
     list-style: none;
     z-index: 9999;
-    transition: all .15s ease-in-out, top 0s, left 0s;
-    transform: translate(5px, -5px);
+    transition: opacity .2s ease-out, transform .34s cubic-bezier(.2, 1.25, .34, 1), top 0s, left 0s;
+    transform: translateY(-10px) scale(.94);
+    transform-origin: top right;
     opacity: 0;
     pointer-events: none;
 }
 
 .sortPopupOpen .sortPopup{
-    transform: translate(0, 0);
+    transform: translateY(0) scale(1);
     opacity: 1;
     pointer-events: all;
 }
 
 .sortPopup h4{
     width: 100%;
-    background-color: var(--bodyBgMP);
-    text-align: center;
-    padding: 5px;
-    border-bottom: 1px solid #242027;
+    background-color: transparent;
+    text-align: left;
+    padding: 10px 12px 7px;
+    border-bottom: 1px solid rgba(220, 214, 247, 0.08);
+    color: var(--offWhite);
+    letter-spacing: 0;
+    font-size: 14px;
+    line-height: 14px;
 }
 
 .sortPopup li{
-    text-align: center;
+    text-align: left;
     width: 100%;
-    padding: 15px;
-    border-bottom: 1px solid #242027;
+    padding: 13px 12px;
+    border-bottom: none;
+    border-radius: 11px;
+    color: var(--offWhite);
+    font-size: 14px;
+    line-height: 14px;
+    transition: transform .18s var(--screenEase), background-color .18s ease-out, color .18s ease-out;
+}
+
+.sortPopup li:active{
+    transform: scale(.97);
+    background-color: rgba(143, 89, 245, 0.18);
+}
+
+@media (hover: hover){
+    .sortPopup li:hover{
+        transform: translateX(2px);
+        background-color: rgba(220, 214, 247, 0.08);
+    }
 }
 
 .sortPopup li:last-child{
@@ -2717,10 +2812,10 @@ a.toggleSection i{
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(5px);
-    transition: all .15s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(3px) brightness(.78);
+    -webkit-backdrop-filter: blur(3px) brightness(.78);
+    transition: opacity .22s ease-out, backdrop-filter .22s ease-out, -webkit-backdrop-filter .22s ease-out;
     z-index: 9998;
     pointer-events: none;
     opacity: 0;
