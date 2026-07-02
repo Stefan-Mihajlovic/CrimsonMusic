@@ -567,13 +567,15 @@ function parseSongItem(songLi, fallbackSource){
 
     const title = songLi.querySelector(".songText h2")?.textContent || args[1];
     const creator = songLi.querySelector(".songText h3")?.textContent || args[2];
-    const image = songLi.querySelector(".songInfo img")?.src || args[3];
+    const image = args[3];
+    const imageSmall = songLi.querySelector(".songInfo img")?.src || image;
 
     return {
         url: args[0],
         title: title,
         creator: creator,
         image: image,
+        imageSmall: imageSmall,
         color: args[4],
         source: args[5] || fallbackSource || "Your queue",
         id: args[6],
@@ -582,11 +584,13 @@ function parseSongItem(songLi, fallbackSource){
 }
 
 function getCurrentSongItem(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id){
+    const imageSmall = playedFromBtn?.querySelector?.(".songInfo img")?.src || imageURL;
     return {
         url: songURL,
         title: songTitle,
         creator: songCreator,
         image: imageURL,
+        imageSmall: imageSmall,
         color: songColor,
         source: getPlayedFromName(playedFrom, playedFromBtn),
         id: id,
@@ -671,6 +675,7 @@ async function fillQueueWithRandomSongs(){
                 title: song.title,
                 creator: song.creator,
                 image: song.image,
+                imageSmall: song.imageSmall || song.image,
                 color: song.color,
                 source: "Autoplay",
                 id: id,
@@ -711,7 +716,7 @@ function renderSongQueue(){
                     <span></span>
                     <span></span>
                 </div>
-                <img src="${song.image}" alt="songBanner">
+                <img src="${song.imageSmall || song.image}" alt="songBanner">
             </div>
             <div class="queueSongText">
                 <h3>${song.title}</h3>

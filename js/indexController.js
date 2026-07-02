@@ -24,6 +24,35 @@ const auth = getAuth(app);
 
 const realdb = getDatabase();
 
+function getRecordImage(record, baseField, size = "large", fallback = ""){
+    if(!record){
+        return fallback;
+    }
+
+    const suffix = size === "small" ? "Small" : size === "original" ? "Original" : "Large";
+    return record[`${baseField}${suffix}`] || record[baseField] || record[`${baseField}Original`] || fallback;
+}
+
+function getSongImage(record, size = "large"){
+    return getRecordImage(record, "ImgURL", size, "images/defaultSong.webp");
+}
+
+function getArtistImage(record, size = "large"){
+    return getRecordImage(record, "ImageURL", size, "images/defaultArtist.webp");
+}
+
+function getArtistAboutImage(record, size = "large"){
+    return getRecordImage(record, "AboutBanner", size, getArtistImage(record, size));
+}
+
+function getPlaylistImage(record, size = "large"){
+    return getRecordImage(record, "Banner", size, "images/defaultPlaylist.webp");
+}
+
+function getCategoryImage(record, size = "large"){
+    return getRecordImage(record, "Banner", size, "images/defaultPlaylist.webp");
+}
+
 window.crimsonGetSongById = async function(songId){
     const dbRef = ref(realdb);
     const snapshot = await get(child(dbRef, "Songs/"+songId));
@@ -36,7 +65,8 @@ window.crimsonGetSongById = async function(songId){
         songURL: snapshot.val().SongURL,
         title: snapshot.val().SongName,
         creator: snapshot.val().Creator,
-        image: snapshot.val().ImgURL,
+        image: getSongImage(snapshot.val(), "large"),
+        imageSmall: getSongImage(snapshot.val(), "small"),
         color: snapshot.val().Color
     };
 }
@@ -479,7 +509,7 @@ export function UserSignedIn(){
 
 // ----- Generate a song based on the songID
 
-let songToBePlayed,songTitle,songCreator,imageURL,songColor;
+let songToBePlayed,songTitle,songCreator,imageURL,imageURLSmall,songColor;
 
 let recSongs = document.getElementById("recSongs");
 
@@ -493,7 +523,8 @@ function GenerateOneSong(songName){
             songToBePlayed = snapshot.val().SongURL;
             songTitle  = snapshot.val().SongName;
             songCreator = snapshot.val().Creator;
-            imageURL = snapshot.val().ImgURL;
+            imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
             songColor = snapshot.val().Color;
             let currentLI =  `<li class="songItem">
                 <div class="songInfo">
@@ -503,7 +534,7 @@ function GenerateOneSong(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img onError="noStorage()" src="`+imageURL+`" alt="songBanner">
+                    <img onError="noStorage()" src="`+imageURLSmall+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -542,7 +573,7 @@ function generateSongs(){
 }
 
 // ----- GENERATE ARTISTS
-let artistImage,artistFollowers,artistListens,artistAboutImage;
+let artistImage,artistImageSmall,artistFollowers,artistListens,artistAboutImage;
 let recArtists = document.getElementsByClassName("recArtists")[0];
 
 function GetArtists(artistName){
@@ -553,12 +584,13 @@ function GetArtists(artistName){
     get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
-            artistImage = snapshot.val().ImageURL;
+            artistImage = getArtistImage(snapshot.val(), "large");
+            artistImageSmall = getArtistImage(snapshot.val(), "small");
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
-            artistAboutImage = snapshot.val().AboutBanner;
+            artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
             let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
-            <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImage +`" alt="artistImage">
+            <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImageSmall +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
             recArtists.innerHTML += currentImg;
@@ -582,7 +614,7 @@ function generateArtists(){
 }
 
 // ----- GENERATE PLAYLISTS
-let playlistBanner,playlistLikes,playlistSongs,playlistArtists,playlistOwners;
+let playlistBanner,playlistBannerSmall,playlistLikes,playlistSongs,playlistArtists,playlistOwners;
 let recPlaylists = document.getElementsByClassName("recPlaylists")[0];
 
 function GetPlaylists(playlistName){
@@ -595,7 +627,8 @@ function GetPlaylists(playlistName){
             let currentLi = "";
 
             playlistName = snapshot.val().Title;
-            playlistBanner = snapshot.val().Banner;
+            playlistBanner = getPlaylistImage(snapshot.val(), "large");
+            playlistBannerSmall = getPlaylistImage(snapshot.val(), "small");
             playlistLikes = snapshot.val().Likes;
             playlistSongs = snapshot.val().Songs;
             playlistArtists = snapshot.val().Artists;
@@ -603,14 +636,14 @@ function GetPlaylists(playlistName){
 
             if(playlistOwners != "..Crimson.."){
                 currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                    <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
+                    <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                     <h3>`+ playlistName +`</h3>
                     <h5>`+ playlistArtists +`</h5>
                 </li>`;
             }else{
                 currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div>
-                        <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
+                        <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                         <img class="crimsonPlaylistTag" src="../images/CrimsonLogo.png" alt="Crimson Tag"></img>
                     </div>
                     <h3>`+ playlistName +`</h3>
@@ -693,7 +726,8 @@ function findSearchedSong(songName, inputText){
             if(songTitle.toLowerCase().includes(inputText.toLowerCase())){
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
-                imageURL = snapshot.val().ImgURL;
+                imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
                 songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem songItemSearch" onclick="clickEffect(this)">
                     <div class="songInfo">
@@ -703,7 +737,7 @@ function findSearchedSong(songName, inputText){
                             <span></span>
                             <span></span>
                         </div>
-                        <img src="`+imageURL+`" alt="songBanner">
+                        <img src="`+imageURLSmall+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -730,10 +764,14 @@ function findSearchedArtist(artistName, inputText){
             artistName = snapshot.val().Artist;
             let artistTerms = snapshot.val().ArtistSearchTerms || "";
             if(artistName.toLowerCase().includes(inputText) || artistTerms.toLowerCase().includes(inputText)){
-                artistImage = snapshot.val().ImageURL;
-                let currentLi = `<li class="artistItemSearch" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`'); clickEffect(this);">
+                artistImage = getArtistImage(snapshot.val(), "large");
+                artistImageSmall = getArtistImage(snapshot.val(), "small");
+                artistFollowers = snapshot.val().Followers;
+                artistListens = snapshot.val().Listens;
+                artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
+                let currentLi = `<li class="artistItemSearch" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`'); clickEffect(this);">
                                     <div>
-                                        <img  src="`+ artistImage +`" alt="artistImage">
+                                        <img  src="`+ artistImageSmall +`" alt="artistImage">
                                         <h3>`+ artistName +`</h3>
                                     </div>
                                     <i class="fa-solid fa-circle-right"></i>
@@ -753,13 +791,14 @@ function findSearchedPlaylist(playlistName, inputText){
         if(snapshot.exists()){
             playlistName = snapshot.val().Title;
             if(playlistName.toLowerCase().includes(inputText.toLowerCase())){
-                playlistBanner = snapshot.val().Banner;
+                playlistBanner = getPlaylistImage(snapshot.val(), "large");
+            playlistBannerSmall = getPlaylistImage(snapshot.val(), "small");
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
                 let currentLi =  `<li class="playlistItemSearch" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div class="playlistItemHolder">
-                        <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                        <img  src="`+ playlistBannerSmall +`" alt="playlistBanner">
                         <div>
                             <h3>`+ playlistName +`</h3>
                             <h5>`+ playlistArtists +`</h5>
@@ -785,7 +824,7 @@ function generateCategories(){
 
 function GetCategories(name){
     let catName,catName2,catColor,catColor2;
-    let catBanner,catBanner2;
+    let catBanner,catBannerSmall,catBanner2,catBanner2Small;
     let currentLi = "";
 
     let dbRef = ref(realdb);
@@ -794,7 +833,8 @@ function GetCategories(name){
         if(snapshot.exists()){
             catName = snapshot.val().Name;
             catColor = snapshot.val().Color;
-            catBanner = snapshot.val().Banner;
+            catBanner = getCategoryImage(snapshot.val(), "large");
+            catBannerSmall = getCategoryImage(snapshot.val(), "small");
 
             currentLi += `<li class="catItems"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`', '`+ catBanner +`')" style="background-color: `+ catColor +`">
             <h3>`+ catName +`</h3><div class="darkenCat"></div>
@@ -806,7 +846,8 @@ function GetCategories(name){
         if(snapshot.exists()){
             catName2 = snapshot.val().Name;
             catColor2 = snapshot.val().Color;
-            catBanner2 = snapshot.val().Banner;
+            catBanner2 = getCategoryImage(snapshot.val(), "large");
+            catBanner2Small = getCategoryImage(snapshot.val(), "small");
 
             currentLi += `<div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName2 +`', '`+ catColor2 +`', '`+ catBanner2 +`')" style="background-color: `+ catColor2 +`">
             <h3>`+ catName2 +`</h3><div class="darkenCat"></div>
@@ -893,12 +934,13 @@ function findPlaylistOfCategory(playlistName, inputText){
             playlistName = snapshot.val().Title;
             let playlistCategory = snapshot.val().Category;
             if(playlistCategory.toLowerCase().includes(inputText.toLowerCase())){
-                playlistBanner = snapshot.val().Banner;
+                playlistBanner = getPlaylistImage(snapshot.val(), "large");
+            playlistBannerSmall = getPlaylistImage(snapshot.val(), "small");
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
                 let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
+                <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
                 </li>`;
@@ -921,7 +963,8 @@ function findSongOfCategory(songName, inputText){
                 songTitle  = snapshot.val().SongName;
                 songToBePlayed = snapshot.val().SongURL;
                 songCreator = snapshot.val().Creator;
-                imageURL = snapshot.val().ImgURL;
+                imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
                 songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
@@ -931,7 +974,7 @@ function findSongOfCategory(songName, inputText){
                             <span></span>
                             <span></span>
                         </div>
-                        <img src="`+imageURL+`" alt="songBanner">
+                        <img src="`+imageURLSmall+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -1052,10 +1095,11 @@ export function openArtistPageByName(artistName2){
 
                 if(artistName.includes(ArtistName)){
                     artistID = i;
-                    artistImage = snapshot.val().ImageURL;
+                    artistImage = getArtistImage(snapshot.val(), "large");
+            artistImageSmall = getArtistImage(snapshot.val(), "small");
                     artistFollowers = snapshot.val().Followers;
                     artistListens = snapshot.val().Listens;
-                    artistAboutImage = snapshot.val().AboutBanner;
+                    artistAImage = getArtistAboutImage(snapshot.val(), "large");
                     br = 1;
                     closeBigPlayer();
                     openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage);
@@ -1152,20 +1196,11 @@ function followArtist(artistId){
     
                     get(child(dbRef, "Artists/"+artistId)).then((snapshot)=>{
                         if(snapshot.exists()){
-                            let artistNameDB = snapshot.val().Artist;
-                            let artistImage = snapshot.val().ImageURL;
                             let artistFollowers = snapshot.val().Followers;
-                            let artistListens = snapshot.val().Listens;
-                            let artistAboutImage = snapshot.val().AboutBanner;
     
                             if(!isArtistFollowed){
-                                set(ref(realdb, "Artists/"+artistId),
-                                {
-                                    AboutBanner: artistAboutImage,
-                                    Artist: artistNameDB,
-                                    Followers: String(Number(artistFollowers)+1),
-                                    ImageURL: artistImage,
-                                    Listens: artistListens
+                                update(ref(realdb, "Artists/"+artistId), {
+                                    Followers: String(Number(artistFollowers)+1)
                                 })
                                 .then(()=>{
                                     // LoadUserFArtists();
@@ -1175,13 +1210,8 @@ function followArtist(artistId){
                                     alert("error "+error);
                                 })
                             }else{
-                                set(ref(realdb, "Artists/"+artistId),
-                                {
-                                    AboutBanner: artistAboutImage,
-                                    Artist: artistNameDB,
-                                    Followers: String(Number(artistFollowers)-1),
-                                    ImageURL: artistImage,
-                                    Listens: artistListens
+                                update(ref(realdb, "Artists/"+artistId), {
+                                    Followers: String(Number(artistFollowers)-1)
                                 })
                                 .then(()=>{
                                     // LoadUserFArtists();
@@ -1214,7 +1244,8 @@ function SetTheLatestRelease(artist){
                     if(songCreator.includes(artist)){
                         songToBePlayed = snapshot.val().SongURL;
                         songTitle  = snapshot.val().SongName;
-                        imageURL = snapshot.val().ImgURL;
+                        imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
                         songColor = snapshot.val().Color;
                         latestReleaseLi =  `<li class="songItem">
                             <div class="songInfo">
@@ -1224,7 +1255,7 @@ function SetTheLatestRelease(artist){
                                     <span></span>
                                     <span></span>
                                 </div>
-                                <img src="`+imageURL+`" alt="songBanner">
+                                <img src="`+imageURLSmall+`" alt="songBanner">
                                 <div class="songText">
                                     <h2>`+ songTitle +`</h2>
                                     <h3>`+ songCreator +`</h3>
@@ -1258,11 +1289,12 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
             playlistArtists = snapshot.val().Artists;
             if(playlistArtists.toLowerCase().includes(artist.toLowerCase())){
                 playlistName = snapshot.val().Title;
-                playlistBanner = snapshot.val().Banner;
+                playlistBanner = getPlaylistImage(snapshot.val(), "large");
+            playlistBannerSmall = getPlaylistImage(snapshot.val(), "small");
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
-                <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBanner +`" alt="playlistBanner">
+                <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
                 </li>`;
@@ -1288,7 +1320,8 @@ function GenerateOneSongFromArtist(songName,artist){
             if(songCreator.toLowerCase().includes(artist.toLowerCase())){
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
-                imageURL = snapshot.val().ImgURL;
+                imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
                 songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                     <div class="songInfo">
@@ -1298,7 +1331,7 @@ function GenerateOneSongFromArtist(songName,artist){
                             <span></span>
                             <span></span>
                         </div>
-                        <img src="`+imageURL+`" alt="songBanner">
+                        <img src="`+imageURLSmall+`" alt="songBanner">
                         <div class="songText">
                             <h2>`+ songTitle +`</h2>
                             <h3>`+ songCreator +`</h3>
@@ -1390,7 +1423,8 @@ function GenerateOneSongFromPlaylist(songName){
             songCreator = snapshot.val().Creator;
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
-                imageURL = snapshot.val().ImgURL;
+                imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
                 songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
@@ -1400,7 +1434,7 @@ function GenerateOneSongFromPlaylist(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img src="`+imageURL+`" alt="songBanner">
+                    <img src="`+imageURLSmall+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -1570,7 +1604,8 @@ function playerSelectedSongVault(songName){
             songCreator = snapshot.val().Creator;
             songToBePlayed = snapshot.val().SongURL;
             songTitle  = snapshot.val().SongName;
-            imageURL = snapshot.val().ImgURL;
+            imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
             songColor = snapshot.val().Color;
 
             playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,songColor,"TheVault",'',name);
@@ -1890,12 +1925,13 @@ function GetArtists2(artistName){
     get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
-            artistImage = snapshot.val().ImageURL;
+            artistImage = getArtistImage(snapshot.val(), "large");
+            artistImageSmall = getArtistImage(snapshot.val(), "small");
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
-            artistAboutImage = snapshot.val().AboutBanner;
+            artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
             let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
-            <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImage +`" alt="artistImage">
+            <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImageSmall +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
             yourFArtists.innerHTML += currentImg;
@@ -1986,14 +2022,15 @@ function LoadLikedPlaylists(){
                 get(child(dbRef, "PublicPlaylists/"+usersLikedPlaylists[i])).then((snapshot)=>{
                     if(snapshot.exists()){
                         let playlistName = snapshot.val().Title;
-                        let playlistBanner = snapshot.val().Banner;
+                        let playlistBanner = getPlaylistImage(snapshot.val(), "large");
+            playlistBannerSmall = getPlaylistImage(snapshot.val(), "small");
                         let playlistLikes = snapshot.val().Likes;
                         let playlistSongs = snapshot.val().Songs;
                         let playlistArtists = snapshot.val().Artists;
 
                         let currentLi =  `<li class="songItem" id="`+ usersLikedPlaylists[i] +`">
                             <div class="songInfo">
-                                <img  src="`+ playlistBanner +`" alt="playlistBanner">
+                                <img  src="`+ playlistBannerSmall +`" alt="playlistBanner">
                                 <div class="songText">
                                     <h2>`+ playlistName +`</h2>
                                     <h3>`+ "by " + playlistArtists +`</h3>
@@ -2106,7 +2143,8 @@ function GenerateOneSongFromLiked(songName){
             songCreator = snapshot.val().Creator;
                 songToBePlayed = snapshot.val().SongURL;
                 songTitle  = snapshot.val().SongName;
-                imageURL = snapshot.val().ImgURL;
+                imageURL = getSongImage(snapshot.val(), "large");
+            imageURLSmall = getSongImage(snapshot.val(), "small");
                 songColor = snapshot.val().Color;
                 let currentLI =  `<li class="songItem">
                 <div class="songInfo">
@@ -2116,7 +2154,7 @@ function GenerateOneSongFromLiked(songName){
                         <span></span>
                         <span></span>
                     </div>
-                    <img src="`+imageURL+`" alt="songBanner">
+                    <img src="`+imageURLSmall+`" alt="songBanner">
                     <div class="songText">
                         <h2>`+ songTitle +`</h2>
                         <h3>`+ songCreator +`</h3>
@@ -2339,10 +2377,11 @@ export function getArtistId(artistName){
         get(child(dbRef, "Artists/"+i)).then((snapshot)=>{
             if(snapshot.exists()){
                 let artistNameDB = snapshot.val().Artist;
-                let artistImage = snapshot.val().ImageURL;
+                let artistImage = getArtistImage(snapshot.val(), "large");
+            artistImageSmall = getArtistImage(snapshot.val(), "small");
                 let artistFollowers = snapshot.val().Followers;
                 let artistListens = snapshot.val().Listens;
-                let artistAboutImage = snapshot.val().AboutBanner;
+                let artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
                 if(artistName.includes(artistNameDB)){
                     document.getElementById('seeMoreFromBtn').onclick = () => {
                         clickEffect(this); 
@@ -2377,6 +2416,7 @@ export function LoadUserPlaylistsPopup(songId){
                     const playlistId = playlistParts[0];
                     const playlistName = playlistParts[1];
                     const playlistBanner = playlistParts[2];
+                    const playlistBannerSmall = playlistBanner;
                     const playlistSongs = playlistParts[3] || "";
                     const rowIndex = playlistRows.length;
                     if(!playlistId || !playlistName){
@@ -2386,7 +2426,7 @@ export function LoadUserPlaylistsPopup(songId){
                     if(playlistSongs.split(',').includes(String(songId))){
                         playlistRows.push(`<li class="songItem popupPlaylistItem" style="--popup-item-index: `+ rowIndex +`" id="`+ playlistId +`">
                             <div class="songInfo">
-                                <img src="`+ playlistBanner +`" alt="playlistBanner">
+                                <img src="`+ playlistBannerSmall +`" alt="playlistBanner">
                                 <div class="songText">
                                     <h2>`+ playlistName +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>
@@ -2401,7 +2441,7 @@ export function LoadUserPlaylistsPopup(songId){
                     }else{
                         playlistRows.push(`<li class="songItem popupPlaylistItem" style="--popup-item-index: `+ rowIndex +`" id="`+ playlistId +`">
                             <div class="songInfo">
-                                <img src="`+ playlistBanner +`" alt="playlistBanner">
+                                <img src="`+ playlistBannerSmall +`" alt="playlistBanner">
                                 <div class="songText">
                                     <h2>`+ playlistName +`</h2>
                                     <h3>`+ "by " + currentUser.Username +`</h3>
@@ -2585,10 +2625,11 @@ function generateThisMonthsFeature(){
             get(child(dbRef, "Artists/"+setArtistId)).then((snapshot)=>{
                 if(snapshot.exists()){
                     let artistName = snapshot.val().Artist;
-                    let artistImage = snapshot.val().ImageURL;
+                    let artistImage = getArtistImage(snapshot.val(), "large");
+            artistImageSmall = getArtistImage(snapshot.val(), "small");
                     let artistFollowers = snapshot.val().Followers;
                     let artistListens = snapshot.val().Listens;
-                    let artistAboutImage = snapshot.val().AboutBanner;
+                    let artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
 
                     document.querySelector('.thisMFDiv').addEventListener('click', () => {
                         openArtistPage(setArtistId, artistName, artistImage, artistFollowers, artistListens , artistAboutImage);
