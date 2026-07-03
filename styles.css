@@ -52,9 +52,6 @@
     --sortPopupTop: 0px;
     --sortPopupLeft: 0px;
     --screenEase: cubic-bezier(0.22, 1, 0.36, 1);
-    --bounceEase: cubic-bezier(0.2, 1.35, 0.32, 1);
-    --softBounceEase: cubic-bezier(0.18, 1.08, 0.3, 1);
-    --tapEase: cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
 html{
@@ -138,36 +135,8 @@ h3{
 
 button{
     font-family: 'Outfit', sans-serif;
-    transition: transform .16s var(--tapEase), filter .16s var(--tapEase), background-color .18s ease-out, border-color .18s ease-out, color .18s ease-out, opacity .18s ease-out !important;
+    transition: all .15s ease-in-out !important;
     cursor: pointer;
-}
-
-button:active,
-[role="button"]:active,
-.songItem:active,
-.artistItemSearch:active,
-.playlistItemSearch:active,
-.searchChip:active,
-.popupItem:active,
-.queueSong:active,
-.miniPlayer:active,
-.searchHistory button:active{
-    transform: scale(.96);
-    filter: brightness(.88);
-}
-
-.bpCC button:active,
-.bCC button:active,
-.playerSongBtns button:active,
-.bigSongInfo .playerSongText button:active,
-.player .pageBar button:active,
-.catTitleRightBtn button:active,
-.smallSideScreenBtn:active,
-.searchOnYoursBtn:active,
-#submitSearch:active,
-#submitYoursSearch:active{
-    transform: scale(.9);
-    filter: brightness(.82);
 }
 
 input{
@@ -189,7 +158,7 @@ input{
 }
 
 li{
-    transition: transform .16s var(--tapEase), filter .16s var(--tapEase), background-color .18s ease-out, border-color .18s ease-out, opacity .18s ease-out;
+    transition: all .15s ease-in-out;
     cursor: pointer;
 }
 
@@ -932,7 +901,7 @@ main{
     padding: 15px;
     width: 80%;
     flex-grow: 1;
-    border-radius: 999px;
+    border-radius: 10px;
     border: none;
     background-color: var(--bodyBg);
     border: 1px solid var(--playerColor);
@@ -943,11 +912,8 @@ main{
 #submitSearch, #submitYoursSearch{
     width: 20% !important;
     max-width: 60px;
-    min-width: 52px;
-    aspect-ratio: 1 / 1;
-    border-radius: 999px !important;
     color: var(--offWhite);
-    transition: transform .16s var(--tapEase), filter .16s var(--tapEase), background-color .22s ease-out, border-color .22s ease-out;
+    transition: all .3s ease-in-out;
     font-size: 15px !important;
 }
 
@@ -1140,10 +1106,10 @@ main{
     border: 1px solid var(--playerColor);
     margin-block: 2px;
     position: absolute;
-    border-radius: 999px !important;
+    border-radius: 10px !important;
     background-color: var(--bodyBg);
     z-index: 1;
-    transition: transform .16s var(--tapEase), filter .16s var(--tapEase), background-color .18s ease-out, border-color .18s ease-out;
+    transition: all .1s ease-in-out;
     cursor: pointer;
 }
 
@@ -2520,7 +2486,7 @@ a.toggleSection i{
     bottom: 0px;
     left: 0px;
     transform: translateY(112%);
-    transition: transform .38s var(--softBounceEase), top .32s var(--softBounceEase), height .32s var(--softBounceEase);
+    transition: transform .32s var(--screenEase), top .32s var(--screenEase), height .32s var(--screenEase);
     overflow: scroll;
 }
 
@@ -2547,7 +2513,7 @@ a.toggleSection i{
         width: 40%;
         border: 1px solid var(--playerColor);
         border-radius: 30px;
-        transition: transform .36s var(--softBounceEase), top .3s var(--softBounceEase), height .3s var(--softBounceEase);
+        transition: transform .3s var(--screenEase), top .3s var(--screenEase), height .3s var(--screenEase);
     }
     main{
         padding-left: env(safe-area-inset-left, 20px) !important;
@@ -2787,7 +2753,7 @@ a.toggleSection i{
     overflow: hidden;
     list-style: none;
     z-index: 9999;
-    transition: opacity .2s ease-out, transform .36s var(--bounceEase), top 0s, left 0s;
+    transition: opacity .2s ease-out, transform .34s cubic-bezier(.2, 1.25, .34, 1), top 0s, left 0s;
     transform: translateY(-10px) scale(.94);
     transform-origin: top right;
     opacity: 0;
@@ -2872,7 +2838,7 @@ a.toggleSection i{
     display: flex;
     flex-direction: column;
     height: calc(100svh + 55px) !important;
-    transition: top .38s var(--softBounceEase), bottom .38s var(--softBounceEase), opacity .22s ease-out, padding-top 0s, background-color .28s ease-out, border-color .28s ease-out;
+    transition: top .32s var(--screenEase), bottom .32s var(--screenEase), opacity .22s ease-out, padding-top 0s, background-color .28s ease-out, border-color .28s ease-out;
     opacity: 0;
     pointer-events: none;
     -webkit-transform: translateZ(0);
@@ -2885,22 +2851,6 @@ a.toggleSection i{
     border-top-right-radius: 30px;
     will-change: top, transform;
     contain: layout paint;
-}
-
-.playerMiniBounce{
-    animation: playerMiniBounce .46s var(--tapEase);
-}
-
-@keyframes playerMiniBounce {
-    0%{
-        transform: translate3d(0, 0, 0);
-    }
-    42%{
-        transform: translate3d(0, -14px, 0);
-    }
-    100%{
-        transform: translate3d(0, 0, 0);
-    }
 }
 
 .darkenPlayer{
@@ -3236,7 +3186,7 @@ a.toggleSection i{
     height: min(87vw, 420px);
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 18px;
+    border-radius: 10px;
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 0.7);
     z-index: 0;
     margin-bottom: 2.5vh;
@@ -3560,7 +3510,7 @@ a.toggleSection i{
     border-top: 1px solid #242027;
     box-shadow: none;
     transform: translateY(112%);
-    transition: transform .38s var(--softBounceEase), top .34s var(--softBounceEase), height .34s var(--softBounceEase), border-radius .34s var(--softBounceEase);
+    transition: transform .32s var(--screenEase), top .32s var(--screenEase), height .32s var(--screenEase), border-radius .32s var(--screenEase);
     z-index: 5;
     overflow: hidden;
     pointer-events: none;
@@ -3606,38 +3556,24 @@ a.toggleSection i{
 }
 
 .queueTabs{
-    position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-    width: calc(100% - 28px);
-    margin: 0 auto 12px;
-    padding: 4px;
-    border: 1px solid rgba(220, 214, 247, 0.09);
-    border-radius: 999px;
-    background: rgba(220, 214, 247, 0.035);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    overflow: hidden;
+    border-bottom: 1px solid #242027;
 }
 
 .queueTabs button{
-    height: 42px;
+    height: 48px;
     border: none;
     background: transparent;
     color: #8a85a1;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0;
-    border-radius: 999px;
-    position: relative;
-    z-index: 1;
 }
 
 .queueTabs .queueTabActive{
     color: #ffffff;
-    border-bottom: none;
-    background: rgba(220, 214, 247, 0.11);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 20px rgba(0, 0, 0, 0.18);
+    border-bottom: 2px solid var(--offWhite);
 }
 
 .queuePlayingFrom{
@@ -3659,7 +3595,7 @@ a.toggleSection i{
 }
 
 .queueList{
-    height: calc(100% - 142px);
+    height: calc(100% - 130px);
     overflow-y: auto;
     padding: 0 0 calc(env(safe-area-inset-bottom) + 18px);
 }
