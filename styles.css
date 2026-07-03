@@ -2281,8 +2281,8 @@ a.toggleSection i{
 
 .yourPlaylists .favoritesLibraryItem{
     background: linear-gradient(45deg, rgba(12, 0, 5, 1), rgba(28, 5, 18, 1), rgba(97, 0, 40, 0.72));
-    border-color: rgba(220, 214, 247, 0.08);
-    box-shadow: 0px 10px 34px rgba(90, 0, 38, 0.22);
+    border: none;
+    box-shadow: 0px 10px 30px rgba(90, 0, 38, 0.18);
 }
 
 .yourPlaylists .favoritesLibraryItem .songInfo img{
@@ -2685,6 +2685,10 @@ a.toggleSection i{
 
 .greenCheck button i{
     color: greenyellow !important;
+}
+
+.greenCheck.playlistCanRemove button i{
+    color: #ff6b8a !important;
 }
 
 .greenCheck .greenSidePl{
@@ -4375,6 +4379,133 @@ nav button i{
 
 .likeBtnAnimDel i{
     animation: likeBtnAnimationIDel .4s ease-in-out;
+}
+
+.playfulButtonPop{
+    animation: playfulButtonPop .74s cubic-bezier(0.2, 1.05, 0.22, 1);
+    transform-origin: center;
+}
+
+.playfulButtonPopLike i{
+    animation: playfulIconLike .74s cubic-bezier(0.2, 1.05, 0.22, 1);
+}
+
+.playfulButtonPopPlay i{
+    animation: playfulIconPlay .74s cubic-bezier(0.2, 1.05, 0.22, 1);
+}
+
+.playfulBurst{
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: visible;
+}
+
+.playfulParticle{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--burst-size);
+    height: var(--burst-size);
+    border-radius: 999px;
+    background: var(--burst-color);
+    box-shadow: 0 0 9px var(--burst-color);
+    animation: playfulParticleBurst .92s cubic-bezier(0.16, 0.98, 0.22, 1) forwards;
+    animation-delay: var(--burst-delay);
+    opacity: 0;
+}
+
+.playfulHeartBreak{
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #ff4f73;
+    font-size: 18px;
+    line-height: 1;
+    text-shadow: 0 0 14px rgba(255, 49, 95, 0.45);
+    opacity: 0;
+    animation: playfulHeartBreak .72s cubic-bezier(0.2, 0.9, 0.22, 1) forwards;
+}
+
+.playfulHeartBreak-left{
+    clip-path: inset(0 50% 0 0);
+    --break-x: -12px;
+    --break-r: -24deg;
+}
+
+.playfulHeartBreak-right{
+    clip-path: inset(0 0 0 50%);
+    --break-x: 12px;
+    --break-r: 24deg;
+}
+
+.playfulBurst-like .playfulParticle:nth-child(3n),
+.playfulBurst-unlike .playfulParticle:nth-child(3n){
+    border-radius: 50% 50% 45% 45%;
+    transform: rotate(45deg);
+}
+
+.playfulBurst-playlist .playfulParticle:nth-child(even),
+.playfulBurst-play .playfulParticle:nth-child(even){
+    width: calc(var(--burst-size) * 1.55);
+    height: calc(var(--burst-size) * 0.72);
+}
+
+@keyframes playfulButtonPop{
+    0%{ transform: scale(1); }
+    30%{ transform: scale(1.12) translateY(-1px); }
+    58%{ transform: scale(0.96) translateY(0); }
+    82%{ transform: scale(1.025); }
+    100%{ transform: scale(1); }
+}
+
+@keyframes playfulIconLike{
+    0%{ transform: scale(1) rotate(0deg); color: inherit; }
+    38%{ transform: scale(1.2) rotate(-7deg); color: #ff315f; }
+    72%{ transform: scale(0.96) rotate(4deg); color: #ff6b8a; }
+    100%{ transform: scale(1) rotate(0deg); color: inherit; }
+}
+
+@keyframes playfulIconPlay{
+    0%{ transform: scale(1) rotate(0deg); color: inherit; }
+    40%{ transform: scale(1.16) rotate(5deg); color: #ffffff; }
+    72%{ transform: scale(0.98) rotate(-2deg); color: #dcd6f7; }
+    100%{ transform: scale(1) rotate(0deg); color: inherit; }
+}
+
+@keyframes playfulHeartBreak{
+    0%{
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+    }
+    18%{
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+    100%{
+        opacity: 0;
+        transform: translate(calc(-50% + var(--break-x)), -64%) scale(0.7) rotate(var(--break-r));
+    }
+}
+
+@keyframes playfulParticleBurst{
+    0%{
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2);
+    }
+    16%{
+        opacity: 1;
+    }
+    68%{
+        opacity: 0.92;
+        transform: translate(calc(var(--burst-x) * 0.9), calc(var(--burst-y) * 0.9 - 5px)) scale(1);
+    }
+    100%{
+        opacity: 0;
+        transform: translate(var(--burst-x), calc(var(--burst-y) + 14px)) scale(0.28);
+    }
 }
 
 @keyframes likeBtnAnimation{

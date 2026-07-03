@@ -335,6 +335,65 @@ function setHomeScreen(){
 
 initializeCrimsonSearchHistory();
 
+function crimsonPlayfulBurst(target, variant = "play"){
+    if(!target || reduceAnimations){
+        return;
+    }
+
+    const colorsByVariant = {
+        like: ["#ff315f", "#ff6b8a", "#ff174f", "#ffd4df"],
+        unlike: ["#ff6b8a", "#dcd6f7", "#8a85a1"],
+        play: ["#ffffff", "#dcd6f7", "#f6f1ff", "#bca7ff"],
+        playlist: ["#ffffff", "#f5edff", "#dcd6f7", "#ff6b8a"],
+        follow: ["#ffffff", "#dcd6f7", "#bca7ff", "#ff6b8a"],
+        unfollow: ["#8a85a1", "#dcd6f7", "#5f5a72"]
+    };
+    const colors = colorsByVariant[variant] || colorsByVariant.play;
+    const rect = target.getBoundingClientRect();
+    const burst = document.createElement("span");
+    const particleCount = variant === "unlike" ? 5 : (variant === "play" || variant === "playlist" ? 8 : 10);
+
+    burst.className = `playfulBurst playfulBurst-${variant}`;
+    burst.style.left = `${rect.left + rect.width / 2}px`;
+    burst.style.top = `${rect.top + rect.height / 2}px`;
+
+    if(variant === "unlike"){
+        ["left", "right"].forEach((side) => {
+            const half = document.createElement("span");
+            half.className = `playfulHeartBreak playfulHeartBreak-${side}`;
+            half.textContent = "♥";
+            burst.appendChild(half);
+        });
+    }
+
+    for(let i = 0; i < particleCount; i++){
+        const particle = document.createElement("span");
+        const angle = (Math.PI * 2 * i) / particleCount + (Math.random() * 0.55 - 0.275);
+        const distance = 14 + Math.random() * (variant === "like" ? 22 : 18);
+        const size = 2.5 + Math.random() * 3.5;
+
+        particle.className = "playfulParticle";
+        particle.style.setProperty("--burst-x", `${Math.cos(angle) * distance}px`);
+        particle.style.setProperty("--burst-y", `${Math.sin(angle) * distance}px`);
+        particle.style.setProperty("--burst-size", `${size}px`);
+        particle.style.setProperty("--burst-color", colors[i % colors.length]);
+        particle.style.setProperty("--burst-delay", `${Math.random() * 70}ms`);
+        burst.appendChild(particle);
+    }
+
+    document.body.appendChild(burst);
+    target.classList.remove("playfulButtonPop", "playfulButtonPopLike", "playfulButtonPopPlay");
+    void target.offsetWidth;
+    target.classList.add("playfulButtonPop", variant === "like" || variant === "unlike" ? "playfulButtonPopLike" : "playfulButtonPopPlay");
+
+    window.setTimeout(() => {
+        burst.remove();
+        target.classList.remove("playfulButtonPop", "playfulButtonPopLike", "playfulButtonPopPlay");
+    }, 900);
+}
+
+window.crimsonPlayfulBurst = crimsonPlayfulBurst;
+
 /* ----- Button clicks ----- */
 
 document.querySelectorAll("button").forEach((button) => {
@@ -1702,6 +1761,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
 // PLAY PLAYLIST FROM PLAY BUTTON
 
 function playPlaylist(){
+    crimsonPlayfulBurst(window.event?.currentTarget || document.getElementById("playPlaylistBtn"), "playlist");
     playFirstSongFromList(".playlistSongsList");
 }
 
@@ -1733,7 +1793,6 @@ let playPlaylistBtn = document.getElementById("playPlaylistBtn");
 let playlistQueue = document.getElementsByClassName("playlistSongsList")[0].children;
 
 function pausePlayCurrentSong(from){
-
     if(from === "Playlist"){
         playlistQueue[0].classList.add("songPlayingLi");
     }
@@ -2209,7 +2268,7 @@ function openPopup(type,src,art,nam,id,isLikedPage){
 
     likeSongBtn.onclick = () => {
         if(UserSignedIn()){
-            addSongToLiked(id);
+            addSongToLiked(id, likeSongBtn);
             likeSongBtn.classList.add("likeBtnAnim2");
             setTimeout(() => {
                 likeSongBtn.classList.remove("likeBtnAnim2");
@@ -3364,6 +3423,7 @@ function noStorage(){
 }
 
 function playArtist(){
+    crimsonPlayfulBurst(window.event?.currentTarget, "play");
     playFirstSongFromList(".artistSongs");
 }
 

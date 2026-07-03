@@ -1210,6 +1210,7 @@ function followArtist(artistId){
                                 .then(()=>{
                                     // LoadUserFArtists();
                                     followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Unfollow`;
+                                    window.crimsonPlayfulBurst?.(followArtistBtn, "follow");
                                 })
                                 .catch((error)=>{
                                     alert("error "+error);
@@ -1221,6 +1222,7 @@ function followArtist(artistId){
                                 .then(()=>{
                                     // LoadUserFArtists();
                                     followArtistBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Follow`;
+                                    window.crimsonPlayfulBurst?.(followArtistBtn, "unfollow");
                                 })
                                 .catch((error)=>{
                                     alert("error "+error);
@@ -1523,6 +1525,7 @@ likePlaylistBtn.addEventListener('click', () => {
                     .then(()=>{
                         // console.log("Uspesno!");
                         likePlaylistBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+                        window.crimsonPlayfulBurst?.(likePlaylistBtn, "like");
                         LoadLikedPlaylists();
                     })
                     .catch((error)=>{
@@ -1549,6 +1552,7 @@ likePlaylistBtn.addEventListener('click', () => {
                     .then(()=>{
                         // console.log("Uspesno!");
                         likePlaylistBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                        window.crimsonPlayfulBurst?.(likePlaylistBtn, "unlike");
                         LoadLikedPlaylists();
                     })
                     .catch((error)=>{
@@ -2320,6 +2324,7 @@ export function addSongToLiked(id, likeBtn){
                         })
                         .then(()=>{
                             if(likeBtn != undefined){
+                                window.crimsonPlayfulBurst?.(likeBtn, "like");
                                 likeBtn.classList.add('likeBtnAnim');
                                 setTimeout(() => {
                                     likeBtn.classList.remove('likeBtnAnim');
@@ -2357,6 +2362,7 @@ export function addSongToLiked(id, likeBtn){
                         })
                         .then(()=>{
                             if(likeBtn != undefined){
+                                window.crimsonPlayfulBurst?.(likeBtn, "unlike");
                                 likeBtn.classList.add('likeBtnAnimDel');
                                 setTimeout(() => {
                                     likeBtn.classList.remove('likeBtnAnimDel');
@@ -2446,8 +2452,8 @@ export function LoadUserPlaylistsPopup(songId){
                                 </div>
                             </div>
                             <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ playlistId +`)"></div>
-                            <div class="songBtns greenCheck">
-                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ playlistId +`)"><i class="fa-solid fa-circle-check checkAnim"></i></button>
+                            <div class="songBtns greenCheck playlistCanRemove">
+                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ playlistId +`)"><i class="fa-solid fa-xmark checkAnim"></i></button>
                                 <div class="greenSidePl"></div>
                             </div>
                         </li>`);
@@ -2480,85 +2486,84 @@ export function LoadUserPlaylistsPopup(songId){
 // ----- ADDING SONG TO A SPECIFIC PLAYLIST
 
 export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
-    if(!clickedPlaylist.children[2].classList.contains('greenCheck')){
-        clickedPlaylist.children[2].children[0].innerHTML = '<i class="fa-solid fa-circle-check checkAnim"></i>';
-        clickedPlaylist.children[2].classList.add('greenCheck');
-        let setUsername,setEmail,setPassword,setPlaylists,setLikedSongs,setTheme;
-        let newSetPlaylists = "";
-        let setFollowedArtists, setProfilePhoto;
+    const actionBtns = clickedPlaylist.children[2];
+    const isRemoving = actionBtns.classList.contains('greenCheck');
+    const previousIcon = actionBtns.children[0].innerHTML;
+    const previousClasses = actionBtns.className;
 
-        let dbRef = ref(realdb);
-
-        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-            if(snapshot.exists()){
-                setUsername = snapshot.val().Username;
-                setEmail = snapshot.val().Email;
-                setPassword = snapshot.val().Password;
-                setPlaylists = snapshot.val().Playlists;
-                setLikedSongs = snapshot.val().LikedSongs;
-                setTheme = snapshot.val().AppTheme;
-                setProfilePhoto = snapshot.val().ProfilePhoto;
-                let setLikedPlaylists = snapshot.val().LikedPlaylists;
-                setFollowedArtists = snapshot.val().FollowedArtists;
-                if(setFollowedArtists == undefined){
-                    setFollowedArtists = "";
-                }
-                if(setLikedSongs == undefined){
-                    setLikedSongs = "";
-                }
-                if(setLikedPlaylists == undefined){
-                    setLikedPlaylists = "";
-                }
-                if(setPlaylists == undefined){
-                    setPlaylists = "";
-                }
-
-                let usersPlaylists = setPlaylists.split('{');
-
-                for (let i = 0; i < usersPlaylists.length; i++) {
-                    if(usersPlaylists[i].split('}')[0] == playlistId && i == (usersPlaylists.length-1)){
-                        if(usersPlaylists[i].split('}')[3] != ""){
-                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + "," + songId + "}";
-                        }else{
-                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + songId + "}";
-                        }
-                    }else if(usersPlaylists[i].split('}')[0] == playlistId && i != (usersPlaylists.length-1)){
-                        if(usersPlaylists[i].split('}')[3] != ""){
-                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + "," + songId + "}" + "{";
-                        }else{
-                            newSetPlaylists += usersPlaylists[i].split('}')[0] + "}" + usersPlaylists[i].split('}')[1] + "}" + usersPlaylists[i].split('}')[2] + "}" + usersPlaylists[i].split('}')[3] + songId + "}" + "{";
-                        }
-                    }else{
-                        if(i == (usersPlaylists.length-1)){
-                            newSetPlaylists += usersPlaylists[i];
-                        }else{
-                            newSetPlaylists += usersPlaylists[i] + "{";
-                        }
-                    }
-                }
-
-                set(ref(realdb, "Users/"+currentUser.Username),
-                {
-                    Username: setUsername,
-                    Email: setEmail,
-                    Password: setPassword,
-                    Playlists: newSetPlaylists,
-                    ProfilePhoto: setProfilePhoto,
-                    LikedSongs: setLikedSongs,
-                    AppTheme: setTheme,
-                    FollowedArtists: setFollowedArtists,
-                    LikedPlaylists: setLikedPlaylists
-                })
-                .then(()=>{
-                    LoadUserPlaylists();
-                    // console.log("Added");
-                })
-                .catch((error)=>{
-                    alert("error "+error);
-                })
-            }
-        })
+    if(isRemoving){
+        actionBtns.children[0].innerHTML = '<i class="fa-solid fa-plus checkAnim"></i>';
+        actionBtns.classList.remove('greenCheck', 'playlistCanRemove');
+    }else{
+        actionBtns.children[0].innerHTML = '<i class="fa-solid fa-xmark checkAnim"></i>';
+        actionBtns.classList.add('greenCheck', 'playlistCanRemove');
     }
+
+    let dbRef = ref(realdb);
+
+    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+        if(snapshot.exists()){
+            let setUsername = snapshot.val().Username;
+            let setEmail = snapshot.val().Email;
+            let setPassword = snapshot.val().Password;
+            let setPlaylists = snapshot.val().Playlists;
+            let setLikedSongs = snapshot.val().LikedSongs;
+            let setTheme = snapshot.val().AppTheme;
+            let setProfilePhoto = snapshot.val().ProfilePhoto;
+            let setLikedPlaylists = snapshot.val().LikedPlaylists;
+            let setFollowedArtists = snapshot.val().FollowedArtists;
+            if(setFollowedArtists == undefined){
+                setFollowedArtists = "";
+            }
+            if(setLikedSongs == undefined){
+                setLikedSongs = "";
+            }
+            if(setLikedPlaylists == undefined){
+                setLikedPlaylists = "";
+            }
+            if(setPlaylists == undefined){
+                setPlaylists = "";
+            }
+
+            const songIdString = String(songId);
+            const playlistIdString = String(playlistId);
+            const usersPlaylists = setPlaylists.split('{');
+            const newSetPlaylists = usersPlaylists.map((playlistString) => {
+                const playlistParts = playlistString.split('}');
+                if(playlistParts[0] !== playlistIdString || playlistParts.length < 4){
+                    return playlistString;
+                }
+
+                const playlistSongs = (playlistParts[3] || "").split(',').filter(Boolean);
+                const nextSongs = isRemoving
+                    ? playlistSongs.filter((item) => item !== songIdString)
+                    : playlistSongs.includes(songIdString) ? playlistSongs : playlistSongs.concat(songIdString);
+
+                return playlistParts[0] + "}" + playlistParts[1] + "}" + playlistParts[2] + "}" + nextSongs.join(',') + "}";
+            }).join('{');
+
+            set(ref(realdb, "Users/"+currentUser.Username),
+            {
+                Username: setUsername,
+                Email: setEmail,
+                Password: setPassword,
+                Playlists: newSetPlaylists,
+                ProfilePhoto: setProfilePhoto,
+                LikedSongs: setLikedSongs,
+                AppTheme: setTheme,
+                FollowedArtists: setFollowedArtists,
+                LikedPlaylists: setLikedPlaylists
+            })
+            .then(()=>{
+                LoadUserPlaylists();
+            })
+            .catch((error)=>{
+                actionBtns.children[0].innerHTML = previousIcon;
+                actionBtns.className = previousClasses;
+                alert("error "+error);
+            })
+        }
+    })
 }
 
 // ----- PLAYER LYRICS
