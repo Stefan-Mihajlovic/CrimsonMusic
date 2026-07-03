@@ -2453,7 +2453,8 @@ export function LoadUserPlaylistsPopup(songId){
                             </div>
                             <div class="songClickDiv" onclick="addSongToThisPlaylist(this.parentElement,`+ songId +`,`+ playlistId +`)"></div>
                             <div class="songBtns greenCheck playlistCanRemove">
-                                <button onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ playlistId +`)"><i class="fa-solid fa-xmark checkAnim"></i></button>
+                                <button class="playlistAddedMark" onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ playlistId +`)"><i class="fa-solid fa-circle-check checkAnim"></i></button>
+                                <button class="playlistRemoveMark" onclick="addSongToThisPlaylist(this.parentElement.parentElement,`+ songId +`,`+ playlistId +`)"><i class="fa-solid fa-xmark checkAnim"></i></button>
                                 <div class="greenSidePl"></div>
                             </div>
                         </li>`);
@@ -2488,14 +2489,14 @@ export function LoadUserPlaylistsPopup(songId){
 export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
     const actionBtns = clickedPlaylist.children[2];
     const isRemoving = actionBtns.classList.contains('greenCheck');
-    const previousIcon = actionBtns.children[0].innerHTML;
+    const previousHTML = actionBtns.innerHTML;
     const previousClasses = actionBtns.className;
 
     if(isRemoving){
-        actionBtns.children[0].innerHTML = '<i class="fa-solid fa-plus checkAnim"></i>';
+        actionBtns.innerHTML = '<button onclick="addSongToThisPlaylist(this.parentElement.parentElement,'+ songId +','+ playlistId +')"><i class="fa-solid fa-plus checkAnim"></i></button><div class="greenSidePl"></div>';
         actionBtns.classList.remove('greenCheck', 'playlistCanRemove');
     }else{
-        actionBtns.children[0].innerHTML = '<i class="fa-solid fa-xmark checkAnim"></i>';
+        actionBtns.innerHTML = '<button class="playlistAddedMark" onclick="addSongToThisPlaylist(this.parentElement.parentElement,'+ songId +','+ playlistId +')"><i class="fa-solid fa-circle-check checkAnim"></i></button><button class="playlistRemoveMark" onclick="addSongToThisPlaylist(this.parentElement.parentElement,'+ songId +','+ playlistId +')"><i class="fa-solid fa-xmark checkAnim"></i></button><div class="greenSidePl"></div>';
         actionBtns.classList.add('greenCheck', 'playlistCanRemove');
     }
 
@@ -2558,7 +2559,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                 LoadUserPlaylists();
             })
             .catch((error)=>{
-                actionBtns.children[0].innerHTML = previousIcon;
+                actionBtns.innerHTML = previousHTML;
                 actionBtns.className = previousClasses;
                 alert("error "+error);
             })

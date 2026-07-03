@@ -3010,7 +3010,9 @@ let playerPopupFrame = null;
 let playerPopupStartedFull = false;
 let playerPopupStartX = 0;
 let playerPopupGestureDirection = null;
+let playerPopupStartTarget = null;
 const playerPopupDragThreshold = 8;
+let cachedSafeAreaTop = null;
 
 function getPlayerPopupContainerRect(){
     return queuePanel?.closest(".player")?.getBoundingClientRect() || document.documentElement.getBoundingClientRect();
@@ -3022,8 +3024,35 @@ function getPlayerPopupViewportHeight(){
 
 function getPlayerPopupFullscreenTop(){
     const containerRect = getPlayerPopupContainerRect();
-    return Math.max(0, -containerRect.top);
+    return Math.max(0, getSafeAreaTopPx() - containerRect.top);
 }
+
+function getSafeAreaTopPx(){
+    if(cachedSafeAreaTop !== null){
+        return cachedSafeAreaTop;
+    }
+
+    const probe = document.createElement("div");
+    probe.style.position = "fixed";
+    probe.style.top = "0";
+    probe.style.left = "0";
+    probe.style.height = "env(safe-area-inset-top)";
+    probe.style.width = "0";
+    probe.style.pointerEvents = "none";
+    probe.style.visibility = "hidden";
+    document.body.appendChild(probe);
+    cachedSafeAreaTop = probe.getBoundingClientRect().height || window.visualViewport?.offsetTop || 0;
+    probe.remove();
+    return cachedSafeAreaTop;
+}
+
+window.visualViewport?.addEventListener("resize", () => {
+    cachedSafeAreaTop = null;
+});
+
+window.addEventListener("orientationchange", () => {
+    cachedSafeAreaTop = null;
+});
 
 function applyPlayerPopupPosition(top){
     if(!queuePanel){
@@ -3043,9 +3072,10 @@ function applyPlayerPopupFullscreenPosition(){
     }
 
     const fullscreenTop = getPlayerPopupFullscreenTop();
+    const viewportHeight = getPlayerPopupViewportHeight();
     playerPopupCurrentTop = fullscreenTop;
     queuePanel.style.top = `${fullscreenTop}px`;
-    queuePanel.style.height = `${window.visualViewport?.height || window.innerHeight}px`;
+    queuePanel.style.height = `${Math.max(120, viewportHeight - fullscreenTop)}px`;
 }
 
 function clearPlayerPopupDragStyles(){
@@ -3066,7 +3096,29 @@ function canStartPlayerPopupDrag(target){
         return true;
     }
 
-    return !!target?.closest(".queueHandle, .queueTabs, .queuePlayingFrom");
+    if(target?.closest(".queueHandle, .queueTabs, .queuePlayingFrom")){
+        return true;
+    }
+
+    const activeContent = getActivePlayerPopupContent();
+    return !!activeContent && activeContent.contains(target) && isPlayerPopupContentAtTop(activeContent);
+}
+
+function getActivePlayerPopupContent(){
+    return queuePanel?.querySelector(".playerPopupContentActive");
+}
+
+function isPlayerPopupContentAtTop(content = getActivePlayerPopupContent()){
+    return !!content && content.scrollTop <= 0;
+}
+
+function shouldDragPlayerPopupFromContent(deltaY){
+    const activeContent = getActivePlayerPopupContent();
+    if(!queuePanel?.classList.contains("playerPopupFull") || !activeContent || !activeContent.contains(playerPopupStartTarget)){
+        return true;
+    }
+
+    return deltaY > 0 && isPlayerPopupContentAtTop(activeContent);
 }
 
 function startPlayerPopupDrag(clientX, clientY){
@@ -3110,6 +3162,10 @@ function movePlayerPopupTo(clientX, clientY){
         return;
     }
 
+    if(!shouldDragPlayerPopupFromContent(deltaY)){
+        return;
+    }
+
     queuePanel.classList.add("playerMovable");
     queuePanel.classList.add("queuePanelDragging");
     setInteractionActive(true);
@@ -3136,6 +3192,7 @@ function finishPlayerPopupDrag(){
         playerPopupTouchStarted = false;
         playerPopupStartedFull = false;
         playerPopupGestureDirection = null;
+        playerPopupStartTarget = null;
         setInteractionActive(false);
         return;
     }
@@ -3155,6 +3212,7 @@ function finishPlayerPopupDrag(){
     playerPopupTouchStarted = false;
     playerPopupStartedFull = false;
     playerPopupGestureDirection = null;
+    playerPopupStartTarget = null;
     moveStarted = false;
     setInteractionActive(false);
 }
@@ -3165,7 +3223,7 @@ const movePlayerPopup = (e) => {
     const deltaX = nextX - playerPopupStartX;
     const deltaY = nextY - playerPopupStartY;
     const dragDirection = playerPopupGestureDirection || getGestureDirection(deltaX, deltaY, playerPopupDragThreshold);
-    if(playerPopupTouchStarted && (moveStarted || dragDirection === "vertical")){
+    if(playerPopupTouchStarted && (moveStarted || (dragDirection === "vertical" && shouldDragPlayerPopupFromContent(deltaY)))){
         e.preventDefault();
     }
     movePlayerPopupTo(nextX, nextY);
@@ -3181,6 +3239,7 @@ if(queuePanel){
         if(!canStartPlayerPopupDrag(e.target)){
             return;
         }
+        playerPopupStartTarget = e.target;
         startPlayerPopupDrag(e.touches[0].clientX, e.touches[0].clientY);
         document.addEventListener("touchmove", movePlayerPopup, { passive: false });
     });
@@ -3203,6 +3262,7 @@ if(queuePanel){
             return;
         }
         e.preventDefault();
+        playerPopupStartTarget = e.target;
         startPlayerPopupDrag(e.clientX, e.clientY);
         document.addEventListener("mousemove", movePlayerPopupMouse);
     });

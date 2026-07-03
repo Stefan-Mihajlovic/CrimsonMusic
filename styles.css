@@ -2687,8 +2687,18 @@ a.toggleSection i{
     color: greenyellow !important;
 }
 
-.greenCheck.playlistCanRemove button i{
+.greenCheck.playlistCanRemove .playlistRemoveMark i{
     color: #ff6b8a !important;
+}
+
+.greenCheck.playlistCanRemove{
+    gap: 8px;
+}
+
+.greenCheck.playlistCanRemove button{
+    width: 18px;
+    display: grid;
+    place-items: center;
 }
 
 .greenCheck .greenSidePl{
@@ -3627,7 +3637,7 @@ a.toggleSection i{
     height: 100%;
     border-radius: 0px;
     border-top: 1px solid transparent;
-    padding-top: env(safe-area-inset-top);
+    padding-top: 0;
 }
 
 .queuePanelDragging{
