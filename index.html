@@ -132,11 +132,6 @@
                 <img name="profilePhoto" src="images/profiles/1.png" alt="Profile">
             </button>
         </header>
-        <h1 class="catTitleRightBtn">Library
-            <div>
-                <button class="searchOnYoursBtn" onclick="showSearchBarYours(this)"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
-        </h1>
         <div id="searchBarYours" class="searchBar">
             <form onsubmit="event.preventDefault()">
                 <input type="search" name="search" id="searchYoursInput" placeholder="Search your playlists and artists...">
@@ -144,15 +139,6 @@
             </form>
             <div class="searchHistory" id="searchHistoryYours" aria-label="Recent library searches"></div>
         </div>
-        <button class="songItem favoritesItem" onclick="openLikedSongs();">
-            <div class="songInfo">
-                <img src="images/favorites.jpg" alt="playlistBanner">
-                <div class="songText">
-                    <h2>FAVORITES</h2>
-                    <h3>SIMPLY YOURS</h3>
-                </div>
-            </div>
-        </button>
         <h1 class="yourPlaylistsH1 catTitleRightBtn">Your Playlists
             <div>
                 <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>

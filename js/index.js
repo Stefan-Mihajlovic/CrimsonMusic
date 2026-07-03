@@ -3180,31 +3180,17 @@ for (let i = 0; i < scrollTexts.length; i++) {
 // ----- Search -> YOURS SCREEN
 
 function showSearchBarYours(searchOnBtn){
-    document.getElementById('searchBarYours').classList.toggle('searchBarOn');
-    if(searchOnBtn.innerHTML == `<i class="fa-solid fa-xmark" aria-hidden="true"></i>` || searchOnBtn.innerHTML == `<i class="fa-solid fa-xmark"></i>`){
-        resetSearchScreenToNormal();
-    }else{
-        document.getElementById('searchYoursInput').focus();
-        renderCrimsonSearchHistory("yours");
-        searchOnBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-        document.querySelector('.favoritesItem').classList.add('displayNone');
-        document.querySelector('.yourPlaylistsH1').classList.add('displayNone');
-        document.querySelector('.yourPlaylists').classList.add('displayNone');
-        document.querySelector('.yourLPlaylistsH1').classList.add('displayNone');
-        document.querySelector('.yourLPlaylists').classList.add('displayNone');
-        document.querySelector('.yourFArtistsH1').classList.add('displayNone');
-        document.querySelector('.yourFArtists').classList.add('displayNone');
-    }
+    document.getElementById('searchYoursInput').focus();
+    renderCrimsonSearchHistory("yours");
 }
 
 function resetSearchScreenToNormal(){
     document.getElementById('searchYoursInput').value = "";
 
-    document.getElementById('searchBarYours').classList.remove('searchBarOn');
-
     const searchOnBtn = document.querySelector('.searchOnYoursBtn');
-    searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
-    document.querySelector('.favoritesItem').classList.remove('displayNone');
+    if(searchOnBtn){
+        searchOnBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i>`;
+    }
     document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
     document.querySelector('.yourPlaylists').classList.remove('displayNone');
     document.querySelector('.yourLPlaylistsH1').classList.remove('displayNone');
@@ -3229,7 +3215,7 @@ function resetSearchScreenToNormal(){
 }
 
 const submitYoursSearchBtn = document.getElementById("submitYoursSearch");
-submitYoursSearchBtn.addEventListener('click', () => {
+function filterYoursLibrary(saveSearchTerm = true){
     const searchInput = document.getElementById('searchYoursInput').value;
     const yourPlaylists = [].slice.call(document.querySelector('.yourPlaylists').children);
     const yourLPlaylists = [].slice.call(document.querySelector('.yourLPlaylists').children);
@@ -3237,7 +3223,9 @@ submitYoursSearchBtn.addEventListener('click', () => {
 
     let brP = 0, brL = 0, brA = 0;
     if(searchInput != "" && searchInput != undefined){
-        saveCrimsonSearchHistory("yours", searchInput);
+        if(saveSearchTerm){
+            saveCrimsonSearchHistory("yours", searchInput);
+        }
 
         yourPlaylists.forEach((playlist) => {
             if(playlist.children[0].children[1].children[0].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(playlist.children[0].children[1].children[0].innerHTML.toLowerCase())){
@@ -3292,7 +3280,17 @@ submitYoursSearchBtn.addEventListener('click', () => {
             document.querySelector('.yourFArtistsH1').classList.add('displayNone');
             document.querySelector('.yourFArtists').classList.add('displayNone');
         }
+    }else{
+        resetSearchScreenToNormal();
     }
+}
+
+submitYoursSearchBtn.addEventListener('click', () => {
+    filterYoursLibrary(true);
+});
+
+document.getElementById('searchYoursInput').addEventListener('input', () => {
+    filterYoursLibrary(false);
 });
 
 // ------ Login Popup

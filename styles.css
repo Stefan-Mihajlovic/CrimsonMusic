@@ -2093,7 +2093,7 @@ a.toggleSection i{
 .artistBtns button{
     background: var(--offWhite);
     color: var(--bodyBg);
-    border-radius: 10px;
+    border-radius: 999px;
     border: none;
     display: flex;
     align-items: center;
@@ -2245,18 +2245,19 @@ a.toggleSection i{
 
 .yoursScreen .searchBar{
     display: flex;
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
-    transform: translateY(-10px) scale(.98);
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: all;
+    transform: none;
     transition: max-height .38s var(--screenEase), opacity .24s ease-out, transform .38s var(--screenEase), padding .38s var(--screenEase), margin .38s var(--screenEase);
     position: relative !important;
     top: auto !important;
-    margin-bottom: 0px !important;
-    padding-block: 0px;
-    width: calc(100% - 10px) !important;
-    margin-left: 5px !important;
+    margin-bottom: 4px !important;
+    padding-top: 8px;
+    padding-bottom: 4px;
+    width: 100% !important;
+    margin-left: 0 !important;
 }
 
 .favoritesItem{
@@ -2276,7 +2277,18 @@ a.toggleSection i{
     width: 60px !important;
     border-radius: 0px !important;
     border: none;
-    filter: hue-rotate(-20deg) saturate(0.6) brightness(0.7);
+}
+
+.yourPlaylists .favoritesLibraryItem{
+    background: linear-gradient(45deg, rgba(12, 0, 5, 1), rgba(28, 5, 18, 1), rgba(97, 0, 40, 0.72));
+    border-color: rgba(220, 214, 247, 0.08);
+    box-shadow: 0px 10px 34px rgba(90, 0, 38, 0.22);
+}
+
+.yourPlaylists .favoritesLibraryItem .songInfo img{
+    background-color: black;
+    border-color: rgba(220, 214, 247, 0.08);
+    filter: hue-rotate(-20deg) saturate(0.7) brightness(0.82);
 }
 
 .favoritesItem .songInfo .songText h2{

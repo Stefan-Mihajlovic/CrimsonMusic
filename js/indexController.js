@@ -1856,7 +1856,15 @@ let yourFArtists = document.getElementsByClassName("yourFArtists")[0];
 let yourLPlaylists = document.getElementsByClassName('yourLPlaylists')[0];
 
 function LoadUserPlaylists(){
-    yourPlaylists.innerHTML = "";
+    yourPlaylists.innerHTML = `<li class="songItem favoritesLibraryItem" onclick="openLikedSongs();">
+        <div class="songInfo">
+            <img src="images/favorites.jpg" alt="playlistBanner">
+            <div class="songText">
+                <h2>Favorites</h2>
+                <h3>Simply yours</h3>
+            </div>
+        </div>
+    </li>`;
 
     let dbRef = ref(realdb);
 
