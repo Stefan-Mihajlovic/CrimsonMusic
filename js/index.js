@@ -569,6 +569,7 @@ const queueList = document.getElementById("queueList");
 const queueSourceName = document.getElementById("queueSourceName");
 const playerPopupBackdrop = document.getElementById("playerPopupBackdrop");
 const queuePlayingFrom = document.getElementById("queuePlayingFrom");
+const queueTabs = document.querySelector(".queueTabs");
 const queueLyricsBody = document.getElementById("queueLyricsBody");
 const queueRelatedBody = document.getElementById("queueRelatedBody");
 let isQueueOpen = false;
@@ -590,6 +591,7 @@ function resetPlayerPopupScroll(){
 
 function setPlayerPopupTab(tabName){
     currentPlayerPopupTab = tabName || "queue";
+    queueTabs?.setAttribute("data-active-tab", currentPlayerPopupTab);
     document.querySelectorAll("[data-player-tab]").forEach((button) => {
         button.classList.toggle("queueTabActive", button.getAttribute("data-player-tab") === currentPlayerPopupTab);
     });
@@ -647,6 +649,133 @@ function closePlayerPopup(){
 
 window.openPlayerPopup = openPlayerPopup;
 window.closePlayerPopup = closePlayerPopup;
+
+function getCurrentPlayerSourceElement(){
+    if(songQueue.current?.element?.isConnected){
+        return songQueue.current.element;
+    }
+
+    if(LastPlayedFromBtn?.isConnected){
+        return LastPlayedFromBtn;
+    }
+
+    return null;
+}
+
+function setMainSourceScreen(screenClass){
+    const screenNavMap = {
+        homeScreen: {
+            title: "Home",
+            button: ".HomeBtnNav"
+        },
+        searchScreen: {
+            title: "Search",
+            button: ".SearchBtnNav"
+        },
+        yoursScreen: {
+            title: "Playlists",
+            button: ".LibraryBtnNav"
+        }
+    };
+    const screenConfig = screenNavMap[screenClass];
+    const navButton = screenConfig ? document.querySelector(screenConfig.button) : null;
+
+    if(screenConfig && navButton && typeof setScreen === "function"){
+        setScreen(screenConfig.title, navButton, screenClass);
+        return;
+    }
+
+    document.querySelectorAll("main").forEach((main) => {
+        main.classList.remove("activeMain");
+    });
+    document.querySelector(`.${screenClass}`)?.classList.add("activeMain");
+    currentScreen = screenClass;
+}
+
+function revealSideSourceScreen(sourceScreen){
+    if(!sourceScreen){
+        return;
+    }
+
+    document.getElementsByClassName(currentScreen)[0]?.classList.add("mainToSide");
+    sourceScreen.classList.add("screenOpenOnTop");
+    if(lastOpenSideScreen && lastOpenSideScreen !== sourceScreen){
+        lastOpenSideScreen.classList.remove("screenOpenOnTop");
+    }
+    lastOpenSideScreen = sourceScreen;
+
+    if(sourceScreen.classList.contains("artistScreen")){
+        sourceScreen.classList.add("artistScreenOpen");
+    }else if(sourceScreen.classList.contains("playlistScreen")){
+        sourceScreen.classList.add("playlistScreenOpen");
+    }else if(sourceScreen.classList.contains("categoryScreen")){
+        sourceScreen.classList.add("categoryPageOpen");
+    }
+}
+
+function revealMainSourceScreen(sourceScreen){
+    if(!sourceScreen){
+        return;
+    }
+
+    if(sourceScreen.classList.contains("homeScreen")){
+        setMainSourceScreen("homeScreen");
+    }else if(sourceScreen.classList.contains("searchScreen")){
+        setMainSourceScreen("searchScreen");
+    }else if(sourceScreen.classList.contains("yoursScreen")){
+        setMainSourceScreen("yoursScreen");
+    }
+}
+
+function scrollSourceElementIntoView(sourceElement){
+    requestAnimationFrame(() => {
+        sourceElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest"
+        });
+    });
+}
+
+function openCurrentPlayerSource(){
+    const sourceElement = getCurrentPlayerSourceElement();
+    const sourceName = songQueue.sourceName || document.getElementById("playingFromSpan")?.textContent || "";
+
+    closeBigPlayer();
+
+    if(sourceElement){
+        const sourceScreen = sourceElement.closest(".artistScreen, .playlistScreen, .categoryScreen, .homeScreen, .searchScreen, .yoursScreen");
+        if(sourceScreen?.matches(".artistScreen, .playlistScreen, .categoryScreen")){
+            revealSideSourceScreen(sourceScreen);
+        }else{
+            revealMainSourceScreen(sourceScreen);
+        }
+        scrollSourceElementIntoView(sourceElement);
+        return;
+    }
+
+    if(sourceName === "Home"){
+        setMainSourceScreen("homeScreen");
+    }else if(sourceName === "Search"){
+        setMainSourceScreen("searchScreen");
+    }else if(sourceName === "Playlists" || sourceName === "Library"){
+        setMainSourceScreen("yoursScreen");
+    }else if(sourceName && sourceName !== "Your queue" && sourceName !== "Autoplay" && typeof openArtistPageByName === "function"){
+        openArtistPageByName(sourceName);
+    }
+}
+
+function updateQueueSourceAction(){
+    if(!queuePlayingFrom){
+        return;
+    }
+
+    const hasSourceTarget = !!getCurrentPlayerSourceElement() || !["", "Your queue", "Autoplay"].includes(songQueue.sourceName || "");
+    queuePlayingFrom.classList.toggle("queuePlayingFromClickable", hasSourceTarget);
+    queuePlayingFrom.setAttribute("role", "button");
+    queuePlayingFrom.setAttribute("tabindex", hasSourceTarget ? "0" : "-1");
+    queuePlayingFrom.setAttribute("aria-label", hasSourceTarget ? `Open ${songQueue.sourceName || "song source"}` : "Song source");
+}
 
 function getSongDurationText(){
     if(!Number.isFinite(currentSongAudio.duration)){
@@ -801,6 +930,7 @@ function renderSongQueue(){
     }
 
     queueSourceName.textContent = songQueue.sourceName || "Your queue";
+    updateQueueSourceAction();
     queueList.innerHTML = "";
 
     const queueRows = [
@@ -909,6 +1039,23 @@ document.querySelectorAll("[data-player-tab]").forEach((button) => {
         setPlayerPopupTab(button.getAttribute("data-player-tab"));
     });
 });
+
+if(queuePlayingFrom){
+    queuePlayingFrom.addEventListener("click", () => {
+        if(queuePlayingFrom.classList.contains("queuePlayingFromClickable")){
+            openCurrentPlayerSource();
+        }
+    });
+
+    queuePlayingFrom.addEventListener("keydown", (event) => {
+        if((event.key === "Enter" || event.key === " ") && queuePlayingFrom.classList.contains("queuePlayingFromClickable")){
+            event.preventDefault();
+            openCurrentPlayerSource();
+        }
+    });
+}
+
+queueTabs?.setAttribute("data-active-tab", currentPlayerPopupTab);
 
 /* ----- LOGIN SCREEN ----- */
 
@@ -1083,10 +1230,25 @@ function setLoggedOutScreen(){
 let isPlayerOpen = false;
 let isSongPaused = true;
 
+function triggerMiniPlayerBounce(){
+    const player = document.getElementsByClassName("player")[0];
+    if(!player || reduceAnimations){
+        return;
+    }
+
+    player.classList.remove("playerMiniBounce");
+    void player.offsetWidth;
+    player.classList.add("playerMiniBounce");
+    setTimeout(() => {
+        player.classList.remove("playerMiniBounce");
+    }, 460);
+}
+
 function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
     player.classList.remove("playerOpen");
+    triggerMiniPlayerBounce();
     closePlayerPopup();
     player.style.top = 'auto';
     document.getElementsByTagName("nav")[0].classList.remove("navClosed");
@@ -2617,6 +2779,7 @@ document.addEventListener("touchend", () => {
         }else{
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
             movablePlayer.classList.remove("playerOpen");
+            triggerMiniPlayerBounce();
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
@@ -2688,6 +2851,7 @@ document.addEventListener("touchend", () => {
         if(moveStarted && currentTouchPos > 70){
             movablePlayer.classList.remove("playerMovable");
             movablePlayer.classList.remove("playerOpen");
+            triggerMiniPlayerBounce();
             movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
             document.getElementsByTagName("nav")[0].classList.remove("navClosed");
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';

@@ -52,8 +52,8 @@
     --sortPopupTop: 0px;
     --sortPopupLeft: 0px;
     --screenEase: cubic-bezier(0.22, 1, 0.36, 1);
-    --bounceEase: cubic-bezier(0.2, 1.35, 0.32, 1);
-    --softBounceEase: cubic-bezier(0.18, 1.08, 0.3, 1);
+    --bounceEase: cubic-bezier(0.2, 1.18, 0.32, 1);
+    --softBounceEase: cubic-bezier(0.18, 1.06, 0.3, 1);
     --tapEase: cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
@@ -2298,9 +2298,11 @@ a.toggleSection i{
 .yoursScreen .searchBarOn{
     max-height: 150px;
     opacity: 1;
+    overflow: visible;
     pointer-events: all;
     transform: translateY(0) scale(1);
-    padding-bottom: 10px;
+    padding-top: 4px;
+    padding-bottom: 12px;
 }
 
 /* ----- MAKE A PLAYLIST ----- */
@@ -2536,6 +2538,7 @@ a.toggleSection i{
 
 .popupOpen .popupScreen{
     transform: translateY(0%);
+    animation: bottomSheetBounceIn .42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .popupPl{
@@ -2797,7 +2800,7 @@ a.toggleSection i{
     overflow: hidden;
     list-style: none;
     z-index: 9999;
-    transition: opacity .2s ease-out, transform .4s var(--bounceEase), top 0s, left 0s;
+    transition: opacity .16s ease-out, transform .24s var(--softBounceEase), top 0s, left 0s;
     transform: translateY(-10px) scale(.94);
     transform-origin: top right;
     opacity: 0;
@@ -2808,6 +2811,21 @@ a.toggleSection i{
     transform: translateY(0) scale(1);
     opacity: 1;
     pointer-events: all;
+}
+
+@keyframes bottomSheetBounceIn {
+    0%{
+        transform: translateY(112%);
+    }
+    66%{
+        transform: translateY(-1.2%);
+    }
+    86%{
+        transform: translateY(0.35%);
+    }
+    100%{
+        transform: translateY(0%);
+    }
 }
 
 .sortPopup h4{
@@ -3093,6 +3111,22 @@ a.toggleSection i{
     border-radius: 10px;
     border: 1px solid var(--playerColor);
     box-shadow: none;
+}
+
+.playerMiniBounce{
+    animation: playerMiniReturnBounce .42s cubic-bezier(0.2, 0.92, 0.24, 1);
+}
+
+@keyframes playerMiniReturnBounce {
+    0%{
+        transform: translate3d(0, -8px, 0);
+    }
+    70%{
+        transform: translate3d(0, 3px, 0);
+    }
+    100%{
+        transform: translate3d(0, 0, 0);
+    }
 }
 
 .playerOpen .miniPlayer .playerClickDiv{
@@ -3565,6 +3599,7 @@ a.toggleSection i{
 
 .queuePanelOpen{
     transform: translateY(0%);
+    animation: bottomSheetBounceIn .42s cubic-bezier(0.22, 1, 0.36, 1);
     pointer-events: all;
 }
 
@@ -3601,6 +3636,7 @@ a.toggleSection i{
 }
 
 .queueTabs{
+    --queue-active-index: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 4px;
@@ -3614,6 +3650,32 @@ a.toggleSection i{
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 16px 35px rgba(0, 0, 0, 0.18);
     backdrop-filter: blur(16px) brightness(1.08);
     -webkit-backdrop-filter: blur(16px) brightness(1.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.queueTabs[data-active-tab="lyrics"]{
+    --queue-active-index: 1;
+}
+
+.queueTabs[data-active-tab="related"]{
+    --queue-active-index: 2;
+}
+
+.queueTabs::before{
+    content: "";
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    width: calc((100% - 18px) / 3);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(220, 214, 247, 0.15), rgba(220, 214, 247, 0.08));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 8px 18px rgba(0, 0, 0, 0.2);
+    transform: translateX(calc(var(--queue-active-index) * (100% + 4px)));
+    transition: transform .36s var(--softBounceEase), width .2s ease-out;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .queueTabs button{
@@ -3629,19 +3691,33 @@ a.toggleSection i{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
+    z-index: 1;
 }
 
 .queueTabs .queueTabActive{
     color: #ffffff;
-    background: linear-gradient(180deg, rgba(220, 214, 247, 0.15), rgba(220, 214, 247, 0.08));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 8px 18px rgba(0, 0, 0, 0.2);
 }
 
 .queuePlayingFrom{
     display: flex;
     flex-direction: column;
     gap: 3px;
-    padding: 18px 18px 10px;
+    min-height: 70px;
+    justify-content: center;
+    padding: 8px 20px 12px;
+    margin: 0 12px 4px;
+    border-radius: 16px;
+    transition: transform .15s var(--tapEase), background-color .18s ease-out;
+}
+
+.queuePlayingFromClickable{
+    cursor: pointer;
+}
+
+.queuePlayingFromClickable:active{
+    transform: scale(.985);
+    background-color: rgba(220, 214, 247, 0.045);
 }
 
 .queuePlayingFrom span{
@@ -3656,7 +3732,7 @@ a.toggleSection i{
 }
 
 .queueList{
-    height: calc(100% - 152px);
+    height: calc(100% - 170px);
     overflow-y: auto;
     padding: 0 0 calc(env(safe-area-inset-bottom) + 18px);
 }
