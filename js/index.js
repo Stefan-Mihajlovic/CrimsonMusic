@@ -351,7 +351,7 @@ function crimsonPlayfulBurst(target, variant = "play"){
     const colors = colorsByVariant[variant] || colorsByVariant.play;
     const rect = target.getBoundingClientRect();
     const burst = document.createElement("span");
-    const particleCount = variant === "unlike" ? 5 : (variant === "play" || variant === "playlist" ? 8 : 10);
+    const particleCount = variant === "unlike" ? 2 : (variant === "play" || variant === "playlist" ? 8 : 10);
 
     burst.className = `playfulBurst playfulBurst-${variant}`;
     burst.style.left = `${rect.left + rect.width / 2}px`;
@@ -691,6 +691,7 @@ function setPlayerPopupTab(tabName){
         }
     }else if(currentPlayerPopupTab === "related"){
         queueRelatedBody?.classList.add("playerPopupContentActive");
+        loadRelatedSongs();
     }else{
         queueList?.classList.add("playerPopupContentActive");
         renderSongQueue();
@@ -1027,7 +1028,8 @@ function renderSongQueue(){
 
     queueRows.forEach((song) => {
         const row = document.createElement("li");
-        row.className = `queueSong queueSong-${song.state}`;
+        row.className = `queueSong queueSong-${song.state} playerPopupStaggerItem`;
+        row.style.setProperty("--player-popup-item-index", queueList.children.length);
         row.innerHTML = `
             <div class="queueSongBanner">
                 <div class="songVisualizer">
@@ -1049,6 +1051,75 @@ function renderSongQueue(){
         }
         queueList.appendChild(row);
     });
+}
+
+async function loadRelatedSongs(){
+    if(!queueRelatedBody || !currentPlayerSongPopup){
+        return;
+    }
+
+    const requestedSongId = String(currentPlayerSongPopup.id || "");
+    if(!requestedSongId){
+        queueRelatedBody.innerHTML = `<p class="playerPopupLoading">No related songs yet.</p>`;
+        return;
+    }
+    if(queueRelatedBody.dataset.relatedSongId === requestedSongId && queueRelatedBody.dataset.relatedState === "ready"){
+        return;
+    }
+
+    queueRelatedBody.dataset.relatedSongId = requestedSongId;
+    queueRelatedBody.dataset.relatedState = "loading";
+    queueRelatedBody.innerHTML = `<p class="playerPopupLoading">Finding similar songs...</p>`;
+
+    if(typeof window.crimsonGetRelatedSongs !== "function"){
+        queueRelatedBody.innerHTML = `<p class="playerPopupLoading">Related songs are unavailable right now.</p>`;
+        return;
+    }
+
+    try{
+        const relatedSongs = await window.crimsonGetRelatedSongs(currentPlayerSongPopup);
+        if(queueRelatedBody.dataset.relatedSongId !== requestedSongId){
+            return;
+        }
+
+        queueRelatedBody.replaceChildren();
+        if(!relatedSongs.length){
+            queueRelatedBody.innerHTML = `<p class="playerPopupLoading">No related songs found yet.</p>`;
+            queueRelatedBody.dataset.relatedState = "ready";
+            return;
+        }
+
+        const relatedFragment = document.createDocumentFragment();
+        relatedSongs.forEach((song, index) => {
+            const row = document.createElement("article");
+            row.className = "queueSong relatedSong playerPopupStaggerItem";
+            row.style.setProperty("--player-popup-item-index", index);
+            row.innerHTML = `
+                <div class="queueSongBanner">
+                    <img src="${song.imageSmall || song.image}" alt="${song.title} cover">
+                </div>
+                <div class="queueSongText">
+                    <h3>${song.title}</h3>
+                    <p>${song.creator}</p>
+                </div>
+                <span class="relatedSongReason">${song.reason}</span>
+            `;
+            row.addEventListener("click", () => {
+                playerSelectedSong(song.url, song.title, song.creator, song.image, song.color, "Related", 0, song.id, {
+                    sourceName: "Related",
+                    preserveQueue: true
+                });
+            });
+            relatedFragment.appendChild(row);
+        });
+        queueRelatedBody.appendChild(relatedFragment);
+        queueRelatedBody.dataset.relatedState = "ready";
+    }catch(error){
+        if(queueRelatedBody.dataset.relatedSongId === requestedSongId){
+            queueRelatedBody.innerHTML = `<p class="playerPopupLoading">Could not load related songs.</p>`;
+            queueRelatedBody.dataset.relatedState = "error";
+        }
+    }
 }
 
 const queuePopupBtn = document.getElementById("queuePopupBtn");
@@ -1770,11 +1841,21 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
         renderSongQueue();
     }
 
+    if(queueRelatedBody){
+        queueRelatedBody.dataset.relatedSongId = "";
+        queueRelatedBody.dataset.relatedState = "";
+    }
+    if(isQueueOpen && currentPlayerPopupTab === "related"){
+        loadRelatedSongs();
+    }
+
     if(songSwipeState.isCommitting){
         songSwipeState.pendingCurrent = currentPlayerSongPopup;
     }else{
         prepareSongSwipeCards(currentPlayerSongPopup);
     }
+
+    syncContextPlaybackButtons();
 
     seeIfSongIsLiked(id);
     const checkLyrics = document.getElementById('checkLyrics');
@@ -1815,8 +1896,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
 // PLAY PLAYLIST FROM PLAY BUTTON
 
 function playPlaylist(){
-    crimsonPlayfulBurst(window.event?.currentTarget || document.getElementById("playPlaylistBtn"), "playlist");
-    playFirstSongFromList(".playlistSongsList");
+    toggleContextPlayback("playlist");
 }
 
 function playFirstSongFromList(selector){
@@ -1825,7 +1905,10 @@ function playFirstSongFromList(selector){
 
     if(firstSong){
         firstSong.click();
+        return true;
     }
+
+    return false;
 }
 
 // Open MINI PLAYER
@@ -1844,11 +1927,53 @@ function openMiniPlayer(){
 
 let songPlayBtns = document.getElementsByName("songPlayButton");
 let playPlaylistBtn = document.getElementById("playPlaylistBtn");
-let playlistQueue = document.getElementsByClassName("playlistSongsList")[0].children;
+let playArtistBtn = document.getElementById("playArtistBtn");
+
+function getCurrentContextPlaybackSource(){
+    const sourceElement = LastPlayedFromBtn && LastPlayedFromBtn !== 0 && LastPlayedFromBtn.isConnected
+        ? LastPlayedFromBtn
+        : songQueue.current?.element;
+    const sourceList = sourceElement?.parentElement;
+
+    if(sourceList?.classList.contains("playlistSongsList")){
+        return "playlist";
+    }
+    if(sourceList?.classList.contains("artistSongs")){
+        return "artist";
+    }
+    return "";
+}
+
+function setContextPlaybackButton(button, isPlaying){
+    if(!button){
+        return;
+    }
+    button.innerHTML = isPlaying
+        ? `<i class="fa-solid fa-pause"></i> Pause`
+        : `<i class="fa-solid fa-play"></i> Play`;
+}
+
+function syncContextPlaybackButtons(){
+    const activeSource = isSongPaused ? "" : getCurrentContextPlaybackSource();
+    setContextPlaybackButton(playPlaylistBtn, activeSource === "playlist");
+    setContextPlaybackButton(playArtistBtn, activeSource === "artist");
+}
+
+function toggleContextPlayback(source){
+    if(getCurrentContextPlaybackSource() === source){
+        pausePlayCurrentSong();
+        return;
+    }
+
+    const isPlaylist = source === "playlist";
+    const button = isPlaylist ? playPlaylistBtn : playArtistBtn;
+    crimsonPlayfulBurst(button, isPlaylist ? "playlist" : "play");
+    playFirstSongFromList(isPlaylist ? ".playlistSongsList" : ".artistSongs");
+}
 
 function pausePlayCurrentSong(from){
     if(from === "Playlist"){
-        playlistQueue[0].classList.add("songPlayingLi");
+        document.querySelector(".playlistSongsList .songItem")?.classList.add("songPlayingLi");
     }
 
     if(isSongPaused){
@@ -1860,7 +1985,7 @@ function pausePlayCurrentSong(from){
         if(from === "Playlist"){
             playPlaylistBtn.innerHTML = `<i class="fa-solid fa-pause"></i> Pause`;
             if(currentSongAudio.currentTime === 0){
-                playlistQueue[0].children[1].click();
+                document.querySelector(".playlistSongsList .songItem .songClickDiv")?.click();
             }else{
                 currentSongAudio.play();
                 if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
@@ -1885,10 +2010,6 @@ function pausePlayCurrentSong(from){
             button.children[0].classList.add("fa-circle-play");
         });
 
-        if(from === "Playlist"){
-            playPlaylistBtn.innerHTML = `<i class="fa-solid fa-play"></i> Play`;
-        }
-
         if(LastPlayedFromBtn != undefined && LastPlayedFromBtn != null && LastPlayedFromBtn != 0){
             LastPlayedFromBtn.classList.remove("songPlayingLi");
             LastPlayedFromBtn.classList.add("songPlayingLiPaused");
@@ -1896,6 +2017,8 @@ function pausePlayCurrentSong(from){
 
         isSongPaused = true;
     }
+
+    syncContextPlaybackButtons();
 }
 
 let songTime = document.getElementById("currentSongInput");
@@ -1937,6 +2060,7 @@ currentSongAudio.addEventListener('ended', () => {
             }
 
             isSongPaused = true;
+            syncContextPlaybackButtons();
         }
     }
 });
@@ -2038,6 +2162,7 @@ currentSongAudio.addEventListener('pause', () =>{
         button.children[0].classList.add("fa-circle-play");
     });
     isSongPaused = true;
+    syncContextPlaybackButtons();
     updateMediaSessionPlaybackState();
 });
 
@@ -2048,6 +2173,7 @@ currentSongAudio.addEventListener('play', () =>{
         button.children[0].classList.add("fa-circle-pause");
     });
     isSongPaused = false;
+    syncContextPlaybackButtons();
     updateMediaSessionPlaybackState();
 });
 
@@ -3673,8 +3799,7 @@ function noStorage(){
 }
 
 function playArtist(){
-    crimsonPlayfulBurst(window.event?.currentTarget, "play");
-    playFirstSongFromList(".artistSongs");
+    toggleContextPlayback("artist");
 }
 
 // ----- PLAYLIST SORTING

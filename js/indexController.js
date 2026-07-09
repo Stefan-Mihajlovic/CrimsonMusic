@@ -71,21 +71,95 @@ window.crimsonGetSongById = async function(songId){
     };
 }
 
+const relatedSongCache = new Map();
+
+function getRelatedTokens(record){
+    return String(record?.Categories || record?.Category || record?.Genre || "")
+        .toLowerCase()
+        .split(/[,|/{}]+/)
+        .map((token) => token.trim())
+        .filter(Boolean);
+}
+
+window.crimsonGetRelatedSongs = async function(currentSong, limit = 8){
+    const currentId = String(currentSong?.id || "");
+    if(!currentId){
+        return [];
+    }
+    if(relatedSongCache.has(currentId)){
+        return relatedSongCache.get(currentId);
+    }
+
+    const request = get(child(ref(realdb), "Songs")).then((snapshot) => {
+        const records = snapshot.val() || {};
+        const currentRecord = records[currentId] || {};
+        const currentCreator = String(currentRecord.Creator || currentSong.creator || "").trim().toLowerCase();
+        const currentTokens = new Set(getRelatedTokens(currentRecord));
+
+        return Object.entries(records)
+            .filter(([id, record]) => id !== currentId && record?.SongURL && record?.SongName)
+            .map(([id, record]) => {
+                const creator = String(record.Creator || "").trim().toLowerCase();
+                const sharedTokens = getRelatedTokens(record).filter((token) => currentTokens.has(token));
+                const sameCreator = !!currentCreator && creator === currentCreator;
+                const score = (sameCreator ? 1000 : 0) + (sharedTokens.length * 120) + (Number(id) % 97) / 100;
+
+                return {
+                    id: String(id),
+                    url: record.SongURL,
+                    title: record.SongName,
+                    creator: record.Creator || "Unknown artist",
+                    image: getSongImage(record, "large"),
+                    imageSmall: getSongImage(record, "small"),
+                    color: record.Color || "#1c1625",
+                    reason: sameCreator ? "Artist" : (sharedTokens.length ? "Similar vibe" : "For you"),
+                    score
+                };
+            })
+            .sort((first, second) => second.score - first.score)
+            .slice(0, limit);
+    }).catch((error) => {
+        relatedSongCache.delete(currentId);
+        throw error;
+    });
+
+    relatedSongCache.set(currentId, request);
+    return request;
+}
+
 window.crimsonLoadLyricsIntoPlayerPopup = async function(songId){
     const lyricsBody = document.getElementById("queueLyricsBody");
     if(!lyricsBody){
         return;
     }
 
-    lyricsBody.innerHTML = "<p>Loading lyrics...</p>";
+    const requestedId = String(songId);
+    lyricsBody.dataset.lyricsSongId = requestedId;
+    lyricsBody.innerHTML = "<p class=\"playerPopupLoading\">Loading lyrics...</p>";
 
     const dbRef = ref(realdb);
     const snapshot = await get(child(dbRef, "Songs/"+songId));
 
+    if(lyricsBody.dataset.lyricsSongId !== requestedId){
+        return;
+    }
+
     if(snapshot.exists() && snapshot.val().Lyrics){
-        lyricsBody.innerHTML = snapshot.val().Lyrics;
+        const lines = String(snapshot.val().Lyrics)
+            .replace(/<br\s*\/?\s*>/gi, "\n")
+            .replace(/<[^>]+>/g, "")
+            .split(/\r?\n/);
+        const lyricFragment = document.createDocumentFragment();
+        lines.forEach((line, index) => {
+            const lyricLine = document.createElement("p");
+            lyricLine.className = "playerPopupStaggerLine";
+            lyricLine.style.setProperty("--player-popup-item-index", index);
+            lyricLine.textContent = line || " ";
+            lyricFragment.appendChild(lyricLine);
+        });
+        lyricsBody.replaceChildren(lyricFragment);
     }else{
-        lyricsBody.innerHTML = "<p>No lyrics available for this song.</p>";
+        lyricsBody.innerHTML = "<p class=\"playerPopupLoading\">No lyrics available for this song.</p>";
     }
     lyricsBody.scrollTo(0, 0);
 }

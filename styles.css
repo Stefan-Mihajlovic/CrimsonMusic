@@ -3914,6 +3914,33 @@ a.toggleSection i{
     font-size: 14px;
 }
 
+.playerPopupStaggerItem,
+.playerPopupStaggerLine{
+    opacity: 0;
+    transform: translateY(10px);
+    animation: popupPlaylistIn 0.28s ease-out forwards;
+    animation-delay: calc(var(--player-popup-item-index, 0) * 45ms);
+}
+
+.queueSong-played.playerPopupStaggerItem{
+    animation-name: playerPopupStaggerPlayed;
+}
+
+@keyframes playerPopupStaggerPlayed{
+    to{
+        opacity: .55;
+        transform: translateY(0);
+    }
+}
+
+.relatedSongReason{
+    font-size: 11px !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: rgba(220, 214, 247, 0.48) !important;
+}
+
 .queueEmpty{
     color: rgba(220, 214, 247, 0.65);
     padding: 22px 18px;
@@ -3931,6 +3958,23 @@ a.toggleSection i{
     font-size: 1.9rem;
     line-height: 2.1rem;
     font-weight: 600;
+}
+
+.queueRelatedBody{
+    padding: 0 0 calc(env(safe-area-inset-bottom) + 18px);
+}
+
+.queueLyricsBody .playerPopupStaggerLine{
+    margin: 0 0 24px;
+    color: #DCD6F7;
+    font: inherit;
+}
+
+.playerPopupLoading{
+    color: #8a85a1;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 22px;
 }
 
 .queueLyricsBody br{
@@ -4494,23 +4538,25 @@ nav button i{
     left: 0;
     top: 0;
     color: #ff4f73;
-    font-size: 18px;
+    font-size: 26px;
     line-height: 1;
-    text-shadow: 0 0 14px rgba(255, 49, 95, 0.45);
+    text-shadow: 0 0 16px rgba(255, 49, 95, 0.58);
     opacity: 0;
     animation: playfulHeartBreak .72s cubic-bezier(0.2, 0.9, 0.22, 1) forwards;
 }
 
 .playfulHeartBreak-left{
-    clip-path: inset(0 50% 0 0);
-    --break-x: -12px;
-    --break-r: -24deg;
+    clip-path: polygon(0 0, 54% 0, 46% 26%, 56% 46%, 44% 67%, 50% 100%, 0 100%);
+    --break-x: -19px;
+    --break-y: -9px;
+    --break-r: -32deg;
 }
 
 .playfulHeartBreak-right{
-    clip-path: inset(0 0 0 50%);
-    --break-x: 12px;
-    --break-r: 24deg;
+    clip-path: polygon(54% 0, 100% 0, 100% 100%, 50% 100%, 44% 67%, 56% 46%, 46% 26%);
+    --break-x: 19px;
+    --break-y: 7px;
+    --break-r: 32deg;
 }
 
 .playfulBurst-like .playfulParticle:nth-child(3n),
@@ -4558,7 +4604,7 @@ nav button i{
     }
     100%{
         opacity: 0;
-        transform: translate(calc(-50% + var(--break-x)), -64%) scale(0.7) rotate(var(--break-r));
+        transform: translate(calc(-50% + var(--break-x)), calc(-50% + var(--break-y))) scale(0.72) rotate(var(--break-r));
     }
 }
 
