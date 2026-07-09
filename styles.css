@@ -1257,6 +1257,225 @@ main{
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.8), transparent);
 }
 
+/* ----- SEARCH: APP DISCOVERY LAYOUT ----- */
+
+.searchScreen{
+    gap: 0;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 120px);
+    background:
+        radial-gradient(circle at 86% 0%, rgba(143, 89, 245, 0.11), transparent 26%),
+        var(--bodyBg);
+}
+
+.searchScreen .searchBar{
+    position: sticky;
+    top: 0;
+    margin: 0;
+    padding: calc(env(safe-area-inset-top) + 10px) 16px 6px;
+    gap: 0;
+    background: linear-gradient(180deg, var(--bodyBg) 72%, color-mix(in srgb, var(--bodyBg) 92%, transparent));
+    border-bottom: 1px solid transparent;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.searchScreen .searchBar.isSticky{
+    border-color: rgba(220, 214, 247, 0.08);
+}
+
+.searchScreen .searchBar form{
+    width: 100%;
+    margin: 0;
+    gap: 9px;
+}
+
+.searchScreen #searchInput{
+    min-height: 46px;
+    padding-inline: 17px;
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(220, 214, 247, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    font-size: 16px;
+}
+
+.searchScreen #searchInput:focus{
+    background: rgba(255, 255, 255, 0.075);
+    border-color: rgba(180, 139, 255, 0.56);
+    box-shadow: 0 0 0 4px rgba(143, 89, 245, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    outline: none;
+}
+
+.searchScreen #submitSearch{
+    width: 46px !important;
+    max-width: 46px;
+    min-height: 46px;
+    flex-basis: 46px;
+    background: linear-gradient(145deg, rgba(143, 89, 245, 0.95), rgba(96, 50, 188, 0.95));
+    border: 1px solid rgba(220, 214, 247, 0.2);
+    box-shadow: 0 8px 24px rgba(96, 50, 188, 0.3);
+}
+
+.searchScreen .searchHistory{
+    width: 100%;
+    margin-left: 0;
+    padding-inline: 2px;
+    gap: 7px;
+}
+
+.searchScreen .searchHistoryOpen{
+    margin-top: 8px;
+}
+
+.searchScreen .searchHistory button{
+    padding: 7px 10px;
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(220, 214, 247, 0.08);
+    color: rgba(220, 214, 247, 0.75);
+}
+
+.searchScreen .SearchTypeChips{
+    max-height: 0;
+    padding: 0 2px;
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: max-height .22s ease-out, opacity .18s ease-out, transform .22s ease-out, padding .22s ease-out;
+}
+
+.searchScreen:has(#searchInput:not(:placeholder-shown)) .SearchTypeChips{
+    max-height: 42px;
+    padding: 2px;
+    margin-top: 8px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.searchScreen .searchChip{
+    height: 36px;
+}
+
+.searchScreen .searchChip label{
+    min-width: 70px;
+    padding-inline: 14px;
+    font-size: 14px;
+}
+
+.searchScreen .searchList{
+    width: calc(100% - 32px);
+    margin: 14px 16px 0;
+    gap: 8px;
+}
+
+.searchScreen .searchListOpen ~ .categories{
+    display: none;
+}
+
+.searchScreen .categories{
+    width: calc(100% - 32px);
+    margin: 8px 16px 0;
+    gap: 12px;
+}
+
+.searchScreen .catItems{
+    height: 122px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.searchScreen .catItem{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    appearance: none;
+    border: 1px solid color-mix(in srgb, var(--category-color) 62%, rgba(255, 255, 255, 0.12));
+    border-radius: 16px;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--category-color) 92%, #18121f), #15111a);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 22px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.searchScreen .catItem::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(160deg, transparent 20%, rgba(5, 4, 8, 0.2) 54%, rgba(5, 4, 8, 0.78) 100%);
+}
+
+.searchScreen .categoryArtwork{
+    position: absolute;
+    z-index: 0;
+    right: -11px;
+    bottom: -10px;
+    width: 74%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    opacity: .7;
+    transform: translate3d(0, var(--category-parallax, 0px), 0) rotate(10deg) scale(1.08);
+    filter: saturate(1.12) contrast(1.04);
+    transition: transform .28s var(--screenEase), opacity .28s ease-out;
+}
+
+.searchScreen .categoryTint{
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--category-color) 70%, transparent), transparent 62%);
+}
+
+.searchScreen .catItem h3{
+    position: absolute;
+    z-index: 3;
+    left: 12px;
+    right: 12px;
+    bottom: 11px;
+    padding: 0;
+    color: #fff;
+    font-size: clamp(16px, 4.8vw, 21px);
+    line-height: 1;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: -.035em;
+    text-align: left;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.58);
+}
+
+.searchScreen .categoryCardArrow{
+    position: absolute;
+    z-index: 3;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.88);
+    background: rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-size: 10px;
+    opacity: 0;
+    transform: scale(.8);
+    transition: opacity .2s ease-out, transform .2s var(--screenEase);
+}
+
+.searchScreen .catItem:active .categoryArtwork,
+.searchScreen .catItem:hover .categoryArtwork{
+    opacity: .9;
+    transform: translate3d(0, var(--category-parallax, 0px), 0) rotate(7deg) scale(1.14);
+}
+
+.searchScreen .catItem:active .categoryCardArrow,
+.searchScreen .catItem:hover .categoryCardArrow{
+    opacity: 1;
+    transform: scale(1);
+}
+
 /* ----- LOGIN SCREEN ----- */
 
 .pageBar{
@@ -2286,6 +2505,160 @@ a.toggleSection i{
     padding-bottom: 4px;
     width: 100% !important;
     margin-left: 0 !important;
+}
+
+.yoursScreen .searchBar{
+    margin: 2px 0 8px !important;
+    padding: 2px 16px !important;
+    gap: 0;
+}
+
+.yoursScreen .searchBar form{
+    width: 100%;
+    margin: 0;
+    gap: 9px;
+}
+
+.yoursScreen #searchYoursInput{
+    min-height: 46px;
+    padding-inline: 17px;
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(220, 214, 247, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    font-size: 16px;
+}
+
+.yoursScreen #searchYoursInput:focus{
+    background: rgba(255, 255, 255, 0.075);
+    border-color: rgba(180, 139, 255, 0.56);
+    box-shadow: 0 0 0 4px rgba(143, 89, 245, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    outline: none;
+}
+
+.yoursScreen #submitYoursSearch{
+    width: 46px !important;
+    max-width: 46px;
+    min-height: 46px;
+    flex-basis: 46px;
+    background: linear-gradient(145deg, rgba(143, 89, 245, 0.95), rgba(96, 50, 188, 0.95));
+    border: 1px solid rgba(220, 214, 247, 0.2);
+    box-shadow: 0 8px 24px rgba(96, 50, 188, 0.3);
+}
+
+.yoursScreen .searchHistory{
+    width: 100%;
+    margin-left: 0;
+    padding-inline: 2px;
+    gap: 7px;
+}
+
+.yoursScreen .searchHistoryOpen{
+    margin-top: 8px;
+}
+
+.libraryViewToggle i{
+    margin-left: 0 !important;
+    font-size: 18px !important;
+}
+
+.libraryGridView .yourPlaylists,
+.libraryGridView .yourLPlaylists{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+.libraryGridView .yourPlaylists .songItem,
+.libraryGridView .yourLPlaylists .songItem{
+    display: block;
+    min-width: 0;
+    min-height: 0;
+    aspect-ratio: 1;
+    padding: 0;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.035);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 20px rgba(0, 0, 0, 0.14);
+}
+
+.libraryGridView .yourPlaylists .songInfo,
+.libraryGridView .yourLPlaylists .songInfo{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.libraryGridView .yourPlaylists .songInfo img,
+.libraryGridView .yourLPlaylists .songInfo img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    margin: 0;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: none;
+}
+
+.libraryGridView .yourPlaylists .songText,
+.libraryGridView .yourLPlaylists .songText{
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    min-width: 0;
+    padding: 32px 10px 9px;
+    background: linear-gradient(transparent, rgba(7, 5, 11, 0.88));
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.libraryGridView .yourPlaylists .songText h2,
+.libraryGridView .yourLPlaylists .songText h2,
+.libraryGridView .yourPlaylists .songText h3,
+.libraryGridView .yourLPlaylists .songText h3{
+    width: 100%;
+}
+
+.libraryGridView .yourPlaylists .songText h2,
+.libraryGridView .yourLPlaylists .songText h2{
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.libraryGridView .yourPlaylists .songText h3,
+.libraryGridView .yourLPlaylists .songText h3{
+    font-size: 11px;
+    line-height: 14px;
+}
+
+.libraryGridView .yourPlaylists .songBtns{
+    display: none;
+}
+
+.libraryGridView .yourPlaylists .songClickDiv,
+.libraryGridView .yourLPlaylists .songClickDiv{
+    width: 100%;
+}
+
+.libraryGridView .yourPlaylists .favoritesLibraryItem{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(145deg, rgba(29, 3, 17, 1), rgba(93, 0, 42, 0.78));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 24px rgba(90, 0, 38, 0.22);
+}
+
+.libraryGridView .yourPlaylists .favoritesLibraryItem .songInfo img{
+    width: 100% !important;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px !important;
+}
+
+.libraryGridView .yourPlaylists .favoritesLibraryItem .songText h2{
+    font-size: 16px;
+    line-height: 18px;
 }
 
 .favoritesItem{

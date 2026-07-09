@@ -261,7 +261,39 @@ function animateSearchCategories(){
     categories.classList.remove("categoriesStagger");
     void categories.offsetWidth;
     categories.classList.add("categoriesStagger");
+    requestAnimationFrame(updateSearchCategoryParallax);
 }
+
+let searchCategoryParallaxFrame = null;
+function updateSearchCategoryParallax(){
+    const searchScreen = document.querySelector(".searchScreen.activeMain");
+    if(!searchScreen || reduceAnimations){
+        return;
+    }
+
+    const searchViewport = searchScreen.getBoundingClientRect();
+    const viewportCenter = searchViewport.top + searchViewport.height * 0.5;
+    searchScreen.querySelectorAll(".categoryArtwork").forEach((artwork) => {
+        const cardRect = artwork.closest(".catItem")?.getBoundingClientRect();
+        if(!cardRect){
+            return;
+        }
+        const cardCenter = cardRect.top + cardRect.height * 0.5;
+        const offset = Math.max(-8, Math.min(8, (viewportCenter - cardCenter) * 0.035));
+        artwork.style.setProperty("--category-parallax", `${offset.toFixed(2)}px`);
+    });
+}
+
+const searchParallaxContainer = document.querySelector(".searchScreen");
+searchParallaxContainer?.addEventListener("scroll", () => {
+    if(searchCategoryParallaxFrame || reduceAnimations){
+        return;
+    }
+    searchCategoryParallaxFrame = requestAnimationFrame(() => {
+        updateSearchCategoryParallax();
+        searchCategoryParallaxFrame = null;
+    });
+}, { passive: true });
 
 window.crimsonSaveSearchHistory = saveCrimsonSearchHistory;
 window.crimsonRenderSearchHistory = renderCrimsonSearchHistory;
@@ -3647,6 +3679,42 @@ function resetSearchScreenToNormal(){
     yourFArtists.forEach((artist) => {
         artist.classList.remove('displayNone');
     })
+}
+
+const libraryViewToggle = document.getElementById("libraryViewToggle");
+
+function setLibraryView(view, savePreference = true){
+    const isGrid = view === "grid";
+    const libraryScreen = document.querySelector(".yoursScreen");
+    libraryScreen?.classList.toggle("libraryGridView", isGrid);
+
+    if(libraryViewToggle){
+        const label = isGrid ? "Switch to column view" : "Switch to grid view";
+        libraryViewToggle.innerHTML = isGrid
+            ? `<i class="fa-solid fa-list"></i>`
+            : `<i class="fa-solid fa-table-cells-large"></i>`;
+        libraryViewToggle.setAttribute("aria-label", label);
+        libraryViewToggle.setAttribute("title", label);
+    }
+
+    if(savePreference){
+        try{
+            localStorage.setItem("crimsonLibraryView", isGrid ? "grid" : "columns");
+        }catch(error){}
+    }
+}
+
+if(libraryViewToggle){
+    let savedLibraryView = "columns";
+    try{
+        savedLibraryView = localStorage.getItem("crimsonLibraryView") || "columns";
+    }catch(error){}
+
+    setLibraryView(savedLibraryView, false);
+    libraryViewToggle.addEventListener("click", () => {
+        const isGrid = document.querySelector(".yoursScreen")?.classList.contains("libraryGridView");
+        setLibraryView(isGrid ? "columns" : "grid");
+    });
 }
 
 const submitYoursSearchBtn = document.getElementById("submitYoursSearch");

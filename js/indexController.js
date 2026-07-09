@@ -892,49 +892,46 @@ function findSearchedPlaylist(playlistName, inputText){
 
 let categoriesList = document.getElementsByClassName("categories")[0];
 
-function generateCategories(){
-    for (let i = 1; i < brojKategorija; i+=2) {
-        GetCategories(i);
+function renderCategoryCard(record){
+    if(!record){
+        return "";
     }
+
+    const categoryName = record.Name || "Category";
+    const categoryColor = record.Color || "#3c2368";
+    const categoryBanner = getCategoryImage(record, "large");
+    return `<button class="catItem" type="button" style="--category-color: ${categoryColor}" onclick="clickEffect(this); openCategoryPage('${categoryName}', '${categoryColor}', '${categoryBanner}')">
+        <img class="categoryArtwork" src="${categoryBanner}" alt="" loading="lazy">
+        <span class="categoryTint"></span>
+        <h3>${categoryName}</h3>
+        <span class="categoryCardArrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+    </button>`;
 }
 
-function GetCategories(name){
-    let catName,catName2,catColor,catColor2;
-    let catBanner,catBannerSmall,catBanner2,catBanner2Small;
-    let currentLi = "";
+async function GetCategories(name){
+    const dbRef = ref(realdb);
+    const [firstSnapshot, secondSnapshot] = await Promise.all([
+        get(child(dbRef, "Categories/"+name)),
+        get(child(dbRef, "Categories/"+(name + 1)))
+    ]);
+    const firstCard = firstSnapshot.exists() ? renderCategoryCard(firstSnapshot.val()) : "";
+    const secondCard = secondSnapshot.exists() ? renderCategoryCard(secondSnapshot.val()) : "";
+    return (firstCard || secondCard)
+        ? `<li class="catItems" style="--cat-row-index: ${Math.floor((name - 1) / 2)}">${firstCard}${secondCard}</li>`
+        : "";
+}
 
-    let dbRef = ref(realdb);
+async function generateCategories(){
+    const categoryIds = [];
+    for(let i = 1; i < brojKategorija; i += 2){
+        categoryIds.push(i);
+    }
 
-    get(child(dbRef, "Categories/"+name)).then((snapshot)=>{
-        if(snapshot.exists()){
-            catName = snapshot.val().Name;
-            catColor = snapshot.val().Color;
-            catBanner = getCategoryImage(snapshot.val(), "large");
-            catBannerSmall = getCategoryImage(snapshot.val(), "small");
-
-            currentLi += `<li class="catItems" style="--cat-row-index: `+ Math.floor((name - 1) / 2) +`"><div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName +`', '`+ catColor +`', '`+ catBanner +`')" style="background-color: `+ catColor +`">
-            <h3>`+ catName +`</h3><div class="darkenCat"></div>
-            </div>`;
-        }
-    })
-
-    get(child(dbRef, "Categories/"+(name+1))).then((snapshot)=>{
-        if(snapshot.exists()){
-            catName2 = snapshot.val().Name;
-            catColor2 = snapshot.val().Color;
-            catBanner2 = getCategoryImage(snapshot.val(), "large");
-            catBanner2Small = getCategoryImage(snapshot.val(), "small");
-
-            currentLi += `<div class="catItem" onclick="clickEffect(this); openCategoryPage('`+ catName2 +`', '`+ catColor2 +`', '`+ catBanner2 +`')" style="background-color: `+ catColor2 +`">
-            <h3>`+ catName2 +`</h3><div class="darkenCat"></div>
-            </div></li>`;
-
-            categoriesList.innerHTML += currentLi;
-            if(document.querySelector(".searchScreen.activeMain")){
-                window.crimsonAnimateSearchCategories?.();
-            }
-        }
-    })
+    const categoryRows = await Promise.all(categoryIds.map(GetCategories));
+    categoriesList.innerHTML = categoryRows.filter(Boolean).join("");
+    if(document.querySelector(".searchScreen.activeMain")){
+        window.crimsonAnimateSearchCategories?.();
+    }
 }
 
 // ----- CATEGORY PAGE

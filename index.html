@@ -90,7 +90,7 @@
     <main class="searchScreen">
         <div class="searchBar" id="searchScreenBar">
             <form onsubmit="event.preventDefault()">
-                <input type="search" name="search" id="searchInput" placeholder="Search away...">
+                <input type="search" name="search" id="searchInput" placeholder="Search music">
                 <input style="font-family: Bootstrap-icons" id="submitSearch" type="submit" value="&#xF52A;">
             </form>
             <div class="searchHistory" id="searchHistorySearch" aria-label="Recent searches"></div>
@@ -118,8 +118,7 @@
             </div>
         </div>
         <ul class="searchList" name="Search"></ul>
-        <h1 class="catTitle">Categories</h1>
-        <ul class="categories"></ul>
+        <ul class="categories" aria-label="Music categories"></ul>
     </main>
 
     <main class="yoursScreen">
@@ -134,13 +133,14 @@
         </header>
         <div id="searchBarYours" class="searchBar">
             <form onsubmit="event.preventDefault()">
-                <input type="search" name="search" id="searchYoursInput" placeholder="Search your playlists and artists...">
+                <input type="search" name="search" id="searchYoursInput" placeholder="Search your library">
                 <input style="font-family: Bootstrap-icons" id="submitYoursSearch" type="submit" value="&#xF52A;">
             </form>
             <div class="searchHistory" id="searchHistoryYours" aria-label="Recent library searches"></div>
         </div>
         <h1 class="yourPlaylistsH1 catTitleRightBtn">Your Playlists
             <div>
+                <button id="libraryViewToggle" class="libraryViewToggle" type="button" aria-label="Switch to grid view" title="Switch to grid view"><i class="fa-solid fa-table-cells-large"></i></button>
                 <button onclick="MakeAPlaylist()"><i class="fa-solid fa-plus"></i></button>
             </div>
         </h1>
