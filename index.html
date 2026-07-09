@@ -152,6 +152,9 @@
     </main>
 
     <div class="player">
+        <div class="playerGradientLayers" aria-hidden="true">
+            <div class="playerGradientLayer"></div>
+        </div>
         <div class="miniPlayer">
             <div class="miniSeek">
                 <div id="miniSeekBar"></div>
@@ -181,7 +184,22 @@
             <img loading="lazy" class="songBackdrop" src="images/CrimsonLogo.png" alt="playerBackdrop" name="songBanner">
             <div class="bigControls">
                 <div class="bigSongInfo">
-                    <img id="bigSongBanner" loading="lazy" src="images/CrimsonLogo.png" alt="songBanner" name="songBanner">
+                    <div class="songSwipeViewport" id="songSwipeViewport" aria-label="Swipe between songs">
+                        <div class="songSwipeTrack" id="songSwipeTrack">
+                            <div class="songSwipeCard songSwipeCardPrevious" data-swipe-card="previous" aria-hidden="true">
+                                <div class="songSwipePlaceholder" aria-hidden="true"></div>
+                                <img alt="Previous song cover">
+                            </div>
+                            <div class="songSwipeCard songSwipeCardCurrent" data-swipe-card="current">
+                                <div class="songSwipePlaceholder" aria-hidden="true"></div>
+                                <img id="bigSongBanner" loading="lazy" src="images/CrimsonLogo.png" alt="songBanner" name="songBanner">
+                            </div>
+                            <div class="songSwipeCard songSwipeCardNext" data-swipe-card="next" aria-hidden="true">
+                                <div class="songSwipePlaceholder" aria-hidden="true"></div>
+                                <img alt="Next song cover">
+                            </div>
+                        </div>
+                    </div>
                     <div class="playerClickDiv2"></div>
                     <div class="playerLyrcis"></div>
                     <div class="playerSongText">

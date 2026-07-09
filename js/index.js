@@ -582,21 +582,43 @@ autoplayBtn.addEventListener('click', () => {
 })
 
 const backwardBtn = document.querySelector('#backward');
-backwardBtn.addEventListener('click', () => {
-    if(prevSongBtn != 0){
-        prevSongBtn.children[1].click();
-    }else if(songQueue.history.length > 0){
-        playQueueSong(songQueue.history[songQueue.history.length - 1]);
+function performSongChange(direction){
+    if(direction === "previous"){
+        if(prevSongBtn != 0){
+            prevSongBtn.children[1].click();
+        }else if(songQueue.history.length > 0){
+            playQueueSong(songQueue.history[songQueue.history.length - 1]);
+        }
+        return;
     }
-})
 
-const forwardBtn = document.querySelector('#forward');
-forwardBtn.addEventListener('click', () => {
     if(isShuffleOn){
         PlayRandomSongShuffle();
     }else{
         playNextQueuedSong();
     }
+}
+
+function requestSongChange(direction){
+    const canAnimate = movablePlayer?.classList.contains("playerOpen") && songSwipeViewport && !songSwipeState.isCommitting;
+    if(canAnimate && getSongSwipePreview(direction)){
+        prepareSongSwipeCards();
+        completeSongSwipe(direction);
+        return;
+    }
+
+    if(!songSwipeState.isCommitting){
+        performSongChange(direction);
+    }
+}
+
+backwardBtn.addEventListener('click', () => {
+    requestSongChange("previous");
+})
+
+const forwardBtn = document.querySelector('#forward');
+forwardBtn.addEventListener('click', () => {
+    requestSongChange("next");
 })
 
 const addToPlBtn = document.querySelector('#addToPlBtn');
@@ -1445,6 +1467,8 @@ setupMediaSessionControls();
 
 let isTheVaultOn = false;
 let LastPlayedFromBtn;
+const playerGradientLayers = Array.from(document.querySelectorAll(".playerGradientLayer"));
+let playerGradientRequest = 0;
 
 function clampColorChannel(value){
     return Math.max(0, Math.min(255, Math.round(value)));
@@ -1515,25 +1539,43 @@ function buildPlayerGradient(colors){
     const base = mixRgb(primary, { r: 18, g: 12, b: 22 }, 0.34);
     const softBase = mixRgb(base, secondary, 0.12);
 
-    return `
-        linear-gradient(180deg, rgba(8, 6, 12, 0.62) 0%, rgba(8, 6, 12, 0.38) 12%, rgba(8, 6, 12, 0) 28%),
-        radial-gradient(circle at 22% 8%, ${rgbToCss(mixRgb(primary, { r: 255, g: 255, b: 255 }, 0.08))} 0%, transparent 34%),
-        radial-gradient(circle at 82% 22%, ${rgbToCss(mixRgb(secondary, tertiary, 0.18))} 0%, transparent 40%),
-        linear-gradient(165deg, ${rgbToCss(primary)} 0%, ${rgbToCss(secondary)} 30%, ${rgbToCss(softBase)} 64%, rgb(18, 12, 22) 100%)
-    `;
+    return {
+        primary: rgbToCss(primary),
+        secondary: rgbToCss(secondary),
+        softBase: rgbToCss(softBase),
+        glowOne: rgbToCss(mixRgb(primary, { r: 255, g: 255, b: 255 }, 0.08)),
+        glowTwo: rgbToCss(mixRgb(secondary, tertiary, 0.18))
+    };
 }
 
-function setFallbackPlayerGradient(songColor){
+function applyPlayerGradient(gradient, songColor, requestId = playerGradientRequest){
+    if(requestId !== playerGradientRequest){
+        return;
+    }
+
+    const gradientLayer = playerGradientLayers[0];
+    if(!gradientLayer){
+        return;
+    }
+    gradientLayer.style.setProperty("--playerGradientPrimary", gradient.primary || songColor);
+    gradientLayer.style.setProperty("--playerGradientSecondary", gradient.secondary || songColor);
+    gradientLayer.style.setProperty("--playerGradientSoftBase", gradient.softBase || songColor);
+    gradientLayer.style.setProperty("--playerGradientGlowOne", gradient.glowOne || songColor);
+    gradientLayer.style.setProperty("--playerGradientGlowTwo", gradient.glowTwo || songColor);
+}
+
+function setFallbackPlayerGradient(songColor, requestId = playerGradientRequest){
     const base = hexToRgb(songColor);
-    document.documentElement.style.setProperty("--playerGradientBg", buildPlayerGradient([
+    applyPlayerGradient(buildPlayerGradient([
         mixRgb(base, { r: 255, g: 255, b: 255 }, 0.08),
         mixRgb(base, { r: 0, g: 0, b: 0 }, 0.22),
         mixRgb(base, { r: 160, g: 95, b: 255 }, 0.18)
-    ]));
+    ]), songColor, requestId);
 }
 
 function getDominantImageColors(imageURL, fallbackColor){
-    setFallbackPlayerGradient(fallbackColor);
+    const requestId = ++playerGradientRequest;
+    setFallbackPlayerGradient(fallbackColor, requestId);
     if(!imageURL){
         return;
     }
@@ -1541,6 +1583,9 @@ function getDominantImageColors(imageURL, fallbackColor){
     const image = new Image();
     image.crossOrigin = "anonymous";
     image.onload = () => {
+        if(requestId !== playerGradientRequest){
+            return;
+        }
         try{
             const canvas = document.createElement("canvas");
             const size = 32;
@@ -1607,13 +1652,13 @@ function getDominantImageColors(imageURL, fallbackColor){
             ].filter(Boolean);
 
             if(gradientColors.length){
-                document.documentElement.style.setProperty("--playerGradientBg", buildPlayerGradient(gradientColors));
+                applyPlayerGradient(buildPlayerGradient(gradientColors), fallbackColor, requestId);
             }
         }catch(error){
-            setFallbackPlayerGradient(fallbackColor);
+            setFallbackPlayerGradient(fallbackColor, requestId);
         }
     };
-    image.onerror = () => setFallbackPlayerGradient(fallbackColor);
+    image.onerror = () => setFallbackPlayerGradient(fallbackColor, requestId);
     image.src = imageURL;
 }
 
@@ -1663,7 +1708,9 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     isSongPaused = false;
 
     songBanners.forEach((banner) => {
-        banner.src = imageURL;
+        if(banner !== bigSongBanner){
+            banner.src = imageURL;
+        }
     });
     songTitles.forEach((title) => {
         title.innerHTML = songTitle;
@@ -1720,6 +1767,12 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
         currentSongBtn = 0;
         fillQueueWithRandomSongs();
         renderSongQueue();
+    }
+
+    if(songSwipeState.isCommitting){
+        songSwipeState.pendingCurrent = currentPlayerSongPopup;
+    }else{
+        prepareSongSwipeCards(currentPlayerSongPopup);
     }
 
     seeIfSongIsLiked(id);
@@ -2501,11 +2554,171 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
 // ----- playerDiv 2
 
 const bigSongBanner = document.getElementById("bigSongBanner");
-let bigSongBannerMoved = false, playerMovedDown = false;
+const songSwipeViewport = document.getElementById("songSwipeViewport");
+const songSwipeTrack = document.getElementById("songSwipeTrack");
+const songSwipeCards = {
+    previous: document.querySelector('[data-swipe-card="previous"]'),
+    current: document.querySelector('[data-swipe-card="current"]'),
+    next: document.querySelector('[data-swipe-card="next"]')
+};
+const songSwipeState = {
+    dragOffset: 0,
+    isDragging: false,
+    isCommitting: false,
+    pendingCurrent: null,
+    settleTimer: null
+};
+let playerMovedDown = false;
 let playerGestureStartX = 0;
 let playerGestureStartY = 0;
 let playerGestureDirection = null;
 let playerDragStartTop = 0;
+
+function getSongSwipePreview(direction){
+    if(direction === "previous"){
+        if(prevSongBtn != 0){
+            return parseSongItem(prevSongBtn, songQueue.sourceName);
+        }
+        return songQueue.history[songQueue.history.length - 1] || null;
+    }
+
+    if(isShuffleOn){
+        return null;
+    }
+    if(nextSongBtn != 0){
+        return parseSongItem(nextSongBtn, songQueue.sourceName);
+    }
+    return songQueue.upcoming[0] || null;
+}
+
+function getSongSwipeSource(song){
+    if(!song){
+        return "";
+    }
+    return getCrimsonImageSrc(song.image || song.imageSmall || "", "song");
+}
+
+function setSongSwipeCard(card, song){
+    if(!card){
+        return;
+    }
+
+    const image = card.querySelector("img");
+    const source = getSongSwipeSource(song);
+    const key = song ? `${song.id || ""}|${source}` : "";
+    card.setAttribute("aria-hidden", card === songSwipeCards.current ? "false" : "true");
+    if(card.dataset.songSwipeKey === key){
+        return;
+    }
+
+    card.dataset.songSwipeKey = key;
+    card.dataset.songSwipeLoadToken = String(Number(card.dataset.songSwipeLoadToken || 0) + 1);
+    const loadToken = card.dataset.songSwipeLoadToken;
+    card.classList.remove("songSwipeCardLoaded");
+    card.classList.toggle("songSwipeCardEmpty", !source);
+    image.removeAttribute("src");
+
+    if(!source){
+        image.alt = "";
+        return;
+    }
+
+    image.alt = song?.title ? `${song.title} cover` : "Song cover";
+    const preload = new Image();
+    preload.decoding = "async";
+    preload.onload = () => {
+        if(card.dataset.songSwipeLoadToken !== loadToken){
+            return;
+        }
+        image.src = source;
+        requestAnimationFrame(() => {
+            if(card.dataset.songSwipeLoadToken === loadToken){
+                card.classList.add("songSwipeCardLoaded");
+            }
+        });
+    };
+    preload.onerror = () => {
+        if(card.dataset.songSwipeLoadToken === loadToken){
+            card.classList.add("songSwipeCardEmpty");
+        }
+    };
+    preload.src = source;
+}
+
+function setSongSwipeTrackPosition(offset = 0, animate = false){
+    if(!songSwipeViewport || !songSwipeTrack){
+        return;
+    }
+    const cardWidth = songSwipeViewport.getBoundingClientRect().width;
+    songSwipeTrack.classList.toggle("songSwipeTrackAnimating", animate && !reduceAnimations);
+    if(cardWidth > 0){
+        songSwipeTrack.style.transform = `translate3d(${-cardWidth + offset}px, 0, 0)`;
+    }
+}
+
+function resetSongSwipeTrack(){
+    songSwipeState.dragOffset = 0;
+    songSwipeState.isDragging = false;
+    setSongSwipeTrackPosition(0, false);
+}
+
+function prepareSongSwipeCards(currentSong = currentPlayerSongPopup){
+    if(!songSwipeTrack){
+        return;
+    }
+    setSongSwipeCard(songSwipeCards.previous, getSongSwipePreview("previous"));
+    setSongSwipeCard(songSwipeCards.current, currentSong);
+    setSongSwipeCard(songSwipeCards.next, getSongSwipePreview("next"));
+    if(!songSwipeState.isDragging && !songSwipeState.isCommitting){
+        resetSongSwipeTrack();
+    }
+}
+
+function rotateSongSwipeCards(direction){
+    if(!songSwipeTrack){
+        return;
+    }
+
+    if(direction === "next"){
+        songSwipeTrack.appendChild(songSwipeCards.previous);
+    }else{
+        songSwipeTrack.insertBefore(songSwipeCards.next, songSwipeTrack.firstElementChild);
+    }
+
+    songSwipeCards.previous = songSwipeTrack.children[0];
+    songSwipeCards.current = songSwipeTrack.children[1];
+    songSwipeCards.next = songSwipeTrack.children[2];
+}
+
+function completeSongSwipe(direction){
+    const previewSong = getSongSwipePreview(direction);
+    if(!previewSong){
+        resetSongSwipeTrack();
+        return;
+    }
+
+    songSwipeState.isCommitting = true;
+    const cardWidth = songSwipeViewport?.getBoundingClientRect().width || 0;
+    const targetOffset = direction === "next" ? -cardWidth : cardWidth;
+    setSongSwipeTrackPosition(targetOffset, true);
+
+    const commit = () => {
+        songSwipeState.settleTimer = null;
+        performSongChange(direction);
+
+        rotateSongSwipeCards(direction);
+        resetSongSwipeTrack();
+        songSwipeState.isCommitting = false;
+        prepareSongSwipeCards(songSwipeState.pendingCurrent || currentPlayerSongPopup);
+        songSwipeState.pendingCurrent = null;
+    };
+
+    if(reduceAnimations){
+        commit();
+    }else{
+        songSwipeState.settleTimer = window.setTimeout(commit, 285);
+    }
+}
 
 const move2 = (e) => {
     const deltaX = e.touches[0].clientX - playerGestureStartX;
@@ -2521,18 +2734,16 @@ const move2 = (e) => {
     currentTouchPos = e.touches[0].clientY - offsetY;
     // Update div pos based on new cursor pos
     if(currentTouchPos > playerDragStartTop && !isPopupOpen && !isLyricsOn){
-        if(!bigSongBannerMoved){
-            moveStarted = true;
-            playerMovedDown = true;
-            movablePlayer.classList.add("playerMovable");
-            bigSongBanner.classList.remove("playerMovable");
-            playerMoveTop = currentTouchPos;
-            if(!playerMoveFrame){
-                playerMoveFrame = requestAnimationFrame(() => {
-                    movablePlayer.style.top = `${playerMoveTop}px`;
-                    playerMoveFrame = null;
-                });
-            }
+        moveStarted = true;
+        playerMovedDown = true;
+        movablePlayer.classList.add("playerMovable");
+        bigSongBanner.classList.remove("playerMovable");
+        playerMoveTop = currentTouchPos;
+        if(!playerMoveFrame){
+            playerMoveFrame = requestAnimationFrame(() => {
+                movablePlayer.style.top = `${playerMoveTop}px`;
+                playerMoveFrame = null;
+            });
         }
     }
     // console.log("moved " + (e.touches[0].clientY - offsetY));
@@ -2543,7 +2754,11 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
     // console.log("touched");
     // Calc the initial offset Values
     if(window.innerWidth < window.innerHeight){
+        if(songSwipeState.isCommitting){
+            return;
+        }
         currentTouchPosSkip = 0;
+        prepareSongSwipeCards();
         playerGestureStartX = e.touches[0].clientX;
         playerGestureStartY = e.touches[0].clientY;
         playerGestureDirection = null;
@@ -2562,7 +2777,7 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
 
 // ----- PLAYER SONG SKIPPING
 
-let currentTouchPosSkip;
+let currentTouchPosSkip = 0;
 const moveSideSkip = (e) =>{
     const deltaX = e.touches[0].clientX - playerGestureStartX;
     const deltaY = e.touches[0].clientY - playerGestureStartY;
@@ -2571,26 +2786,24 @@ const moveSideSkip = (e) =>{
     }
     if(playerGestureDirection === "vertical"){
         currentTouchPosSkip = 0;
+        songSwipeState.isDragging = false;
         return;
     }
     if(!playerMovedDown){
-        currentTouchPosSkip = e.touches[0].clientX - offsetX;
-        if(Math.abs(currentTouchPosSkip) > 30){
-            e.preventDefault();
-            bigSongBannerMoved = true;
-            // Update div pos based on new cursor pos
-            let dragDelay;
-            if(currentTouchPosSkip > 0){
-                dragDelay = 30;
-            }else{
-                dragDelay = -30;
-            }
-            bigSongBanner.style.transform = `translateX(${e.touches[0].clientX - offsetX - dragDelay}px)`;
-        }
+        e.preventDefault();
+        const rawOffset = e.touches[0].clientX - offsetX;
+        const direction = rawOffset < 0 ? "next" : "previous";
+        const hasPreview = !!getSongSwipePreview(direction);
+        const cardWidth = songSwipeViewport?.getBoundingClientRect().width || window.innerWidth;
+        const maxOffset = cardWidth * 0.92;
+        currentTouchPosSkip = hasPreview ? Math.max(-maxOffset, Math.min(maxOffset, rawOffset)) : 0;
+        songSwipeState.isDragging = true;
+        songSwipeState.dragOffset = currentTouchPosSkip;
+        setSongSwipeTrackPosition(currentTouchPosSkip, false);
     }else{
         currentTouchPosSkip = 0;
+        resetSongSwipeTrack();
     }
-    // console.log("moved " + e.touches[0].clientX - offsetX);
 }
 
 // ----- SIDE PAGES CLOSE
@@ -2928,40 +3141,14 @@ document.addEventListener("touchend", () => {
         }
     }
     document.removeEventListener("touchmove", moveSideSkip);
-    if(bigSongBannerMoved){
-        movablePlayer.classList.remove("playerMovable");
-        if(currentTouchPosSkip > 130){
-            bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(200%)";
-            setTimeout(() => {
-                backwardBtn.click();
-                bigSongBanner.classList.add("playerMovable");
-                setTimeout(() => {
-                    bigSongBanner.style.transform = "translateX(-200%)";
-                    setTimeout(() => {
-                        bigSongBanner.classList.remove("playerMovable");
-                        bigSongBanner.style.transform = "translateX(0)";
-                    }, 10);
-                }, 10);
-            }, 350);
-        }
-        if(currentTouchPosSkip < -130){
-            bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(-200%)";
-            setTimeout(() => {
-                forwardBtn.click();
-                bigSongBanner.classList.add("playerMovable");
-                setTimeout(() => {
-                    bigSongBanner.style.transform = "translateX(200%)";
-                    setTimeout(() => {
-                        bigSongBanner.classList.remove("playerMovable");
-                        bigSongBanner.style.transform = "translateX(0)";
-                    }, 10);
-                }, 10);
-            }, 350);
-        }else if(currentTouchPosSkip <= 130){
-            bigSongBanner.classList.remove("playerMovable");
-            bigSongBanner.style.transform = "translateX(0)";
+    if(songSwipeState.isDragging && !playerMovedDown && !songSwipeState.isCommitting){
+        const cardWidth = songSwipeViewport?.getBoundingClientRect().width || window.innerWidth;
+        const threshold = cardWidth * 0.22;
+        if(Math.abs(currentTouchPosSkip) >= threshold){
+            completeSongSwipe(currentTouchPosSkip < 0 ? "next" : "previous");
+        }else{
+            setSongSwipeTrackPosition(0, true);
+            songSwipeState.isDragging = false;
         }
     }
     if(playerTouchStarted3){
@@ -2978,7 +3165,6 @@ document.addEventListener("touchend", () => {
         }
     }
     playerMovedDown = false;
-    bigSongBannerMoved = false;
     playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
@@ -3132,7 +3318,7 @@ function startPlayerPopupDrag(clientX, clientY){
     playerMoveFrame = null;
     playerTouchStarted2 = false;
     playerMovedDown = false;
-    bigSongBannerMoved = false;
+    resetSongSwipeTrack();
 
     playerPopupTouchStarted = true;
     moveStarted = false;

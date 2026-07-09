@@ -43,8 +43,6 @@
 
     --gmBackdrop: blur(20px) brightness(1.2);
     --gmBackdropPlayer: brightness(0.5) blur(50px) saturate(2.5);
-    --playerGradientBg: linear-gradient(160deg, rgb(28, 22, 37), rgb(13, 10, 18));
-
     --footerBg: rgba(26, 21, 34, 0.7);
     --footerBgHO: rgb(30, 27, 37);
 
@@ -55,6 +53,36 @@
     --bounceEase: cubic-bezier(0.2, 1.18, 0.32, 1);
     --softBounceEase: cubic-bezier(0.18, 1.06, 0.3, 1);
     --tapEase: cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+@property --playerGradientPrimary {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: rgb(28, 22, 37);
+}
+
+@property --playerGradientSecondary {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: rgb(57, 44, 74);
+}
+
+@property --playerGradientSoftBase {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: rgb(31, 24, 40);
+}
+
+@property --playerGradientGlowOne {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: rgb(46, 36, 59);
+}
+
+@property --playerGradientGlowTwo {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: rgb(66, 49, 88);
 }
 
 html{
@@ -2941,6 +2969,35 @@ a.toggleSection i{
     contain: layout paint;
 }
 
+.playerGradientLayers{
+    position: absolute;
+    inset: 0;
+    display: none;
+    overflow: hidden;
+    pointer-events: none;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    z-index: 0;
+}
+
+.playerGradientLayer{
+    position: absolute;
+    inset: 0;
+    opacity: 1;
+    background-color: var(--playerGradientPrimary);
+    background-image:
+        linear-gradient(180deg, rgba(8, 6, 12, 0.62) 0%, rgba(8, 6, 12, 0.38) 12%, rgba(8, 6, 12, 0) 28%),
+        radial-gradient(circle at 22% 8%, var(--playerGradientGlowOne) 0%, transparent 34%),
+        radial-gradient(circle at 82% 22%, var(--playerGradientGlowTwo) 0%, transparent 40%),
+        linear-gradient(165deg, var(--playerGradientPrimary) 0%, var(--playerGradientSecondary) 30%, var(--playerGradientSoftBase) 64%, rgb(18, 12, 22) 100%);
+    background-size: cover;
+    transition: --playerGradientPrimary 520ms ease-in-out, --playerGradientSecondary 520ms ease-in-out, --playerGradientSoftBase 520ms ease-in-out, --playerGradientGlowOne 520ms ease-in-out, --playerGradientGlowTwo 520ms ease-in-out;
+}
+
+.playerOpen .playerGradientLayers{
+    display: block;
+}
+
 .darkenPlayer{
     position: fixed;
     top: 0px;
@@ -3009,9 +3066,7 @@ a.toggleSection i{
     height: calc(100svh + 50px + env(safe-area-inset-bottom)) !important;
     height: calc(100dvh + 50px + env(safe-area-inset-bottom)) !important;
     padding-top: 50px;
-    background-color: var(--currentSongColorBig);
-    background-image: var(--playerGradientBg);
-    background-size: cover;
+    background-color: transparent;
     border-top: 1px solid #242027;
     overflow: hidden;
 }
@@ -3271,6 +3326,7 @@ a.toggleSection i{
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 1;
 }
 
 .bigSongInfo{
@@ -3285,61 +3341,81 @@ a.toggleSection i{
     transition: all .4s ease-in-out;
 }
 
-.bigSongInfo img{
-    width: min(87vw, 420px);
-    height: min(87vw, 420px);
+.songSwipeViewport{
+    width: min(87vw, calc(100vw - 60px), 420px);
+    height: min(87vw, calc(100vw - 60px), 420px);
     aspect-ratio: 1 / 1;
-    object-fit: cover;
+    position: relative;
+    overflow: hidden;
     border-radius: 24px;
+    margin-bottom: 2.5vh;
     box-shadow: 0px 0px 65px 5px rgba(0, 0, 0, 0.7);
     z-index: 0;
-    margin-bottom: 2.5vh;
-    transition: all .35s ease-in-out;
-    animation: popInBanner .45s ease-in-out;
 }
 
-#bigSongBanner{
-    width: min(87vw, calc(100vw - 60px), 420px) !important;
-    height: min(87vw, calc(100vw - 60px), 420px) !important;
+.songSwipeTrack{
+    display: flex;
+    width: 300%;
+    height: 100%;
+    transform: translate3d(-33.333333%, 0, 0);
+    will-change: transform;
+}
+
+.songSwipeTrack.songSwipeTrackAnimating{
+    transition: transform 280ms cubic-bezier(0.2, 0.78, 0.25, 1);
+}
+
+.songSwipeCard{
+    position: relative;
+    flex: 0 0 33.333333%;
+    width: 33.333333%;
+    height: 100%;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--currentSongColorBig) 55%, #17131c);
+}
+
+.songSwipeCard img{
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
     object-fit: cover !important;
     object-position: center;
-    border-radius: 24px !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    opacity: 0;
+    transform: scale(1.015);
+    transition: opacity 280ms ease-out, transform 420ms ease-out;
 }
 
-.bannerFromRight{
-    animation: bannerFromRight 0.5s ease-in-out;
+.songSwipeCard.songSwipeCardLoaded img{
+    opacity: 1;
+    transform: scale(1);
 }
 
-.bannerFromLeft{
-    animation: bannerFromLeft 0.5s ease-in-out;
-}
-
-@keyframes bannerFromRight {
-    from{
-        transform: translateX(100vw);
-    }
-    to{
-        transform: translateX(0);
-    }
-}
-
-@keyframes bannerFromLeft {
-    from{
-        transform: translateX(-100vw);
-    }
-    to{
-        transform: translateX(0);
-    }
-}
-
-.playerBannerAway{
+.songSwipePlaceholder{
     position: absolute;
-    transform: translateX(200%) !important;
+    inset: 0;
+    background:
+        radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.18), transparent 34%),
+        linear-gradient(115deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
+    background-size: 100% 100%, 210% 100%;
+    animation: songCoverLoading 1.05s ease-in-out infinite;
+    transition: opacity 220ms ease-out;
 }
 
-@keyframes popInBanner {
-    0%{ transform: translateX(200%); }
-    1000%{ transform: translateX(0%); }
+.songSwipeCard.songSwipeCardLoaded .songSwipePlaceholder{
+    opacity: 0;
+}
+
+.songSwipeCard.songSwipeCardEmpty .songSwipePlaceholder{
+    animation: none;
+    opacity: 0.38;
+}
+
+@keyframes songCoverLoading{
+    0%, 100%{ opacity: 0.55; background-position: 0 0, 110% 0; }
+    50%{ opacity: 1; background-position: 0 0, -20% 0; }
 }
 
 .playerMovable{
@@ -3365,11 +3441,7 @@ a.toggleSection i{
     .bigSongInfo{
         flex-direction: row;
     }
-    .bigSongInfo img{
-        width: 30% !important;
-        height: auto !important;
-    }
-    #bigSongBanner{
+    .songSwipeViewport{
         width: 30% !important;
         height: auto !important;
     }
@@ -3385,7 +3457,6 @@ a.toggleSection i{
     align-items: center;
     z-index: 3;
     transition: all .45s ease-in-out;
-    animation: popInBanner .45s ease-in-out;
 }
 
 .littleSongBtns{
@@ -4142,11 +4213,7 @@ nav button i{
     .playerOpen{
         height: calc(100svh);
     }
-    .bigSongInfo img{
-        width: 57.5vw !important;
-        height: 57.5vw !important;
-    }
-    #bigSongBanner{
+    .songSwipeViewport{
         width: 57.5vw !important;
         height: 57.5vw !important;
     }
@@ -4192,14 +4259,10 @@ nav button i{
 /* ----- MIN HEIGHT 570px ----- */
 
 @media screen and (max-height: 570px){
-    .bigSongInfo img{
+    .songSwipeViewport{
         width: 100%;
         height: auto;
         aspect-ratio: 1 / 1;
-    }
-    #bigSongBanner{
-        width: 100% !important;
-        height: auto !important;
     }
     .loginForm{
         margin-top: 10px;
