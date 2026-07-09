@@ -1684,6 +1684,7 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     }
 
     currentSongAudio.autoplay = true;
+    setPlayerProgressLoadingState();
     currentSongAudio.src = songURL;
     var playPromise = currentSongAudio.play();
 
@@ -1981,47 +1982,50 @@ function PlayRandomSongShuffle(){
     }
 }
 
-// Set the seekbar and times relative to the songs current time
-currentSongAudio.addEventListener('timeupdate', () =>{
-    let musicCurr = currentSongAudio.currentTime;
-    let musicDur = currentSongAudio.duration;
+function formatPlayerTime(seconds){
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    const minutes = Math.floor(safeSeconds / 60);
+    const remainder = String(safeSeconds % 60).padStart(2, "0");
+    return `${minutes}:${remainder}`;
+}
 
-    // End Time
-    let min = Math.floor(musicDur / 60);
-    let sec = Math.floor(musicDur % 60);
+function setPlayerProgressLoadingState(){
+    songTime.value = 0;
+    document.getElementById("miniSeekBar").style.width = "0%";
+    document.getElementById("currentSongTime").textContent = "0:00";
+    document.getElementById("currentSongTimeLeft").textContent = "--:--";
+}
 
-    if(sec<10){
-        sec = `0${sec}`;
+function syncPlayerProgress(){
+    const musicCurr = currentSongAudio.currentTime;
+    const musicDur = currentSongAudio.duration;
+    if(!Number.isFinite(musicDur) || musicDur <= 0 || !Number.isFinite(musicCurr)){
+        setPlayerProgressLoadingState();
+        return;
     }
-    
-    document.getElementById("currentSongTimeLeft").innerHTML = `${min}:${sec}`;
 
-    //Curr Time
-    let min2 = Math.floor(musicCurr / 60);
-    let sec2 = Math.floor(musicCurr % 60);
-
-    if(sec2<10){
-        sec2 = `0${sec2}`;
-    }
-
-    document.getElementById("currentSongTime").innerHTML = `${min2}:${sec2}`;
-
-    let progressBar = parseInt((currentSongAudio.currentTime/currentSongAudio.duration)*100);
+    const progressBar = Math.max(0, Math.min(100, (musicCurr / musicDur) * 100));
+    document.getElementById("currentSongTime").textContent = formatPlayerTime(musicCurr);
+    document.getElementById("currentSongTimeLeft").textContent = formatPlayerTime(musicDur);
     songTime.value = progressBar;
-
-    let miniSeekBar = document.getElementById("miniSeekBar");
-    miniSeekBar.style.width = progressBar + "%";
-
+    document.getElementById("miniSeekBar").style.width = `${progressBar}%`;
     setMediaSessionPosition();
+}
 
-});
+// Set the seekbar and times relative to the song's current time.
+currentSongAudio.addEventListener('timeupdate', syncPlayerProgress);
 
 currentSongAudio.addEventListener('loadedmetadata', () => {
+    syncPlayerProgress();
     renderSongQueue();
     setMediaSessionPosition();
 });
 
 songTime.addEventListener('change', ()=>{
+    if(!Number.isFinite(currentSongAudio.duration) || currentSongAudio.duration <= 0){
+        setPlayerProgressLoadingState();
+        return;
+    }
     var seekto = currentSongAudio.duration * (songTime.value / 100);
     currentSongAudio.currentTime = seekto;
     setMediaSessionPosition();
