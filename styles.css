@@ -5401,7 +5401,7 @@ body.authLocked .bodyHolder{
 .authFormFooter{
     position: absolute;
     left: 50%;
-    bottom: max(48px, calc(env(safe-area-inset-bottom) + 24px));
+    bottom: max(76px, calc(env(safe-area-inset-bottom) + 48px));
     width: min(292px, calc(100vw - 48px));
     display: flex;
     flex-direction: column;
@@ -5741,7 +5741,14 @@ body.authLocked .bodyHolder{
 
     .authFormFooter,
     .authWelcomeActions{
-        bottom: max(18px, env(safe-area-inset-bottom));
+        bottom: max(38px, calc(env(safe-area-inset-bottom) + 24px));
+    }
+}
+
+@media (min-height: 800px){
+    .authFormFooter,
+    .authWelcomeActions{
+        bottom: max(84px, calc(env(safe-area-inset-bottom) + 52px));
     }
 }
 
