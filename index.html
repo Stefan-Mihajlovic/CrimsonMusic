@@ -13,8 +13,8 @@
     <meta name="application-name" content="Crimson" />
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
-    <script src="js/index.js" defer></script>
-    <script src="js/indexController.js" type="module"></script>
+    <script src="js/index.js?v=20260710-context-menu" defer></script>
+    <script src="js/indexController.js?v=20260710-context-menu" type="module"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <script src="https://kit.fontawesome.com/1d408b5acd.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -637,6 +637,34 @@
                     <h5>Edit playlist</h5>
                 </li>
             </ul>
+            <ul class="publicPlaylistPopupBody">
+                <li class="popupItem" id="playContextPlaylistBtn">
+                    <i class="fa-solid fa-play"></i>
+                    <h5>Play playlist</h5>
+                </li>
+                <li class="popupItem" id="likeContextPlaylistBtn">
+                    <i class="fa-regular fa-heart"></i>
+                    <h5>Like playlist</h5>
+                </li>
+                <li class="popupItem" id="openContextPlaylistBtn">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <h5>Open playlist</h5>
+                </li>
+            </ul>
+            <ul class="artistPopupBody">
+                <li class="popupItem" id="playContextArtistBtn">
+                    <i class="fa-solid fa-play"></i>
+                    <h5>Play artist</h5>
+                </li>
+                <li class="popupItem" id="followContextArtistBtn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <h5>Follow artist</h5>
+                </li>
+                <li class="popupItem" id="openContextArtistBtn">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <h5>Open artist</h5>
+                </li>
+            </ul>
         </div>
         <div class="closePopup" onclick="closePopup()"></div>
     </div>
@@ -686,7 +714,7 @@
     </div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js?v=20260710-context-menu';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;

@@ -1061,6 +1061,13 @@ function renderSongQueue(){
     queueRows.forEach((song) => {
         const row = document.createElement("li");
         row.className = `queueSong queueSong-${song.state} playerPopupStaggerItem`;
+        row._crimsonContext = {
+            type: "song",
+            id: song.id,
+            name: song.title,
+            image: song.image,
+            creator: song.creator
+        };
         row.style.setProperty("--player-popup-item-index", queueList.children.length);
         row.innerHTML = `
             <div class="queueSongBanner">
@@ -1125,6 +1132,13 @@ async function loadRelatedSongs(){
         relatedSongs.forEach((song, index) => {
             const row = document.createElement("article");
             row.className = "queueSong relatedSong playerPopupStaggerItem";
+            row._crimsonContext = {
+                type: "song",
+                id: song.id,
+                name: song.title,
+                image: song.image,
+                creator: song.creator
+            };
             row.style.setProperty("--player-popup-item-index", index);
             row.innerHTML = `
                 <div class="queueSongBanner">
@@ -2393,6 +2407,7 @@ function changeMakePlaylistName(text){
 // ----- Close Popup
 
 let isPopupOpen = false;
+let currentPopupContext = null;
 
 function getCachedPopupLikeState(id){
     const likedSongs = window.crimsonLikedSongIds;
@@ -2422,18 +2437,141 @@ function setPopupLikeState(id, isLiked){
         : `<i class="fa-regular fa-heart"></i><h5>Add to favorites</h5>`;
 }
 
-function openPopup(type,src,art,nam,id,isLikedPage){
-    src = getCrimsonImageSrc(src, type === "playlist" ? "playlist" : "song");
+function showPopupBody(activeBody){
+    ["songPopupBody", "playlistPopupBody", "publicPlaylistPopupBody", "artistPopupBody"].forEach((className) => {
+        const body = document.getElementsByClassName(className)[0];
+        if(body){
+            body.style.display = className === activeBody ? "block" : "none";
+        }
+    });
+}
+
+function setContextPlaylistLikeState(isLiked){
+    const button = document.getElementById("likeContextPlaylistBtn");
+    if(!button){
+        return;
+    }
+    button.classList.toggle("popupItemLoading", isLiked === null);
+    button.innerHTML = isLiked === null
+        ? `<i class="fa-regular fa-heart"></i><h5>Checking library...</h5>`
+        : isLiked
+            ? `<i class="fa-solid fa-heart"></i><h5>Unlike playlist</h5>`
+            : `<i class="fa-regular fa-heart"></i><h5>Like playlist</h5>`;
+}
+
+function setContextArtistFollowState(isFollowed){
+    const button = document.getElementById("followContextArtistBtn");
+    if(!button){
+        return;
+    }
+    button.classList.toggle("popupItemLoading", isFollowed === null);
+    button.innerHTML = isFollowed === null
+        ? `<i class="fa-solid fa-user-plus"></i><h5>Checking follow status...</h5>`
+        : isFollowed
+            ? `<i class="fa-solid fa-user-minus"></i><h5>Unfollow artist</h5>`
+            : `<i class="fa-solid fa-user-plus"></i><h5>Follow artist</h5>`;
+}
+
+function configurePlaylistContextPopup(context){
+    const playButton = document.getElementById("playContextPlaylistBtn");
+    const likeButton = document.getElementById("likeContextPlaylistBtn");
+    const openButton = document.getElementById("openContextPlaylistBtn");
+
+    playButton.innerHTML = context.vault
+        ? `<i class="fa-solid fa-play"></i><h5>Play The Vault</h5>`
+        : context.category
+            ? `<i class="fa-solid fa-play"></i><h5>Play category</h5>`
+            : `<i class="fa-solid fa-play"></i><h5>Play playlist</h5>`;
+    openButton.innerHTML = context.vault
+        ? `<i class="fa-solid fa-arrow-up-right-from-square"></i><h5>Open The Vault</h5>`
+        : context.category
+            ? `<i class="fa-solid fa-arrow-up-right-from-square"></i><h5>Open category</h5>`
+            : `<i class="fa-solid fa-arrow-up-right-from-square"></i><h5>Open playlist</h5>`;
+    playButton.onclick = () => {
+        if(context.vault){
+            window.vaultEmotionLoad?.(context.mood);
+        }else if(context.category){
+            window.crimsonPlayCategoryFromContext?.(context);
+        }else{
+            window.crimsonPlayPlaylistFromContext?.(context);
+        }
+        closePopup();
+    };
+    openButton.onclick = () => {
+        closePopup();
+        if(context.vault){
+            window.openTheVault?.();
+        }else if(context.category){
+            window.openCategoryPage?.(context.name, context.color, context.image);
+        }else if(context.favorites){
+            if(window.UserSignedIn?.()){
+                window.openLikedSongs?.();
+            }else{
+                openLoginPopup();
+            }
+        }else{
+            window.openPlaylistPage?.(context.id, context.name, context.image, context.likes, context.songs || "");
+        }
+    };
+
+    likeButton.style.display = context.favorites || context.vault || context.category ? "none" : "flex";
+    if(!context.favorites && !context.vault && !context.category){
+        setContextPlaylistLikeState(null);
+        const requestedId = String(context.id);
+        Promise.resolve(window.crimsonIsPlaylistLiked?.(context.id)).then((isLiked) => {
+            if(currentPopupContext?.type === "publicPlaylist" && String(currentPopupContext.id) === requestedId){
+                setContextPlaylistLikeState(isLiked);
+            }
+        });
+        likeButton.onclick = () => {
+            window.crimsonTogglePlaylistLike?.(context.id);
+            closePopup();
+        };
+    }
+}
+
+function configureArtistContextPopup(context){
+    const playButton = document.getElementById("playContextArtistBtn");
+    const followButton = document.getElementById("followContextArtistBtn");
+    const openButton = document.getElementById("openContextArtistBtn");
+
+    playButton.onclick = () => {
+        window.crimsonPlayArtistFromContext?.(context);
+        closePopup();
+    };
+    openButton.onclick = () => {
+        closePopup();
+        window.openArtistPage?.(context.id, context.name, context.image, context.followers, context.listens, context.aboutImage);
+    };
+    followButton.onclick = () => {
+        window.crimsonToggleArtistFollow?.(context.id);
+        closePopup();
+    };
+
+    setContextArtistFollowState(null);
+    const requestedId = String(context.id);
+    Promise.resolve(window.crimsonIsArtistFollowed?.(context.id)).then((isFollowed) => {
+        if(currentPopupContext?.type === "artist" && String(currentPopupContext.id) === requestedId){
+            setContextArtistFollowState(isFollowed);
+        }
+    });
+}
+
+function openPopup(type,src,art,nam,id,isLikedPage,contextData){
+    const isPlaylistContext = type === "playlist" || type === "publicPlaylist" || type === "libraryPlaylist" || type === "vaultPlaylist" || type === "category";
+    src = getCrimsonImageSrc(src, isPlaylistContext ? "playlist" : type === "artist" ? "artist" : "song");
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.add("popupOpen");
+    popupWrapper.classList.toggle("artistContextPopup", type === "artist");
 
     popupWrapper.focus();
     isPopupOpen = true;
+    currentPopupContext = contextData || {type, id, name: nam, image: src, creator: art};
 
-    getArtistId(art.split(',')[0]);
+    if(type === "song"){
+        getArtistId(art.split(',')[0]);
+    }
 
-    const songPopupBody = document.getElementsByClassName("songPopupBody")[0];
-    const playlistPopupBody = document.getElementsByClassName("playlistPopupBody")[0];
     const likeSongBtn = document.getElementById("likeSongBtn");
 
     const popupImages = document.getElementsByName("popupImage");
@@ -2471,15 +2609,18 @@ function openPopup(type,src,art,nam,id,isLikedPage){
     })
 
     if(type === 'song'){
-        songPopupBody.style.display = "block";
-        playlistPopupBody.style.display = "none";
+        showPopupBody("songPopupBody");
         setPopupLikeState(id, getCachedPopupLikeState(id));
+        seeIfSongIsLiked(id);
+    }else if(type === "playlist"){
+        showPopupBody("playlistPopupBody");
+    }else if(type === "artist"){
+        showPopupBody("artistPopupBody");
+        configureArtistContextPopup(currentPopupContext);
     }else{
-        songPopupBody.style.display = "none";
-        playlistPopupBody.style.display = "block";
+        showPopupBody("publicPlaylistPopupBody");
+        configurePlaylistContextPopup(currentPopupContext);
     }
-
-    seeIfSongIsLiked(id);
 
     likeSongBtn.onclick = () => {
         if(UserSignedIn()){
@@ -2497,14 +2638,157 @@ function openPopup(type,src,art,nam,id,isLikedPage){
 function closePopup(){
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.remove("popupOpen");
+    popupWrapper.classList.remove("artistContextPopup");
 
     isPopupOpen = false;
+    currentPopupContext = null;
 
     const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
     popupScreen.classList.remove('popupPl');
     popupMyPlaylists.innerHTML = "";
     addToPlBtn.onclick = addToPlFunc;
 }
+
+function getItemContext(item){
+    if(item?._crimsonContext){
+        return item._crimsonContext;
+    }
+
+    const encodedContext = item?.getAttribute("data-crimson-context");
+    if(!encodedContext){
+        return null;
+    }
+
+    try{
+        return JSON.parse(decodeURIComponent(encodedContext));
+    }catch(error){
+        return null;
+    }
+}
+
+function openItemContextMenu(item){
+    const context = getItemContext(item);
+    if(context?.type === "song"){
+        openPopup("song", context.image, context.creator, context.name, context.id, false, context);
+        return true;
+    }
+    if(context?.type === "artist"){
+        openPopup("artist", context.image, "Artist", context.name, context.id, false, context);
+        return true;
+    }
+    if(context?.type === "publicPlaylist" || context?.type === "libraryPlaylist" || context?.type === "vaultPlaylist" || context?.type === "category"){
+        openPopup(context.type, context.image, context.artists || "Playlist", context.name, context.id, false, context);
+        return true;
+    }
+
+    const existingMenuButton = item?.querySelector(".songBtns button");
+    if(existingMenuButton){
+        existingMenuButton.click();
+        return true;
+    }
+    return false;
+}
+
+const crimsonLongPress = {
+    timer: null,
+    item: null,
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    suppressItem: null,
+    suppressUntil: 0
+};
+
+const vaultContextItem = document.querySelector(".vaultPlItem");
+if(vaultContextItem){
+    vaultContextItem._crimsonContext = {
+        type: "vaultPlaylist",
+        id: "Party",
+        name: "The Vault",
+        image: "images/VaultBanner.gif",
+        artists: "Mood mix",
+        mood: "Party",
+        vault: true
+    };
+}
+
+function clearCrimsonLongPress(){
+    clearTimeout(crimsonLongPress.timer);
+    crimsonLongPress.timer = null;
+    crimsonLongPress.item?.classList.remove("crimsonContextPressing");
+}
+
+function findContextItem(target){
+    const item = target?.closest?.("[data-crimson-context], .songItem, .queueSong, .playlistItem");
+    const interactiveTarget = target?.closest?.("button, a, input, textarea, select, label");
+    if(!item || item.closest("#popupWrapper") || (interactiveTarget && interactiveTarget !== item)){
+        return null;
+    }
+    if(!getItemContext(item) && !item.querySelector(".songBtns button")){
+        return null;
+    }
+    return item;
+}
+
+document.addEventListener("pointerdown", (event) => {
+    if(!event.isPrimary || event.button !== 0 || isPopupOpen){
+        return;
+    }
+
+    const item = findContextItem(event.target);
+    if(!item){
+        return;
+    }
+
+    clearCrimsonLongPress();
+    crimsonLongPress.item = item;
+    crimsonLongPress.pointerId = event.pointerId;
+    crimsonLongPress.startX = event.clientX;
+    crimsonLongPress.startY = event.clientY;
+    item.classList.add("crimsonContextPressing");
+    crimsonLongPress.timer = setTimeout(() => {
+        if(openItemContextMenu(item)){
+            crimsonLongPress.suppressItem = item;
+            crimsonLongPress.suppressUntil = performance.now() + 850;
+            item.classList.remove("crimsonContextPressing");
+            navigator.vibrate?.(24);
+        }
+    }, 520);
+}, true);
+
+document.addEventListener("pointermove", (event) => {
+    if(event.pointerId !== crimsonLongPress.pointerId || !crimsonLongPress.timer){
+        return;
+    }
+    if(Math.hypot(event.clientX - crimsonLongPress.startX, event.clientY - crimsonLongPress.startY) > 12){
+        clearCrimsonLongPress();
+    }
+}, true);
+
+["pointerup", "pointercancel"].forEach((eventName) => {
+    document.addEventListener(eventName, (event) => {
+        if(event.pointerId === crimsonLongPress.pointerId){
+            clearCrimsonLongPress();
+            crimsonLongPress.pointerId = null;
+        }
+    }, true);
+});
+
+document.addEventListener("scroll", clearCrimsonLongPress, true);
+
+document.addEventListener("click", (event) => {
+    if(crimsonLongPress.suppressItem && performance.now() < crimsonLongPress.suppressUntil && crimsonLongPress.suppressItem.contains(event.target)){
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    }
+}, true);
+
+document.addEventListener("contextmenu", (event) => {
+    const item = findContextItem(event.target);
+    if(item && openItemContextMenu(item)){
+        event.preventDefault();
+    }
+});
 
 // ----- SET APP THEME
 

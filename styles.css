@@ -2902,6 +2902,25 @@ a.toggleSection i{
 
 /* ----- POPUP ----- */
 
+.publicPlaylistPopupBody,
+.artistPopupBody{
+    display: none;
+}
+
+.artistContextPopup .popupInfo img{
+    border-radius: 50%;
+}
+
+[data-crimson-context],
+.songItem,
+.queueSong{
+    -webkit-touch-callout: none;
+}
+
+.crimsonContextPressing{
+    filter: brightness(.8);
+}
+
 #popupWrapper{
     top: 0px;
     height: 100vh;

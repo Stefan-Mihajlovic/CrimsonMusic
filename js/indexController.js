@@ -53,6 +53,10 @@ function getCategoryImage(record, size = "large"){
     return getRecordImage(record, "Banner", size, "images/defaultPlaylist.webp");
 }
 
+function encodeContextPayload(payload){
+    return encodeURIComponent(JSON.stringify(payload));
+}
+
 window.crimsonGetSongById = async function(songId){
     const dbRef = ref(realdb);
     const snapshot = await get(child(dbRef, "Songs/"+songId));
@@ -125,6 +129,60 @@ window.crimsonGetRelatedSongs = async function(currentSong, limit = 8){
 
     relatedSongCache.set(currentId, request);
     return request;
+}
+
+async function playSongFromContext(songId, sourceName){
+    const song = await window.crimsonGetSongById(songId);
+    if(!song || typeof window.playerSelectedSong !== "function"){
+        return false;
+    }
+
+    window.playerSelectedSong(
+        song.songURL,
+        song.title,
+        song.creator,
+        song.image,
+        song.color,
+        sourceName,
+        0,
+        String(songId)
+    );
+    return true;
+}
+
+window.crimsonPlayPlaylistFromContext = async function(context){
+    if(context?.favorites){
+        if(currentUser == undefined){
+            openLoginPopup();
+            return false;
+        }
+        const snapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+        const firstLikedSong = String(snapshot.val()?.LikedSongs || "").split(',').filter(Boolean).reverse()[0];
+        return firstLikedSong ? playSongFromContext(firstLikedSong, "Favorites") : false;
+    }
+
+    const firstSong = String(context?.songs || "").split(',').find(Boolean);
+    return firstSong ? playSongFromContext(firstSong, context?.name || "Playlist") : false;
+}
+
+window.crimsonPlayArtistFromContext = async function(context){
+    const snapshot = await get(child(ref(realdb), "Songs"));
+    const artistName = String(context?.name || "").toLowerCase();
+    const match = Object.entries(snapshot.val() || {}).find(([, song]) =>
+        String(song?.Creator || "").toLowerCase().includes(artistName)
+    );
+
+    return match ? playSongFromContext(match[0], context?.name || "Artist") : false;
+}
+
+window.crimsonPlayCategoryFromContext = async function(context){
+    const snapshot = await get(child(ref(realdb), "Songs"));
+    const categoryName = String(context?.name || "").toLowerCase();
+    const match = Object.entries(snapshot.val() || {}).find(([, song]) =>
+        String(song?.Categories || "").toLowerCase().includes(categoryName)
+    );
+
+    return match ? playSongFromContext(match[0], context?.name || "Category") : false;
 }
 
 window.crimsonLoadLyricsIntoPlayerPopup = async function(songId){
@@ -663,7 +721,7 @@ function GetArtists(artistName){
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
             artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
-            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" data-crimson-context="${encodeContextPayload({type: "artist", id: name, name: artistName, image: artistImage, imageSmall: artistImageSmall, followers: artistFollowers, listens: artistListens, aboutImage: artistAboutImage})}" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
             <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImageSmall +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
@@ -709,13 +767,13 @@ function GetPlaylists(playlistName){
             playlistOwners = snapshot.val().Owners;
 
             if(playlistOwners != "..Crimson.."){
-                currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                currentLi =  `<li class="playlistItem" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: name, name: playlistName, image: playlistBanner, imageSmall: playlistBannerSmall, likes: playlistLikes, songs: playlistSongs || "", artists: playlistArtists || ""})}" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                     <h3>`+ playlistName +`</h3>
                     <h5>`+ playlistArtists +`</h5>
                 </li>`;
             }else{
-                currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                currentLi =  `<li class="playlistItem" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: name, name: playlistName, image: playlistBanner, imageSmall: playlistBannerSmall, likes: playlistLikes, songs: playlistSongs || "", artists: playlistArtists || ""})}" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div>
                         <img onload="buttonClickAnim(this.parentElement.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                         <img class="crimsonPlaylistTag" src="../images/CrimsonLogo.png" alt="Crimson Tag"></img>
@@ -845,7 +903,7 @@ function findSearchedArtist(artistName, inputText){
                 artistFollowers = snapshot.val().Followers;
                 artistListens = snapshot.val().Listens;
                 artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
-                let currentLi = `<li class="artistItemSearch" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`'); clickEffect(this);">
+                let currentLi = `<li class="artistItemSearch" data-crimson-context="${encodeContextPayload({type: "artist", id: name, name: artistName, image: artistImage, imageSmall: artistImageSmall, followers: artistFollowers, listens: artistListens, aboutImage: artistAboutImage})}" onclick="clickEffect(this); openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`'); clickEffect(this);">
                                     <div>
                                         <img  src="`+ artistImageSmall +`" alt="artistImage">
                                         <h3>`+ artistName +`</h3>
@@ -872,7 +930,7 @@ function findSearchedPlaylist(playlistName, inputText){
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
-                let currentLi =  `<li class="playlistItemSearch" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                let currentLi =  `<li class="playlistItemSearch" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: name, name: playlistName, image: playlistBanner, imageSmall: playlistBannerSmall, likes: playlistLikes, songs: playlistSongs || "", artists: playlistArtists || ""})}" onclick="clickEffect(this); openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                     <div class="playlistItemHolder">
                         <img  src="`+ playlistBannerSmall +`" alt="playlistBanner">
                         <div>
@@ -900,7 +958,7 @@ function renderCategoryCard(record){
     const categoryName = record.Name || "Category";
     const categoryColor = record.Color || "#3c2368";
     const categoryBanner = getCategoryImage(record, "large");
-    return `<button class="catItem" type="button" style="--category-color: ${categoryColor}" onclick="clickEffect(this); openCategoryPage('${categoryName}', '${categoryColor}', '${categoryBanner}')">
+    return `<button class="catItem" type="button" data-crimson-context="${encodeContextPayload({type: "category", name: categoryName, color: categoryColor, image: categoryBanner, category: true})}" style="--category-color: ${categoryColor}" onclick="clickEffect(this); openCategoryPage('${categoryName}', '${categoryColor}', '${categoryBanner}')">
         <img class="categoryArtwork" src="${categoryBanner}" alt="" loading="lazy">
         <span class="categoryTint"></span>
         <h3>${categoryName}</h3>
@@ -1015,7 +1073,7 @@ function findPlaylistOfCategory(playlistName, inputText){
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
                 playlistArtists = snapshot.val().Artists;
-                let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                let currentLi =  `<li class="playlistItem" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: name, name: playlistName, image: playlistBanner, imageSmall: playlistBannerSmall, likes: playlistLikes, songs: playlistSongs || "", artists: playlistArtists || ""})}" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                 <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
@@ -1310,6 +1368,26 @@ function followArtist(artistId){
     }
 }
 
+window.crimsonIsArtistFollowed = async function(artistId){
+    if(currentUser == undefined){
+        return false;
+    }
+
+    const snapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+    const followedArtists = String(snapshot.val()?.FollowedArtists || "").split(',');
+    return followedArtists.includes(String(artistId));
+}
+
+window.crimsonToggleArtistFollow = function(artistId){
+    if(currentUser == undefined){
+        openLoginPopup();
+        return false;
+    }
+
+    followArtist(artistId);
+    return true;
+}
+
 function SetTheLatestRelease(artist){
     let latestReleaseLi = "";
     let dbRef = ref(realdb);
@@ -1371,7 +1449,7 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
             playlistBannerSmall = getPlaylistImage(snapshot.val(), "small");
                 playlistLikes = snapshot.val().Likes;
                 playlistSongs = snapshot.val().Songs;
-                let currentLi =  `<li class="playlistItem" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
+                let currentLi =  `<li class="playlistItem" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: name, name: playlistName, image: playlistBanner, imageSmall: playlistBannerSmall, likes: playlistLikes, songs: playlistSongs || "", artists: playlistArtists || ""})}" onclick="openPlaylistPage(`+ name +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');">
                 <img onload="buttonClickAnim(this.parentElement)" src="`+ playlistBannerSmall +`" alt="playlistBanner">
                 <h3>`+ playlistName +`</h3>
                 <h5>`+ playlistArtists +`</h5>
@@ -1663,6 +1741,21 @@ function IsPPlaylistLiked(id){
     }
 }
 
+window.crimsonIsPlaylistLiked = async function(playlistId){
+    if(currentUser == undefined){
+        return false;
+    }
+
+    const snapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+    const likedPlaylists = String(snapshot.val()?.LikedPlaylists || "").split(',');
+    return likedPlaylists.includes(String(playlistId));
+}
+
+window.crimsonTogglePlaylistLike = function(playlistId){
+    likePlaylistBtn.setAttribute('name', String(playlistId));
+    likePlaylistBtn.click();
+}
+
 // ----- THE VAULT
 
 let vaultSongArray = [];
@@ -1931,7 +2024,7 @@ let yourFArtists = document.getElementsByClassName("yourFArtists")[0];
 let yourLPlaylists = document.getElementsByClassName('yourLPlaylists')[0];
 
 function LoadUserPlaylists(){
-    yourPlaylists.innerHTML = `<li class="songItem favoritesLibraryItem" onclick="openLikedSongs();">
+    yourPlaylists.innerHTML = `<li class="songItem favoritesLibraryItem" data-crimson-context="${encodeContextPayload({type: "libraryPlaylist", id: 0, name: "Favorites", image: "images/favoritesPlaylistPage.gif", artists: "Simply yours", favorites: true})}" onclick="openLikedSongs();">
         <div class="songInfo">
             <img src="images/favorites.jpg" alt="playlistBanner">
             <div class="songText">
@@ -2018,7 +2111,7 @@ function GetArtists2(artistName){
             artistFollowers = snapshot.val().Followers;
             artistListens = snapshot.val().Listens;
             artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
-            let currentImg =  `<li id="song`+ name +`" class="artistItem" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
+            let currentImg =  `<li id="song`+ name +`" class="artistItem" data-crimson-context="${encodeContextPayload({type: "artist", id: name, name: artistName, image: artistImage, imageSmall: artistImageSmall, followers: artistFollowers, listens: artistListens, aboutImage: artistAboutImage})}" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
             <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImageSmall +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
@@ -2116,7 +2209,7 @@ function LoadLikedPlaylists(){
                         let playlistSongs = snapshot.val().Songs;
                         let playlistArtists = snapshot.val().Artists;
 
-                        let currentLi =  `<li class="songItem" id="`+ usersLikedPlaylists[i] +`">
+                        let currentLi =  `<li class="songItem" id="`+ usersLikedPlaylists[i] +`" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: usersLikedPlaylists[i], name: playlistName, image: playlistBanner, imageSmall: playlistBannerSmall, likes: playlistLikes, songs: playlistSongs || "", artists: playlistArtists || ""})}">
                             <div class="songInfo">
                                 <img  src="`+ playlistBannerSmall +`" alt="playlistBanner">
                                 <div class="songText">
@@ -2724,6 +2817,16 @@ function generateThisMonthsFeature(){
                     document.querySelector('.thisMFDiv').addEventListener('click', () => {
                         openArtistPage(setArtistId, artistName, artistImage, artistFollowers, artistListens , artistAboutImage);
                     })
+                    document.querySelector('.thisMFDiv').setAttribute('data-crimson-context', encodeContextPayload({
+                        type: "artist",
+                        id: setArtistId,
+                        name: artistName,
+                        image: artistImage,
+                        imageSmall: artistImageSmall,
+                        followers: artistFollowers,
+                        listens: artistListens,
+                        aboutImage: artistAboutImage
+                    }));
 
                     document.getElementById('artistMFBanner').src = artistImage;
                     document.getElementById('MFArtistInfo').innerHTML += `
