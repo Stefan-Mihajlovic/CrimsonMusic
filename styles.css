@@ -2942,6 +2942,10 @@ a.toggleSection i{
     pointer-events: all !important;
 }
 
+.popupOpen.popupAwaitingRelease{
+    pointer-events: none !important;
+}
+
 .closePopup{
     position: fixed;
     top: 0;

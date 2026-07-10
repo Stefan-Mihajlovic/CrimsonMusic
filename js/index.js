@@ -2639,6 +2639,7 @@ function closePopup(){
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.remove("popupOpen");
     popupWrapper.classList.remove("artistContextPopup");
+    popupWrapper.classList.remove("popupAwaitingRelease");
 
     isPopupOpen = false;
     currentPopupContext = null;
@@ -2695,7 +2696,7 @@ const crimsonLongPress = {
     pointerId: null,
     startX: 0,
     startY: 0,
-    suppressItem: null,
+    openedPopup: false,
     suppressUntil: 0
 };
 
@@ -2745,11 +2746,12 @@ document.addEventListener("pointerdown", (event) => {
     crimsonLongPress.pointerId = event.pointerId;
     crimsonLongPress.startX = event.clientX;
     crimsonLongPress.startY = event.clientY;
+    crimsonLongPress.openedPopup = false;
     item.classList.add("crimsonContextPressing");
     crimsonLongPress.timer = setTimeout(() => {
         if(openItemContextMenu(item)){
-            crimsonLongPress.suppressItem = item;
-            crimsonLongPress.suppressUntil = performance.now() + 850;
+            crimsonLongPress.openedPopup = true;
+            document.getElementById("popupWrapper")?.classList.add("popupAwaitingRelease");
             item.classList.remove("crimsonContextPressing");
             navigator.vibrate?.(24);
         }
@@ -2768,8 +2770,21 @@ document.addEventListener("pointermove", (event) => {
 ["pointerup", "pointercancel"].forEach((eventName) => {
     document.addEventListener(eventName, (event) => {
         if(event.pointerId === crimsonLongPress.pointerId){
+            const openedPopup = crimsonLongPress.openedPopup;
             clearCrimsonLongPress();
             crimsonLongPress.pointerId = null;
+            crimsonLongPress.openedPopup = false;
+
+            if(openedPopup){
+                crimsonLongPress.suppressUntil = performance.now() + 350;
+                if(eventName === "pointerup"){
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                }
+                setTimeout(() => {
+                    document.getElementById("popupWrapper")?.classList.remove("popupAwaitingRelease");
+                }, 80);
+            }
         }
     }, true);
 });
@@ -2777,7 +2792,7 @@ document.addEventListener("pointermove", (event) => {
 document.addEventListener("scroll", clearCrimsonLongPress, true);
 
 document.addEventListener("click", (event) => {
-    if(crimsonLongPress.suppressItem && performance.now() < crimsonLongPress.suppressUntil && crimsonLongPress.suppressItem.contains(event.target)){
+    if(performance.now() < crimsonLongPress.suppressUntil){
         event.preventDefault();
         event.stopImmediatePropagation();
     }
