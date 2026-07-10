@@ -4,7 +4,7 @@ setHomeScreen();
 let regexp = /android|iphone|kindle|ipad/i;
 let isMobileDevice = regexp.test(navigator.userAgent);
 
-if (!isMobileDevice) {
+if (!isMobileDevice && window.innerWidth > 760 && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
     window.location.href = `https://crimsonmusicpc.netlify.app/`;
 }
 
@@ -279,7 +279,7 @@ function updateSearchCategoryParallax(){
             return;
         }
         const cardCenter = cardRect.top + cardRect.height * 0.5;
-        const offset = Math.max(-8, Math.min(8, (viewportCenter - cardCenter) * 0.035));
+        const offset = Math.max(-18, Math.min(18, (viewportCenter - cardCenter) * 0.07));
         artwork.style.setProperty("--category-parallax", `${offset.toFixed(2)}px`);
     });
 }
@@ -1414,6 +1414,7 @@ function setLoggedInScreen(){
     document.getElementsByClassName("loginCrimsonLogo")[0].style.display = "none";
     document.getElementsByClassName("loggedInScreen")[0].style.display = "flex";
     document.getElementsByName("regLogTitle")[0].innerHTML = "Settings";
+    window.setAuthGatewayVisible?.(false);
 
 }
 
@@ -1421,6 +1422,7 @@ function setLoggedOutScreen(){
     document.getElementsByClassName("loginForm")[0].style.display = "flex";
     document.getElementsByClassName("loggedInScreen")[0].style.display = "none";
     document.getElementsByName("regLogTitle")[0].innerHTML = "Register";
+    window.setAuthGatewayVisible?.(true, 'welcome');
 }
 
 /* ----- PLAYER ----- */
@@ -2252,9 +2254,11 @@ screenScrollables.forEach((screen) => {
 
         if(!reduceAnimations){
             if(screen.id != "screenScrollableCat"){
+                const isPlaylistDetail = !!screen.closest(".playlistScreen");
+                const baseHeroHeight = isPlaylistDetail ? 400 : 500;
                 if(screen.scrollTop < 0){
                     screen.children[2].children[0].classList.add('noAnimTransitions');
-                    let newHeight = Number(-screen.scrollTop) + (500 + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
+                    let newHeight = Number(-screen.scrollTop) + (baseHeroHeight + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
                     screen.children[2].children[0].style.height = `${newHeight}px`;
                     if(screen.scrollTop > -120){
                         screen.children[2].children[1].style.opacity = 1;
@@ -2264,7 +2268,7 @@ screenScrollables.forEach((screen) => {
                 }else{
                     screen.children[2].children[1].style.opacity = 1;
                     screen.children[2].children[0].classList.remove('noAnimTransitions');
-                    screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + 500px)`;
+                    screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + ${baseHeroHeight}px)`;
                 }
 
                 if(screen.scrollTop > 150){
@@ -2276,15 +2280,23 @@ screenScrollables.forEach((screen) => {
                     screen.children[2].children[0].style.opacity = 1;
                 }
             }else{
-                if(screen.scrollTop > 130){
-                    let curOp = 1 - (screen.scrollTop/125 - 1);
-                    screen.children[3].children[0].style.opacity = curOp;
-                }else{
-                    screen.children[3].children[0].style.opacity = 1;
+                const categoryHero = screen.querySelector(".categoryHero");
+                const categoryHeroContent = screen.querySelector(".categoryHeroContent");
+                const categoryBanner = screen.querySelector(".catBanner");
+                const fadeProgress = Math.max(0, Math.min(1, (screen.scrollTop - 70) / 150));
+                if(categoryHeroContent){
+                    categoryHeroContent.style.opacity = 1 - fadeProgress;
+                    categoryHeroContent.style.transform = `translateY(${-screen.scrollTop * .08}px)`;
                 }
+                if(categoryBanner){
+                    categoryBanner.classList.add("noAnimTransitions");
+                    categoryBanner.style.transform = `translateY(${screen.scrollTop * .24}px) scale(1.08)`;
+                }
+                categoryHero?.style.setProperty("--category-scroll", `${screen.scrollTop}px`);
             }
     
-            if(screen.scrollTop > 268){
+            const pageBarThreshold = screen.id === "screenScrollableCat" ? 145 : 268;
+            if(screen.scrollTop > pageBarThreshold){
                 screen.children[0].classList.add("pageBarOn");
                 screen.children[1].classList.add("pageBarOn2");
             }else{
@@ -2295,12 +2307,10 @@ screenScrollables.forEach((screen) => {
             if(screen.id != "screenScrollableCat"){
                 screen.children[2].children[0].classList.add('noAnimTransitions');
                 screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
-            }else{
-                screen.children[3].children[0].classList.add('noAnimTransitions');
-                screen.children[3].children[0].style.transform = "translateY(-"+ screen.scrollTop / 4 +"px)";
             }
         }else{
-            if(screen.scrollTop > 250){
+            const pageBarThreshold = screen.id === "screenScrollableCat" ? 145 : 250;
+            if(screen.scrollTop > pageBarThreshold){
                 screen.children[0].classList.add("pageBarOn");
                 screen.children[1].classList.add("pageBarOn2");
             }else{
@@ -3431,7 +3441,9 @@ const moveSide6 = (e) =>{
     moveStarted = true;
     // Update div pos based on new cursor pos
     bugReportScreen.style.left = `${e.touches[0].clientX - offsetX}px`;
-    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    if(bugReportScreen.dataset.openedFromSettings !== 'true'){
+        document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    }
     // console.log("moved " + e.touches[0].clientX - offsetX);
 }
 
@@ -3982,10 +3994,54 @@ function resetSearchScreenToNormal(){
 
 const libraryViewToggle = document.getElementById("libraryViewToggle");
 
-function setLibraryView(view, savePreference = true){
+function getLibraryLayoutElements(libraryScreen){
+    return Array.from(libraryScreen?.querySelectorAll(
+        ".yourPlaylistsH1, .yourPlaylists > li, .yourLPlaylistsH1, .yourLPlaylists > li, .yourFArtistsH1, .yourFArtists"
+    ) || []).filter((element) => !element.classList.contains("displayNone"));
+}
+
+function animateLibraryLayoutChange(libraryScreen, firstRects){
+    const elements = getLibraryLayoutElements(libraryScreen);
+    libraryScreen.classList.add("libraryLayoutAnimating");
+    elements.forEach((element) => {
+        const first = firstRects.get(element);
+        if(!first){
+            return;
+        }
+        const last = element.getBoundingClientRect();
+        const deltaX = first.left - last.left;
+        const deltaY = first.top - last.top;
+        const scaleX = first.width && last.width ? first.width / last.width : 1;
+        const scaleY = first.height && last.height ? first.height / last.height : 1;
+        if(Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1 && Math.abs(scaleX - 1) < .01 && Math.abs(scaleY - 1) < .01){
+            return;
+        }
+        element.getAnimations?.().forEach((animation) => animation.cancel());
+        element.animate([
+            {transform: `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`, opacity: .78},
+            {transform: "translate(0, 0) scale(1, 1)", opacity: 1}
+        ], {
+            duration: 390,
+            easing: "cubic-bezier(.2, .82, .22, 1)",
+            fill: "both"
+        });
+    });
+    setTimeout(() => libraryScreen.classList.remove("libraryLayoutAnimating"), 410);
+}
+
+function setLibraryView(view, savePreference = true, animateChange = true){
     const isGrid = view === "grid";
     const libraryScreen = document.querySelector(".yoursScreen");
+    const shouldAnimate = animateChange && libraryScreen && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const firstRects = new Map();
+    if(shouldAnimate){
+        getLibraryLayoutElements(libraryScreen).forEach((element) => firstRects.set(element, element.getBoundingClientRect()));
+    }
     libraryScreen?.classList.toggle("libraryGridView", isGrid);
+    if(shouldAnimate){
+        void libraryScreen.offsetWidth;
+        animateLibraryLayoutChange(libraryScreen, firstRects);
+    }
 
     if(libraryViewToggle){
         const label = isGrid ? "Switch to column view" : "Switch to grid view";
@@ -4009,14 +4065,27 @@ if(libraryViewToggle){
         savedLibraryView = localStorage.getItem("crimsonLibraryView") || "columns";
     }catch(error){}
 
-    setLibraryView(savedLibraryView, false);
+    setLibraryView(savedLibraryView, false, false);
     libraryViewToggle.addEventListener("click", () => {
         const isGrid = document.querySelector(".yoursScreen")?.classList.contains("libraryGridView");
-        setLibraryView(isGrid ? "columns" : "grid");
+        setLibraryView(isGrid ? "columns" : "grid", true, true);
     });
 }
 
 const submitYoursSearchBtn = document.getElementById("submitYoursSearch");
+function filterLibraryCollection(items, titleSelector, searchTerm){
+    return items.reduce((matchCount, item) => {
+        if(item.matches(".skeletonItem, .contentEmptyState")){
+            item.classList.add("displayNone");
+            return matchCount;
+        }
+        const title = item.querySelector(titleSelector)?.textContent?.trim().toLowerCase() || "";
+        const matches = title.includes(searchTerm) || searchTerm.includes(title);
+        item.classList.toggle("displayNone", !matches);
+        return matchCount + (matches ? 1 : 0);
+    }, 0);
+}
+
 function filterYoursLibrary(saveSearchTerm = true){
     const searchInput = document.getElementById('searchYoursInput').value;
     const yourPlaylists = [].slice.call(document.querySelector('.yourPlaylists').children);
@@ -4029,32 +4098,10 @@ function filterYoursLibrary(saveSearchTerm = true){
             saveCrimsonSearchHistory("yours", searchInput);
         }
 
-        yourPlaylists.forEach((playlist) => {
-            if(playlist.children[0].children[1].children[0].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(playlist.children[0].children[1].children[0].innerHTML.toLowerCase())){
-                playlist.classList.remove('displayNone');
-                brP++;
-            }else{
-                playlist.classList.add('displayNone');
-            }
-        })
-
-        yourLPlaylists.forEach((playlist) => {
-            if(playlist.children[0].children[1].children[0].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(playlist.children[0].children[1].children[0].innerHTML.toLowerCase())){
-                playlist.classList.remove('displayNone');
-                brL++;
-            }else{
-                playlist.classList.add('displayNone');
-            }
-        })
-
-        yourFArtists.forEach((artist) => {
-            if(artist.children[1].innerHTML.toLowerCase().includes(searchInput.toLowerCase()) || searchInput.toLowerCase().includes(artist.children[1].innerHTML.toLowerCase())){
-                artist.classList.remove('displayNone');
-                brA++;
-            }else{
-                artist.classList.add('displayNone');
-            }
-        })
+        const normalizedSearch = searchInput.toLowerCase();
+        brP = filterLibraryCollection(yourPlaylists, ".songText h2", normalizedSearch);
+        brL = filterLibraryCollection(yourLPlaylists, ".songText h2", normalizedSearch);
+        brA = filterLibraryCollection(yourFArtists, "h3", normalizedSearch);
 
         if(brP != 0){
             document.querySelector('.yourPlaylistsH1').classList.remove('displayNone');
@@ -4143,8 +4190,15 @@ if(window.innerHeight < window.innerWidth){
 
 let isBugReportScreenOpen = false;
 
-function openBugReport(){
-    document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+function openBugReportFromSettings(){
+    openBugReport(true);
+}
+
+function openBugReport(fromSettings = false){
+    bugReportScreen.dataset.openedFromSettings = String(fromSettings);
+    if(!fromSettings){
+        document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
+    }
 
     bugReportScreen.classList.add("bugReportScreenOpen");
 
@@ -4152,11 +4206,14 @@ function openBugReport(){
 }
 
 function closeBugScreenF(){
-    document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    if(bugReportScreen.dataset.openedFromSettings !== 'true'){
+        document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
+    }
 
     bugReportScreen.classList.remove("bugReportScreenOpen");
     
     bugReportScreen.classList.remove("playerMovable");
+    delete bugReportScreen.dataset.openedFromSettings;
 
     isBugReportScreenOpen = false;
 }

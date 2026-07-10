@@ -778,6 +778,15 @@ main{
     min-height: 125px;
 }
 
+.yourFArtists .skeletonArtist{
+    width: 100px;
+}
+
+.yourFArtists .contentEmptyState{
+    min-width: calc(100vw - 40px);
+    min-height: 92px;
+}
+
 .artistItem{
     width: calc(30vw + 7.5px);
     max-width: 150px;
@@ -934,6 +943,174 @@ main{
     box-shadow: none !important;
 }
 
+/* ----- REUSABLE CONTENT SKELETONS ----- */
+
+.skeletonItem{
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(220, 214, 247, 0.055);
+    box-shadow: none;
+    opacity: 0;
+    animation: skeletonAppear .24s ease-out forwards;
+    animation-delay: calc(var(--skeleton-index, 0) * 35ms);
+}
+
+.skeletonItem::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background: linear-gradient(105deg, transparent 22%, rgba(255, 255, 255, 0.075) 43%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0.075) 57%, transparent 78%);
+    transform: translateX(-115%);
+    animation: skeletonShimmer 1.35s ease-in-out infinite;
+}
+
+.skeletonArtwork,
+.skeletonLine,
+.skeletonAction{
+    display: block;
+    background: rgba(220, 214, 247, 0.075);
+}
+
+.skeletonSong{
+    width: 100%;
+    min-height: 61px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 7px;
+    border-radius: 11px;
+}
+
+.skeletonSong .skeletonArtwork{
+    width: 45px;
+    aspect-ratio: 1;
+    flex: 0 0 45px;
+    border-radius: 7px;
+}
+
+.skeletonCopy{
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skeletonLine{
+    width: min(70%, 190px);
+    height: 11px;
+    border-radius: 999px;
+}
+
+.skeletonLineShort{
+    width: min(43%, 110px);
+    height: 9px;
+    opacity: .72;
+}
+
+.skeletonAction{
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+    border-radius: 7px;
+}
+
+.skeletonArtist{
+    width: calc(30vw + 7.5px);
+    max-width: 150px;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    border: 0;
+    background: transparent;
+}
+
+.skeletonArtist .skeletonArtwork{
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid rgba(220, 214, 247, 0.08);
+}
+
+.skeletonArtist .skeletonLine{
+    width: 64%;
+}
+
+.skeletonPlaylist{
+    width: calc(30vw + 7.5px);
+    max-width: 150px;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.skeletonPlaylist .skeletonArtwork{
+    width: 100%;
+    aspect-ratio: 1 / 1.25;
+    border-radius: 13px;
+}
+
+.skeletonPlaylist .skeletonLine{
+    width: 82%;
+}
+
+.skeletonPlaylist .skeletonLineShort{
+    width: 56%;
+}
+
+.skeletonCategoryRow{
+    pointer-events: none;
+}
+
+.skeletonCategoryCard{
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+}
+
+.contentEmptyState{
+    width: 100%;
+    min-height: 78px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--offWhiteDark);
+    border: 1px dashed rgba(220, 214, 247, 0.12);
+    border-radius: 14px;
+    font-size: 13px;
+}
+
+@keyframes skeletonAppear{
+    to{ opacity: 1; }
+}
+
+@keyframes skeletonShimmer{
+    0%{ transform: translateX(-115%); }
+    70%, 100%{ transform: translateX(115%); }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .skeletonItem,
+    .skeletonItem::after{
+        animation: none;
+        opacity: 1;
+    }
+}
+
 /* ----- SEARCH SCREEN ----- */
 
 .searchBar{
@@ -978,7 +1155,7 @@ main{
     padding: 0;
     border-radius: 50%;
     color: var(--offWhite);
-    transition: all .3s ease-in-out;
+    transition: transform .18s var(--tapEase), background-color .24s ease-out, border-color .24s ease-out, box-shadow .24s ease-out, filter .18s ease-out, opacity .18s ease-out;
     font-size: 15px !important;
 }
 
@@ -1273,14 +1450,17 @@ main{
     margin: 0;
     padding: calc(env(safe-area-inset-top) + 10px) 16px 6px;
     gap: 0;
-    background: linear-gradient(180deg, var(--bodyBg) 72%, color-mix(in srgb, var(--bodyBg) 92%, transparent));
+    background: linear-gradient(180deg, color-mix(in srgb, var(--footerBg) 80%, transparent) 0%, color-mix(in srgb, var(--bodyBg) 58%, transparent) 72%, transparent 100%);
     border-bottom: 1px solid transparent;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(22px) saturate(1.28) brightness(1.04);
+    -webkit-backdrop-filter: blur(22px) saturate(1.28) brightness(1.04);
+    box-shadow: 0 12px 28px rgba(6, 4, 10, .08);
 }
 
 .searchScreen .searchBar.isSticky{
     border-color: rgba(220, 214, 247, 0.08);
+    background: color-mix(in srgb, var(--footerBg) 72%, transparent);
+    box-shadow: 0 12px 30px rgba(6, 4, 10, .2);
 }
 
 .searchScreen .searchBar form{
@@ -2246,7 +2426,7 @@ a.toggleSection i{
     transform: translate3d(0, 0, 0) scale(1) !important;
 }
 
-.artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryScreenOpen .pageBar h2{
+.artistScreenOpen .pageBar h2, .playlistScreenOpen .pageBar h2, .categoryPageOpen .pageBar h2{
     transform: translateX(3vw);
 }
 
@@ -2329,6 +2509,30 @@ a.toggleSection i{
     margin-top: 5px;
 }
 
+.artistScreen .artistControls h5,
+.playlistScreen .artistControls h5{
+    padding: 4px 10px 5px;
+    margin: 3px 0 2px;
+    border: 0;
+    border-radius: 0;
+    color: rgba(220, 214, 247, .72);
+    background: transparent;
+    box-shadow: none;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, .62);
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 500;
+}
+
+.playlistScreen .artistInfo img{
+    height: calc(env(safe-area-inset-top) + 400px);
+}
+
+.playlistScreen .artistControls{
+    padding-top: calc(env(safe-area-inset-top) + 215px);
+    padding-bottom: 12px;
+}
+
 .artistBtns{
     display: flex;
     align-items: center;
@@ -2395,11 +2599,26 @@ a.toggleSection i{
 }
 
 .catWork{
-    background: linear-gradient(180deg, transparent, var(--bodyBg), var(--bodyBg), var(--bodyBg), var(--bodyBg));
+    position: relative;
+    margin-top: 0;
+    padding: 4px 15px calc(env(safe-area-inset-bottom) + 220px);
+    gap: 10px;
+    border-radius: 28px 28px 0 0;
+    background:
+        radial-gradient(circle at 82% 0%, color-mix(in srgb, var(--category-accent, #8f59f5) 16%, transparent), transparent 28%),
+        var(--bodyBg);
+    box-shadow: 0 -16px 40px rgba(0, 0, 0, .18);
 }
 
 #catH3Title{
-    text-shadow: 0px 0px 50px var(--bodyBg), 0px 0px 1px var(--bodyBg);
+    margin: 0;
+    max-width: 100%;
+    color: #fff;
+    font-size: clamp(38px, 12vw, 58px);
+    line-height: .95;
+    letter-spacing: -.055em;
+    text-align: center;
+    text-shadow: 0 4px 28px rgba(0, 0, 0, .65);
 }
 
 .latestRelease{
@@ -2446,46 +2665,184 @@ a.toggleSection i{
     height: 35px;
 }
 
-.categoryAccentBubble{
-    position: absolute;
-    background: radial-gradient(closest-side, red, transparent);
-    width: 200vw;
-    top: -40vh;
-    left: -50vw;
-    height: 90vh;
-    filter: blur(50px);
-    transition: all 0.2s ease-in-out;
-    animation: blink 4s ease-in-out infinite;
-    z-index: -1;
-    opacity: 0.8;
-}
-
-@keyframes blink {
-    0% {
-      opacity: 0.8;
-      transform: translateY(0%);
-    }
-    50% {
-      opacity: 0.6;
-      transform: translateY(-5%);
-    }
-    100% {
-      opacity: 0.8;
-      transform: translateY(0%);
-    }
-}
-
 .center{
     text-align: center;
 }
 
-.categoryScreen .screenScrollable .artistInfo .artistControls{
-    padding-top: 160px;
-    padding-bottom: 0px !important;
+.categoryHero{
+    position: relative;
+    width: 100%;
+    min-height: min(46vh, 380px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--category-accent, #8f59f5) 24%, var(--bodyBg));
 }
 
-.catBanner{
-    height: calc(env(safe-area-inset-top) + 200px) !important;
+.categoryHero .catBanner{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.025);
+    filter: saturate(1.08) contrast(1.02);
+}
+
+.categoryHeroTint{
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(4, 3, 7, .06) 0%, rgba(4, 3, 7, .12) 32%, rgba(4, 3, 7, .72) 78%, var(--bodyBg) 100%),
+        linear-gradient(135deg, color-mix(in srgb, var(--category-accent, #8f59f5) 24%, transparent), transparent 58%);
+}
+
+.categoryHeroFade{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 42%;
+    background: linear-gradient(transparent, var(--bodyBg));
+    pointer-events: none;
+}
+
+.categoryHeroContent{
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: calc(env(safe-area-inset-top) + 56px) 20px 24px;
+    transition: opacity .16s ease-out;
+}
+
+.categoryEyebrow{
+    padding: 6px 11px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, .76);
+    background: rgba(8, 6, 12, .28);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+#categoryMeta{
+    margin: -2px 0 2px;
+    color: rgba(220, 214, 247, .72);
+    font-size: 13px;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, .62);
+}
+
+#playCategoryBtn{
+    min-width: 166px;
+    min-height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 2px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 999px;
+    color: #17121d;
+    background: #f0eaff;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255,255,255,.65);
+    font-weight: 700;
+}
+
+#playCategoryBtn i{
+    color: inherit;
+}
+
+.categorySectionHeading{
+    width: 100%;
+    min-height: 30px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 2px;
+}
+
+.categorySectionHeading > div{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.categorySectionHeading > div > span{
+    color: color-mix(in srgb, var(--category-accent, #8f59f5) 68%, var(--offWhite));
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.categorySectionHeading h2{
+    color: var(--offWhite);
+    font-size: 23px;
+    line-height: 26px;
+    letter-spacing: -.035em;
+}
+
+.categoryScreen .catPageBar.pageBarOn{
+    background: color-mix(in srgb, var(--bodyBg) 82%, transparent);
+    backdrop-filter: var(--gmBackdrop);
+    -webkit-backdrop-filter: var(--gmBackdrop);
+}
+
+.categoryScreen .catPageBar.pageBarOn h2{
+    color: var(--offWhite);
+    font-weight: 600;
+}
+
+.categoryResultCount{
+    min-width: 28px;
+    min-height: 25px;
+    display: grid;
+    place-items: center;
+    padding: 0 8px;
+    border: 1px solid rgba(220, 214, 247, .1);
+    border-radius: 999px;
+    color: var(--offWhiteDark);
+    background: rgba(220, 214, 247, .055);
+    font-size: 11px;
+}
+
+.categoryResultCount:empty{
+    display: none;
+}
+
+.categoryScreen .categoryRecommendedSongs{
+    gap: 7px;
+}
+
+.categoryScreen .categoryRecommendedPlaylists{
+    width: calc(100% + 15px);
+    margin-right: -15px;
+    padding: 4px 15px 8px 0;
+    gap: 12px;
+}
+
+.categoryScreen .categoryRecommendedPlaylists .playlistItem{
+    width: min(38vw, 154px);
+}
+
+.categoryScreen .categoryRecommendedPlaylists .playlistItem img{
+    aspect-ratio: 1;
+    border-radius: 15px;
+}
+
+.categoryScreen .pageBarOn{
+    background: color-mix(in srgb, var(--bodyBg) 74%, transparent);
 }
 
 /* ----- LIBRARY / YOURS SCREEN ----- */
@@ -2569,6 +2926,30 @@ a.toggleSection i{
     align-items: start;
 }
 
+.libraryGridView .yourPlaylists .contentEmptyState,
+.libraryGridView .yourLPlaylists .contentEmptyState{
+    grid-column: 1 / -1;
+}
+
+.libraryLayoutAnimating .yourPlaylists,
+.libraryLayoutAnimating .yourLPlaylists,
+.libraryLayoutAnimating .songItem,
+.libraryLayoutAnimating .songInfo,
+.libraryLayoutAnimating .songText,
+.libraryLayoutAnimating img{
+    transition: none !important;
+}
+
+.libraryLayoutAnimating .yourPlaylists > li,
+.libraryLayoutAnimating .yourLPlaylists > li,
+.libraryLayoutAnimating .yourPlaylistsH1,
+.libraryLayoutAnimating .yourLPlaylistsH1,
+.libraryLayoutAnimating .yourFArtistsH1,
+.libraryLayoutAnimating .yourFArtists{
+    transform-origin: top left;
+    will-change: transform, opacity;
+}
+
 .libraryGridView .yourPlaylists .songItem,
 .libraryGridView .yourLPlaylists .songItem{
     display: block;
@@ -2579,6 +2960,29 @@ a.toggleSection i{
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.035);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 20px rgba(0, 0, 0, 0.14);
+}
+
+.libraryGridView .yourPlaylists .skeletonSong,
+.libraryGridView .yourLPlaylists .skeletonSong{
+    min-height: 0;
+    aspect-ratio: 1;
+    display: block;
+    padding: 0;
+    border-radius: 14px;
+}
+
+.libraryGridView .yourPlaylists .skeletonSong .skeletonArtwork,
+.libraryGridView .yourLPlaylists .skeletonSong .skeletonArtwork{
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+}
+
+.libraryGridView .yourPlaylists .skeletonSong .skeletonCopy,
+.libraryGridView .yourLPlaylists .skeletonSong .skeletonCopy,
+.libraryGridView .yourPlaylists .skeletonSong .skeletonAction,
+.libraryGridView .yourLPlaylists .skeletonSong .skeletonAction{
+    display: none;
 }
 
 .libraryGridView .yourPlaylists .songInfo,
@@ -4875,6 +5279,1029 @@ nav button i{
 
 .displayNone{
     display: none !important;
+}
+
+/* ----- AUTH GATEWAY (Figma: Crimson Music Welcome / Login / Register) ----- */
+
+.srOnly{
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+body.authLocked .bodyHolder{
+    pointer-events: none;
+}
+
+.authGateway{
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    overflow: hidden;
+    color: #fff;
+    background: #0d0a10;
+    isolation: isolate;
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0, 0, 0);
+    transition: opacity .42s ease, visibility .42s ease, transform .52s var(--screenEase);
+}
+
+.authGateway img{
+    background-color: transparent;
+}
+
+.authGateway.authGatewayHidden{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate3d(0, -2%, 0) scale(1.015);
+}
+
+.authGatewayBackdrop{
+    position: absolute;
+    inset: -24px;
+    z-index: -2;
+    background-image: url("images/auth/auth-background.png");
+    background-size: cover;
+    background-position: center top;
+    filter: blur(2.5px);
+    opacity: .34;
+    transform: scale(1.08);
+}
+
+.authGateway::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, #0d0a10 0%, rgba(13, 10, 16, .02) 17%, rgba(13, 10, 16, .08) 53%, #0d0a10 82%),
+        linear-gradient(0deg, rgba(13, 10, 16, .86), transparent 58%);
+}
+
+.authView{
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transform: translate3d(24px, 0, 0) scale(.985);
+    pointer-events: none;
+    will-change: opacity, transform;
+    transition: opacity .28s ease, transform .58s var(--screenEase);
+}
+
+.authView.isActive{
+    z-index: 2;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    pointer-events: auto;
+}
+
+.authView.isLeaving{
+    z-index: 1;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    pointer-events: none;
+}
+
+.authView[hidden]{
+    display: none;
+}
+
+.authWelcomeLogo{
+    position: absolute;
+    top: max(92px, calc(env(safe-area-inset-top) + 66px));
+    left: 50%;
+    width: min(255px, calc(100vw - 64px));
+    height: auto;
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(-50%) translateY(-2px) scale(.43);
+    transform-origin: center top;
+    object-fit: contain;
+    will-change: opacity, filter, transform;
+    transition: opacity .42s ease, filter .58s ease, transform .68s var(--screenEase);
+}
+
+.authWelcomeView.isActive .authWelcomeLogo{
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.authWelcomeActions,
+.authFormFooter{
+    position: absolute;
+    left: 50%;
+    bottom: max(48px, calc(env(safe-area-inset-bottom) + 24px));
+    width: min(292px, calc(100vw - 48px));
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    transform: translateX(-50%);
+}
+
+.authWelcomeActions > *,
+.authFormFooter > *{
+    opacity: 0;
+    transform: translateY(46px);
+    transition: opacity .4s ease, transform .6s var(--screenEase) !important;
+}
+
+.authWelcomeView.isActive .authWelcomeActions > *,
+.authView.isActive .authFormFooter > *{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.authWelcomeView.isActive .authWelcomeActions > :first-child{
+    transition-delay: .38s !important;
+}
+
+.authWelcomeView.isActive .authWelcomeActions > :last-child{
+    transition-delay: .47s !important;
+}
+
+.authView.isActive .authFormFooter > :first-child{
+    transition-delay: .54s !important;
+}
+
+.authView.isActive .authFormFooter > :last-child{
+    transition-delay: .62s !important;
+}
+
+.authSwitchPrompt,
+.authPrimaryButton,
+.authGoogleButton{
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.authSwitchPrompt{
+    min-height: 42px;
+    padding: 10px 12px;
+    color: #fff;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.authSwitchPrompt strong{
+    color: #8f59f5;
+    font-weight: 700;
+}
+
+.authPrimaryButton{
+    min-height: 44px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    color: #0d0a10;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, .24);
+    transition: transform .18s var(--tapEase), opacity .2s ease;
+}
+
+.authPrimaryButton:active,
+.authGoogleButton:active{
+    transform: scale(.975);
+}
+
+.authPrimaryButton:disabled,
+.authGoogleButton:disabled{
+    opacity: .55;
+    pointer-events: none;
+}
+
+.authForm{
+    position: absolute;
+    inset: 0;
+}
+
+.authFormHeader{
+    position: absolute;
+    top: max(93px, calc(env(safe-area-inset-top) + 64px));
+    left: 50%;
+    width: min(330px, calc(100vw - 40px));
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
+}
+
+.authFormHeader img{
+    width: 106px;
+    height: auto;
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(-7px) scale(.92);
+    transform-origin: center top;
+    object-fit: contain;
+    will-change: opacity, filter, transform;
+    transition: opacity .38s ease .06s, filter .48s ease .06s, transform .62s var(--screenEase) .06s;
+}
+
+.authFormHeader h1{
+    margin-top: 11px;
+    color: #fff;
+    font-family: "Outfit", sans-serif;
+    font-size: clamp(43px, 12.2vw, 48px);
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -.9px;
+    opacity: 0;
+    filter: blur(7px);
+    transform: translateY(-12px) scale(.96);
+    transform-origin: center top;
+    will-change: opacity, filter, transform;
+    transition: opacity .38s ease .16s, filter .5s ease .16s, transform .58s var(--screenEase) .16s;
+}
+
+.authView.isActive .authFormHeader img,
+.authView.isActive .authFormHeader h1{
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+}
+
+.authGateway[data-auth-from="welcome"] .authView.isEntering .authFormHeader img{
+    opacity: .16;
+    filter: blur(2px);
+    transform: translateY(0) scale(2.4);
+}
+
+.authGateway[data-auth-to="welcome"] .authView.isLeaving .authFormHeader img{
+    opacity: .12;
+    filter: blur(3px);
+    transform: translateY(0) scale(2.4);
+}
+
+.authGateway.authFormSwitch .authFormHeader img{
+    opacity: 1 !important;
+    filter: blur(0) !important;
+    transform: translateY(0) scale(1) !important;
+    transition: none !important;
+}
+
+.authGateway.authFormSwitch .authView,
+.authGateway.authFormSwitch .authView.isActive,
+.authGateway.authFormSwitch .authView.isEntering,
+.authGateway.authFormSwitch .authView.isLeaving{
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+}
+
+.authFields{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(292px, calc(100vw - 48px));
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transform: translate(-50%, -50%);
+}
+
+.authFields input{
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 19px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 999px;
+    outline: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, .15);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 12px 30px rgba(0, 0, 0, .16);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Outfit", sans-serif;
+    font-size: 15px;
+    user-select: text;
+    -webkit-user-select: text;
+    transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+
+.authFields input::placeholder{
+    color: rgba(255, 255, 255, .5);
+}
+
+.authFields input:focus{
+    border-color: rgba(143, 89, 245, .9);
+    background: rgba(255, 255, 255, .19);
+    box-shadow: 0 0 0 3px rgba(143, 89, 245, .14), 0 14px 34px rgba(0, 0, 0, .2);
+}
+
+.authFields input.authInputError{
+    border-color: rgba(255, 89, 110, .9);
+    box-shadow: 0 0 0 3px rgba(255, 89, 110, .12);
+}
+
+.authDivider{
+    width: calc(100% + 8px);
+    margin-left: -4px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, .8);
+}
+
+.authDivider span{
+    height: 1px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .2);
+}
+
+.authDivider small{
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.authGoogleButton{
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: #fff;
+    background:
+        linear-gradient(rgba(50, 46, 57, .94), rgba(50, 46, 57, .94)) padding-box,
+        linear-gradient(100deg, #ea4335, #fbbc05 35%, #34a853 67%, #4285f4) border-box;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform .18s var(--tapEase), opacity .2s ease;
+}
+
+.authGoogleButton img{
+    width: 18px;
+    height: 18px;
+}
+
+.authInlineMessage{
+    min-height: 17px;
+    margin: -4px 8px -13px;
+    color: #ff8a9a;
+    font-size: 12px;
+    line-height: 1.35;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-3px);
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.authInlineMessage.isVisible{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.authInlineMessage.isSuccess{
+    color: #88e3ac;
+}
+
+.authFields > input,
+.authFields > .authDivider,
+.authFields > .authGoogleButton{
+    opacity: 0;
+    transform: translateY(16px) scale(.985);
+    will-change: opacity, transform;
+    transition:
+        opacity .38s ease,
+        transform .54s var(--screenEase),
+        border-color .2s ease,
+        background-color .2s ease,
+        box-shadow .2s ease !important;
+}
+
+.authView.isActive .authFields > input,
+.authView.isActive .authFields > .authDivider,
+.authView.isActive .authFields > .authGoogleButton{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.authView.isActive .authFields > input:nth-of-type(1){
+    transition-delay: .2s !important;
+}
+
+.authView.isActive .authFields > input:nth-of-type(2){
+    transition-delay: .3s !important;
+}
+
+.authView.isActive .authFields > input:nth-of-type(3){
+    transition-delay: .4s !important;
+}
+
+.authView.isActive .authFields > .authDivider{
+    transition-delay: .5s !important;
+}
+
+.authView.isActive .authFields > .authGoogleButton{
+    transition-delay: .58s !important;
+}
+
+.authView.isActive .authFields > .authGoogleButton:active,
+.authView.isActive .authFormFooter > .authPrimaryButton:active,
+.authWelcomeView.isActive .authWelcomeActions > .authPrimaryButton:active{
+    transform: scale(.975);
+    transition-delay: 0s !important;
+}
+
+@media (max-height: 700px){
+    .authFormHeader{
+        top: max(66px, calc(env(safe-area-inset-top) + 38px));
+    }
+
+    .authFields{
+        top: 48%;
+        gap: 10px;
+    }
+
+    .authFields input,
+    .authGoogleButton{
+        min-height: 44px;
+        padding-block: 11px;
+    }
+
+    .authFormFooter,
+    .authWelcomeActions{
+        bottom: max(18px, env(safe-area-inset-bottom));
+    }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .authView,
+    .authWelcomeLogo,
+    .authFormHeader img,
+    .authFormHeader h1,
+    .authWelcomeActions > *,
+    .authFormFooter > *,
+    .authFields > input,
+    .authFields > .authDivider,
+    .authFields > .authGoogleButton{
+        transition-duration: .01ms !important;
+        transition-delay: 0ms !important;
+    }
+}
+
+@media (min-width: 700px){
+    .authGateway{
+        left: 50%;
+        right: auto;
+        width: 393px;
+        border-radius: 38px;
+        transform: translateX(-50%);
+        box-shadow: 0 28px 100px rgba(0, 0, 0, .5);
+    }
+
+    .authGateway.authGatewayHidden{
+        transform: translateX(-50%) translateY(-2%) scale(1.015);
+    }
+}
+
+/* ----- CRIMSON NOTICES ----- */
+
+.crimsonNoticeStack{
+    position: fixed;
+    z-index: 2147483100;
+    top: max(14px, calc(env(safe-area-inset-top) + 10px));
+    left: 50%;
+    width: min(360px, calc(100vw - 24px));
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.crimsonNotice{
+    --notice-color: #8f59f5;
+    position: relative;
+    width: 100%;
+    min-height: 68px;
+    display: grid;
+    grid-template-columns: 40px 1fr 28px;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 10px 12px 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 19px;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(37, 30, 44, .94), rgba(14, 10, 19, .9));
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .06);
+    -webkit-backdrop-filter: blur(24px) saturate(1.25);
+    backdrop-filter: blur(24px) saturate(1.25);
+    pointer-events: auto;
+    animation: crimsonNoticeIn .48s var(--bounceEase) both;
+}
+
+.crimsonNotice[data-type="error"]{ --notice-color: #ff596e; }
+.crimsonNotice[data-type="success"]{ --notice-color: #55d88a; }
+.crimsonNotice[data-type="warning"]{ --notice-color: #ffbd59; }
+
+.crimsonNoticeIcon{
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    color: var(--notice-color);
+    background: color-mix(in srgb, var(--notice-color) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--notice-color) 22%, transparent);
+}
+
+.crimsonNoticeCopy h4{
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 750;
+}
+
+.crimsonNoticeCopy p{
+    margin-top: 3px;
+    color: rgba(255, 255, 255, .68);
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.crimsonNoticeClose{
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    color: rgba(255, 255, 255, .65);
+    background: rgba(255, 255, 255, .06);
+}
+
+.crimsonNoticeProgress{
+    position: absolute;
+    bottom: 0;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    border-radius: 99px;
+    background: var(--notice-color);
+    transform-origin: left;
+    animation: crimsonNoticeProgress var(--notice-duration, 4400ms) linear both;
+}
+
+.crimsonNotice.isLeaving{
+    animation: crimsonNoticeOut .25s ease forwards;
+}
+
+@keyframes crimsonNoticeIn{
+    from{ opacity: 0; transform: translateY(-18px) scale(.94); }
+    to{ opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes crimsonNoticeOut{
+    to{ opacity: 0; transform: translateY(-10px) scale(.97); }
+}
+
+@keyframes crimsonNoticeProgress{
+    to{ transform: scaleX(0); }
+}
+
+/* ----- GOOGLE PROFILE PHOTO ----- */
+
+.profilePhotoActions .googleProfilePhotoOption{
+    min-height: 58px;
+    display: flex;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(143, 89, 245, .26), rgba(220, 214, 247, .08));
+    border: 1px solid rgba(143, 89, 245, .36);
+}
+
+.profilePhotoActions .uploadProfilePhotoButton{
+    color: var(--bodyBg);
+    background: var(--offWhite);
+    border: 1px solid transparent;
+}
+
+.profilePhotoActions .presetProfilePhotoButton{
+    color: var(--offWhite);
+    background: rgba(220, 214, 247, .08);
+    border: 1px solid rgba(220, 214, 247, .14);
+}
+
+.googleProfilePhotoOption img{
+    width: 34px;
+    height: 34px;
+    padding: 2px;
+    border: 1px solid rgba(255, 255, 255, .6);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ----- REPORT A BUG ----- */
+
+.bugReportScreen{
+    background:
+        radial-gradient(circle at 85% 8%, rgba(143, 89, 245, .2), transparent 34%),
+        radial-gradient(circle at 10% 52%, rgba(164, 25, 80, .11), transparent 42%),
+        var(--bodyBg);
+}
+
+.bugReportScreen .screenScrollable{
+    padding: calc(env(safe-area-inset-top) + 76px) 16px calc(env(safe-area-inset-bottom) + 100px);
+    display: block;
+}
+
+.bugReportIntro{
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto 14px;
+    padding: 22px 20px 18px;
+    overflow: hidden;
+    border: 1px solid rgba(220, 214, 247, .1);
+    border-radius: 26px;
+    background:
+        linear-gradient(145deg, rgba(143, 89, 245, .13), transparent 56%),
+        rgba(25, 20, 32, .72);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .04);
+    -webkit-backdrop-filter: blur(22px);
+    backdrop-filter: blur(22px);
+}
+
+.bugReportIntro::after{
+    content: "";
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    top: -80px;
+    right: -58px;
+    border-radius: 50%;
+    background: rgba(143, 89, 245, .2);
+    filter: blur(20px);
+}
+
+.bugReportIcon{
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 17px;
+    border-radius: 15px;
+    color: #c7a9ff;
+    background: linear-gradient(135deg, rgba(143, 89, 245, .32), rgba(143, 89, 245, .08));
+    border: 1px solid rgba(191, 157, 255, .26);
+    box-shadow: 0 12px 30px rgba(118, 45, 255, .16);
+}
+
+.bugReportIcon i{
+    font-size: 20px;
+}
+
+.bugReportIntro > p{
+    color: #a986ed;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.bugReportIntro h1{
+    margin-top: 5px;
+    color: var(--offWhite);
+    font-size: clamp(31px, 9vw, 42px);
+    line-height: .98;
+    letter-spacing: -1.1px;
+}
+
+.bugReportIntro h1 span{
+    color: #9e72f5;
+}
+
+.bugReportIntro h5{
+    width: 90%;
+    margin-top: 13px;
+    color: rgba(220, 214, 247, .58);
+    font-size: 13px;
+    line-height: 1.45;
+    font-weight: 400;
+}
+
+.bugReportTips{
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.bugReportTips span{
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border: 1px solid rgba(220, 214, 247, .09);
+    border-radius: 999px;
+    color: rgba(220, 214, 247, .76);
+    background: rgba(220, 214, 247, .05);
+    font-size: 11px;
+}
+
+.bugReportTips i{
+    color: #a986ed;
+    font-size: 11px;
+}
+
+.bugReportScreen .bugReportForm{
+    width: 100%;
+    min-width: 0;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 18px;
+    gap: 16px;
+    border: 1px solid rgba(220, 214, 247, .08);
+    border-radius: 24px;
+    background: rgba(19, 15, 25, .7);
+    box-shadow: 0 18px 52px rgba(0, 0, 0, .2);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+}
+
+.bugField{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bugField label{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-inline: 2px;
+}
+
+.bugField label > span{
+    color: var(--offWhite);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.bugField label small{
+    color: rgba(220, 214, 247, .42);
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.bugReportScreen .bugReportForm input,
+.bugReportScreen .bugReportForm textarea{
+    width: 100%;
+    margin: 0;
+    padding: 14px 15px;
+    border: 1px solid rgba(220, 214, 247, .1);
+    border-radius: 14px;
+    outline: 0;
+    color: var(--offWhite);
+    background: rgba(7, 6, 10, .44);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.45;
+    user-select: text;
+    -webkit-user-select: text;
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.bugReportScreen .bugReportForm input:focus,
+.bugReportScreen .bugReportForm textarea:focus{
+    border-color: rgba(143, 89, 245, .72);
+    background: rgba(13, 10, 18, .72);
+    box-shadow: 0 0 0 3px rgba(143, 89, 245, .1);
+}
+
+.bugReportScreen .bugReportForm textarea{
+    min-width: 0;
+    min-height: 190px;
+    resize: vertical;
+}
+
+.bugSubmitButton{
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px 12px 18px;
+    border: 0;
+    border-radius: 15px;
+    color: #fff;
+    background: linear-gradient(120deg, #7b42e5, #9b65ff);
+    box-shadow: 0 14px 34px rgba(118, 45, 255, .25);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.bugSubmitButton i{
+    width: 30px;
+    height: 30px;
+    display: grid !important;
+    place-items: center;
+    margin: 0 !important;
+    border-radius: 10px;
+    color: #7b42e5;
+    background: #fff;
+    font-size: 12px !important;
+}
+
+.bugSubmitButton:disabled{
+    opacity: .55;
+    pointer-events: none;
+}
+
+.bugPrivacyNote{
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    padding-inline: 3px;
+    color: rgba(220, 214, 247, .38);
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.bugPrivacyNote i{
+    margin: 1px 0 0 !important;
+    color: rgba(169, 134, 237, .72);
+    font-size: 11px !important;
+}
+
+/* Calm, settings-style bug report */
+
+.accountName,
+.accountText h2,
+.usernameSS{
+    text-transform: none !important;
+}
+
+.bugReportScreen{
+    background: var(--bodyBg);
+    z-index: 1000;
+}
+
+.bugReportScreen .screenScrollable{
+    height: 100svh;
+    min-height: 0;
+    display: block;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    padding: calc(env(safe-area-inset-top) + 72px) 18px calc(env(safe-area-inset-bottom) + 180px);
+    touch-action: pan-y !important;
+    -ms-touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}
+
+.bugReportContent{
+    width: 100%;
+    max-width: 520px;
+    min-height: calc(100svh - 72px);
+    margin: 0 auto;
+}
+
+.bugReportLead{
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 4px 2px 20px;
+    border-bottom: 1px solid rgba(220, 214, 247, .08);
+}
+
+.bugReportLeadIcon{
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    color: var(--offWhite);
+    background: rgba(220, 214, 247, .07);
+    border: 1px solid rgba(220, 214, 247, .1);
+}
+
+.bugReportLeadIcon i{
+    margin: 0;
+    font-size: 16px;
+}
+
+.bugReportLead h3{
+    color: var(--offWhite);
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1.25;
+}
+
+.bugReportLead p{
+    margin-top: 4px;
+    color: var(--offWhiteDark);
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.bugReportScreen .bugReportForm{
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    padding: 22px 0 0;
+    gap: 20px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+.bugField{
+    gap: 9px;
+}
+
+.bugField label{
+    padding-inline: 1px;
+}
+
+.bugField label > span{
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.bugField label small{
+    font-size: 10px;
+}
+
+.bugReportScreen .bugReportForm input,
+.bugReportScreen .bugReportForm textarea{
+    padding: 14px 15px;
+    border-color: rgba(220, 214, 247, .09);
+    border-radius: 12px;
+    background: rgba(220, 214, 247, .045);
+    box-shadow: none;
+    font-size: 13px;
+}
+
+.bugReportScreen .bugReportForm input:focus,
+.bugReportScreen .bugReportForm textarea:focus{
+    border-color: rgba(220, 214, 247, .28);
+    background: rgba(220, 214, 247, .065);
+    box-shadow: none;
+}
+
+.bugReportScreen .bugReportForm textarea{
+    min-height: 230px;
+    resize: none;
+}
+
+.bugSubmitButton{
+    min-height: 48px;
+    justify-content: center;
+    gap: 9px;
+    padding: 13px 18px;
+    border: 0;
+    border-radius: 12px;
+    color: var(--bodyBg);
+    background: var(--offWhite);
+    box-shadow: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.bugSubmitButton i{
+    width: auto;
+    height: auto;
+    display: inline-block !important;
+    margin: 0 !important;
+    border-radius: 0;
+    color: inherit;
+    background: transparent;
+    font-size: 11px !important;
+}
+
+.bugPrivacyNote{
+    padding: 0 2px 12px;
+    color: rgba(220, 214, 247, .4);
+    font-size: 10px;
+}
+
+.bugPrivacyNote i{
+    color: rgba(220, 214, 247, .5);
 }
 
 .likeBtnAnim{

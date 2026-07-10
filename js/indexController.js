@@ -1,3 +1,184 @@
+const authGateway = document.getElementById('authGateway');
+const authViews = Array.from(document.querySelectorAll('[data-auth-view]'));
+const appBodyHolder = document.querySelector('.bodyHolder');
+let authViewTransitionTimer;
+
+authGateway?.addEventListener('scroll', () => {
+    if(authGateway.scrollTop !== 0){
+        authGateway.scrollTop = 0;
+    }
+}, {passive: true});
+
+function setAuthView(viewName, animate = true){
+    const nextView = authViews.find((view) => view.dataset.authView === viewName) || authViews[0];
+    const currentView = authViews.find((view) => view.classList.contains('isActive') && !view.hidden);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isFormToFormTransition = currentView?.dataset.authView !== 'welcome' && nextView.dataset.authView !== 'welcome';
+
+    if(currentView === nextView){
+        return;
+    }
+
+    window.clearTimeout(authViewTransitionTimer);
+    authGateway?.classList.toggle('authFormSwitch', Boolean(animate && !reduceMotion && isFormToFormTransition));
+    authViews.forEach((view) => {
+        if(view !== currentView && view !== nextView){
+            view.hidden = true;
+            view.classList.remove('isActive', 'isEntering', 'isLeaving');
+        }
+    });
+
+    nextView.hidden = false;
+    nextView.classList.remove('isActive', 'isLeaving');
+    currentView?.classList.remove('isEntering');
+
+    if(!animate || reduceMotion || !currentView){
+        authGateway?.classList.remove('authFormSwitch');
+        currentView?.classList.remove('isActive', 'isLeaving');
+        if(currentView){
+            currentView.hidden = true;
+        }
+        nextView.classList.remove('isEntering', 'isLeaving');
+        nextView.classList.add('isActive');
+    }else{
+        authGateway.dataset.authFrom = currentView.dataset.authView;
+        authGateway.dataset.authTo = nextView.dataset.authView;
+        nextView.classList.add('isEntering');
+        currentView.classList.add('isLeaving');
+        currentView.classList.remove('isActive');
+
+        void nextView.offsetWidth;
+        nextView.classList.add('isActive');
+        nextView.classList.remove('isEntering');
+
+        authViewTransitionTimer = window.setTimeout(() => {
+            currentView.hidden = true;
+            currentView.classList.remove('isLeaving');
+            authGateway.classList.remove('authFormSwitch');
+            delete authGateway.dataset.authFrom;
+            delete authGateway.dataset.authTo;
+        }, 780);
+    }
+
+    authViews.filter((view) => view !== nextView).forEach((view) => {
+        view.querySelectorAll('.authInputError').forEach((input) => input.classList.remove('authInputError'));
+    });
+    if(authGateway){
+        authGateway.scrollTop = 0;
+        requestAnimationFrame(() => {
+            authGateway.scrollTop = 0;
+        });
+    }
+}
+
+function setAuthGatewayVisible(visible, viewName = 'welcome'){
+    if(!authGateway){
+        return;
+    }
+    document.body.classList.toggle('authLocked', visible);
+    authGateway.classList.toggle('authGatewayHidden', !visible);
+    authGateway.setAttribute('aria-hidden', visible ? 'false' : 'true');
+    if(appBodyHolder){
+        appBodyHolder.inert = visible;
+        appBodyHolder.setAttribute('aria-hidden', visible ? 'true' : 'false');
+    }
+    if(visible){
+        setAuthView(viewName, false);
+    }
+}
+
+function setAuthInlineMessage(viewName, message = '', type = 'error'){
+    const view = authViews.find((item) => item.dataset.authView === viewName);
+    const messageElement = view?.querySelector('[data-auth-message]');
+    if(!messageElement){
+        return;
+    }
+    messageElement.textContent = message;
+    messageElement.classList.toggle('isVisible', Boolean(message));
+    messageElement.classList.toggle('isSuccess', type === 'success');
+}
+
+document.querySelectorAll('[data-auth-target]').forEach((button) => {
+    button.addEventListener('click', () => setAuthView(button.dataset.authTarget));
+});
+
+const noticeTypeDetails = {
+    error: {title: 'Something went wrong', icon: 'fa-solid fa-circle-exclamation'},
+    success: {title: 'All set', icon: 'fa-solid fa-circle-check'},
+    warning: {title: 'Heads up', icon: 'fa-solid fa-triangle-exclamation'},
+    info: {title: 'Crimson Music', icon: 'fa-solid fa-bell'}
+};
+
+function inferCrimsonNoticeType(message){
+    const normalized = String(message || '').toLowerCase();
+    if(/success|welcome|submitted|saved|created|added|thank/.test(normalized)){
+        return 'success';
+    }
+    if(/warning|too short|too large|under 3mb|empty|valid|choose/.test(normalized)){
+        return 'warning';
+    }
+    if(/error|failed|not found|already exists|wrong|unable|invalid/.test(normalized)){
+        return 'error';
+    }
+    return 'info';
+}
+
+function showCrimsonNotice(message, type = 'auto', options = {}){
+    const stack = document.getElementById('crimsonNoticeStack');
+    if(!stack){
+        return;
+    }
+    const resolvedType = type === 'auto' ? inferCrimsonNoticeType(message) : type;
+    const details = noticeTypeDetails[resolvedType] || noticeTypeDetails.info;
+    const duration = Math.max(1800, Number(options.duration) || 4400);
+    const notice = document.createElement('article');
+    notice.className = 'crimsonNotice';
+    notice.dataset.type = resolvedType;
+    notice.style.setProperty('--notice-duration', `${duration}ms`);
+
+    const icon = document.createElement('div');
+    icon.className = 'crimsonNoticeIcon';
+    icon.innerHTML = `<i class="${details.icon}"></i>`;
+    const copy = document.createElement('div');
+    copy.className = 'crimsonNoticeCopy';
+    const title = document.createElement('h4');
+    title.textContent = options.title || details.title;
+    const body = document.createElement('p');
+    body.textContent = String(message || '');
+    copy.append(title, body);
+    const close = document.createElement('button');
+    close.className = 'crimsonNoticeClose';
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Close notification');
+    close.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    const progress = document.createElement('span');
+    progress.className = 'crimsonNoticeProgress';
+    notice.append(icon, copy, close, progress);
+    stack.prepend(notice);
+    while(stack.children.length > 3){
+        stack.lastElementChild.remove();
+    }
+    let removed = false;
+    const removeNotice = () => {
+        if(removed){
+            return;
+        }
+        removed = true;
+        notice.classList.add('isLeaving');
+        setTimeout(() => notice.remove(), 260);
+    };
+    close.addEventListener('click', removeNotice);
+    setTimeout(removeNotice, duration);
+    return notice;
+}
+
+window.setAuthView = setAuthView;
+window.setAuthGatewayVisible = setAuthGatewayVisible;
+window.setAuthInlineMessage = setAuthInlineMessage;
+window.showCrimsonNotice = showCrimsonNotice;
+window.alert = (message) => showCrimsonNotice(message, 'auto');
+setAuthGatewayVisible(true, 'welcome');
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
 import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
@@ -55,6 +236,57 @@ function getCategoryImage(record, size = "large"){
 
 function encodeContextPayload(payload){
     return encodeURIComponent(JSON.stringify(payload));
+}
+
+function skeletonMarkup(type = "song", count = 3){
+    if(type === "category"){
+        const rowCount = Math.ceil(count / 2);
+        return Array.from({length: rowCount}, (_, rowIndex) => `
+            <li class="catItems skeletonCategoryRow" style="--cat-row-index:${rowIndex}">
+                <div class="skeletonItem skeletonCategoryCard"><span></span></div>
+                <div class="skeletonItem skeletonCategoryCard"><span></span></div>
+            </li>`).join("");
+    }
+
+    return Array.from({length: count}, (_, index) => {
+        if(type === "artist"){
+            return `<li class="skeletonItem skeletonArtist" style="--skeleton-index:${index}"><span class="skeletonArtwork"></span><span class="skeletonLine skeletonLineShort"></span></li>`;
+        }
+        if(type === "playlist"){
+            return `<li class="skeletonItem skeletonPlaylist" style="--skeleton-index:${index}"><span class="skeletonArtwork"></span><span class="skeletonLine"></span><span class="skeletonLine skeletonLineShort"></span></li>`;
+        }
+        return `<li class="skeletonItem skeletonSong" style="--skeleton-index:${index}"><span class="skeletonArtwork"></span><span class="skeletonCopy"><span class="skeletonLine"></span><span class="skeletonLine skeletonLineShort"></span></span><span class="skeletonAction"></span></li>`;
+    }).join("");
+}
+
+function showSkeleton(container, type = "song", count = 3, append = false){
+    if(!container){
+        return;
+    }
+    container.setAttribute("aria-busy", "true");
+    const markup = skeletonMarkup(type, count);
+    if(append){
+        container.insertAdjacentHTML("beforeend", markup);
+    }else{
+        container.innerHTML = markup;
+    }
+}
+
+function clearSkeleton(container){
+    if(!container){
+        return;
+    }
+    container.querySelectorAll(".skeletonItem, .skeletonCategoryRow").forEach((item) => item.remove());
+    container.setAttribute("aria-busy", "false");
+}
+
+function appendLoadedMarkup(container, markup){
+    clearSkeleton(container);
+    container.insertAdjacentHTML("beforeend", markup);
+}
+
+function emptyStateMarkup(message){
+    return `<li class="contentEmptyState"><i class="fa-regular fa-face-smile"></i><span>${message}</span></li>`;
 }
 
 window.crimsonGetSongById = async function(songId){
@@ -250,11 +482,20 @@ const password = document.getElementById('password');
 const registerBtn = document.getElementById('registerBtn');
 const loginBtn = document.getElementById('loginBtn');
 const googleLoginBtn = document.getElementById('googleLoginBtn');
+const authLoginForm = document.getElementById('authLoginForm');
+const authRegisterForm = document.getElementById('authRegisterForm');
+const authLoginIdentifier = document.getElementById('authLoginIdentifier');
+const authLoginPassword = document.getElementById('authLoginPassword');
+const authRegisterUsername = document.getElementById('authRegisterUsername');
+const authRegisterEmail = document.getElementById('authRegisterEmail');
+const authRegisterPassword = document.getElementById('authRegisterPassword');
+const googleAuthButtons = Array.from(document.querySelectorAll('[data-google-auth]'));
 
 let accountNames = document.getElementsByName('accountName');
 let accountEmails = document.getElementsByName('accountEmail');
 let accountPhotos = document.getElementsByName('profilePhoto');
 const profilePhotoUpload = document.getElementById('profilePhotoUpload');
+const googleProfilePhotoOption = document.getElementById('googleProfilePhotoOption');
 let accountUsername;
 let accountEmail;
 let profilePhoto;
@@ -293,6 +534,41 @@ function setAccountPhotoSrc(photoValue){
         editablePhoto.removeAttribute('data-photo-upload');
     }
 }
+
+function syncGoogleProfilePhotoOption(user = currentUser){
+    if(!googleProfilePhotoOption){
+        return;
+    }
+
+    const googlePhotoURL = user?.GooglePhotoURL || "";
+    googleProfilePhotoOption.classList.toggle('displayNone', !googlePhotoURL);
+    googleProfilePhotoOption.dataset.photoUrl = googlePhotoURL;
+    const preview = googleProfilePhotoOption.querySelector('img');
+    if(preview && googlePhotoURL){
+        preview.src = googlePhotoURL;
+    }
+}
+
+googleProfilePhotoOption?.addEventListener('click', () => {
+    const googlePhotoURL = googleProfilePhotoOption.dataset.photoUrl;
+    const editablePhoto = document.querySelector('.accPhotoWrapper img');
+    if(!googlePhotoURL || !editablePhoto){
+        return;
+    }
+
+    editablePhoto.src = googlePhotoURL;
+    editablePhoto.setAttribute('data-photo-url', googlePhotoURL);
+    editablePhoto.removeAttribute('data-photo-id');
+    editablePhoto.removeAttribute('data-photo-upload');
+    selectedProfilePhotoFile = null;
+    if(profilePhotoUpload){
+        profilePhotoUpload.value = "";
+    }
+    document.querySelector('.photoPicker')?.classList.add('displayNone');
+    document.querySelector('.presetPhotoGrid')?.classList.add('displayNone');
+    window.dispatchEvent(new CustomEvent('profilePhotoPickerClosed'));
+    window.showCrimsonNotice?.('Google profile photo selected. Tap Save to apply it.', 'info');
+});
 
 function getSafeFileName(file){
     const extension = GetFileExt(file).toLowerCase();
@@ -359,56 +635,115 @@ if(profilePhotoUpload){
     });
 }
 
-function Validation(){
-    let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook|icloud)\.com$/;
-    let userregex = /^[a-zA-Z0-9]{4,}$/;
+function setAuthFormMessage(viewName, message = "", type = "error", input = null){
+    window.setAuthInlineMessage?.(viewName, message, type);
+    document.querySelectorAll(`[data-auth-view="${viewName}"] .authInputError`).forEach((item) => item.classList.remove('authInputError'));
+    input?.classList.add('authInputError');
+    if(message && type === "error"){
+        window.showCrimsonNotice?.(message, "error", {title: "Unable to continue"});
+    }
+}
 
-    if(isEmptyOrSpaces(username.value) || isEmptyOrSpaces(email.value) ||
-    isEmptyOrSpaces(password.value)){
-        alert('Some fields are empty!');
+function setAuthFormBusy(form, isBusy){
+    if(!form){
+        return;
+    }
+    form.querySelectorAll('button, input').forEach((control) => {
+        control.disabled = isBusy;
+    });
+    const submit = form.querySelector('[type="submit"]');
+    if(submit){
+        if(!submit.dataset.defaultLabel){
+            submit.dataset.defaultLabel = submit.textContent;
+        }
+        submit.textContent = isBusy ? "Just a moment..." : submit.dataset.defaultLabel;
+    }
+}
+
+function validateRegistration(usernameValue, emailValue, passwordValue, viewName = null){
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const usernameRegex = /^[a-zA-Z0-9]{4,20}$/;
+
+    if(isEmptyOrSpaces(usernameValue)){
+        viewName ? setAuthFormMessage(viewName, 'Enter a username.', 'error', authRegisterUsername) : alert('Enter a username.');
         return false;
     }
-
-    if(!emailregex.test(email.value)){
-        alert('Email is not valid!');
+    if(!usernameRegex.test(usernameValue)){
+        viewName ? setAuthFormMessage(viewName, 'Username must be 4–20 letters or numbers.', 'error', authRegisterUsername) : alert('Username must be 4–20 letters or numbers.');
         return false;
     }
-
-    if(!userregex.test(username.value)){
-        alert('Username is not valid and has to have more than 5 characters!');
+    if(!emailRegex.test(emailValue)){
+        viewName ? setAuthFormMessage(viewName, 'Enter a valid email address.', 'error', authRegisterEmail) : alert('Enter a valid email address.');
         return false;
     }
-
+    if(!passwordValue || passwordValue.length < 6){
+        viewName ? setAuthFormMessage(viewName, 'Password must have at least 6 characters.', 'error', authRegisterPassword) : alert('Password must have at least 6 characters.');
+        return false;
+    }
     return true;
+}
+
+function encryptPassword(passwordValue){
+    return CryptoJS.AES.encrypt(passwordValue, passwordValue).toString();
+}
+
+function decryptPassword(encryptedPassword, passwordValue){
+    if(!encryptedPassword || !passwordValue){
+        return "";
+    }
+    try{
+        return CryptoJS.AES.decrypt(encryptedPassword, passwordValue).toString(CryptoJS.enc.Utf8);
+    }catch(error){
+        return "";
+    }
 }
 
 // ----- REGISTER USER
 
-function RegisterUser(){
-    if(!Validation()){
+async function registerAccount(usernameValue, emailValue, passwordValue, viewName = null){
+    usernameValue = String(usernameValue || '').trim();
+    emailValue = String(emailValue || '').trim().toLowerCase();
+
+    if(!validateRegistration(usernameValue, emailValue, passwordValue, viewName)){
         return;
     }
-    const dbRef = ref(realdb);
 
-    get(child(dbRef, "Users/"+username.value)).then((snapshot)=>{
+    const form = viewName ? authRegisterForm : null;
+    setAuthFormBusy(form, true);
+    try{
+        const dbRef = ref(realdb);
+        const snapshot = await get(child(dbRef, "Users/"+usernameValue));
         if(snapshot.exists()){
-            alert('Account already exists!');
+            viewName ? setAuthFormMessage(viewName, 'That username is already taken.', 'error', authRegisterUsername) : alert('Account already exists!');
+            return;
         }
-        else{
-            const newUser = createDefaultUser(username.value, email.value);
-            newUser.Password = encPass();
 
-            set(ref(realdb, "Users/"+username.value),
-            newUser)
-            .then(()=>{
-                alert(`Welcome to Crimson ${username.value}!`);
-                AuthenticateUser();
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            })
+        const existingEmailSnapshot = await get(query(ref(realdb, "Users"), orderByChild("Email"), equalTo(emailValue)));
+        if(existingEmailSnapshot.exists()){
+            viewName ? setAuthFormMessage(viewName, 'An account already uses this email.', 'error', authRegisterEmail) : alert('An account already uses this email.');
+            return;
         }
-    })
+
+        const newUser = createDefaultUser(usernameValue, emailValue);
+        newUser.Password = encryptPassword(passwordValue);
+        await set(ref(realdb, "Users/"+usernameValue), newUser);
+        window.showCrimsonNotice?.(`Welcome to Crimson, ${usernameValue}!`, 'success');
+        setAuthFormMessage(viewName || 'register', '', 'success');
+        loginUser(newUser);
+        LoadUserPlaylists();
+        LoadLikedPlaylists();
+        LoadUserFArtists();
+    }catch(error){
+        const message = "We couldn't create your account. Please try again.";
+        viewName ? setAuthFormMessage(viewName, message) : alert(message);
+        console.error(error);
+    }finally{
+        setAuthFormBusy(form, false);
+    }
+}
+
+function RegisterUser(){
+    return registerAccount(username.value, email.value, password.value);
 }
 
 function createDefaultUser(usernameValue, emailValue, authUser = null){
@@ -418,6 +753,7 @@ function createDefaultUser(usernameValue, emailValue, authUser = null){
         Password: "",
         Playlists: "",
         ProfilePhoto: "1",
+        GooglePhotoURL: authUser?.photoURL || "",
         LikedSongs: "",
         AppTheme: "Dark",
         FollowedArtists: "",
@@ -427,36 +763,83 @@ function createDefaultUser(usernameValue, emailValue, authUser = null){
     };
 }
 
-// Encrypt the password using AES
-
-function encPass(){
-    let pass12 = CryptoJS.AES.encrypt(password.value, password.value);
-    return pass12.toString();
-}
-
 // Call the register user on click
-registerBtn.addEventListener('click', RegisterUser);
-loginBtn.addEventListener('click', AuthenticateUser);
-googleLoginBtn.addEventListener('click', SignInWithGoogle);
+registerBtn?.addEventListener('click', RegisterUser);
+loginBtn?.addEventListener('click', AuthenticateUser);
+googleLoginBtn?.addEventListener('click', SignInWithGoogle);
+googleAuthButtons.forEach((button) => button.addEventListener('click', SignInWithGoogle));
+
+authRegisterForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    registerAccount(authRegisterUsername.value, authRegisterEmail.value, authRegisterPassword.value, 'register');
+});
+
+authLoginForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    authenticateAccount(authLoginIdentifier.value, authLoginPassword.value, 'login');
+});
 
 // ----- AUTHENTICATE USER
 
-function AuthenticateUser(){
-    const dbRef = ref(realdb);
+async function findPasswordUser(identifier){
+    identifier = String(identifier || '').trim();
+    if(!identifier){
+        return null;
+    }
 
-    get(child(dbRef, "Users/"+username.value)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let dbpass = decPass(snapshot.val().Password);
-            if(dbpass == password.value){
-                loginUser(snapshot.val());
-                LoadUserPlaylists();
-                LoadLikedPlaylists();
-                LoadUserFArtists();
-            }
-        }else{
-            alert("Account not found!");
+    if(!identifier.includes('@')){
+        const directSnapshot = await get(child(ref(realdb), "Users/"+identifier));
+        return directSnapshot.exists() ? directSnapshot.val() : null;
+    }
+
+    const emailSnapshot = await get(query(ref(realdb, "Users"), orderByChild("Email"), equalTo(identifier.toLowerCase())));
+    return getFirstSnapshotValue(emailSnapshot);
+}
+
+async function authenticateAccount(identifier, passwordValue, viewName = null){
+    identifier = String(identifier || '').trim();
+    if(!identifier){
+        viewName ? setAuthFormMessage(viewName, 'Enter your email or username.', 'error', authLoginIdentifier) : alert('Enter your username.');
+        return;
+    }
+    if(!passwordValue){
+        viewName ? setAuthFormMessage(viewName, 'Enter your password.', 'error', authLoginPassword) : alert('Enter your password.');
+        return;
+    }
+
+    const form = viewName ? authLoginForm : null;
+    setAuthFormBusy(form, true);
+    try{
+        const user = await findPasswordUser(identifier);
+        if(!user){
+            const message = 'We couldn’t find that account.';
+            viewName ? setAuthFormMessage(viewName, message, 'error', authLoginIdentifier) : alert(message);
+            return;
         }
-    })
+
+        if(decryptPassword(user.Password, passwordValue) !== passwordValue){
+            const message = 'That password doesn’t look right.';
+            viewName ? setAuthFormMessage(viewName, message, 'error', authLoginPassword) : alert(message);
+            return;
+        }
+
+        setAuthFormMessage(viewName || 'login', '', 'success');
+        loginUser(user);
+        LoadUserPlaylists();
+        LoadLikedPlaylists();
+        LoadUserFArtists();
+        window.showCrimsonNotice?.(`Welcome back, ${user.Username}.`, 'success');
+    }catch(error){
+        const message = 'Sign in failed. Check your connection and try again.';
+        viewName ? setAuthFormMessage(viewName, message) : alert(message);
+        console.error(error);
+    }finally{
+        setAuthFormBusy(form, false);
+    }
+}
+
+function AuthenticateUser(){
+    return authenticateAccount(username.value, password.value);
 }
 
 function sanitizeGoogleUsername(authUser){
@@ -481,7 +864,13 @@ async function ensureGoogleUser(authUser){
     const existingGoogleUser = getFirstSnapshotValue(existingGoogleUserSnapshot);
 
     if(existingGoogleUser){
-        return existingGoogleUser;
+        const googleUserPatch = {
+            AuthProvider: "google",
+            GoogleUid: authUser.uid,
+            GooglePhotoURL: authUser.photoURL || existingGoogleUser.GooglePhotoURL || ""
+        };
+        await update(ref(realdb, "Users/"+existingGoogleUser.Username), googleUserPatch);
+        return {...existingGoogleUser, ...googleUserPatch};
     }
 
     const baseUsername = sanitizeGoogleUsername(authUser);
@@ -511,6 +900,14 @@ async function handleGoogleCredential(authUser){
 }
 
 async function SignInWithGoogle(){
+    googleAuthButtons.forEach((button) => {
+        button.disabled = true;
+        const label = button.querySelector('span');
+        if(label){
+            label.dataset.defaultLabel ||= label.textContent;
+            label.textContent = 'Connecting...';
+        }
+    });
     try{
         const result = await signInWithPopup(auth, provider);
         await handleGoogleCredential(result.user);
@@ -522,7 +919,16 @@ async function SignInWithGoogle(){
         if(error.code === "auth/popup-closed-by-user" || error.code === "auth/cancelled-popup-request"){
             return;
         }
-        alert("Google login failed: " + error.message);
+        window.showCrimsonNotice?.("Google sign in failed. Please try again.", "error");
+        console.error(error);
+    }finally{
+        googleAuthButtons.forEach((button) => {
+            button.disabled = false;
+            const label = button.querySelector('span');
+            if(label?.dataset.defaultLabel){
+                label.textContent = label.dataset.defaultLabel;
+            }
+        });
     }
 }
 
@@ -533,7 +939,8 @@ getRedirectResult(auth)
     }
 })
 .catch((error) => {
-    alert("Google login failed: " + error.message);
+    window.showCrimsonNotice?.("Google sign in failed. Please try again.", "error");
+    console.error(error);
 });
 
 function reloadUserPhotoAndUsername(){
@@ -546,19 +953,12 @@ function reloadUserPhotoAndUsername(){
     })
 }
 
-// ----- DECRYPT PASSWORD
-
-function decPass(dbpass){
-    let pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
-    return pass12.toString(CryptoJS.enc.Utf8);
-}
-
 // ----- LOGIN USER
 
 function loginUser(user){
+    currentUser = user;
     localStorage.setItem('keepLoggedIn', 'yes');
     localStorage.setItem('user', JSON.stringify(user));
-    getUsername();
     accountUsername = user.Username;
     accountEmail = user.Email;
     accountNames.forEach((name) => {
@@ -567,16 +967,21 @@ function loginUser(user){
     accountEmails.forEach((email) => {
         email.innerHTML = accountEmail;
     });
+    syncGoogleProfilePhotoOption(user);
     
     let dbRef = ref(realdb);
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
-            let setProfilePhoto = snapshot.val().ProfilePhoto || "1";
+            const latestUser = snapshot.val();
+            currentUser = latestUser;
+            localStorage.setItem('user', JSON.stringify(latestUser));
+            let setProfilePhoto = latestUser.ProfilePhoto || "1";
             setAccountPhotoSrc(setProfilePhoto);
+            syncGoogleProfilePhotoOption(latestUser);
         }
     })
 
-    accountTheme = user.AppTheme;
+    accountTheme = user.AppTheme || "Dark";
     setLoggedInScreen();
 }
 
@@ -620,13 +1025,27 @@ logoutBtn.addEventListener('click', ()=>{
 })
 
 // See if user was signed in
-function seeIfUserIsSignedIn(){
-    if(currentUser == null){
+async function seeIfUserIsSignedIn(){
+    if(currentUser == null || !currentUser.Username){
         setLoggedOutScreen();
+        return;
     }
-    else{
-        loginUser(currentUser);
+
+    try{
+        const snapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+        if(snapshot.exists()){
+            loginUser(snapshot.val());
+            return;
+        }
+    }catch(error){
+        console.error(error);
+        window.showCrimsonNotice?.('We could not verify your session. Please sign in again.', 'warning');
     }
+
+    localStorage.removeItem('user');
+    localStorage.removeItem('keepLoggedIn');
+    currentUser = null;
+    setLoggedOutScreen();
 }
 
 // Is user signed in check
@@ -650,7 +1069,7 @@ function GenerateOneSong(songName){
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+    return get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             songToBePlayed = snapshot.val().SongURL;
             songTitle  = snapshot.val().SongName;
@@ -677,7 +1096,7 @@ function GenerateOneSong(songName){
                     <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </li>`;
-            recSongs.innerHTML += currentLI;
+            appendLoadedMarkup(recSongs, currentLI);
 
             if(recSongs.children.length == 5){
                 setTimeout(() => {
@@ -692,16 +1111,18 @@ function generateSongs(){
 
     let randomList = [];
 
+    const requests = [];
     for (let i = 0; i < 5; i++) {
         while(true){
             let g = Math.floor(Math.random() * brojPesama) + 1;
             if(!randomList.includes(g)){
-                GenerateOneSong(g);
+                requests.push(GenerateOneSong(g));
                 randomList.push(g);
                 break;
             }
         }
     }
+    return Promise.allSettled(requests).finally(() => clearSkeleton(recSongs));
 }
 
 // ----- GENERATE ARTISTS
@@ -713,7 +1134,7 @@ function GetArtists(artistName){
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
+    return get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
             artistImage = getArtistImage(snapshot.val(), "large");
@@ -725,24 +1146,26 @@ function GetArtists(artistName){
             <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImageSmall +`" alt="artistImage">
             <h3>`+ artistName +`</h3>
             </li>`;
-            recArtists.innerHTML += currentImg;
+            appendLoadedMarkup(recArtists, currentImg);
         }
     })
 }
 
 function generateArtists(){
     let randomList = [];
+    const requests = [];
 
     for (let i = 0; i < 10; i++) {
         while(true){
             let g = Math.floor(Math.random() * brojArtista) + 1;
             if(!randomList.includes(g)){
-                GetArtists(g);
+                requests.push(GetArtists(g));
                 randomList.push(g);
                 break;
             }
         }
     }
+    return Promise.allSettled(requests).finally(() => clearSkeleton(recArtists));
 }
 
 // ----- GENERATE PLAYLISTS
@@ -754,7 +1177,7 @@ function GetPlaylists(playlistName){
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
+    return get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
         if(snapshot.exists()){
             let currentLi = "";
 
@@ -783,7 +1206,7 @@ function GetPlaylists(playlistName){
                 </li>`;
             }
 
-            recPlaylists.innerHTML += currentLi;
+            appendLoadedMarkup(recPlaylists, currentLi);
         }
     })
 }
@@ -791,25 +1214,29 @@ function GetPlaylists(playlistName){
 function generatePlaylists(){
 
     let randomList = [];
+    const requests = [];
 
     for (let i = 0; i < 5; i++) {
         while(true){
             let g = Math.floor(Math.random() * brojPlejlista) + 1;
             if(!randomList.includes(g)){
-                GetPlaylists(g);
+                requests.push(GetPlaylists(g));
                 randomList.push(g);
                 break;
             }
         }
     }
+    return Promise.allSettled(requests).finally(() => clearSkeleton(recPlaylists));
 }
 
 // ----- SEARCH
 
 let searchList = document.getElementsByClassName("searchList")[0];
+let searchLoadToken = 0;
 
 const searchBtn = document.getElementById("submitSearch");
 searchBtn.addEventListener('click', () => {
+    const requestToken = ++searchLoadToken;
     
     const searchInput = document.getElementById("searchInput");
     const searchedText = searchInput.value;
@@ -825,36 +1252,51 @@ searchBtn.addEventListener('click', () => {
     searchList.classList.add("searchListOpen");
 
     if(searchedTextLower != ""){
+        showSkeleton(searchList, "song", 5);
         window.crimsonSaveSearchHistory?.("search", searchedText);
+        const searchRequests = [];
 
         if(isAllCh || isSongsCh){
             for (let i = 1; i <= brojPesama; i++) {
-                findSearchedSong(i,searchedTextLower);
+                searchRequests.push(findSearchedSong(i,searchedTextLower,requestToken));
             }
         }
     
         if(isAllCh || isArtistsCh){
             for (let i = 1; i <= brojArtista; i++) {
-                findSearchedArtist(i,searchedTextLower);
+                searchRequests.push(findSearchedArtist(i,searchedTextLower,requestToken));
             }
         }
 
         if(isAllCh || isPlaylistsCh){
             for (let i = 1; i <= brojPlejlista; i++) {
-                findSearchedPlaylist(i,searchedTextLower);
+                searchRequests.push(findSearchedPlaylist(i,searchedTextLower,requestToken));
             }
         }
+        Promise.allSettled(searchRequests).then(() => {
+            if(requestToken !== searchLoadToken){
+                return;
+            }
+            clearSkeleton(searchList);
+            if(searchList.children.length === 0){
+                searchList.innerHTML = emptyStateMarkup("No matching music found");
+            }
+        });
     }else{
+        clearSkeleton(searchList);
         searchList.classList.remove("searchListOpen");
     }
 });
 
-function findSearchedSong(songName, inputText){
+function findSearchedSong(songName, inputText, requestToken){
     let name = songName;
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+    return get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
+        if(requestToken !== searchLoadToken){
+            return;
+        }
         if(snapshot.exists()){
             songTitle  = snapshot.val().SongName;
             if(songTitle.toLowerCase().includes(inputText.toLowerCase())){
@@ -882,18 +1324,21 @@ function findSearchedSong(songName, inputText){
                         <button onclick="openPopup('song','`+ imageURL +`','`+ songCreator +`','`+ songTitle +`','`+ songName +`')"><i class="fa-solid fa-bars"></i></button>
                     </div>
                     </li>`;
-                searchList.innerHTML += currentLI;
+                appendLoadedMarkup(searchList, currentLI);
             }
         }
     })
 }
 
-function findSearchedArtist(artistName, inputText){
+function findSearchedArtist(artistName, inputText, requestToken){
     let name = artistName;
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
+    return get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
+        if(requestToken !== searchLoadToken){
+            return;
+        }
         if(snapshot.exists()){
             artistName = snapshot.val().Artist;
             let artistTerms = snapshot.val().ArtistSearchTerms || "";
@@ -910,18 +1355,21 @@ function findSearchedArtist(artistName, inputText){
                                     </div>
                                     <i class="fa-solid fa-circle-right"></i>
                                 </li>`;
-                searchList.innerHTML += currentLi;
+                appendLoadedMarkup(searchList, currentLi);
             }
         }
     })
 }
 
-function findSearchedPlaylist(playlistName, inputText){
+function findSearchedPlaylist(playlistName, inputText, requestToken){
     let name = playlistName;
 
     let dbRef = ref(realdb);
 
-    get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
+    return get(child(dbRef, "PublicPlaylists/"+name)).then((snapshot)=>{
+        if(requestToken !== searchLoadToken){
+            return;
+        }
         if(snapshot.exists()){
             playlistName = snapshot.val().Title;
             if(playlistName.toLowerCase().includes(inputText.toLowerCase())){
@@ -940,7 +1388,7 @@ function findSearchedPlaylist(playlistName, inputText){
                     </div>
                     <i class="fa-solid fa-circle-right"></i>
                 </li>`;
-                searchList.innerHTML += currentLi;
+                appendLoadedMarkup(searchList, currentLi);
             }
         }
     })
@@ -997,13 +1445,95 @@ async function generateCategories(){
 let categoryPage = document.getElementsByClassName("categoryScreen")[0];
 let categoryRecommendedPlaylistsList = document.getElementsByClassName("categoryRecommendedPlaylists")[0];
 let categoryRecommendedSongsList = document.getElementsByClassName("categoryRecommendedSongs")[0];
-let categoryAccentBubble = document.getElementsByClassName("categoryAccentBubble")[0];
+let categoryLoadToken = 0;
 
 let isCategoryPageOpen = false;
+
+function renderCategorySongRow(songId, record, sourceName = "Categories"){
+    const title = record.SongName;
+    const creator = record.Creator;
+    const image = getSongImage(record, "large");
+    const imageSmall = getSongImage(record, "small");
+    const color = record.Color;
+    return `<li class="songItem">
+        <div class="songInfo">
+            <div class="songVisualizer"><span></span><span></span><span></span><span></span></div>
+            <img src="${imageSmall}" alt="songBanner">
+            <div class="songText"><h2>${title}</h2><h3>${creator}</h3></div>
+        </div>
+        <div class="songClickDiv" onclick="playerSelectedSong('${record.SongURL}','${title}','${creator}','${image}','${color}','${sourceName}',this.parentElement,'${songId}');"></div>
+        <div class="songBtns"><button onclick="clickEffect(this); openPopup('song','${image}','${creator}','${title}','${songId}')"><i class="fa-solid fa-bars"></i></button></div>
+    </li>`;
+}
+
+function renderCategoryPlaylistCard(playlistId, record){
+    const name = record.Title;
+    const banner = getPlaylistImage(record, "large");
+    const bannerSmall = getPlaylistImage(record, "small");
+    const likes = record.Likes;
+    const songs = record.Songs || "";
+    const artists = record.Artists || "";
+    return `<li class="playlistItem" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: playlistId, name, image: banner, imageSmall: bannerSmall, likes, songs, artists})}" onclick="openPlaylistPage(${playlistId},'${name}','${banner}','${likes}','${songs}');">
+        <img src="${bannerSmall}" alt="playlistBanner">
+        <h3>${name}</h3>
+        <h5>${artists}</h5>
+    </li>`;
+}
+
+async function loadCategoryContent(category, token){
+    try{
+        const [songsSnapshot, playlistsSnapshot] = await Promise.all([
+            get(child(ref(realdb), "Songs")),
+            get(child(ref(realdb), "PublicPlaylists"))
+        ]);
+        if(token !== categoryLoadToken){
+            return;
+        }
+
+        const categoryLower = String(category).toLowerCase();
+        const matchingSongs = Object.entries(songsSnapshot.val() || {}).filter(([, record]) =>
+            record?.SongName && String(record.Categories || "").toLowerCase().includes(categoryLower)
+        );
+        const matchingPlaylists = Object.entries(playlistsSnapshot.val() || {}).filter(([, record]) =>
+            record?.Title && String(record.Category || "").toLowerCase().includes(categoryLower)
+        );
+
+        categoryRecommendedSongsList.innerHTML = matchingSongs.length
+            ? matchingSongs.map(([id, record]) => renderCategorySongRow(id, record)).join("")
+            : emptyStateMarkup("No featured songs yet");
+        categoryRecommendedPlaylistsList.innerHTML = matchingPlaylists.length
+            ? matchingPlaylists.map(([id, record]) => renderCategoryPlaylistCard(id, record)).join("")
+            : emptyStateMarkup("No featured playlists yet");
+        categoryRecommendedSongsList.setAttribute("aria-busy", "false");
+        categoryRecommendedPlaylistsList.setAttribute("aria-busy", "false");
+        document.getElementById("categorySongCount").textContent = matchingSongs.length ? `${matchingSongs.length}` : "";
+        document.getElementById("categoryPlaylistCount").textContent = matchingPlaylists.length ? `${matchingPlaylists.length}` : "";
+        const songLabel = matchingSongs.length === 1 ? "song" : "songs";
+        const playlistLabel = matchingPlaylists.length === 1 ? "playlist" : "playlists";
+        document.getElementById("categoryMeta").textContent = `${matchingSongs.length} ${songLabel} · ${matchingPlaylists.length} ${playlistLabel}`;
+    }catch(error){
+        if(token !== categoryLoadToken){
+            return;
+        }
+        categoryRecommendedSongsList.innerHTML = emptyStateMarkup("Could not load songs");
+        categoryRecommendedPlaylistsList.innerHTML = emptyStateMarkup("Could not load playlists");
+        categoryRecommendedSongsList.setAttribute("aria-busy", "false");
+        categoryRecommendedPlaylistsList.setAttribute("aria-busy", "false");
+    }
+}
 
 export function openCategoryPage(category, color, banner){
 
     categoryPage.classList.add('screenOpenOnTop');
+    const categoryScroller = document.getElementById("screenScrollableCat");
+    categoryScroller.scrollTop = 0;
+    categoryScroller.children[0]?.classList.remove("pageBarOn");
+    categoryScroller.children[1]?.classList.remove("pageBarOn2");
+    const categoryHeroContent = categoryScroller.querySelector(".categoryHeroContent");
+    if(categoryHeroContent){
+        categoryHeroContent.style.opacity = 1;
+        categoryHeroContent.style.transform = "";
+    }
 
     if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != categoryPage){
         lastOpenSideScreen.classList.remove('screenOpenOnTop');
@@ -1017,30 +1547,27 @@ export function openCategoryPage(category, color, banner){
     let catBanners = document.getElementsByName("catBanner");
     catBanners.forEach((cat) => {
         cat.src = banner;
+        cat.style.transform = "";
     })
 
-    if(!isCategoryPageOpen){
-        categoryPage.classList.add("categoryPageOpen");
-        categoryAccentBubble.style.backgroundImage = `radial-gradient(closest-side, `+ color +`, transparent)`;
-        let categoryNames = document.getElementsByName("categoryName");
-        categoryNames.forEach((name) => {
-            name.innerHTML = category.toUpperCase();
-        });
+    categoryPage.classList.add("categoryPageOpen");
+    categoryPage.style.setProperty("--category-accent", color || "#8f59f5");
+    let categoryNames = document.getElementsByName("categoryName");
+    categoryNames.forEach((name) => {
+        name.textContent = category;
+    });
 
-        categoryRecommendedPlaylistsList.innerHTML = "";
-        for (let i = 1; i <= brojPlejlista; i++) {
-            findPlaylistOfCategory(i, category);
-        }
-
-        categoryRecommendedSongsList.innerHTML = "";
-        for (let i = 1; i <= brojPesama; i++) {
-            findSongOfCategory(i, category);
-        }
-
-        isCategoryPageOpen = true;
-    }else{
-        isCategoryPageOpen = false;
-    }
+    document.getElementById("categoryMeta").textContent = "Curating this category...";
+    document.getElementById("categorySongCount").textContent = "";
+    document.getElementById("categoryPlaylistCount").textContent = "";
+    document.getElementById("playCategoryBtn").onclick = () => {
+        window.crimsonPlayCategoryFromContext?.({name: category});
+    };
+    showSkeleton(categoryRecommendedSongsList, "song", 5);
+    showSkeleton(categoryRecommendedPlaylistsList, "playlist", 4);
+    categoryLoadToken++;
+    loadCategoryContent(category, categoryLoadToken);
+    isCategoryPageOpen = true;
 }
 
 export function closeCategoryPage(){
@@ -1186,15 +1713,12 @@ export async function openArtistPage(artistID, artistName, artistImage, artistFo
         followers.innerHTML = artistFollowers;
     });
 
-    SetTheLatestRelease(artistName);
-    document.getElementsByClassName("latestRelease")[0].setAttribute("name", artistName);
-    for (let i = 1; i <= brojPlejlista; i++) {
-        GetPlaylistsArtistAppearsOn(i, artistName);
-    }
-
-    for (let i = 0; i <= brojPesama; i++) {
-        GenerateOneSongFromArtist(i, artistName);
-    }
+    const latestReleaseList = document.getElementsByClassName("latestRelease")[0];
+    latestReleaseList.setAttribute("name", artistName);
+    showSkeleton(latestReleaseList, "song", 1);
+    showSkeleton(artistSongs, "song", 5);
+    showSkeleton(artistAppearsOnList, "playlist", 4);
+    loadArtistContent(artistName);
 
     const followArtistBtn = document.getElementById('followArtistBtn');
     followArtistBtn.addEventListener('click', () => {
@@ -1313,18 +1837,7 @@ function followArtist(artistId){
                     newFollowedArtists = setFollowedArtists + artistId + ",";
                 }
     
-                set(ref(realdb, "Users/"+currentUser.Username),
-                {
-                    Username: setUsername,
-                    Email: setEmail,
-                    LikedSongs: setLikedSongs,
-                    Password: setPassword,
-                    Playlists: setPlaylists,
-                    ProfilePhoto: setProfilePhoto,
-                    AppTheme: setTheme,
-                    FollowedArtists: newFollowedArtists,
-                    LikedPlaylists: setLikedPlaylists
-                })
+                update(ref(realdb, "Users/"+currentUser.Username), {FollowedArtists: newFollowedArtists})
                 .then(()=>{
                     const followArtistBtn = document.getElementById('followArtistBtn');
     
@@ -1462,6 +1975,49 @@ function GetPlaylistsArtistAppearsOn(playlistName,artist){
 }
 
 let artistSongs = document.getElementsByClassName("artistSongs")[0];
+let artistContentToken = 0;
+
+async function loadArtistContent(artist){
+    const token = ++artistContentToken;
+    try{
+        const [songsSnapshot, playlistsSnapshot] = await Promise.all([
+            get(child(ref(realdb), "Songs")),
+            get(child(ref(realdb), "PublicPlaylists"))
+        ]);
+        if(token !== artistContentToken){
+            return;
+        }
+
+        const artistLower = String(artist).toLowerCase();
+        const matchingSongs = Object.entries(songsSnapshot.val() || {}).filter(([, record]) =>
+            record?.SongName && String(record.Creator || "").toLowerCase().includes(artistLower)
+        );
+        const matchingPlaylists = Object.entries(playlistsSnapshot.val() || {}).filter(([, record]) =>
+            record?.Title && String(record.Artists || "").toLowerCase().includes(artistLower)
+        );
+        const latestReleaseList = document.getElementsByClassName("latestRelease")[0];
+        const latestSong = matchingSongs[matchingSongs.length - 1];
+
+        latestReleaseList.innerHTML = latestSong
+            ? renderCategorySongRow(latestSong[0], latestSong[1], "Artists")
+            : emptyStateMarkup("No releases yet");
+        artistSongs.innerHTML = matchingSongs.length
+            ? matchingSongs.map(([id, record]) => renderCategorySongRow(id, record, "Artists")).join("")
+            : emptyStateMarkup("No tracks yet");
+        artistAppearsOnList.innerHTML = matchingPlaylists.length
+            ? matchingPlaylists.map(([id, record]) => renderCategoryPlaylistCard(id, record)).join("")
+            : emptyStateMarkup("No playlist appearances yet");
+        [latestReleaseList, artistSongs, artistAppearsOnList].forEach((list) => list.setAttribute("aria-busy", "false"));
+        defaultPlaylistSort = artistSongs.innerHTML;
+    }catch(error){
+        if(token !== artistContentToken){
+            return;
+        }
+        document.getElementsByClassName("latestRelease")[0].innerHTML = emptyStateMarkup("Could not load release");
+        artistSongs.innerHTML = emptyStateMarkup("Could not load tracks");
+        artistAppearsOnList.innerHTML = emptyStateMarkup("Could not load playlists");
+    }
+}
 
 function GenerateOneSongFromArtist(songName,artist){
     let name = songName;
@@ -1507,6 +2063,39 @@ function GenerateOneSongFromArtist(songName,artist){
 // ----- PLAYLIST PAGE
 
 let playlistSongsList = document.getElementsByClassName("playlistSongsList")[0];
+let playlistContentToken = 0;
+
+async function loadPlaylistSongRows(songIds, sourceName = "Playlist"){
+    const token = ++playlistContentToken;
+    const cleanIds = songIds.map(String).filter(Boolean);
+    if(cleanIds.length === 0){
+        playlistSongsList.innerHTML = emptyStateMarkup("This playlist is empty");
+        playlistSongsList.setAttribute("aria-busy", "false");
+        return;
+    }
+
+    showSkeleton(playlistSongsList, "song", Math.min(6, Math.max(3, cleanIds.length)));
+    try{
+        const songRecords = await Promise.all(cleanIds.map(async (songId) => {
+            const snapshot = await get(child(ref(realdb), "Songs/"+songId));
+            return snapshot.exists() ? [songId, snapshot.val()] : null;
+        }));
+        if(token !== playlistContentToken){
+            return;
+        }
+        const availableSongs = songRecords.filter(Boolean);
+        playlistSongsList.innerHTML = availableSongs.length
+            ? availableSongs.map(([id, record]) => renderCategorySongRow(id, record, sourceName)).join("")
+            : emptyStateMarkup("No available songs");
+        playlistSongsList.setAttribute("aria-busy", "false");
+        defaultPlaylistSort = playlistSongsList.innerHTML;
+    }catch(error){
+        if(token === playlistContentToken){
+            playlistSongsList.innerHTML = emptyStateMarkup("Could not load playlist songs");
+            playlistSongsList.setAttribute("aria-busy", "false");
+        }
+    }
+}
 
 let isPlaylistPageOpen = false;
 
@@ -1525,8 +2114,6 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     if(document.getElementById("playlistChecker").innerHTML !== pName){
-
-        playlistSongsList.innerHTML = "";
 
         document.getElementById("playlistLikesH5").style.display = "block";
         document.getElementById("likePlaylist").style.display = "flex";
@@ -1551,16 +2138,11 @@ export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
         IsPPlaylistLiked(playlistID);
 
-        let playlistSongss = pSongs.split(',');
-        for (let i = 0; i < playlistSongss.length; i++) {
-            GenerateOneSongFromPlaylist(playlistSongss[i]);
-        }
+        let playlistSongss = String(pSongs || "").split(',').filter(Boolean);
+        loadPlaylistSongRows(playlistSongss, pName);
 
         document.getElementById('likePlaylist').setAttribute('name',playlistID);
 
-        setTimeout(() => {
-            defaultPlaylistSort = document.querySelector('.playlistSongsList').innerHTML;
-        }, 500);
     }else{
         playlistScreen.classList.add("playlistScreenOpen");
         isPlaylistPageOpen = true;
@@ -1659,18 +2241,7 @@ likePlaylistBtn.addEventListener('click', () => {
                 if(!slpArray.includes(playlistID)){
                     setLikedPlaylists += playlistID + ",";
 
-                    set(ref(realdb, "Users/"+currentUser.Username),
-                    {
-                        Username: setUsername,
-                        Email: setEmail,
-                        LikedSongs: setLikedSongs,
-                        Password: setPassword,
-                        Playlists: setPlaylists,
-                        ProfilePhoto: setProfilePhoto,
-                        AppTheme: setTheme,
-                        FollowedArtists: setFollowedArtists,
-                        LikedPlaylists: setLikedPlaylists
-                    })
+                    update(ref(realdb, "Users/"+currentUser.Username), {LikedPlaylists: setLikedPlaylists})
                     .then(()=>{
                         // console.log("Uspesno!");
                         likePlaylistBtn.innerHTML = `<i class="fa-solid fa-heart"></i>`;
@@ -1686,18 +2257,7 @@ likePlaylistBtn.addEventListener('click', () => {
                     });
                     setLikedPlaylists = slpArray.join(',');
 
-                    set(ref(realdb, "Users/"+currentUser.Username),
-                    {
-                        Username: setUsername,
-                        Email: setEmail,
-                        LikedSongs: setLikedSongs,
-                        Password: setPassword,
-                        Playlists: setPlaylists,
-                        ProfilePhoto: setProfilePhoto,
-                        AppTheme: setTheme,
-                        FollowedArtists: setFollowedArtists,
-                        LikedPlaylists: setLikedPlaylists
-                    })
+                    update(ref(realdb, "Users/"+currentUser.Username), {LikedPlaylists: setLikedPlaylists})
                     .then(()=>{
                         // console.log("Uspesno!");
                         likePlaylistBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
@@ -1908,17 +2468,8 @@ async function DBMakePl(){
                     const newPlaylistId = numberOfPlaylists + 1;
                     const newPlaylistName = currentMakePlaylistName.innerHTML;
         
-                    return set(ref(realdb, "Users/"+currentUser.Username),
-                    {
-                        Username: setUsername,
-                        Email: setEmail,
-                        LikedSongs: setLikedSongs,
-                        Password: setPassword,
-                        Playlists: (setPlaylists + "{" + newPlaylistId + "}" + newPlaylistName + "}" + imageDownload + "}}"),
-                        ProfilePhoto: setProfilePhoto,
-                        AppTheme: setTheme,
-                        FollowedArtists: setFollowedArtists,
-                        LikedPlaylists: setLikedPlaylists
+                    return update(ref(realdb, "Users/"+currentUser.Username), {
+                        Playlists: (setPlaylists + "{" + newPlaylistId + "}" + newPlaylistName + "}" + imageDownload + "}}")
                     })
                     .then(()=>{
                         setMakePlaylistLoading(false);
@@ -1986,18 +2537,7 @@ async function DBMakePl(){
                         }
                     }
     
-                    return set(ref(realdb, "Users/"+currentUser.Username),
-                    {
-                        Username: setUsername,
-                        Email: setEmail,
-                        Password: setPassword,
-                        Playlists: newSetPlaylists,
-                        ProfilePhoto: setProfilePhoto,
-                        LikedSongs: setLikedSongs,
-                        AppTheme: setTheme,
-                        FollowedArtists: setFollowedArtists,
-                        LikedPlaylists: setLikedPlaylists
-                    })
+                    return update(ref(realdb, "Users/"+currentUser.Username), {Playlists: newSetPlaylists})
                     .then(()=>{
                         deleteReplacedPlaylistCover(oldPlaylistBanner, imageDownload);
                         setMakePlaylistLoading(false);
@@ -2023,8 +2563,8 @@ let yourPlaylists = document.getElementsByClassName("yourPlaylists")[0];
 let yourFArtists = document.getElementsByClassName("yourFArtists")[0];
 let yourLPlaylists = document.getElementsByClassName('yourLPlaylists')[0];
 
-function LoadUserPlaylists(){
-    yourPlaylists.innerHTML = `<li class="songItem favoritesLibraryItem" data-crimson-context="${encodeContextPayload({type: "libraryPlaylist", id: 0, name: "Favorites", image: "images/favoritesPlaylistPage.gif", artists: "Simply yours", favorites: true})}" onclick="openLikedSongs();">
+function favoritesLibraryMarkup(){
+    return `<li class="songItem favoritesLibraryItem" data-crimson-context="${encodeContextPayload({type: "libraryPlaylist", id: 0, name: "Favorites", image: "images/favoritesPlaylistPage.gif", artists: "Simply yours", favorites: true})}" onclick="openLikedSongs();">
         <div class="songInfo">
             <img src="images/favorites.jpg" alt="playlistBanner">
             <div class="songText">
@@ -2033,91 +2573,100 @@ function LoadUserPlaylists(){
             </div>
         </div>
     </li>`;
+}
 
-    let dbRef = ref(realdb);
+async function LoadUserPlaylists(){
+    const favoritesMarkup = favoritesLibraryMarkup();
+    yourPlaylists.innerHTML = favoritesMarkup;
 
-    if(currentUser == null || currentUser == undefined)
+    if(currentUser == null || currentUser == undefined){
+        yourPlaylists.setAttribute("aria-busy", "false");
         return;
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
+    }
+
+    showSkeleton(yourPlaylists, "song", 2, true);
+    try{
+        const snapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+        const playlistRows = [];
         if(snapshot.exists()){
-            let usersPlaylists = (snapshot.val().Playlists).split('{');
+            const usersPlaylists = String(snapshot.val().Playlists || "").split('{');
             numberOfPlaylists = usersPlaylists.length - 1;
 
             for (let i = numberOfPlaylists; i > 0; i--) {
-                let currentLi =  `<li class="songItem" id="`+ usersPlaylists[i].split('}')[0] +`">
+                const playlistParts = usersPlaylists[i].split('}');
+                if(!playlistParts[0] || !playlistParts[1]){
+                    continue;
+                }
+                playlistRows.push(`<li class="songItem" id="`+ playlistParts[0] +`">
                     <div class="songInfo">
-                        <img src="`+ usersPlaylists[i].split('}')[2] +`" alt="playlistBanner">
+                        <img src="`+ playlistParts[2] +`" alt="playlistBanner">
                         <div class="songText">
-                            <h2>`+ usersPlaylists[i].split('}')[1] +`</h2>
+                            <h2>`+ playlistParts[1] +`</h2>
                             <h3>`+ "by " + currentUser.Username +`</h3>
                         </div>
                     </div>
-                    <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ usersPlaylists[i].split('}')[0] +`,'`+ usersPlaylists[i].split('}')[1] +`','`+ usersPlaylists[i].split('}')[2] +`','`+ 0 +`','`+ usersPlaylists[i].split('}')[3] +`');"></div>
+                    <div class="songClickDiv" onclick="clickEffect(this); openMyPlaylistPage(`+ playlistParts[0] +`,'`+ playlistParts[1] +`','`+ playlistParts[2] +`','`+ 0 +`','`+ (playlistParts[3] || "") +`');"></div>
                     <div class="songBtns">
-                        <button onclick="openPopup('playlist','`+ usersPlaylists[i].split('}')[2] +`','`+ "by " + currentUser.Username +`','`+ usersPlaylists[i].split('}')[1] +`',${usersPlaylists[i].split('}')[0]},'${usersPlaylists[i].split('}')[3]}')"><i class="fa-solid fa-bars"></i></button>
+                        <button onclick="openPopup('playlist','`+ playlistParts[2] +`','`+ "by " + currentUser.Username +`','`+ playlistParts[1] +`',${playlistParts[0]},'${playlistParts[3] || ""}')"><i class="fa-solid fa-bars"></i></button>
                     </div>
-                </li>`;
-                yourPlaylists.innerHTML += currentLi;
+                </li>`);
             }
         }
-    })
+        yourPlaylists.innerHTML = favoritesMarkup + playlistRows.join("");
+        yourPlaylists.setAttribute("aria-busy", "false");
+    }catch(error){
+        yourPlaylists.innerHTML = favoritesMarkup;
+        yourPlaylists.setAttribute("aria-busy", "false");
+    }
 }
 
 function DeLoadUserPlaylists(){
     yourPlaylists.innerHTML = "";
 }
 
-function LoadUserFArtists(){
-    yourFArtists.innerHTML = "";
+async function LoadUserFArtists(){
+    if(currentUser == undefined){
+        yourFArtists.innerHTML = "";
+        yourFArtists.setAttribute("aria-busy", "false");
+        return;
+    }
 
-    const dbRef = ref(realdb);
-
-    if(currentUser != undefined){
-        get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-            if(snapshot.exists()){
-                let setUsername = snapshot.val().Username;
-                let setEmail = snapshot.val().Email;
-                let setPassword = snapshot.val().Password;
-                let setPlaylists = snapshot.val().Playlists;
-                let setLikedSongs = snapshot.val().LikedSongs;
-                let setLikedPlaylists = snapshot.val().LikedPlaylists;
-                let setFollowedArtists = snapshot.val().FollowedArtists;
-                if(setFollowedArtists == undefined){
-                    setFollowedArtists = "";
-                }
-    
-                let fArtistsCut = setFollowedArtists.split(',');
-                fArtistsCut.reverse();
-                fArtistsCut.forEach(artist => {
-                    if(artist != undefined && artist != ""){
-                        GetArtists2(artist);
-                    }
-                });
+    showSkeleton(yourFArtists, "artist", 4);
+    try{
+        const userSnapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+        const followedArtistIds = String(userSnapshot.val()?.FollowedArtists || "").split(',').filter(Boolean).reverse();
+        const artistRows = await Promise.all(followedArtistIds.map(async (artistId) => {
+            const snapshot = await get(child(ref(realdb), "Artists/"+artistId));
+            if(!snapshot.exists()){
+                return "";
             }
-        })
+            const record = snapshot.val();
+            const name = record.Artist;
+            const image = getArtistImage(record, "large");
+            const imageSmall = getArtistImage(record, "small");
+            const followers = record.Followers;
+            const listens = record.Listens;
+            const aboutImage = getArtistAboutImage(record, "large");
+            return `<li id="song${artistId}" class="artistItem" data-crimson-context="${encodeContextPayload({type: "artist", id: artistId, name, image, imageSmall, followers, listens, aboutImage})}" onclick="openArtistPage(${artistId},'${name}','${image}','${followers}','${listens}','${aboutImage}');">
+                <img onload="buttonClickAnim(this.parentElement)" src="${imageSmall}" alt="artistImage">
+                <h3>${name}</h3>
+            </li>`;
+        }));
+        yourFArtists.innerHTML = artistRows.filter(Boolean).join("") || emptyStateMarkup("Artists you follow will appear here");
+        yourFArtists.setAttribute("aria-busy", "false");
+    }catch(error){
+        yourFArtists.innerHTML = emptyStateMarkup("Could not load followed artists");
+        yourFArtists.setAttribute("aria-busy", "false");
     }
 }
 
 function GetArtists2(artistName){
-    let name = artistName;
-
-    let dbRef = ref(realdb);
-
-    get(child(dbRef, "Artists/"+name)).then((snapshot)=>{
-        if(snapshot.exists()){
-            artistName = snapshot.val().Artist;
-            artistImage = getArtistImage(snapshot.val(), "large");
-            artistImageSmall = getArtistImage(snapshot.val(), "small");
-            artistFollowers = snapshot.val().Followers;
-            artistListens = snapshot.val().Listens;
-            artistAboutImage = getArtistAboutImage(snapshot.val(), "large");
-            let currentImg =  `<li id="song`+ name +`" class="artistItem" data-crimson-context="${encodeContextPayload({type: "artist", id: name, name: artistName, image: artistImage, imageSmall: artistImageSmall, followers: artistFollowers, listens: artistListens, aboutImage: artistAboutImage})}" onclick="openArtistPage(`+ name +`,'`+ artistName +`','`+ artistImage +`','`+ artistFollowers +`','`+ artistListens +`','`+ artistAboutImage +`');">
-            <img onload="buttonClickAnim(this.parentElement)" src="`+ artistImageSmall +`" alt="artistImage">
-            <h3>`+ artistName +`</h3>
-            </li>`;
-            yourFArtists.innerHTML += currentImg;
+    return get(child(ref(realdb), "Artists/"+artistName)).then((snapshot) => {
+        if(!snapshot.exists()){
+            return;
         }
-    })
+        clearSkeleton(yourFArtists);
+    });
 }
 
 function DeLoadUserFArtists(){
@@ -2162,69 +2711,49 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
             like.innerHTML = pLikes;
         })
 
-        if(pSongs != ""){
-            let playlistSongss = pSongs.split(',');
-            for (let i = (playlistSongss.length-1); i >= 0; i--) {
-                if(playlistSongss[i] != ""){
-                    GenerateOneSongFromLiked(playlistSongss[i]);
-                }
-            }
-        }else{
-            playlistSongsList.innerHTML = "";
-        }
-
-        setTimeout(() => {
-            defaultPlaylistSort = document.querySelector('.playlistSongsList').innerHTML;
-        }, 500);
+        const playlistSongss = String(pSongs || "").split(',').filter(Boolean).reverse();
+        loadPlaylistSongRows(playlistSongss, pName);
 }
 
 
 
-function LoadLikedPlaylists(){
-    yourLPlaylists.innerHTML = "";
-
-    let dbRef = ref(realdb);
-
-    if(currentUser == null || currentUser == undefined)
+async function LoadLikedPlaylists(){
+    if(currentUser == null || currentUser == undefined){
+        yourLPlaylists.innerHTML = "";
+        yourLPlaylists.setAttribute("aria-busy", "false");
         return;
-    get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
-        if(snapshot.exists()){
-            let usersLikedPlaylists
-            if(snapshot.val().LikedPlaylists != undefined){
-                usersLikedPlaylists = (snapshot.val().LikedPlaylists).split(',');
-            }else{
-                usersLikedPlaylists = "";
+    }
+
+    showSkeleton(yourLPlaylists, "song", 3);
+    try{
+        const userSnapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+        const likedPlaylistIds = String(userSnapshot.val()?.LikedPlaylists || "").split(',').filter(Boolean);
+        const playlistRows = await Promise.all(likedPlaylistIds.map(async (playlistId) => {
+            const snapshot = await get(child(ref(realdb), "PublicPlaylists/"+playlistId));
+            if(!snapshot.exists()){
+                return "";
             }
-            let numberOfLPlaylists = usersLikedPlaylists.length;
-
-            let dbRef = ref(realdb);
-
-            for (let i = 0; i < numberOfLPlaylists-1; i++) {
-                get(child(dbRef, "PublicPlaylists/"+usersLikedPlaylists[i])).then((snapshot)=>{
-                    if(snapshot.exists()){
-                        let playlistName = snapshot.val().Title;
-                        let playlistBanner = getPlaylistImage(snapshot.val(), "large");
-            playlistBannerSmall = getPlaylistImage(snapshot.val(), "small");
-                        let playlistLikes = snapshot.val().Likes;
-                        let playlistSongs = snapshot.val().Songs;
-                        let playlistArtists = snapshot.val().Artists;
-
-                        let currentLi =  `<li class="songItem" id="`+ usersLikedPlaylists[i] +`" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: usersLikedPlaylists[i], name: playlistName, image: playlistBanner, imageSmall: playlistBannerSmall, likes: playlistLikes, songs: playlistSongs || "", artists: playlistArtists || ""})}">
-                            <div class="songInfo">
-                                <img  src="`+ playlistBannerSmall +`" alt="playlistBanner">
-                                <div class="songText">
-                                    <h2>`+ playlistName +`</h2>
-                                    <h3>`+ "by " + playlistArtists +`</h3>
-                                </div>
-                            </div>
-                            <div class="songClickDiv" onclick="clickEffect(this); openPlaylistPage(`+ usersLikedPlaylists[i] +`,'`+ playlistName +`','`+ playlistBanner +`','`+ playlistLikes +`','`+ playlistSongs +`');"></div>
-                        </li>`;
-                        yourLPlaylists.innerHTML += currentLi;
-                    }
-                })
-            }
-        }
-    })
+            const record = snapshot.val();
+            const name = record.Title;
+            const banner = getPlaylistImage(record, "large");
+            const bannerSmall = getPlaylistImage(record, "small");
+            const likes = record.Likes;
+            const songs = record.Songs || "";
+            const artists = record.Artists || "";
+            return `<li class="songItem" id="${playlistId}" data-crimson-context="${encodeContextPayload({type: "publicPlaylist", id: playlistId, name, image: banner, imageSmall: bannerSmall, likes, songs, artists})}">
+                <div class="songInfo">
+                    <img src="${bannerSmall}" alt="playlistBanner">
+                    <div class="songText"><h2>${name}</h2><h3>by ${artists}</h3></div>
+                </div>
+                <div class="songClickDiv" onclick="clickEffect(this); openPlaylistPage(${playlistId},'${name}','${banner}','${likes}','${songs}');"></div>
+            </li>`;
+        }));
+        yourLPlaylists.innerHTML = playlistRows.filter(Boolean).join("") || emptyStateMarkup("Liked playlists will appear here");
+        yourLPlaylists.setAttribute("aria-busy", "false");
+    }catch(error){
+        yourLPlaylists.innerHTML = emptyStateMarkup("Could not load liked playlists");
+        yourLPlaylists.setAttribute("aria-busy", "false");
+    }
 }
 
 function DeLoadLikedPlaylists(){
@@ -2364,16 +2893,8 @@ export function reloadLikedSongs(){
                 userLiked = "";
             }
         
-            if(userLiked !== ""){
-                let playlistSongss = userLiked.split(',');
-                for (let i = (playlistSongss.length-1); i > 0; i--) {
-                    if(playlistSongss[i] !== ""){
-                        GenerateOneSongFromLiked(playlistSongss[i]);
-                    }
-                }
-            }else{
-                playlistSongsList.innerHTML = "";
-            }
+            const playlistSongss = String(userLiked || "").split(',').filter(Boolean).reverse();
+            loadPlaylistSongRows(playlistSongss, "Favorites");
         }
     })
 }
@@ -2381,6 +2902,7 @@ export function reloadLikedSongs(){
 export function openLikedSongs(){
 
     let dbRef = ref(realdb);
+    showSkeleton(playlistSongsList, "song", 5);
 
     get(child(dbRef, "Users/"+currentUser.Username)).then((snapshot)=>{
         if(snapshot.exists()){
@@ -2474,18 +2996,7 @@ export function addSongToLiked(id, likeBtn){
                     if(!likedSongsArray.includes(songId)){
                         window.crimsonLikedSongIds = window.crimsonLikedSongIds || new Set();
                         window.crimsonLikedSongIds.add(songId);
-                        set(ref(realdb, "Users/"+currentUser.Username),
-                        {
-                            Username: setUsername,
-                            Email: setEmail,
-                            Password: setPassword,
-                            Playlists: setPlaylists,
-                            ProfilePhoto: setProfilePhoto,
-                            LikedSongs: setLikedSongs + songId + ",",
-                            AppTheme: setTheme,
-                            FollowedArtists: setFollowedArtists,
-                            LikedPlaylists: setLikedPlaylists
-                        })
+                        update(ref(realdb, "Users/"+currentUser.Username), {LikedSongs: setLikedSongs + songId + ","})
                         .then(()=>{
                             if(likeBtn != undefined){
                                 window.crimsonPlayfulBurst?.(likeBtn, "like");
@@ -2512,18 +3023,7 @@ export function addSongToLiked(id, likeBtn){
                             return item !== songId;
                         });
         
-                        set(ref(realdb, "Users/"+currentUser.Username),
-                        {
-                            Username: setUsername,
-                            Email: setEmail,
-                            Password: setPassword,
-                            Playlists: setPlaylists,
-                            ProfilePhoto: setProfilePhoto,
-                            LikedSongs: likedSongsArray.toString(),
-                            AppTheme: setTheme,
-                            LikedPlaylists: setLikedPlaylists,
-                            FollowedArtists: setFollowedArtists
-                        })
+                        update(ref(realdb, "Users/"+currentUser.Username), {LikedSongs: likedSongsArray.toString()})
                         .then(()=>{
                             if(likeBtn != undefined){
                                 window.crimsonPlayfulBurst?.(likeBtn, "unlike");
@@ -2707,18 +3207,7 @@ export function addSongToThisPlaylist(clickedPlaylist, songId, playlistId){
                 return playlistParts[0] + "}" + playlistParts[1] + "}" + playlistParts[2] + "}" + nextSongs.join(',') + "}";
             }).join('{');
 
-            set(ref(realdb, "Users/"+currentUser.Username),
-            {
-                Username: setUsername,
-                Email: setEmail,
-                Password: setPassword,
-                Playlists: newSetPlaylists,
-                ProfilePhoto: setProfilePhoto,
-                LikedSongs: setLikedSongs,
-                AppTheme: setTheme,
-                FollowedArtists: setFollowedArtists,
-                LikedPlaylists: setLikedPlaylists
-            })
+            update(ref(realdb, "Users/"+currentUser.Username), {Playlists: newSetPlaylists})
             .then(()=>{
                 LoadUserPlaylists();
             })
@@ -2891,18 +3380,7 @@ deletePlaylistBtn.addEventListener('click', () => {
 
                 newSetPlaylists = newSetPlaylists.slice(0, -1);
 
-                set(ref(realdb, "Users/"+currentUser.Username),
-                {
-                    Username: setUsername,
-                    Email: setEmail,
-                    Password: setPassword,
-                    Playlists: newSetPlaylists,
-                    ProfilePhoto: setProfilePhoto,
-                    LikedSongs: setLikedSongs,
-                    AppTheme: setTheme,
-                    FollowedArtists: setFollowedArtists,
-                    LikedPlaylists: setLikedPlaylists
-                })
+                update(ref(realdb, "Users/"+currentUser.Username), {Playlists: newSetPlaylists})
                 .then(()=>{
                     LoadUserPlaylists();
                 })
@@ -2989,18 +3467,7 @@ saveAccountBtn .addEventListener('click', async (e) => {
                 newProfilePhoto = setProfilePhoto;
             }
 
-            set(ref(realdb, "Users/"+currentUser.Username),
-            {
-                Username: setUsername,
-                Email: setEmail,
-                Password: setPassword,
-                Playlists: setPlaylists,
-                ProfilePhoto: newProfilePhoto,
-                LikedSongs: setLikedSongs,
-                AppTheme: setTheme,
-                FollowedArtists: setFollowedArtists,
-                LikedPlaylists: setLikedPlaylists
-            })
+            update(ref(realdb, "Users/"+currentUser.Username), {ProfilePhoto: newProfilePhoto})
             .then(()=>{
                 alert("Successfully saved the profile!");
                 editablePhoto.setAttribute('data-photo-url', newProfilePhoto);
@@ -3018,63 +3485,88 @@ saveAccountBtn .addEventListener('click', async (e) => {
 // ----- BUG REPORTING
 
 const bugReportForm = document.querySelector('.bugReportForm');
-bugReportForm.addEventListener('submit', (e) => {
+const bugDescriptionInput = document.getElementById('bugDescription');
+const bugDescriptionCount = document.getElementById('bugDescriptionCount');
+
+bugDescriptionInput?.addEventListener('input', () => {
+    if(bugDescriptionCount){
+        bugDescriptionCount.textContent = bugDescriptionInput.value.length;
+    }
+});
+
+bugReportForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    let bugSubject = document.getElementById('bugSubject').value;
-    let bugDescription = document.getElementById('bugDescription').value;
+    const bugSubjectInput = document.getElementById('bugSubject');
+    const submitButton = bugReportForm.querySelector('.bugSubmitButton');
+    const bugSubject = bugSubjectInput.value.trim();
+    const bugDescription = bugDescriptionInput.value.trim();
+
+    if(!currentUser?.Username){
+        window.showCrimsonNotice?.('Sign in before sending a bug report.', 'warning');
+        window.setAuthGatewayVisible?.(true, 'login');
+        return;
+    }
+    if(bugSubject.length < 4){
+        window.showCrimsonNotice?.('Give the issue a short, specific title.', 'warning');
+        bugSubjectInput.focus();
+        return;
+    }
     if(bugDescription.length < 10){
-        alert('Description is too short. Describe the issue a bit more!');
-    }else{
-        let dbRef = ref(realdb);
+        window.showCrimsonNotice?.('Add a little more detail so we can reproduce the issue.', 'warning');
+        bugDescriptionInput.focus();
+        return;
+    }
 
-        get(child(dbRef, "BugReports/"+currentUser.Username)).then((snapshot)=>{
-            if(snapshot.exists()){
+    submitButton.disabled = true;
+    submitButton.querySelector('span').textContent = 'Sending...';
 
-                let setBugs = snapshot.val().Bugs;
-                let bugsLength = setBugs.split('{').length;
-                if(setBugs == null || setBugs == undefined){
-                    setBugs = "";
-                }
-                bugsLength++;
-                
-                let setBugsNew = setBugs + "{" + bugsLength + "}" + bugSubject + "}" + bugDescription + "}";
-                if(setBugsNew.length > 10000){
-                    setBugsNew = "";
-                }
+    try{
+        const reportRoot = ref(realdb, "BugReports/"+currentUser.Username);
+        const snapshot = await get(reportRoot);
+        const oldReports = String(snapshot.val()?.Bugs || "");
+        const reportNumber = (oldReports.match(/\{/g) || []).length + 1;
+        let legacyReports = oldReports + "{" + reportNumber + "}" + bugSubject + "}" + bugDescription + "}";
+        if(legacyReports.length > 10000){
+            legacyReports = "{" + reportNumber + "}" + bugSubject + "}" + bugDescription + "}";
+        }
 
-                set(ref(realdb, "BugReports/"+currentUser.Username),
-                {
-                    Bugs: setBugsNew
-                })
-                .then(()=>{
-                    alert('Bug submitted. Thank you!');
-                })
-                .catch((error)=>{
-                    alert("error "+error);
-                })
-            }else{
-                let setBugs = 1 + "}" + bugSubject + "}" + bugDescription + "}";
-    
-                set(ref(realdb, "BugReports/"+currentUser.Username),
-                {
-                    Bugs: setBugs
-                })
-                .then(()=>{
-                    alert('Bug submitted. Thank you!');
-                })
-                .catch((error)=>{
-                    alert("error "+error);
-                })
+        const reportId = Date.now();
+        await update(reportRoot, {
+            Bugs: legacyReports,
+            [`Reports/${reportId}`]: {
+                Subject: bugSubject,
+                Description: bugDescription,
+                CreatedAt: new Date(reportId).toISOString(),
+                AppVersion: "0.2.7"
             }
-        })
+        });
+
+        bugReportForm.reset();
+        if(bugDescriptionCount){
+            bugDescriptionCount.textContent = '0';
+        }
+        window.showCrimsonNotice?.('Bug report sent. Thank you for helping us improve Crimson!', 'success', {title: 'Report received'});
+    }catch(error){
+        window.showCrimsonNotice?.('Your report could not be sent. Please try again.', 'error');
+        console.error(error);
+    }finally{
+        submitButton.disabled = false;
+        submitButton.querySelector('span').textContent = 'Send report';
     }
 });
 
 // ----- APP LOADING
 
 async function loadApp(){
+    showSkeleton(recSongs, "song", 5);
+    showSkeleton(recArtists, "artist", 6);
+    showSkeleton(recPlaylists, "playlist", 4, true);
+    showSkeleton(categoriesList, "category", 10);
+
     let result = await loadAppNumbers();
+
+    document.querySelector('.loaderWrapper')?.classList.add('loaderOff');
 
     generateSongs();
     generateArtists();

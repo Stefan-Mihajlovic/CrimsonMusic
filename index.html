@@ -13,15 +13,79 @@
     <meta name="application-name" content="Crimson" />
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
-    <script src="js/index.js?v=20260710-context-menu" defer></script>
-    <script src="js/indexController.js?v=20260710-context-menu" type="module"></script>
+    <script src="js/index.js?v=20260710-auth-flow-3" defer></script>
+    <script src="js/indexController.js?v=20260710-auth-flow-3" type="module"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <script src="https://kit.fontawesome.com/1d408b5acd.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <title>Crimson Music</title>
 </head>
-<body>
+<body class="authLocked">
+    <section class="authGateway" id="authGateway" aria-label="Crimson Music account access">
+        <div class="authGatewayBackdrop" aria-hidden="true"></div>
+
+        <div class="authView authWelcomeView isActive" data-auth-view="welcome">
+            <img class="authWelcomeLogo" src="images/auth/crimson-logo.webp?v=20260710" alt="Crimson Music">
+            <div class="authWelcomeActions">
+                <button class="authSwitchPrompt" type="button" data-auth-target="register">Don’t have an account? <strong>Register</strong></button>
+                <button class="authPrimaryButton" type="button" data-auth-target="login">Sign In</button>
+            </div>
+        </div>
+
+        <div class="authView" data-auth-view="login" hidden>
+            <form class="authForm" id="authLoginForm" novalidate>
+                <header class="authFormHeader">
+                    <img src="images/auth/crimson-logo.webp?v=20260710" alt="Crimson Music">
+                    <h1>Sign In</h1>
+                </header>
+                <div class="authFields">
+                    <label class="srOnly" for="authLoginIdentifier">Email or username</label>
+                    <input id="authLoginIdentifier" type="text" placeholder="Email" autocomplete="username" required>
+                    <label class="srOnly" for="authLoginPassword">Password</label>
+                    <input id="authLoginPassword" type="password" placeholder="Password" autocomplete="current-password" required>
+                    <div class="authDivider"><span></span><small>Or With</small><span></span></div>
+                    <button class="authGoogleButton" type="button" data-google-auth>
+                        <img src="images/auth/google-icon.svg" alt="">
+                        <span>Continue with Google</span>
+                    </button>
+                    <p class="authInlineMessage" data-auth-message aria-live="polite"></p>
+                </div>
+                <footer class="authFormFooter">
+                    <button class="authSwitchPrompt" type="button" data-auth-target="register">Don’t have an account? <strong>Register</strong></button>
+                    <button class="authPrimaryButton" type="submit">Continue</button>
+                </footer>
+            </form>
+        </div>
+
+        <div class="authView" data-auth-view="register" hidden>
+            <form class="authForm" id="authRegisterForm" novalidate>
+                <header class="authFormHeader">
+                    <img src="images/auth/crimson-logo.webp?v=20260710" alt="Crimson Music">
+                    <h1>Register</h1>
+                </header>
+                <div class="authFields authRegisterFields">
+                    <label class="srOnly" for="authRegisterUsername">Username</label>
+                    <input id="authRegisterUsername" type="text" placeholder="Username" autocomplete="username" minlength="4" required>
+                    <label class="srOnly" for="authRegisterEmail">Email</label>
+                    <input id="authRegisterEmail" type="email" placeholder="Email" autocomplete="email" required>
+                    <label class="srOnly" for="authRegisterPassword">Password</label>
+                    <input id="authRegisterPassword" type="password" placeholder="Password" autocomplete="new-password" minlength="6" required>
+                    <div class="authDivider"><span></span><small>Or With</small><span></span></div>
+                    <button class="authGoogleButton" type="button" data-google-auth>
+                        <img src="images/auth/google-icon.svg" alt="">
+                        <span>Continue with Google</span>
+                    </button>
+                    <p class="authInlineMessage" data-auth-message aria-live="polite"></p>
+                </div>
+                <footer class="authFormFooter">
+                    <button class="authSwitchPrompt" type="button" data-auth-target="login">Already have an account? <strong>Login</strong></button>
+                    <button class="authPrimaryButton" type="submit">Continue</button>
+                </footer>
+            </form>
+        </div>
+    </section>
+
     <div class="bodyHolder">
 
     <main class="homeScreen">
@@ -79,10 +143,6 @@
             <h5 class="catDesc">You can download it on your Windows PC today!</h5>
             <img src="images/CrimsonMusicDesktopAd.png" alt="Crimson Music Desktop Ad">
             <a href="https://www.mediafire.com/file/y2y3378ys2eytu2/crimsonmusic-0.1.4+Setup.exe/file">Download</a>
-        </section>
-
-        <section class="bugSection">
-            <button onclick="openBugReport()">SEE A BUG?<span>REPORT IT!</span><i class="fa-solid fa-bug"></i></button>
         </section>
 
     </main>
@@ -259,27 +319,38 @@
     <div class="categoryScreen">
         <div class="screenScrollable" name="screenScrollable"  id="screenScrollableCat">
             <div class="pageBar catPageBar" name="showUpPageBar">
-                <button type="button"><i class="fa-solid fa-angle-left"></i></button>
+                <button type="button" onclick="closeCategoryPage()"><i class="fa-solid fa-angle-left"></i></button>
                 <h2 name="categoryName"></h2>
             </div>
             <div class="pageBar">
                 <button type="button" id="closeCategoryPage"><i style="color: #DCD6F7 !important;" class="fa-solid fa-angle-left"></i></button>
                 <h2></h2>
             </div>
-            <div class="categoryAccentBubble"></div>
-            <div class="artistInfo">
-                <img loading="lazy" name="catBanner" src="" alt="categoryBanner" class="sideBanner catBanner">
-                <div class="artistControls">
-                    <div class="artistText">
-                        <h3 name="categoryName" id="catH3Title">?</h3>
-                    </div>
+            <div class="categoryHero">
+                <img loading="lazy" name="catBanner" src="" alt="categoryBanner" class="catBanner">
+                <div class="categoryHeroTint"></div>
+                <div class="categoryHeroContent">
+                    <h3 name="categoryName" id="catH3Title">?</h3>
+                    <p id="categoryMeta">Curated songs and playlists</p>
+                    <button id="playCategoryBtn" type="button"><i class="fa-solid fa-play"></i> Play category</button>
                 </div>
+                <div class="categoryHeroFade"></div>
             </div>
             <div class="closeCurrentScreen" id="closeCategoryScreen"></div>
             <section class="catWork">
-                <h2 class="catTitle center">Featured Songs</h2>
+                <div class="categorySectionHeading">
+                    <div>
+                        <h2>Featured Songs</h2>
+                    </div>
+                    <span class="categoryResultCount" id="categorySongCount"></span>
+                </div>
                 <ul class="categoryRecommendedSongs" name="Categories"></ul>
-                <h2 class="catTitle center">Featured Playlists</h2>
+                <div class="categorySectionHeading">
+                    <div>
+                        <h2>Featured Playlists</h2>
+                    </div>
+                    <span class="categoryResultCount" id="categoryPlaylistCount"></span>
+                </div>
                 <ul class="categoryRecommendedPlaylists"></ul>
             </section>
         </div>
@@ -494,6 +565,14 @@
                     <input id="pmToggle" type="checkbox" name="pmToggle" placeholder="Performance Mode Toggle">
                 </section>
                 <hr>
+                <button class="toggleSection" type="button" onclick="openBugReportFromSettings()">
+                    <div class="toggleText">
+                        <h2>Report a bug</h2>
+                        <h5>Tell us when something isn’t working correctly</h5>
+                    </div>
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+                <hr>
                 <button class="toggleSection" onclick="openLicenseAndProfileScreen(true)">
                     <div class="toggleText">
                         <h2>Licenses & Attribution</h2>
@@ -552,11 +631,15 @@
                 </div>
                 <div class="photoPicker displayNone">
                     <div class="profilePhotoActions">
-                        <button type="button" onclick="document.getElementById('profilePhotoUpload').click()">
+                        <button class="googleProfilePhotoOption displayNone" type="button" id="googleProfilePhotoOption">
+                            <img src="images/profiles/1.png" alt="Google profile">
+                            <span>Use Google photo</span>
+                        </button>
+                        <button class="uploadProfilePhotoButton" type="button" onclick="document.getElementById('profilePhotoUpload').click()">
                             <i class="fa-solid fa-arrow-up-from-bracket"></i>
                             <span>Upload photo</span>
                         </button>
-                        <button type="button" onclick="showPresetPhotoPicker()">
+                        <button class="presetProfilePhotoButton" type="button" onclick="showPresetPhotoPicker()">
                             <i class="fa-solid fa-images"></i>
                             <span>Choose ours</span>
                         </button>
@@ -582,18 +665,30 @@
         <div class="closeCurrentScreen" id="closeBugScreen"></div>
         <div class="pageBar">
             <button type="button" onclick="closeBugScreenF()"><i class="fa-solid fa-angle-left"></i></button>
-            <h2>Report a Bug</h2>
+            <h2>Report a bug</h2>
         </div>
         <div class="screenScrollable">
-            <form class="bugReportForm" name="bugForm">
-                <i class="fa-solid fa-bug"></i>
-                <input type="text" id="bugSubject" placeholder="Subject" aria-describedby="subjectHelp" autocomplete="subject" name="bugForm" required>
-                <textarea name="bugForm" id="bugDescription" placeholder="Describe the issue here..."></textarea>
-                
-                <div class="buttonField">
-                    <input type="submit" value="Submit">
-                </div>
-            </form>
+            <div class="bugReportContent">
+                <section class="bugReportLead">
+                    <div class="bugReportLeadIcon"><i class="fa-solid fa-bug"></i></div>
+                    <div>
+                        <h3>Help us improve Crimson</h3>
+                        <p>Describe the problem and what you expected to happen.</p>
+                    </div>
+                </section>
+                <form class="bugReportForm" name="bugForm">
+                    <div class="bugField">
+                        <label for="bugSubject"><span>Title</span><small>Up to 80 characters</small></label>
+                        <input type="text" id="bugSubject" placeholder="What went wrong?" autocomplete="off" name="bugSubject" maxlength="80" required>
+                    </div>
+                    <div class="bugField">
+                        <label for="bugDescription"><span>Description</span><small><span id="bugDescriptionCount">0</span>/1000</small></label>
+                        <textarea name="bugDescription" id="bugDescription" placeholder="What were you doing, what happened, and what did you expect?" maxlength="1000" required></textarea>
+                    </div>
+                    <button class="bugSubmitButton" type="submit"><span>Send report</span><i class="fa-solid fa-arrow-right"></i></button>
+                    <p class="bugPrivacyNote"><i class="fa-solid fa-shield-halved"></i> Your report is linked to your account so we can investigate it.</p>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -713,8 +808,10 @@
 
     </div>
 
+    <div class="crimsonNoticeStack" id="crimsonNoticeStack" aria-live="polite" aria-atomic="false"></div>
+
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js?v=20260710-context-menu';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js?v=20260710-auth-flow-3';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
