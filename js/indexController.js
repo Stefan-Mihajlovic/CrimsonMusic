@@ -2605,9 +2605,9 @@ let yourFArtists = document.getElementsByClassName("yourFArtists")[0];
 let yourLPlaylists = document.getElementsByClassName('yourLPlaylists')[0];
 
 function favoritesLibraryMarkup(){
-    return `<li class="songItem favoritesLibraryItem" data-crimson-context="${encodeContextPayload({type: "libraryPlaylist", id: 0, name: "Favorites", image: "images/favoritesPlaylistPage.gif", artists: "Simply yours", favorites: true})}" onclick="openLikedSongs();">
+    return `<li class="songItem favoritesLibraryItem" data-crimson-context="${encodeContextPayload({type: "libraryPlaylist", id: 0, name: "Favorites", image: "images/favoritesPlaylistPage.webp", artists: "Simply yours", favorites: true})}" onclick="openLikedSongs();">
         <div class="songInfo">
-            <img src="images/favorites.jpg" alt="playlistBanner">
+            <img src="images/favorites.webp" alt="playlistBanner">
             <div class="songText">
                 <h2>Favorites</h2>
                 <h3>Simply yours</h3>
@@ -2951,9 +2951,9 @@ export function openLikedSongs(){
             let userLiked = snapshot.val().LikedSongs;
 
             if(userLiked != undefined){
-                openMyPlaylistPage(0, "Favorites", "images/favoritesPlaylistPage.gif", "0", userLiked);
+                openMyPlaylistPage(0, "Favorites", "images/favoritesPlaylistPage.webp", "0", userLiked);
             }else{
-                openMyPlaylistPage(0, "Favorites", "images/favoritesPlaylistPage.gif", "0", "");
+                openMyPlaylistPage(0, "Favorites", "images/favoritesPlaylistPage.webp", "0", "");
             }
         }
     })
