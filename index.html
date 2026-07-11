@@ -29,10 +29,10 @@
             localStorage.removeItem('keepLoggedIn');
         }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260711-player-queue-cors-2">
+    <link rel="stylesheet" href="styles.css?v=20260711-player-fullscreen-1">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
-    <script src="js/index.js?v=20260711-player-queue-cors-2" defer></script>
-    <script src="js/indexController.js?v=20260711-player-queue-cors-2" type="module"></script>
+    <script src="js/index.js?v=20260711-player-fullscreen-1" defer></script>
+    <script src="js/indexController.js?v=20260711-player-fullscreen-1" type="module"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <script src="https://kit.fontawesome.com/1d408b5acd.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -330,7 +330,20 @@
                 </div>
                 <ul class="queueList playerPopupContent playerPopupContentActive" id="queueList"></ul>
                 <div class="queueLyricsBody playerPopupContent" id="queueLyricsBody">
-                    <p>No lyrics loaded.</p>
+                    <div class="lyricsModeBar" id="lyricsModeBar" hidden>
+                        <div>
+                            <strong>Karaoke (beta)</strong>
+                            <span>Word-synced lyrics</span>
+                        </div>
+                        <button type="button" id="karaokeLyricsToggle" role="switch" aria-checked="false">
+                            <i class="fa-solid fa-microphone-lines"></i>
+                            <span class="karaokeToggleLabel">Off</span>
+                            <span class="karaokeToggleTrack" aria-hidden="true"><span></span></span>
+                        </button>
+                    </div>
+                    <div class="queueLyricsContent" id="queueLyricsContent">
+                        <p>No lyrics loaded.</p>
+                    </div>
                 </div>
                 <div class="queueRelatedBody playerPopupContent" id="queueRelatedBody">
                     <p>Related songs are coming soon.</p>
@@ -839,7 +852,7 @@
     <div class="crimsonNoticeStack" id="crimsonNoticeStack" aria-live="polite" aria-atomic="false"></div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js?v=20260711-player-queue-cors-2';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js?v=20260711-player-fullscreen-1';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;

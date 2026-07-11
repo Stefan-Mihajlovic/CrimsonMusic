@@ -215,12 +215,16 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/fireba
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
 import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 import { getDatabase, ref, set, child, get, update, remove, onValue, query, orderByChild, equalTo } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js';
-import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
+import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
+
+const firebaseHostedAuthDomain = "crimsonmusic-b97d9.firebaseapp.com";
+const usesSameOriginAuthHelper = location.protocol === "https:"
+    && (location.hostname === "crimsonmusic.netlify.app" || location.hostname.endsWith("--crimsonmusic.netlify.app"));
 
 // Firebase Config with all IDs
 const firebaseConfig = {
     apiKey: "AIzaSyBtHlJGvOX-dNiyWWUUzheaSl21fD3-WBA",
-    authDomain: "crimsonmusic-b97d9.firebaseapp.com",
+    authDomain: usesSameOriginAuthHelper ? location.hostname : firebaseHostedAuthDomain,
     projectId: "crimsonmusic-b97d9",
     storageBucket: "crimsonmusic-b97d9.appspot.com",
     messagingSenderId: "181983859666",
@@ -234,6 +238,10 @@ const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 const auth = getAuth(app);
+const googleRedirectPendingKey = "crimsonGoogleRedirectPending";
+const authPersistenceReady = setPersistence(auth, browserLocalPersistence).catch((error) => {
+    console.warn("Crimson could not explicitly set Firebase auth persistence.", error);
+});
 
 const realdb = getDatabase();
 
@@ -469,42 +477,469 @@ window.crimsonPlayCategoryFromContext = async function(context){
     return match ? playSongFromContext(match[0], context?.name || "Category", requestRevision) : false;
 }
 
+const playerLyricsBody = document.getElementById("queueLyricsBody");
+const playerLyricsContent = document.getElementById("queueLyricsContent");
+const lyricsModeBar = document.getElementById("lyricsModeBar");
+const karaokeLyricsToggle = document.getElementById("karaokeLyricsToggle");
+const karaokeToggleLabel = karaokeLyricsToggle?.querySelector(".karaokeToggleLabel");
+const lyricsAudio = document.getElementById("currentSong");
+const karaokeModePreferenceKey = "crimsonKaraokeLyricsEnabled";
+const karaokeNamedCurves = {
+    linear: [0, 0, 1, 1],
+    ease: [0.25, 0.1, 0.25, 1],
+    "ease-in": [0.42, 0, 1, 1],
+    "ease-out": [0, 0, 0.58, 1],
+    "ease-in-out": [0.42, 0, 0.58, 1]
+};
+const karaokeCubicPattern = /^cubic-bezier\(\s*([-+]?(?:\d*\.?\d+)(?:e[-+]?\d+)?)\s*,\s*([-+]?(?:\d*\.?\d+)(?:e[-+]?\d+)?)\s*,\s*([-+]?(?:\d*\.?\d+)(?:e[-+]?\d+)?)\s*,\s*([-+]?(?:\d*\.?\d+)(?:e[-+]?\d+)?)\s*\)$/i;
+const karaokeEasingCache = new Map();
+const playerLyricsState = {
+    songId: "",
+    loadRevision: 0,
+    plainLines: [],
+    karaokeLines: [],
+    karaokeEnabled: localStorage.getItem(karaokeModePreferenceKey) === "yes",
+    panelActive: false,
+    frame: null,
+    renderedLines: [],
+    focusLineIndex: -1,
+    activeWordKey: "",
+    manualScrollUntil: 0
+};
+
+function clampKaraokeProgress(value){
+    return Math.max(0, Math.min(1, Number(value) || 0));
+}
+
+function karaokeArrayFromFirebase(value){
+    if(typeof value === "string"){
+        try{
+            value = JSON.parse(value);
+        }catch{
+            return [];
+        }
+    }
+    if(Array.isArray(value)){
+        return value;
+    }
+    if(value && typeof value === "object"){
+        const keys = Object.keys(value).sort((first, second) => Number(first) - Number(second));
+        if(keys.length && keys.every((key, index) => String(index) === key)){
+            return keys.map((key) => value[key]);
+        }
+    }
+    return [];
+}
+
+function normalizeKaraokeEase(value){
+    const ease = String(value || "linear").trim().toLowerCase();
+    if(karaokeNamedCurves[ease]){
+        return ease;
+    }
+    const match = ease.match(karaokeCubicPattern);
+    if(!match){
+        return "linear";
+    }
+    const values = match.slice(1).map(Number);
+    if(!values.every(Number.isFinite) || values[0] < 0 || values[0] > 1 || values[2] < 0 || values[2] > 1){
+        return "linear";
+    }
+    return `cubic-bezier(${values.join(",")})`;
+}
+
+function normalizeKaraokeLyrics(value){
+    const sourceLines = karaokeArrayFromFirebase(value);
+    if(!sourceLines.length){
+        return [];
+    }
+    try{
+        const ids = new Set();
+        let previousLineEnd = -Infinity;
+        const tolerance = 0.051;
+        return sourceLines.map((line, lineIndex) => {
+            if(!line || typeof line !== "object" || Array.isArray(line)){
+                throw new Error("Invalid karaoke line");
+            }
+            const lineId = Number(line.line_id);
+            const startTime = Number(line.start_time);
+            const endTime = Number(line.end_time);
+            if(!Number.isInteger(lineId) || lineId <= 0 || ids.has(lineId) || !Number.isFinite(startTime) || startTime < 0 || !Number.isFinite(endTime) || endTime <= startTime || startTime + tolerance < previousLineEnd){
+                throw new Error("Invalid karaoke line timing");
+            }
+            if(!Array.isArray(line.words) || !line.words.length){
+                throw new Error("Missing karaoke words");
+            }
+            let previousWordStart = -Infinity;
+            const words = line.words.map((word) => {
+                const text = String(word?.text || "").trim();
+                const start = Number(word?.start);
+                const duration = Number(word?.duration);
+                if(!text || !Number.isFinite(start) || !Number.isFinite(duration) || duration <= 0 || start + tolerance < startTime || start + duration > endTime + tolerance || start + tolerance < previousWordStart){
+                    throw new Error("Invalid karaoke word");
+                }
+                previousWordStart = start;
+                return {text, start, duration, ease: normalizeKaraokeEase(word?.ease)};
+            });
+            ids.add(lineId);
+            previousLineEnd = endTime;
+            return {line_id: lineId || lineIndex + 1, start_time: startTime, end_time: endTime, words};
+        });
+    }catch(error){
+        console.warn("Crimson ignored invalid karaoke lyrics.", error);
+        return [];
+    }
+}
+
+function parsePlainLyrics(value){
+    if(!value){
+        return [];
+    }
+    return String(value)
+        .replace(/<br\s*\/?\s*>/gi, "\n")
+        .replace(/<[^>]+>/g, "")
+        .split(/\r?\n/);
+}
+
+function makeCubicBezierEasing(x1, y1, x2, y2){
+    const coordinate = (time, first, second) => {
+        const inverse = 1 - time;
+        return 3 * inverse * inverse * time * first + 3 * inverse * time * time * second + time * time * time;
+    };
+    const derivative = (time, first, second) => 3 * (1 - time) * (1 - time) * first + 6 * (1 - time) * time * (second - first) + 3 * time * time * (1 - second);
+
+    return (input) => {
+        const progress = clampKaraokeProgress(input);
+        if(progress === 0 || progress === 1){
+            return progress;
+        }
+        let time = progress;
+        for(let iteration = 0; iteration < 7; iteration++){
+            const difference = coordinate(time, x1, x2) - progress;
+            const slope = derivative(time, x1, x2);
+            if(Math.abs(difference) < 0.00001 || Math.abs(slope) < 0.00001){
+                break;
+            }
+            time = clampKaraokeProgress(time - difference / slope);
+        }
+        let low = 0;
+        let high = 1;
+        for(let iteration = 0; iteration < 10; iteration++){
+            const currentX = coordinate(time, x1, x2);
+            if(Math.abs(currentX - progress) < 0.00001){
+                break;
+            }
+            if(currentX < progress){
+                low = time;
+            }else{
+                high = time;
+            }
+            time = (low + high) / 2;
+        }
+        return clampKaraokeProgress(coordinate(time, y1, y2));
+    };
+}
+
+function getKaraokeEasing(ease){
+    const normalizedEase = normalizeKaraokeEase(ease);
+    if(karaokeEasingCache.has(normalizedEase)){
+        return karaokeEasingCache.get(normalizedEase);
+    }
+    const curve = karaokeNamedCurves[normalizedEase] || normalizedEase.match(karaokeCubicPattern)?.slice(1).map(Number) || karaokeNamedCurves.linear;
+    const easing = makeCubicBezierEasing(curve[0], curve[1], curve[2], curve[3]);
+    karaokeEasingCache.set(normalizedEase, easing);
+    return easing;
+}
+
+function cancelKaraokeFrame(){
+    if(playerLyricsState.frame !== null){
+        cancelAnimationFrame(playerLyricsState.frame);
+        playerLyricsState.frame = null;
+    }
+}
+
+function updateKaraokeToggle(){
+    const available = playerLyricsState.karaokeLines.length > 0;
+    const active = available && playerLyricsState.karaokeEnabled;
+    if(lyricsModeBar){
+        lyricsModeBar.hidden = !available;
+    }
+    if(karaokeLyricsToggle){
+        karaokeLyricsToggle.disabled = !available;
+        karaokeLyricsToggle.classList.toggle("karaokeToggleActive", active);
+        karaokeLyricsToggle.setAttribute("aria-checked", active ? "true" : "false");
+    }
+    if(karaokeToggleLabel){
+        karaokeToggleLabel.textContent = active ? "On" : "Off";
+    }
+}
+
+function renderPlainPlayerLyrics(){
+    const fragment = document.createDocumentFragment();
+    playerLyricsState.plainLines.forEach((line, index) => {
+        const lyricLine = document.createElement("p");
+        lyricLine.className = "playerPopupStaggerLine";
+        lyricLine.style.setProperty("--player-popup-item-index", index);
+        lyricLine.textContent = line || " ";
+        fragment.appendChild(lyricLine);
+    });
+    playerLyricsContent.className = "queueLyricsContent plainLyricsContent";
+    if(fragment.childNodes.length){
+        playerLyricsContent.replaceChildren(fragment);
+    }else{
+        playerLyricsContent.innerHTML = "<p class=\"playerPopupLoading\">No lyrics available for this song.</p>";
+    }
+}
+
+function renderKaraokePlayerLyrics(){
+    const fragment = document.createDocumentFragment();
+    playerLyricsState.renderedLines = playerLyricsState.karaokeLines.map((line) => {
+        const lineElement = document.createElement("p");
+        lineElement.className = "karaokeLine";
+        lineElement.setAttribute("aria-label", line.words.map((word) => word.text).join(" "));
+        const wordRefs = line.words.map((word) => {
+            const wordElement = document.createElement("span");
+            wordElement.className = "karaokeWord";
+            wordElement.style.setProperty("--karaoke-progress", "0%");
+
+            const base = document.createElement("span");
+            base.className = "karaokeWordBase";
+            base.textContent = word.text;
+            const fill = document.createElement("span");
+            fill.className = "karaokeWordFill";
+            fill.textContent = word.text;
+            const glow = document.createElement("span");
+            glow.className = "karaokeWordGlow";
+            glow.setAttribute("aria-hidden", "true");
+
+            wordElement.append(base, fill, glow);
+            lineElement.appendChild(wordElement);
+            return {element: wordElement, word};
+        });
+        fragment.appendChild(lineElement);
+        return {element: lineElement, line, words: wordRefs};
+    });
+    playerLyricsContent.className = "queueLyricsContent karaokeLyricsContent";
+    playerLyricsContent.replaceChildren(fragment);
+    playerLyricsState.focusLineIndex = -1;
+    playerLyricsState.activeWordKey = "";
+}
+
+function setKaraokeWordProgress(wordRef, currentTime){
+    const rawProgress = (currentTime - wordRef.word.start) / wordRef.word.duration;
+    const clampedProgress = clampKaraokeProgress(rawProgress);
+    const easedProgress = getKaraokeEasing(wordRef.word.ease)(clampedProgress);
+    wordRef.element.style.setProperty("--karaoke-progress", `${(easedProgress * 100).toFixed(2)}%`);
+    wordRef.element.classList.toggle("karaokeWordActive", rawProgress >= 0 && rawProgress < 1);
+    return rawProgress >= 0 && rawProgress < 1;
+}
+
+function syncKaraokeLineWords(lineIndex, currentTime){
+    const lineRef = playerLyricsState.renderedLines[lineIndex];
+    if(!lineRef){
+        return -1;
+    }
+    let activeWordIndex = -1;
+    lineRef.words.forEach((wordRef, wordIndex) => {
+        if(setKaraokeWordProgress(wordRef, currentTime)){
+            activeWordIndex = wordIndex;
+        }
+    });
+    return activeWordIndex;
+}
+
+function scrollKaraokeLine(lineIndex, activeWordIndex){
+    if(Date.now() < playerLyricsState.manualScrollUntil){
+        return;
+    }
+    const lineRef = playerLyricsState.renderedLines[lineIndex];
+    if(!lineRef || !playerLyricsBody){
+        return;
+    }
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const targetTop = Math.max(0, lineRef.element.offsetTop - playerLyricsBody.clientHeight * 0.38);
+    playerLyricsBody.scrollTo({top: targetTop, behavior: reduceMotion ? "auto" : "smooth"});
+
+    const wordRef = lineRef.words[activeWordIndex];
+    if(wordRef){
+        const targetLeft = Math.max(0, wordRef.element.offsetLeft - lineRef.element.clientWidth * 0.42);
+        lineRef.element.scrollTo({left: targetLeft, behavior: reduceMotion ? "auto" : "smooth"});
+    }
+}
+
+function updateKaraokeAtTime(currentTime, force = false){
+    if(!playerLyricsState.karaokeEnabled || !playerLyricsState.renderedLines.length){
+        return;
+    }
+    const lines = playerLyricsState.karaokeLines;
+    const activeLineIndex = lines.findIndex((line) => currentTime >= line.start_time && currentTime < line.end_time);
+    let focusLineIndex = activeLineIndex;
+    if(focusLineIndex < 0){
+        focusLineIndex = lines.findIndex((line) => currentTime < line.end_time);
+        if(focusLineIndex < 0){
+            focusLineIndex = lines.length - 1;
+        }
+    }
+    const lineChanged = focusLineIndex !== playerLyricsState.focusLineIndex;
+    if(lineChanged || force){
+        playerLyricsState.renderedLines.forEach((lineRef, index) => {
+            lineRef.element.classList.toggle("karaokeLineActive", index === activeLineIndex);
+            lineRef.element.classList.toggle("karaokeLinePast", currentTime >= lineRef.line.end_time);
+            lineRef.element.classList.toggle("karaokeLineUpcoming", index === focusLineIndex && activeLineIndex < 0);
+            syncKaraokeLineWords(index, currentTime);
+        });
+        playerLyricsState.focusLineIndex = focusLineIndex;
+    }
+    const activeWordIndex = syncKaraokeLineWords(focusLineIndex, currentTime);
+    const activeWordKey = `${focusLineIndex}:${activeWordIndex}`;
+    if(lineChanged || activeWordKey !== playerLyricsState.activeWordKey){
+        playerLyricsState.activeWordKey = activeWordKey;
+        scrollKaraokeLine(focusLineIndex, activeWordIndex);
+    }
+}
+
+function shouldRunKaraokeFrame(){
+    return playerLyricsState.panelActive
+        && playerLyricsState.karaokeEnabled
+        && playerLyricsState.karaokeLines.length > 0
+        && lyricsAudio
+        && !lyricsAudio.paused
+        && !lyricsAudio.ended
+        && !document.hidden;
+}
+
+function scheduleKaraokeFrame(){
+    if(playerLyricsState.frame !== null || !shouldRunKaraokeFrame()){
+        return;
+    }
+    playerLyricsState.frame = requestAnimationFrame(function karaokeFrame(){
+        playerLyricsState.frame = null;
+        updateKaraokeAtTime(lyricsAudio.currentTime);
+        if(shouldRunKaraokeFrame()){
+            playerLyricsState.frame = requestAnimationFrame(karaokeFrame);
+        }
+    });
+}
+
+function renderPlayerLyrics(){
+    if(!playerLyricsContent){
+        return;
+    }
+    cancelKaraokeFrame();
+    updateKaraokeToggle();
+    if(playerLyricsState.karaokeEnabled && playerLyricsState.karaokeLines.length){
+        renderKaraokePlayerLyrics();
+        updateKaraokeAtTime(lyricsAudio?.currentTime || 0, true);
+        scheduleKaraokeFrame();
+    }else{
+        playerLyricsState.renderedLines = [];
+        renderPlainPlayerLyrics();
+    }
+}
+
+function resetPlayerLyrics(songId){
+    cancelKaraokeFrame();
+    playerLyricsState.songId = String(songId ?? "");
+    playerLyricsState.loadRevision += 1;
+    playerLyricsState.plainLines = [];
+    playerLyricsState.karaokeLines = [];
+    playerLyricsState.renderedLines = [];
+    playerLyricsState.focusLineIndex = -1;
+    updateKaraokeToggle();
+    if(playerLyricsState.panelActive && playerLyricsContent){
+        playerLyricsContent.className = "queueLyricsContent";
+        playerLyricsContent.innerHTML = "<p class=\"playerPopupLoading\">Loading lyrics...</p>";
+    }
+}
+
+window.crimsonResetPlayerLyrics = resetPlayerLyrics;
+window.crimsonSetLyricsPanelActive = function(isActive){
+    playerLyricsState.panelActive = Boolean(isActive);
+    if(playerLyricsState.panelActive){
+        updateKaraokeAtTime(lyricsAudio?.currentTime || 0, true);
+        scheduleKaraokeFrame();
+    }else{
+        cancelKaraokeFrame();
+    }
+};
+
 window.crimsonLoadLyricsIntoPlayerPopup = async function(songId){
-    const lyricsBody = document.getElementById("queueLyricsBody");
-    if(!lyricsBody){
+    if(!playerLyricsBody || !playerLyricsContent){
         return;
     }
 
     const requestedId = String(songId);
-    lyricsBody.dataset.lyricsSongId = requestedId;
-    lyricsBody.innerHTML = "<p class=\"playerPopupLoading\">Loading lyrics...</p>";
+    const requestRevision = ++playerLyricsState.loadRevision;
+    playerLyricsState.songId = requestedId;
+    playerLyricsBody.dataset.lyricsSongId = requestedId;
+    playerLyricsContent.className = "queueLyricsContent";
+    playerLyricsContent.innerHTML = "<p class=\"playerPopupLoading\">Loading lyrics...</p>";
+    lyricsModeBar.hidden = true;
 
-    const dbRef = ref(realdb);
-    const snapshot = await get(child(dbRef, "Songs/"+songId));
+    try{
+        const snapshot = await get(child(ref(realdb), "Songs/"+songId));
+        if(playerLyricsBody.dataset.lyricsSongId !== requestedId || requestRevision !== playerLyricsState.loadRevision){
+            return;
+        }
+        const record = snapshot.exists() ? snapshot.val() : {};
+        const karaokeLines = normalizeKaraokeLyrics(record?.lyricsKaraoke ?? record?.LyricsKaraoke);
+        let plainLines = parsePlainLyrics(record?.Lyrics);
+        if(!plainLines.length && karaokeLines.length){
+            plainLines = karaokeLines.map((line) => line.words.map((word) => word.text).join(" "));
+        }
+        playerLyricsState.plainLines = plainLines;
+        playerLyricsState.karaokeLines = karaokeLines;
+        renderPlayerLyrics();
+        playerLyricsBody.scrollTo(0, 0);
+    }catch(error){
+        if(requestRevision === playerLyricsState.loadRevision){
+            playerLyricsState.plainLines = [];
+            playerLyricsState.karaokeLines = [];
+            updateKaraokeToggle();
+            playerLyricsContent.innerHTML = "<p class=\"playerPopupLoading\">Could not load lyrics.</p>";
+        }
+        console.error(error);
+    }
+};
 
-    if(lyricsBody.dataset.lyricsSongId !== requestedId){
+karaokeLyricsToggle?.addEventListener("click", () => {
+    if(!playerLyricsState.karaokeLines.length){
         return;
     }
+    playerLyricsState.karaokeEnabled = !playerLyricsState.karaokeEnabled;
+    localStorage.setItem(karaokeModePreferenceKey, playerLyricsState.karaokeEnabled ? "yes" : "no");
+    renderPlayerLyrics();
+});
 
-    if(snapshot.exists() && snapshot.val().Lyrics){
-        const lines = String(snapshot.val().Lyrics)
-            .replace(/<br\s*\/?\s*>/gi, "\n")
-            .replace(/<[^>]+>/g, "")
-            .split(/\r?\n/);
-        const lyricFragment = document.createDocumentFragment();
-        lines.forEach((line, index) => {
-            const lyricLine = document.createElement("p");
-            lyricLine.className = "playerPopupStaggerLine";
-            lyricLine.style.setProperty("--player-popup-item-index", index);
-            lyricLine.textContent = line || " ";
-            lyricFragment.appendChild(lyricLine);
-        });
-        lyricsBody.replaceChildren(lyricFragment);
-    }else{
-        lyricsBody.innerHTML = "<p class=\"playerPopupLoading\">No lyrics available for this song.</p>";
-    }
-    lyricsBody.scrollTo(0, 0);
+playerLyricsBody?.addEventListener("touchstart", () => {
+    playerLyricsState.manualScrollUntil = Date.now() + 1800;
+}, {passive: true});
+playerLyricsBody?.addEventListener("wheel", () => {
+    playerLyricsState.manualScrollUntil = Date.now() + 1800;
+}, {passive: true});
+
+if(lyricsAudio){
+    ["timeupdate", "seeking", "seeked", "loadedmetadata", "ratechange"].forEach((eventName) => {
+        lyricsAudio.addEventListener(eventName, () => updateKaraokeAtTime(lyricsAudio.currentTime, eventName !== "timeupdate"));
+    });
+    lyricsAudio.addEventListener("play", scheduleKaraokeFrame);
+    lyricsAudio.addEventListener("pause", () => {
+        cancelKaraokeFrame();
+        updateKaraokeAtTime(lyricsAudio.currentTime, true);
+    });
+    lyricsAudio.addEventListener("ended", () => {
+        cancelKaraokeFrame();
+        updateKaraokeAtTime(lyricsAudio.currentTime, true);
+    });
 }
+
+document.addEventListener("visibilitychange", () => {
+    if(document.hidden){
+        cancelKaraokeFrame();
+    }else{
+        updateKaraokeAtTime(lyricsAudio?.currentTime || 0, true);
+        scheduleKaraokeFrame();
+    }
+});
 
 function loadAppNumbers(){
     return new Promise(resolve => {
@@ -951,6 +1386,29 @@ async function handleGoogleCredential(authUser){
     LoadUserFArtists();
 }
 
+function isStandaloneWebApp(){
+    return navigator.standalone === true || window.matchMedia("(display-mode: standalone)").matches;
+}
+
+function waitForInitialFirebaseUser(){
+    return new Promise((resolve) => {
+        let unsubscribe = () => {};
+        unsubscribe = onAuthStateChanged(auth, (authUser) => {
+            unsubscribe();
+            resolve(authUser);
+        }, () => {
+            unsubscribe();
+            resolve(null);
+        });
+    });
+}
+
+async function beginGoogleRedirect(){
+    localStorage.setItem(googleRedirectPendingKey, "yes");
+    await authPersistenceReady;
+    await signInWithRedirect(auth, provider);
+}
+
 async function SignInWithGoogle(){
     googleAuthButtons.forEach((button) => {
         button.disabled = true;
@@ -961,11 +1419,16 @@ async function SignInWithGoogle(){
         }
     });
     try{
+        if(isStandaloneWebApp()){
+            await beginGoogleRedirect();
+            return;
+        }
+        await authPersistenceReady;
         const result = await signInWithPopup(auth, provider);
         await handleGoogleCredential(result.user);
     }catch(error){
-        if(error.code === "auth/popup-blocked"){
-            await signInWithRedirect(auth, provider);
+        if(error.code === "auth/popup-blocked" || error.code === "auth/operation-not-supported-in-this-environment"){
+            await beginGoogleRedirect();
             return;
         }
         if(error.code === "auth/popup-closed-by-user" || error.code === "auth/cancelled-popup-request"){
@@ -984,16 +1447,30 @@ async function SignInWithGoogle(){
     }
 }
 
-getRedirectResult(auth)
-.then((result) => {
-    if(result && result.user){
-        handleGoogleCredential(result.user);
+async function restoreGoogleRedirectSession(){
+    const redirectWasPending = localStorage.getItem(googleRedirectPendingKey) === "yes";
+    try{
+        await authPersistenceReady;
+        const [result, persistedAuthUser] = await Promise.all([
+            getRedirectResult(auth),
+            waitForInitialFirebaseUser()
+        ]);
+        const authUser = result?.user || (redirectWasPending ? persistedAuthUser : null);
+        if(!authUser){
+            return false;
+        }
+        await handleGoogleCredential(authUser);
+        return true;
+    }catch(error){
+        if(redirectWasPending){
+            window.showCrimsonNotice?.("Google sign in failed. Please try again.", "error");
+        }
+        console.error(error);
+        return false;
+    }finally{
+        localStorage.removeItem(googleRedirectPendingKey);
     }
-})
-.catch((error) => {
-    window.showCrimsonNotice?.("Google sign in failed. Please try again.", "error");
-    console.error(error);
-});
+}
 
 function reloadUserPhotoAndUsername(){
     const dbRef = ref(realdb);
@@ -3384,8 +3861,10 @@ export function doesSongHaveLyrics(songId, playedFrom){
 
     get(child(dbRef, "Songs/"+songId)).then((snapshot)=>{
         if(snapshot.exists()){
-            let LYRICS = snapshot.val().Lyrics;
-            if(LYRICS == undefined || LYRICS == ""){
+            const record = snapshot.val();
+            const hasPlainLyrics = Boolean(String(record.Lyrics || "").trim());
+            const hasKaraokeLyrics = normalizeKaraokeLyrics(record.lyricsKaraoke ?? record.LyricsKaraoke).length > 0;
+            if(!hasPlainLyrics && !hasKaraokeLyrics){
                 playerLyricsBtn.classList.add("disabledBtn");
                 if(isLyricsOn){
                     closePlayerLyrics2(playedFrom);
@@ -3732,6 +4211,14 @@ async function loadApp(){
 
 // ----- CALLING ALL NECESSARY FUNCTIONS
 
-getUsername();
-seeIfUserIsSignedIn();
+async function restoreUserSession(){
+    const restoredGoogleSession = await restoreGoogleRedirectSession();
+    if(restoredGoogleSession){
+        return;
+    }
+    getUsername();
+    await seeIfUserIsSignedIn();
+}
+
+restoreUserSession();
 loadApp();

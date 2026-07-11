@@ -16,6 +16,16 @@ let brojKategorija = 14;
 let isPerformanceModeOn = false;
 
 const crimsonViewHideTimers = new WeakMap();
+const crimsonScrollLocks = new Set();
+
+function setCrimsonScrollLock(source, locked){
+    if(locked){
+        crimsonScrollLocks.add(source);
+    }else{
+        crimsonScrollLocks.delete(source);
+    }
+    document.body.classList.toggle("crimsonScrollLocked", crimsonScrollLocks.size > 0);
+}
 
 function showCrimsonView(view){
     if(!view){
@@ -913,6 +923,7 @@ function setPlayerPopupTab(tabName){
         renderSongQueue();
     }
 
+    window.crimsonSetLyricsPanelActive?.(currentPlayerPopupTab === "lyrics");
     resetPlayerPopupScroll();
 }
 
@@ -923,11 +934,11 @@ function openPlayerPopup(tabName = "queue"){
 
     showCrimsonView(queuePanel);
     showCrimsonView(playerPopupBackdrop);
-    queuePanel.style.setProperty("--player-popup-full-top", `${getPlayerPopupFullscreenTop()}px`);
     isQueueOpen = true;
     queuePanel.classList.add("queuePanelOpen");
     queuePanel.setAttribute("aria-hidden", "false");
     playerPopupBackdrop?.classList.add("playerPopupBackdropOpen");
+    setCrimsonScrollLock("player-popup", true);
     setPlayerPopupTab(tabName);
 }
 
@@ -943,10 +954,11 @@ function closePlayerPopup(){
     queuePanel.classList.remove("playerMovable");
     queuePanel.setAttribute("aria-hidden", "true");
     queuePanel.style.transform = "";
-    queuePanel.style.removeProperty("--player-popup-full-top");
     queuePanel.style.top = "";
     queuePanel.style.height = "";
     playerPopupBackdrop?.classList.remove("playerPopupBackdropOpen");
+    window.crimsonSetLyricsPanelActive?.(false);
+    setCrimsonScrollLock("player-popup", false);
     hideCrimsonView(queuePanel, "queuePanelOpen");
     hideCrimsonView(playerPopupBackdrop, "playerPopupBackdropOpen", 220);
     setInteractionActive(false);
@@ -1726,6 +1738,7 @@ function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
     player.classList.remove("playerMovable");
+    player.classList.remove("playerSheetDragging");
     player.classList.remove("playerOpen");
     player.style.transform = "";
     triggerMiniPlayerBounce();
@@ -1735,6 +1748,7 @@ function closeBigPlayer(){
     document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
     document.querySelector('header').style.opacity = '1';
     document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
+    setCrimsonScrollLock("player", false);
     isPlayerOpen = false;
 }
 
@@ -1936,16 +1950,13 @@ function getColorStats(color){
 function buildPlayerGradient(colors){
     const primary = colors[0] || { r: 28, g: 22, b: 37 };
     const secondary = colors[1] || mixRgb(primary, { r: 180, g: 180, b: 180 }, 0.28);
-    const tertiary = colors[2] || mixRgb(primary, { r: 255, g: 255, b: 255 }, 0.14);
     const base = mixRgb(primary, { r: 18, g: 12, b: 22 }, 0.34);
     const softBase = mixRgb(base, secondary, 0.12);
 
     return {
         primary: rgbToCss(primary),
         secondary: rgbToCss(secondary),
-        softBase: rgbToCss(softBase),
-        glowOne: rgbToCss(mixRgb(primary, { r: 255, g: 255, b: 255 }, 0.08)),
-        glowTwo: rgbToCss(mixRgb(secondary, tertiary, 0.18))
+        softBase: rgbToCss(softBase)
     };
 }
 
@@ -1961,8 +1972,6 @@ function applyPlayerGradient(gradient, songColor, requestId = playerGradientRequ
     gradientLayer.style.setProperty("--playerGradientPrimary", gradient.primary || songColor);
     gradientLayer.style.setProperty("--playerGradientSecondary", gradient.secondary || songColor);
     gradientLayer.style.setProperty("--playerGradientSoftBase", gradient.softBase || songColor);
-    gradientLayer.style.setProperty("--playerGradientGlowOne", gradient.glowOne || songColor);
-    gradientLayer.style.setProperty("--playerGradientGlowTwo", gradient.glowTwo || songColor);
 }
 
 function setFallbackPlayerGradient(songColor, requestId = playerGradientRequest){
@@ -2121,6 +2130,7 @@ function handleAudioPlaybackFailure(error, requestedSongURL){
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id,queueOptions = {}){
     playbackRequestRevision += 1;
     currentPlayerSongId = id;
+    window.crimsonResetPlayerLyrics?.(id);
     imageURL = getCrimsonImageSrc(imageURL, "song");
     currentPlayerSongPopup = {
         id,
@@ -2233,6 +2243,8 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     }
     if(isQueueOpen && currentPlayerPopupTab === "related"){
         loadRelatedSongs();
+    }else if(isQueueOpen && currentPlayerPopupTab === "lyrics"){
+        window.crimsonLoadLyricsIntoPlayerPopup?.(id);
     }
 
     if(songSwipeState.isCommitting){
@@ -2990,6 +3002,7 @@ function openPopup(type,src,art,nam,id,isLikedPage,contextData){
 
     popupWrapper.focus();
     isPopupOpen = true;
+    setCrimsonScrollLock("context-popup", true);
     currentPopupContext = contextData || {type, id, name: nam, image: src, creator: art};
 
     if(type === "song"){
@@ -3068,6 +3081,7 @@ function closePopup(){
     hideCrimsonView(popupWrapper, "popupOpen");
 
     isPopupOpen = false;
+    setCrimsonScrollLock("context-popup", false);
     currentPopupContext = null;
 
     const popupMyPlaylists = document.querySelector('.popupMyPlaylists');
@@ -3467,7 +3481,7 @@ function cancelScheduledMove(frame){
 }
 
 function getOpenPlayerTop(){
-    return -50;
+    return 0;
 }
 
 function applyPlayerDragTop(top){
@@ -3477,8 +3491,10 @@ function applyPlayerDragTop(top){
 
 function settlePlayerPosition(open){
     movablePlayer.classList.remove("playerMovable");
+    movablePlayer.classList.remove("playerSheetDragging");
     movablePlayer.classList.toggle("playerOpen", open);
     movablePlayer.style.transform = "";
+    setCrimsonScrollLock("player", open);
 }
 
 function getGestureDirection(deltaX, deltaY, threshold = 10){
@@ -3500,7 +3516,7 @@ function getGestureDirection(deltaX, deltaY, threshold = 10){
 
 const move = (e) => {
     currentTouchPos = (e.touches[0].clientY - offsetY);
-    if(currentTouchPos <= (-50)){
+    if(currentTouchPos <= getOpenPlayerTop()){
         return;
     }
     moveStarted = true;
@@ -3516,15 +3532,21 @@ const move = (e) => {
 }
 
 let isLyricsOn = false;
+let suppressPlayerOpenClickUntil = 0;
 
 playerOpenDiv.addEventListener("touchstart", (e) => {
     // console.log("touched");
     if(window.innerWidth < window.innerHeight){
+        e.preventDefault();
+        e.stopPropagation();
+        suppressPlayerOpenClickUntil = Date.now() + 650;
         const playerStartTop = movablePlayer.getBoundingClientRect().top;
         playerDragStartTop = playerStartTop;
         playerMovedDown = true;
         setPlayerNavClosed(true);
         movablePlayer.classList.add("playerOpen");
+        movablePlayer.classList.add("playerSheetDragging");
+        setCrimsonScrollLock("player", true);
         if(reduceAnimations){
             document.querySelector('.bigControls').classList.add('noPointerEvents');
             setTimeout(() => {
@@ -3545,7 +3567,16 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
         playerTouchStarted = true;
         moveStarted = false;
     }
-})
+}, {passive: false});
+
+document.addEventListener("click", (event) => {
+    if(Date.now() > suppressPlayerOpenClickUntil || !event.target.closest(".player .pageBar, .player .bigPlayer")){
+        return;
+    }
+    suppressPlayerOpenClickUntil = 0;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+}, true);
 
 // ----- playerDiv 2
 
@@ -3781,6 +3812,7 @@ const move2 = (e) => {
         moveStarted = true;
         playerMovedDown = true;
         movablePlayer.classList.add("playerMovable");
+        movablePlayer.classList.add("playerSheetDragging");
         bigSongBanner.classList.remove("playerMovable");
         playerMoveTop = currentTouchPos;
         if(!playerMoveFrame){
@@ -4285,6 +4317,7 @@ document.addEventListener("touchend", () => {
             isPlayerOpen = true;
         }else{
             movablePlayer.classList.remove("playerMovable");
+            movablePlayer.classList.remove("playerSheetDragging");
             bigSongBanner.classList.remove("playerMovable");
         }
     }
@@ -4332,63 +4365,17 @@ let playerPopupGestureDirection = null;
 let playerPopupStartTarget = null;
 let playerPopupDragViewportHeight = 0;
 const playerPopupDragThreshold = 8;
-let cachedSafeAreaTop = null;
 
 function getPlayerPopupContainerRect(){
     return queuePanel?.closest(".player")?.getBoundingClientRect() || document.documentElement.getBoundingClientRect();
 }
 
 function getPlayerPopupViewportHeight(){
-    return getPlayerPopupContainerRect().height || window.innerHeight;
+    return window.visualViewport?.height || window.innerHeight || getPlayerPopupContainerRect().height;
 }
 
 function getPlayerPopupFullscreenTop(){
-    const containerRect = getPlayerPopupContainerRect();
-    return Math.max(0, getSafeAreaTopPx() - containerRect.top);
-}
-
-function getSafeAreaTopPx(){
-    if(cachedSafeAreaTop !== null){
-        return cachedSafeAreaTop;
-    }
-
-    const probe = document.createElement("div");
-    probe.style.position = "fixed";
-    probe.style.top = "0";
-    probe.style.left = "0";
-    probe.style.height = "env(safe-area-inset-top)";
-    probe.style.width = "0";
-    probe.style.pointerEvents = "none";
-    probe.style.visibility = "hidden";
-    document.body.appendChild(probe);
-    cachedSafeAreaTop = probe.getBoundingClientRect().height || window.visualViewport?.offsetTop || 0;
-    probe.remove();
-    return cachedSafeAreaTop;
-}
-
-window.visualViewport?.addEventListener("resize", () => {
-    cachedSafeAreaTop = null;
-    if(isQueueOpen){
-        requestAnimationFrame(syncPlayerPopupViewportOffset);
-    }
-});
-
-window.addEventListener("orientationchange", () => {
-    cachedSafeAreaTop = null;
-    if(isQueueOpen){
-        requestAnimationFrame(syncPlayerPopupViewportOffset);
-    }
-});
-
-function syncPlayerPopupViewportOffset(){
-    if(!queuePanel || !isQueueOpen){
-        return;
-    }
-    const fullscreenTop = getPlayerPopupFullscreenTop();
-    queuePanel.style.setProperty("--player-popup-full-top", `${fullscreenTop}px`);
-    if(queuePanel.classList.contains("playerPopupFull")){
-        playerPopupCurrentTop = fullscreenTop;
-    }
+    return 0;
 }
 
 function applyPlayerPopupPosition(top){
@@ -4409,7 +4396,6 @@ function applyPlayerPopupFullscreenPosition(){
 
     const fullscreenTop = getPlayerPopupFullscreenTop();
     playerPopupCurrentTop = fullscreenTop;
-    queuePanel.style.setProperty("--player-popup-full-top", `${fullscreenTop}px`);
     queuePanel.style.transform = "";
 }
 
@@ -4478,7 +4464,7 @@ function startPlayerPopupDrag(clientX, clientY){
     playerPopupGestureDirection = null;
     const panelRect = queuePanel.getBoundingClientRect();
     const containerRect = getPlayerPopupContainerRect();
-    playerPopupDragViewportHeight = containerRect.height || window.innerHeight;
+    playerPopupDragViewportHeight = getPlayerPopupViewportHeight();
     playerPopupStartTop = panelRect.top - containerRect.top;
     playerPopupCurrentTop = playerPopupStartTop;
 }
@@ -4543,7 +4529,6 @@ function finishPlayerPopupDrag(){
     }else{
         queuePanel.style.transform = "";
         queuePanel.classList.remove("playerPopupFull");
-        queuePanel.style.removeProperty("--player-popup-full-top");
     }
 
     playerPopupTouchStarted = false;

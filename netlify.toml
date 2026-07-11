@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/__/auth/*"
+  to = "https://crimsonmusic-b97d9.firebaseapp.com/__/auth/:splat"
+  status = 200
+  force = true
