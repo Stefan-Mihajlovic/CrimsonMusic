@@ -15,7 +15,7 @@
     <script>
         try {
             const cachedUser = JSON.parse(localStorage.getItem('user') || 'null');
-            const savedTheme = localStorage.getItem('crimsonTheme') || cachedUser?.AppTheme || 'Auto';
+            const savedTheme = localStorage.getItem('crimsonTheme') || cachedUser?.AppTheme || 'Dark';
             const resolvedTheme = savedTheme === 'Auto'
                 ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Dark' : 'Light')
                 : savedTheme;
@@ -29,10 +29,10 @@
             localStorage.removeItem('keepLoggedIn');
         }
     </script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260711-player-queue-cors-2">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
-    <script src="js/index.js?v=20260711-view-lifecycle-1" defer></script>
-    <script src="js/indexController.js?v=20260711-view-lifecycle-1" type="module"></script>
+    <script src="js/index.js?v=20260711-player-queue-cors-2" defer></script>
+    <script src="js/indexController.js?v=20260711-player-queue-cors-2" type="module"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <script src="https://kit.fontawesome.com/1d408b5acd.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -120,18 +120,18 @@
                 <img name="profilePhoto" src="images/profiles/1.png" alt="Profile">
             </button>
         </header>
-        <section class="vaultSection">
-            <video src="videos/TheVaultBg.mp4" autoplay muted loop playsinline></video>
+        <section class="vaultSection" aria-busy="false">
+            <video src="videos/TheVaultBg.mp4" preload="metadata" muted loop playsinline aria-hidden="true"></video>
             <h2>VAULT</h2>
-            <button class="vaultPlayBtn" onclick="openTheVault()">
+            <button class="vaultPlayBtn" type="button" onclick="openTheVault()" aria-expanded="false" aria-controls="vaultMoodList" aria-label="Choose a Vault mood">
                 <i class="fa-solid fa-play"></i>
             </button>
-            <ul class="vaultCatsHolder">
-                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Chill</li>
-                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Focus</li>
-                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Melancholy</li>
-                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Motivation</li>
-                <li onclick="vaultEmotionLoad(this.innerHTML)" class="vaultCat">Party</li>
+            <ul class="vaultCatsHolder" id="vaultMoodList">
+                <li onclick="vaultEmotionLoad(this.dataset.vaultMood)" data-vault-mood="Chill" class="vaultCat" role="button" tabindex="0">Chill</li>
+                <li onclick="vaultEmotionLoad(this.dataset.vaultMood)" data-vault-mood="Focus" class="vaultCat" role="button" tabindex="0">Focus</li>
+                <li onclick="vaultEmotionLoad(this.dataset.vaultMood)" data-vault-mood="Melancholy" class="vaultCat" role="button" tabindex="0">Melancholy</li>
+                <li onclick="vaultEmotionLoad(this.dataset.vaultMood)" data-vault-mood="Motivation" class="vaultCat" role="button" tabindex="0">Motivation</li>
+                <li onclick="vaultEmotionLoad(this.dataset.vaultMood)" data-vault-mood="Party" class="vaultCat" role="button" tabindex="0">Party</li>
             </ul>
         </section>
 
@@ -150,7 +150,7 @@
             <h2 class="catTitle">Playlists curated just for <span class="highlightSpan">YOU</span></h2>
             <ul class="recPlaylists">
                 <div class="playlistItem vaultPlItem" onclick="vaultEmotionLoad('Party')">
-                    <img src="images/VaultBanner.gif" alt="vaultBanner">
+                    <img src="images/VaultBanner.gif" alt="vaultBanner" loading="lazy" decoding="async">
                     <i class="fa-solid fa-play"></i>
                     <h3>The Vault</h3>
                     <h5>Ready to experience magic like no other?</h5>
@@ -290,7 +290,7 @@
                         <div class="playerSongNames">
                             <span id="openArtistPageBigBtn"></span>
                             <h2 class="scrollText"><div name="songTitle">Demo Song</div></h2>
-                            <h3 class="scrollText"><div name="songArtist">Demo artist</di></h3>
+                            <h3 class="scrollText"><div name="songArtist">Demo artist</div></h3>
                         </div>
                         <div class="littleSongBtns">
                             <button id="checkLyrics" style="display: none !important;"></button>
@@ -301,13 +301,13 @@
                 </div>
                 <div class="bipCC">
                     <span id="currentSongTime">0:00</span>
-                    <input type="range" name="currentSongInput" id="currentSongInput" placeholder="a">
+                    <input type="range" name="currentSongInput" id="currentSongInput" min="0" max="100" step="0.1" value="0" aria-label="Song progress">
                     <span id="currentSongTimeLeft">0:00</span>
                 </div>
                 <div class="bpCC">
                     <button id="shuffleBtn"><i class="fa-solid fa-shuffle"></i></button>
                     <button id="backward" class="rewindButton"><i class="fa-solid fa-backward-step"></i></button>
-                    <button class="bigPlayButton" onclick="pausePlayCurrentSong()" name="songPlayButton"><i class="fa-solid fa-circle-pause"></i></but>
+                    <button class="bigPlayButton" onclick="pausePlayCurrentSong()" name="songPlayButton"><i class="fa-solid fa-circle-pause"></i></button>
                     <button id="forward" class="rewindButton"><i class="fa-solid fa-forward-step"></i></button>
                     <button id="repeatBtn"><i class="fa-solid fa-repeat"></i></button>
                 </div>
@@ -354,9 +354,13 @@
                 <img loading="lazy" name="catBanner" src="" alt="categoryBanner" class="catBanner">
                 <div class="categoryHeroTint"></div>
                 <div class="categoryHeroContent">
-                    <h3 name="categoryName" id="catH3Title">?</h3>
-                    <p id="categoryMeta">Curated songs and playlists</p>
-                    <button id="playCategoryBtn" type="button"><i class="fa-solid fa-play"></i> Play category</button>
+                    <div class="categoryHeroText">
+                        <h3 name="categoryName" id="catH3Title">?</h3>
+                        <p id="categoryMeta">Curated songs and playlists</p>
+                    </div>
+                    <div class="artistBtns categoryHeroActions">
+                        <button class="bigSideScreenBtn" id="playCategoryBtn" type="button"><i class="fa-solid fa-play"></i> Play</button>
+                    </div>
                 </div>
                 <div class="categoryHeroFade"></div>
             </div>
@@ -553,14 +557,14 @@
                         <div class="themeItem">
                             <img src="images/DarkModeBanner.png" alt="themeImage">
                             <h3>Dark</h3>
-                            <input type="radio" class="fullInput" name="appTheme" id="darkThemeInput" onchange="setAppTheme('Dark',true)">
-                            <input type="checkbox" name="appTheme2" id="darkThemeInput2">
+                            <input type="radio" class="fullInput" name="appTheme" id="darkThemeInput" onchange="setAppTheme('Dark',true)" checked>
+                            <input type="checkbox" name="appTheme2" id="darkThemeInput2" checked>
                         </div>
                         <div class="themeItem">
                             <img src="images/AutoModeBanner.png" alt="themeImage">
                             <h3>Auto</h3>
-                            <input type="radio" class="fullInput" name="appTheme" id="autoThemeInput" onchange="setAppTheme('Auto',false)" checked>
-                            <input type="checkbox" name="appTheme2" id="autoThemeInput2" checked>
+                            <input type="radio" class="fullInput" name="appTheme" id="autoThemeInput" onchange="setAppTheme('Auto',false)">
+                            <input type="checkbox" name="appTheme2" id="autoThemeInput2">
                         </div>
                     </div>
                 </section>
@@ -716,7 +720,7 @@
         </div>
     </div>
 
-    <div id="popupWrapper">
+    <div id="popupWrapper" role="dialog" aria-modal="true" aria-label="Song options" tabindex="-1">
         <div class="popupScreen">
             <div class="draggableBarTop">
                 <div></div>
@@ -729,15 +733,15 @@
                 </div>
             </div>
             <ul class="songPopupBody">
-                <li class="popupItem" id="likeSongBtn">
+                <li class="popupItem" id="likeSongBtn" role="button" tabindex="0">
                     <i class="fa-regular fa-heart"></i>
                     <h5>Add to favorites</h5>
                 </li>
-                <li class="popupItem" id="seeMoreFromBtn">
+                <li class="popupItem" id="seeMoreFromBtn" role="button" tabindex="0">
                     <i class="fa-regular fa-user"></i>
                     <h5>See more from <span name="popupArtist">SongArtist</span></h5>
                 </li>
-                <li class="popupItem" id="addToPlBtn">
+                <li class="popupItem" id="addToPlBtn" role="button" tabindex="0">
                     <div class="playlistAddPopup">
                         <i class="fa-regular fa-plus"></i>
                         <h5>Add to playlist</h5>
@@ -747,39 +751,39 @@
                 </li>
             </ul>
             <ul class="playlistPopupBody">
-                <li class="popupItem" id="deletePlaylistBtn">
+                <li class="popupItem" id="deletePlaylistBtn" role="button" tabindex="0">
                     <i class="fa-solid fa-trash-can"></i>
                     <h5>Delete playlist</h5>
                 </li>
-                <li class="popupItem" id="editPlaylistBtn">
+                <li class="popupItem" id="editPlaylistBtn" role="button" tabindex="0">
                     <i class="fa-solid fa-pen-to-square"></i>
                     <h5>Edit playlist</h5>
                 </li>
             </ul>
             <ul class="publicPlaylistPopupBody">
-                <li class="popupItem" id="playContextPlaylistBtn">
+                <li class="popupItem" id="playContextPlaylistBtn" role="button" tabindex="0">
                     <i class="fa-solid fa-play"></i>
                     <h5>Play playlist</h5>
                 </li>
-                <li class="popupItem" id="likeContextPlaylistBtn">
+                <li class="popupItem" id="likeContextPlaylistBtn" role="button" tabindex="0">
                     <i class="fa-regular fa-heart"></i>
                     <h5>Like playlist</h5>
                 </li>
-                <li class="popupItem" id="openContextPlaylistBtn">
+                <li class="popupItem" id="openContextPlaylistBtn" role="button" tabindex="0">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     <h5>Open playlist</h5>
                 </li>
             </ul>
             <ul class="artistPopupBody">
-                <li class="popupItem" id="playContextArtistBtn">
+                <li class="popupItem" id="playContextArtistBtn" role="button" tabindex="0">
                     <i class="fa-solid fa-play"></i>
                     <h5>Play artist</h5>
                 </li>
-                <li class="popupItem" id="followContextArtistBtn">
+                <li class="popupItem" id="followContextArtistBtn" role="button" tabindex="0">
                     <i class="fa-solid fa-user-plus"></i>
                     <h5>Follow artist</h5>
                 </li>
-                <li class="popupItem" id="openContextArtistBtn">
+                <li class="popupItem" id="openContextArtistBtn" role="button" tabindex="0">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     <h5>Open artist</h5>
                 </li>
@@ -806,9 +810,9 @@
     </div>
 
     <nav id="mobileNav" class="navNoPlayer">
-        <button class="HomeBtnNav activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i style="font-size: 17px !important;" class="bi bi-house"></i>Home</button>
-        <button class="SearchBtnNav" type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i>Search</button>
-        <button class="LibraryBtnNav" type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i>Library</button>
+        <button class="HomeBtnNav activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i>Home</button>
+        <button class="SearchBtnNav" type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        <button class="LibraryBtnNav" type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-regular fa-folder"></i>Library</button>
     </nav>
 
     <nav class="navBig">
@@ -816,9 +820,9 @@
             <img loading="lazy" src="images/CrimsonLogo.png" alt="logo">
             <h2 id="timeOfDayNav"></h2>
         </div>
-        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="bi bi-house"></i>Home</button>
-        <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="bi bi-search"></i>Search</button>
-        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="bi bi-journals"></i>Library</button>
+        <button class="activeScreen" type="button" onclick="setScreen('Home', this, 'homeScreen'); closeArtistPage();"><i class="fa-solid fa-house"></i>Home</button>
+        <button type="button" onclick="setScreen('Search', this, 'searchScreen'); closeArtistPage();"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        <button type="button" onclick="setScreen('Playlists', this, 'yoursScreen'); closeArtistPage();"><i class="fa-regular fa-folder"></i>Library</button>
         <button class="settingsBtnNav" type="button" onclick="openLoginScreen();"><i class="fa-solid fa-gear"></i>Settings</button>
     </nav>
 
@@ -835,7 +839,7 @@
     <div class="crimsonNoticeStack" id="crimsonNoticeStack" aria-live="polite" aria-atomic="false"></div>
 
     <script type="module">
-        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js?v=20260711-view-lifecycle-1';
+        import { openArtistPage,closeArtistPage,closePlaylistPage,openPlaylistPage,openCategoryPage,playRandomSongForTheVault,closeCategoryPage,MakeAPlaylist,openMyPlaylistPage,SubmitAPlaylist,openLikedSongs,addSongToLiked,seeIfSongIsLiked,reloadLikedSongs,getArtistId,LoadUserPlaylistsPopup,addSongToThisPlaylist,turnLyrics,doesSongHaveLyrics,openArtistPageByName,UserSignedIn,vaultEmotionLoad } from './js/indexController.js?v=20260711-player-queue-cors-2';
         window.openArtistPage = openArtistPage;
         window.closeArtistPage = closeArtistPage;
         window.closePlaylistPage = closePlaylistPage;
@@ -860,6 +864,6 @@
         window.vaultEmotionLoad = vaultEmotionLoad;
     </script>
 
-    <audio src="https://firebasestorage.googleapis.com/v0/b/crimsonmusic-b97d9.appspot.com/o/Songs%2F1.mp3?alt=media&token=54e2f635-d62d-491f-aaab-44ba18c77f65" id="currentSong"></audio>
+    <audio crossorigin="anonymous" preload="metadata" src="https://firebasestorage.googleapis.com/v0/b/crimsonmusic-b97d9.appspot.com/o/Songs%2F1.mp3?alt=media&amp;token=54e2f635-d62d-491f-aaab-44ba18c77f65" id="currentSong"></audio>
 </body>
 </html>

@@ -560,6 +560,7 @@ redanimToggle.addEventListener('click', () => {
         document.getElementsByClassName('miniPlayer')[0].classList.add('noAnimTransitions');
         document.getElementsByClassName('bigSongInfo')[0].classList.add('noAnimTransitions');
         document.getElementsByClassName('bigControls')[0].classList.add('noAnimTransitions');
+        document.querySelector('.vaultSection').classList.add('noAnimTransitions');
 
         document.querySelector('.categoryScreen').classList.add('noAnimTransitions');
         document.querySelector('.artistScreen').classList.add('noAnimTransitions');
@@ -610,6 +611,7 @@ redanimToggle.addEventListener('click', () => {
         document.getElementsByClassName('miniPlayer')[0].classList.remove('noAnimTransitions');
         document.getElementsByClassName('bigSongInfo')[0].classList.remove('noAnimTransitions');
         document.getElementsByClassName('bigControls')[0].classList.remove('noAnimTransitions');
+        document.querySelector('.vaultSection').classList.remove('noAnimTransitions');
 
         document.querySelector('.categoryScreen').classList.remove('noAnimTransitions');
         document.querySelector('.artistScreen').classList.remove('noAnimTransitions');
@@ -704,9 +706,7 @@ autoplayBtn.addEventListener('click', () => {
 const backwardBtn = document.querySelector('#backward');
 function performSongChange(direction){
     if(direction === "previous"){
-        if(prevSongBtn != 0){
-            prevSongBtn.children[1].click();
-        }else if(songQueue.history.length > 0){
+        if(songQueue.history.length > 0){
             playQueueSong(songQueue.history[songQueue.history.length - 1]);
         }
         return;
@@ -783,6 +783,102 @@ let songQueue = {
     history: [],
     upcoming: []
 };
+let songQueueRevision = 0;
+let songQueueFillState = null;
+const songQueueTargetLength = 12;
+let playbackRequestRevision = 0;
+const queueSongRenderKeys = new WeakMap();
+let nextQueueSongRenderKey = 1;
+let hasRenderedSongQueue = false;
+
+window.crimsonBeginPlaybackRequest = function(){
+    playbackRequestRevision += 1;
+    return playbackRequestRevision;
+};
+
+window.crimsonIsPlaybackRequestCurrent = function(requestRevision){
+    return requestRevision == null || requestRevision === playbackRequestRevision;
+};
+
+function replaceSongQueue(nextQueue){
+    songQueue = nextQueue;
+    songQueueRevision += 1;
+    songQueueFillState = null;
+}
+
+function queueSongsMatch(firstSong, secondSong){
+    if(!firstSong || !secondSong){
+        return false;
+    }
+
+    const firstId = String(firstSong.id ?? "");
+    const secondId = String(secondSong.id ?? "");
+    if(firstId && secondId){
+        return firstId === secondId;
+    }
+
+    return !!firstSong.url && firstSong.url === secondSong.url;
+}
+
+function mergeQueueSong(queueSong, selectedSong){
+    const targetSong = queueSong || {};
+    const source = targetSong.source || selectedSong?.source || songQueue.sourceName || "Your queue";
+    const element = selectedSong?.element || targetSong.element || null;
+    Object.assign(targetSong, selectedSong, {source, element});
+    return targetSong;
+}
+
+function moveQueueToSong(selectedSong){
+    if(!selectedSong){
+        return;
+    }
+
+    const previousCurrent = songQueue.current;
+    if(queueSongsMatch(previousCurrent, selectedSong)){
+        songQueue.current = mergeQueueSong(previousCurrent, selectedSong);
+        return;
+    }
+
+    const upcomingIndex = songQueue.upcoming.findIndex((song) => queueSongsMatch(song, selectedSong));
+    if(upcomingIndex >= 0){
+        const queuedSong = songQueue.upcoming[upcomingIndex];
+        const skippedSongs = songQueue.upcoming.slice(0, upcomingIndex);
+        if(previousCurrent){
+            songQueue.history.push(previousCurrent);
+        }
+        songQueue.history.push(...skippedSongs);
+        songQueue.current = mergeQueueSong(queuedSong, selectedSong);
+        songQueue.upcoming = songQueue.upcoming.slice(upcomingIndex + 1);
+        return;
+    }
+
+    let historyIndex = songQueue.history.lastIndexOf(selectedSong);
+    if(historyIndex < 0){
+        for(let index = songQueue.history.length - 1; index >= 0; index--){
+            if(queueSongsMatch(songQueue.history[index], selectedSong)){
+                historyIndex = index;
+                break;
+            }
+        }
+    }
+    if(historyIndex >= 0){
+        const queuedSong = songQueue.history[historyIndex];
+        const restoredUpcoming = [
+            ...songQueue.history.slice(historyIndex + 1),
+            ...(previousCurrent ? [previousCurrent] : []),
+            ...songQueue.upcoming
+        ];
+        songQueue.history = songQueue.history.slice(0, historyIndex);
+        songQueue.current = mergeQueueSong(queuedSong, selectedSong);
+        songQueue.upcoming = restoredUpcoming;
+        return;
+    }
+
+    if(previousCurrent){
+        songQueue.history.push(previousCurrent);
+    }
+    songQueue.current = selectedSong;
+}
 
 function resetPlayerPopupScroll(){
     queueList?.scrollTo(0, 0);
@@ -1068,12 +1164,12 @@ function buildQueueFromSongList(currentItem, playedFromBtn, playedFrom){
         upcoming = songList.slice(currentIndex + 1).map((item) => parseSongItem(item, playedFrom)).filter(Boolean);
     }
 
-    songQueue = {
+    replaceSongQueue({
         sourceName: playedFrom || currentItem.source || "Your queue",
         current: currentItem,
         history: history,
         upcoming: upcoming
-    };
+    });
 
     fillQueueWithRandomSongs();
     renderSongQueue();
@@ -1085,16 +1181,23 @@ function randomSongId(excludedIds = []){
         return null;
     }
 
+    const excluded = excludedIds instanceof Set ? excludedIds : new Set(excludedIds);
     let attempts = 0;
     while(attempts < 40){
         const id = String(Math.floor(Math.random() * songCount) + 1);
-        if(!excludedIds.includes(id)){
+        if(!excluded.has(id)){
             return id;
         }
         attempts++;
     }
 
-    return String(Math.floor(Math.random() * songCount) + 1);
+    for(let id = 1; id <= songCount; id++){
+        if(!excluded.has(String(id))){
+            return String(id);
+        }
+    }
+
+    return null;
 }
 
 async function fillQueueWithRandomSongs(){
@@ -1103,22 +1206,58 @@ async function fillQueueWithRandomSongs(){
         return;
     }
 
-    const excludedIds = [
-        ...songQueue.history.map((song) => String(song.id)),
-        songQueue.current ? String(songQueue.current.id) : "",
-        ...songQueue.upcoming.map((song) => String(song.id))
-    ];
+    const queueReference = songQueue;
+    const queueRevision = songQueueRevision;
+    if(songQueueFillState?.revision === queueRevision && songQueueFillState.queue === queueReference){
+        return songQueueFillState.promise;
+    }
 
-    while(songQueue.upcoming.length < 12){
-        const id = randomSongId(excludedIds);
-        if(!id){
-            break;
-        }
+    const fillPromise = (async () => {
+        let allowHistoryReuse = false;
+        let excludedIds = new Set([
+            ...queueReference.history.map((song) => String(song.id)),
+            queueReference.current ? String(queueReference.current.id) : "",
+            ...queueReference.upcoming.map((song) => String(song.id))
+        ].filter(Boolean));
 
-        excludedIds.push(id);
-        const song = await window.crimsonGetSongById(id);
-        if(song){
-            songQueue.upcoming.push({
+        while(queueReference.upcoming.length < songQueueTargetLength){
+            if(songQueueRevision !== queueRevision || songQueue !== queueReference){
+                return;
+            }
+
+            let id = randomSongId(excludedIds);
+            if(!id && !allowHistoryReuse){
+                allowHistoryReuse = true;
+                excludedIds = new Set([
+                    queueReference.current ? String(queueReference.current.id) : "",
+                    ...queueReference.upcoming.map((song) => String(song.id))
+                ].filter(Boolean));
+                id = randomSongId(excludedIds);
+            }
+            if(!id){
+                break;
+            }
+
+            excludedIds.add(id);
+            let song = null;
+            try{
+                song = await window.crimsonGetSongById(id);
+            }catch(error){
+                continue;
+            }
+
+            if(songQueueRevision !== queueRevision || songQueue !== queueReference){
+                return;
+            }
+            const fetchedSong = { id, url: song?.songURL };
+            const alreadyQueued = queueSongsMatch(queueReference.current, fetchedSong)
+                || queueReference.upcoming.some((queuedSong) => queueSongsMatch(queuedSong, fetchedSong))
+                || (!allowHistoryReuse && queueReference.history.some((queuedSong) => queueSongsMatch(queuedSong, fetchedSong)));
+            if(!song || alreadyQueued){
+                continue;
+            }
+
+            queueReference.upcoming.push({
                 url: song.songURL,
                 title: song.title,
                 creator: song.creator,
@@ -1131,6 +1270,20 @@ async function fillQueueWithRandomSongs(){
             });
             renderSongQueue();
         }
+    })();
+
+    songQueueFillState = {
+        revision: queueRevision,
+        queue: queueReference,
+        promise: fillPromise
+    };
+
+    try{
+        await fillPromise;
+    }finally{
+        if(songQueueFillState?.promise === fillPromise){
+            songQueueFillState = null;
+        }
     }
 }
 
@@ -1141,22 +1294,45 @@ function renderSongQueue(){
 
     queueSourceName.textContent = songQueue.sourceName || "Your queue";
     updateQueueSourceAction();
-    queueList.innerHTML = "";
 
     const queueRows = [
-        ...songQueue.history.map((song) => ({...song, state: "played"})),
-        ...(songQueue.current ? [{...songQueue.current, state: "current"}] : []),
-        ...songQueue.upcoming.map((song) => ({...song, state: "upcoming"}))
+        ...songQueue.history.map((song) => ({song, state: "played"})),
+        ...(songQueue.current ? [{song: songQueue.current, state: "current"}] : []),
+        ...songQueue.upcoming.map((song) => ({song, state: "upcoming"}))
     ];
 
     if(queueRows.length === 0){
         queueList.innerHTML = `<li class="queueEmpty">Your queue is empty.</li>`;
+        hasRenderedSongQueue = true;
         return;
     }
 
-    queueRows.forEach((song) => {
-        const row = document.createElement("li");
-        row.className = `queueSong queueSong-${song.state} playerPopupStaggerItem`;
+    queueList.querySelector(".queueEmpty")?.remove();
+    const existingRows = new Map(
+        Array.from(queueList.querySelectorAll(".queueSong[data-queue-render-key]"))
+            .map((row) => [row.dataset.queueRenderKey, row])
+    );
+    queueRows.forEach(({song, state}) => {
+        if(!queueSongRenderKeys.has(song)){
+            queueSongRenderKeys.set(song, String(nextQueueSongRenderKey++));
+        }
+        const renderKey = queueSongRenderKeys.get(song);
+        let row = existingRows.get(renderKey);
+        const isNewRow = !row;
+        if(isNewRow){
+            row = document.createElement("li");
+            row.dataset.queueRenderKey = renderKey;
+        }
+
+        row.className = `queueSong queueSong-${state}`;
+        if(isNewRow && hasRenderedSongQueue){
+            row.classList.add("playerPopupStaggerItem");
+            row.style.setProperty("--player-popup-item-index", 0);
+            row.addEventListener("animationend", () => {
+                row.classList.remove("playerPopupStaggerItem");
+                row.style.removeProperty("--player-popup-item-index");
+            }, {once: true});
+        }
         row._crimsonContext = {
             type: "song",
             id: song.id,
@@ -1164,7 +1340,6 @@ function renderSongQueue(){
             image: song.image,
             creator: song.creator
         };
-        row.style.setProperty("--player-popup-item-index", queueList.children.length);
         row.innerHTML = `
             <div class="queueSongBanner">
                 <div class="songVisualizer">
@@ -1179,13 +1354,17 @@ function renderSongQueue(){
                 <h3>${song.title}</h3>
                 <p>${song.creator}</p>
             </div>
-            <span>${song.state === "current" ? getSongDurationText() : ""}</span>
+            <span>${state === "current" ? getSongDurationText() : ""}</span>
         `;
         row.onclick = () => {
             playQueueSong(song);
-        }
+        };
         queueList.appendChild(row);
+        existingRows.delete(renderKey);
     });
+
+    existingRows.forEach((row) => row.remove());
+    hasRenderedSongQueue = true;
 }
 
 async function loadRelatedSongs(){
@@ -1298,31 +1477,25 @@ function playQueueSong(song){
         return;
     }
 
-    if(song.element){
-        song.element.querySelector(".songClickDiv")?.click();
-        return;
-    }
-
     const sourceName = songQueue.sourceName || song.source || "Your queue";
-    playerSelectedSong(song.url,song.title,song.creator,song.image,song.color,sourceName,0,song.id,{
+    const sourceElement = song.element?.isConnected && song.element.parentElement ? song.element : 0;
+    playerSelectedSong(song.url,song.title,song.creator,song.image,song.color,sourceName,sourceElement,song.id,{
         sourceName: sourceName,
         preserveQueue: true
     });
 }
 
 function playNextQueuedSong(){
-    if(nextSongBtn != 0){
-        nextSongBtn.children[1].click();
-        return;
-    }
-
     if(songQueue.upcoming.length > 0){
         playQueueSong(songQueue.upcoming[0]);
         return;
     }
 
+    const requestedQueue = songQueue;
+    const requestedRevision = songQueueRevision;
+    const requestedCurrent = songQueue.current;
     fillQueueWithRandomSongs().then(() => {
-        if(songQueue.upcoming.length > 0){
+        if(songQueue === requestedQueue && songQueueRevision === requestedRevision && queueSongsMatch(songQueue.current, requestedCurrent) && songQueue.upcoming.length > 0){
             playQueueSong(songQueue.upcoming[0]);
         }
     });
@@ -1566,6 +1739,7 @@ function closeBigPlayer(){
 }
 
 const currentSongAudio = document.getElementById("currentSong");
+currentSongAudio.crossOrigin = "anonymous";
 let playingFrom = document.getElementById("playingFromSpan");
 let currentMediaSessionSong = null;
 
@@ -1694,6 +1868,8 @@ let isTheVaultOn = false;
 let LastPlayedFromBtn;
 const playerGradientLayers = Array.from(document.querySelectorAll(".playerGradientLayer"));
 let playerGradientRequest = 0;
+let playerGradientFallbackTimer = null;
+const playerGradientCache = new Map();
 
 function clampColorChannel(value){
     return Math.max(0, Math.min(255, Math.round(value)));
@@ -1800,10 +1976,27 @@ function setFallbackPlayerGradient(songColor, requestId = playerGradientRequest)
 
 function getDominantImageColors(imageURL, fallbackColor){
     const requestId = ++playerGradientRequest;
-    setFallbackPlayerGradient(fallbackColor, requestId);
-    if(!imageURL){
+    if(playerGradientFallbackTimer){
+        clearTimeout(playerGradientFallbackTimer);
+        playerGradientFallbackTimer = null;
+    }
+
+    const cachedGradient = imageURL ? playerGradientCache.get(imageURL) : null;
+    if(cachedGradient){
+        applyPlayerGradient(cachedGradient, fallbackColor, requestId);
         return;
     }
+    if(!imageURL){
+        setFallbackPlayerGradient(fallbackColor, requestId);
+        return;
+    }
+
+    playerGradientFallbackTimer = window.setTimeout(() => {
+        if(requestId === playerGradientRequest){
+            setFallbackPlayerGradient(fallbackColor, requestId);
+        }
+        playerGradientFallbackTimer = null;
+    }, reduceAnimations ? 0 : 140);
 
     const image = new Image();
     image.crossOrigin = "anonymous";
@@ -1877,17 +2070,56 @@ function getDominantImageColors(imageURL, fallbackColor){
             ].filter(Boolean);
 
             if(gradientColors.length){
-                applyPlayerGradient(buildPlayerGradient(gradientColors), fallbackColor, requestId);
+                const gradient = buildPlayerGradient(gradientColors);
+                playerGradientCache.set(imageURL, gradient);
+                if(playerGradientFallbackTimer){
+                    clearTimeout(playerGradientFallbackTimer);
+                    playerGradientFallbackTimer = null;
+                }
+                applyPlayerGradient(gradient, fallbackColor, requestId);
             }
         }catch(error){
+            if(playerGradientFallbackTimer){
+                clearTimeout(playerGradientFallbackTimer);
+                playerGradientFallbackTimer = null;
+            }
             setFallbackPlayerGradient(fallbackColor, requestId);
         }
     };
-    image.onerror = () => setFallbackPlayerGradient(fallbackColor, requestId);
+    image.onerror = () => {
+        if(requestId !== playerGradientRequest){
+            return;
+        }
+        if(playerGradientFallbackTimer){
+            clearTimeout(playerGradientFallbackTimer);
+            playerGradientFallbackTimer = null;
+        }
+        setFallbackPlayerGradient(fallbackColor, requestId);
+    };
     image.src = imageURL;
 }
 
+function handleAudioPlaybackFailure(error, requestedSongURL){
+    if(error?.name === "AbortError" || currentSongAudio.src !== requestedSongURL){
+        return;
+    }
+
+    isSongPaused = true;
+    document.getElementsByName("songPlayButton").forEach((button) => {
+        button.children[0]?.classList.remove("fa-circle-pause");
+        button.children[0]?.classList.add("fa-circle-play");
+    });
+    syncContextPlaybackButtons();
+    updateMediaSessionPlaybackState();
+
+    if(error?.name !== "NotAllowedError"){
+        console.warn("Crimson Music could not start this audio source.", error);
+        window.showCrimsonNotice?.("This audio file could not be played. Please try again.", "error", {title: "Playback unavailable"});
+    }
+}
+
 function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,playedFrom,playedFromBtn,id,queueOptions = {}){
+    playbackRequestRevision += 1;
     currentPlayerSongId = id;
     imageURL = getCrimsonImageSrc(imageURL, "song");
     currentPlayerSongPopup = {
@@ -1911,15 +2143,14 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     currentSongAudio.autoplay = true;
     setPlayerProgressLoadingState();
     currentSongAudio.src = songURL;
+    const requestedSongURL = currentSongAudio.src;
     var playPromise = currentSongAudio.play();
 
     if (playPromise !== undefined) {
     playPromise.then(_ => {
         // Automatic playback started!
     })
-    .catch(error => {
-        // Auto-play was prevented
-    });
+    .catch(error => handleAudioPlaybackFailure(error, requestedSongURL));
     }
 
     let songBanners = document.getElementsByName("songBanner");
@@ -1946,6 +2177,10 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
     });
 
     playedFrom = getPlayedFromName(playedFrom, playedFromBtn);
+    isTheVaultOn = String(playedFrom).replace(/\s+/g, "").toLowerCase() === "thevault";
+    if(!isTheVaultOn){
+        window.crimsonCancelVaultRequest?.();
+    }
     playingFrom = document.getElementById("playingFromSpan");
     playingFrom.innerHTML = playedFrom;
 
@@ -1968,29 +2203,26 @@ function playerSelectedSong(songURL,songTitle,songCreator,imageURL,songColor,pla
                 }
             }
         }
-        buildQueueFromSongList(currentQueueItem, playedFromBtn, playedFrom);
-    }else if(queueOptions.preserveQueue){
-        if(songQueue.current){
-            songQueue.history.push(songQueue.current);
-        }
-        songQueue.upcoming = songQueue.upcoming.filter((song) => String(song.id) !== String(id) || song.url !== songURL);
-        songQueue.current = currentQueueItem;
-        songQueue.sourceName = queueOptions.sourceName || playedFrom || songQueue.sourceName || "Your queue";
+    }else{
         nextSongBtn = 0;
         prevSongBtn = 0;
         currentSongBtn = 0;
+    }
+
+    if(queueOptions.preserveQueue){
+        moveQueueToSong(currentQueueItem);
+        songQueue.sourceName = queueOptions.sourceName || playedFrom || songQueue.sourceName || "Your queue";
         fillQueueWithRandomSongs();
         renderSongQueue();
+    }else if(playedFromBtn != 0){
+        buildQueueFromSongList(currentQueueItem, playedFromBtn, playedFrom);
     }else{
-        songQueue = {
+        replaceSongQueue({
             sourceName: playedFrom || "Your queue",
             current: currentQueueItem,
             history: [],
             upcoming: []
-        };
-        nextSongBtn = 0;
-        prevSongBtn = 0;
-        currentSongBtn = 0;
+        });
         fillQueueWithRandomSongs();
         renderSongQueue();
     }
@@ -2176,14 +2408,10 @@ function pausePlayCurrentSong(from){
 }
 
 let songTime = document.getElementById("currentSongInput");
+let isSeekingPlayer = false;
 
 let isRepeatOn = false;
 
-function setTheVault(){
-    isTheVaultOn = true;
-}
-
-let randomListShuffle = [];
 currentSongAudio.addEventListener('ended', () => {
     if(isRepeatOn){
         currentSongAudio.currentTime = 0;
@@ -2231,33 +2459,26 @@ repeatBtn.addEventListener('click', () => {
 
 // Play random song shuffle
 
-function PlayRandomSongShuffle(){
-    // console.log("ShuffleOn");
-    let currentPlaylistUl,currentPlaylistLength;
-
-    if(nextSongBtn != 0){
-        currentPlaylistUl = nextSongBtn.parentElement.className;
-        currentPlaylistLength = nextSongBtn.parentElement.children.length;
-    }else{
-        currentPlaylistUl = prevSongBtn.parentElement.className;
-        currentPlaylistLength = prevSongBtn.parentElement.children.length;
-    }
-
-    // console.log("UL: " + currentPlaylistUl);
-    // console.log("Length: " + currentPlaylistLength);
-    
-    if(randomListShuffle.length >= currentPlaylistLength){
-        randomListShuffle = [];
-    }
-    while(true){
-        let g = Math.floor(Math.random() * currentPlaylistLength);
-        if(!randomListShuffle.includes(g)){
-            // console.log(document.getElementsByClassName(currentPlaylistUl)[0]);
-            document.getElementsByClassName(currentPlaylistUl)[0].children[g].children[1].click();
-            randomListShuffle.push(g);
-            break;
+async function PlayRandomSongShuffle(){
+    if(songQueue.upcoming.length === 0){
+        const requestedQueue = songQueue;
+        const requestedRevision = songQueueRevision;
+        const requestedCurrent = songQueue.current;
+        await fillQueueWithRandomSongs();
+        if(songQueue !== requestedQueue || songQueueRevision !== requestedRevision || !queueSongsMatch(songQueue.current, requestedCurrent)){
+            return;
         }
     }
+    if(songQueue.upcoming.length === 0){
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * songQueue.upcoming.length);
+    if(randomIndex > 0){
+        const [randomSong] = songQueue.upcoming.splice(randomIndex, 1);
+        songQueue.upcoming.unshift(randomSong);
+    }
+    playQueueSong(songQueue.upcoming[0]);
 }
 
 function formatPlayerTime(seconds){
@@ -2267,9 +2488,17 @@ function formatPlayerTime(seconds){
     return `${minutes}:${remainder}`;
 }
 
+function setPlayerSeekProgress(progress){
+    const safeProgress = Math.max(0, Math.min(100, Number(progress) || 0));
+    songTime.value = safeProgress;
+    songTime.style.setProperty("--seek-progress", `${safeProgress}%`);
+    document.getElementById("miniSeekBar").style.width = `${safeProgress}%`;
+    return safeProgress;
+}
+
 function setPlayerProgressLoadingState(){
-    songTime.value = 0;
-    document.getElementById("miniSeekBar").style.width = "0%";
+    isSeekingPlayer = false;
+    setPlayerSeekProgress(0);
     document.getElementById("currentSongTime").textContent = "0:00";
     document.getElementById("currentSongTimeLeft").textContent = "--:--";
 }
@@ -2283,10 +2512,11 @@ function syncPlayerProgress(){
     }
 
     const progressBar = Math.max(0, Math.min(100, (musicCurr / musicDur) * 100));
-    document.getElementById("currentSongTime").textContent = formatPlayerTime(musicCurr);
     document.getElementById("currentSongTimeLeft").textContent = formatPlayerTime(musicDur);
-    songTime.value = progressBar;
-    document.getElementById("miniSeekBar").style.width = `${progressBar}%`;
+    if(!isSeekingPlayer){
+        document.getElementById("currentSongTime").textContent = formatPlayerTime(musicCurr);
+        setPlayerSeekProgress(progressBar);
+    }
     setMediaSessionPosition();
 }
 
@@ -2299,15 +2529,37 @@ currentSongAudio.addEventListener('loadedmetadata', () => {
     setMediaSessionPosition();
 });
 
-songTime.addEventListener('change', ()=>{
+function seekPlayerFromInput(){
     if(!Number.isFinite(currentSongAudio.duration) || currentSongAudio.duration <= 0){
         setPlayerProgressLoadingState();
         return;
     }
-    var seekto = currentSongAudio.duration * (songTime.value / 100);
+
+    const progress = setPlayerSeekProgress(songTime.value);
+    const seekto = currentSongAudio.duration * (progress / 100);
     currentSongAudio.currentTime = seekto;
+    document.getElementById("currentSongTime").textContent = formatPlayerTime(seekto);
     setMediaSessionPosition();
+}
+
+function finishPlayerSeek(){
+    if(!isSeekingPlayer){
+        return;
+    }
+    seekPlayerFromInput();
+    isSeekingPlayer = false;
+    syncPlayerProgress();
+}
+
+songTime.addEventListener('input', () => {
+    isSeekingPlayer = true;
+    seekPlayerFromInput();
 });
+songTime.addEventListener('change', finishPlayerSeek);
+songTime.addEventListener('pointerup', finishPlayerSeek);
+songTime.addEventListener('pointercancel', finishPlayerSeek);
+songTime.addEventListener('touchend', finishPlayerSeek);
+songTime.addEventListener('blur', finishPlayerSeek);
 
 // Pausing the audio outside of the app
 currentSongAudio.addEventListener('pause', () =>{
@@ -2351,58 +2603,112 @@ function checkTheChip(chipName){
 // SCROLL ON PAGEBARS
 
 let screenScrollables = document.getElementsByName("screenScrollable");
-let sideBanner1 = document.getElementsByName("artistBanner")[0];
-let sideBanner2 = document.getElementsByName("playlistBanner")[0];
-let sideBanner3 = document.getElementsByName("catBanner")[0];
+const categoryScrollRefs = (() => {
+    const scroller = document.getElementById("screenScrollableCat");
+    return {
+        scroller,
+        primaryPageBar: scroller?.children[0] || null,
+        secondaryPageBar: scroller?.children[1] || null,
+        hero: scroller?.querySelector(".categoryHero") || null,
+        content: scroller?.querySelector(".categoryHeroContent") || null,
+        banner: scroller?.querySelector(".catBanner") || null
+    };
+})();
+let categoryScrollFrame = null;
+let categoryPageBarThreshold = 96;
+
+function syncCategoryScrollMetrics(){
+    const heroHeight = categoryScrollRefs.hero?.offsetHeight || 0;
+    const pageBarHeight = categoryScrollRefs.primaryPageBar?.offsetHeight || 0;
+    if(heroHeight > 0){
+        categoryPageBarThreshold = Math.max(96, heroHeight - pageBarHeight - 8);
+    }
+}
+
+function updateCategoryScrollState(){
+    categoryScrollFrame = null;
+    const scrollTop = Math.max(0, categoryScrollRefs.scroller?.scrollTop || 0);
+    const headerVisible = scrollTop >= categoryPageBarThreshold;
+    categoryScrollRefs.primaryPageBar?.classList.toggle("pageBarOn", headerVisible);
+    categoryScrollRefs.secondaryPageBar?.classList.toggle("pageBarOn2", headerVisible);
+
+    if(reduceAnimations){
+        categoryScrollRefs.content?.style.removeProperty("opacity");
+        categoryScrollRefs.banner?.style.removeProperty("transform");
+        return;
+    }
+
+    const fadeDistance = Math.min(120, Math.max(76, categoryPageBarThreshold * .42));
+    const fadeStart = Math.max(0, categoryPageBarThreshold - fadeDistance);
+    const fadeProgress = Math.max(0, Math.min(1, (scrollTop - fadeStart) / fadeDistance));
+    if(categoryScrollRefs.content){
+        categoryScrollRefs.content.style.opacity = `${1 - fadeProgress}`;
+    }
+    if(categoryScrollRefs.banner){
+        categoryScrollRefs.banner.style.transform = `translate3d(0, ${scrollTop * .2}px, 0) scale(1.08)`;
+    }
+}
+
+function scheduleCategoryScrollUpdate(){
+    if(categoryScrollFrame === null){
+        categoryScrollFrame = requestAnimationFrame(updateCategoryScrollState);
+    }
+}
+
+function resetCategoryScrollState(){
+    if(categoryScrollFrame !== null){
+        cancelAnimationFrame(categoryScrollFrame);
+        categoryScrollFrame = null;
+    }
+    syncCategoryScrollMetrics();
+    updateCategoryScrollState();
+}
+
+window.crimsonResetCategoryScroll = resetCategoryScrollState;
+
+if(typeof ResizeObserver === "function" && categoryScrollRefs.hero){
+    new ResizeObserver(() => {
+        syncCategoryScrollMetrics();
+        scheduleCategoryScrollUpdate();
+    }).observe(categoryScrollRefs.hero);
+}
+window.addEventListener("resize", resetCategoryScrollState, {passive: true});
 
 screenScrollables.forEach((screen) => {
     screen.addEventListener("scroll", ()=>{
+        if(screen === categoryScrollRefs.scroller){
+            scheduleCategoryScrollUpdate();
+            return;
+        }
 
         if(!reduceAnimations){
-            if(screen.id != "screenScrollableCat"){
-                const isPlaylistDetail = !!screen.closest(".playlistScreen");
-                const baseHeroHeight = isPlaylistDetail ? 400 : 500;
-                if(screen.scrollTop < 0){
-                    screen.children[2].children[0].classList.add('noAnimTransitions');
-                    let newHeight = Number(-screen.scrollTop) + (baseHeroHeight + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
-                    screen.children[2].children[0].style.height = `${newHeight}px`;
-                    if(screen.scrollTop > -120){
-                        screen.children[2].children[1].style.opacity = 1;
-                    }else{
-                        screen.children[2].children[1].style.opacity = 0;
-                    }
-                }else{
+            const isPlaylistDetail = !!screen.closest(".playlistScreen");
+            const baseHeroHeight = isPlaylistDetail ? 400 : 500;
+            if(screen.scrollTop < 0){
+                screen.children[2].children[0].classList.add('noAnimTransitions');
+                let newHeight = Number(-screen.scrollTop) + (baseHeroHeight + Number(getComputedStyle(document.documentElement).getPropertyValue("--topInsetArea").split('p')[0]));
+                screen.children[2].children[0].style.height = `${newHeight}px`;
+                if(screen.scrollTop > -120){
                     screen.children[2].children[1].style.opacity = 1;
-                    screen.children[2].children[0].classList.remove('noAnimTransitions');
-                    screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + ${baseHeroHeight}px)`;
-                }
-
-                if(screen.scrollTop > 150){
-                    let curOp = 1 - (screen.scrollTop/136 - 1);
-                    screen.children[2].children[1].children[0].style.opacity = curOp;
-                    screen.children[2].children[0].style.opacity = curOp;
                 }else{
-                    screen.children[2].children[1].children[0].style.opacity = 1;
-                    screen.children[2].children[0].style.opacity = 1;
+                    screen.children[2].children[1].style.opacity = 0;
                 }
             }else{
-                const categoryHero = screen.querySelector(".categoryHero");
-                const categoryHeroContent = screen.querySelector(".categoryHeroContent");
-                const categoryBanner = screen.querySelector(".catBanner");
-                const fadeProgress = Math.max(0, Math.min(1, (screen.scrollTop - 70) / 150));
-                if(categoryHeroContent){
-                    categoryHeroContent.style.opacity = 1 - fadeProgress;
-                    categoryHeroContent.style.transform = `translateY(${-screen.scrollTop * .08}px)`;
-                }
-                if(categoryBanner){
-                    categoryBanner.classList.add("noAnimTransitions");
-                    categoryBanner.style.transform = `translateY(${screen.scrollTop * .24}px) scale(1.08)`;
-                }
-                categoryHero?.style.setProperty("--category-scroll", `${screen.scrollTop}px`);
+                screen.children[2].children[1].style.opacity = 1;
+                screen.children[2].children[0].classList.remove('noAnimTransitions');
+                screen.children[2].children[0].style.height = `calc(env(safe-area-inset-top) + ${baseHeroHeight}px)`;
+            }
+
+            if(screen.scrollTop > 150){
+                let curOp = 1 - (screen.scrollTop/136 - 1);
+                screen.children[2].children[1].children[0].style.opacity = curOp;
+                screen.children[2].children[0].style.opacity = curOp;
+            }else{
+                screen.children[2].children[1].children[0].style.opacity = 1;
+                screen.children[2].children[0].style.opacity = 1;
             }
     
-            const pageBarThreshold = screen.id === "screenScrollableCat" ? 145 : 268;
-            if(screen.scrollTop > pageBarThreshold){
+            if(screen.scrollTop > 268){
                 screen.children[0].classList.add("pageBarOn");
                 screen.children[1].classList.add("pageBarOn2");
             }else{
@@ -2410,13 +2716,10 @@ screenScrollables.forEach((screen) => {
                 screen.children[1].classList.remove("pageBarOn2");
             }
     
-            if(screen.id != "screenScrollableCat"){
-                screen.children[2].children[0].classList.add('noAnimTransitions');
-                screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
-            }
+            screen.children[2].children[0].classList.add('noAnimTransitions');
+            screen.children[2].children[0].style.transform = "translateY(-"+ screen.scrollTop / 3 +"px)";
         }else{
-            const pageBarThreshold = screen.id === "screenScrollableCat" ? 145 : 250;
-            if(screen.scrollTop > pageBarThreshold){
+            if(screen.scrollTop > 250){
                 screen.children[0].classList.add("pageBarOn");
                 screen.children[1].classList.add("pageBarOn2");
             }else{
@@ -2424,9 +2727,10 @@ screenScrollables.forEach((screen) => {
                 screen.children[1].classList.remove("pageBarOn2");
             }
         }
-
-    })
+    }, {passive: true})
 })
+
+resetCategoryScrollState();
 
 // THE VAULT
 
@@ -2760,7 +3064,6 @@ function closePopup(){
     const popupWrapper = document.getElementById("popupWrapper");
     popupWrapper.classList.remove("popupOpen");
     popupWrapper.classList.remove("artistContextPopup");
-    popupWrapper.classList.remove("popupAwaitingRelease");
     popupScreen.style.transform = "";
     hideCrimsonView(popupWrapper, "popupOpen");
 
@@ -2820,7 +3123,8 @@ const crimsonLongPress = {
     startX: 0,
     startY: 0,
     openedPopup: false,
-    suppressUntil: 0
+    suppressNextClick: false,
+    suppressClickTimer: null
 };
 
 const vaultContextItem = document.querySelector(".vaultPlItem");
@@ -2842,6 +3146,18 @@ function clearCrimsonLongPress(){
     crimsonLongPress.item?.classList.remove("crimsonContextPressing");
 }
 
+function clearCrimsonLongPressClickSuppression(){
+    clearTimeout(crimsonLongPress.suppressClickTimer);
+    crimsonLongPress.suppressClickTimer = null;
+    crimsonLongPress.suppressNextClick = false;
+}
+
+function suppressNextCrimsonLongPressClick(){
+    clearCrimsonLongPressClickSuppression();
+    crimsonLongPress.suppressNextClick = true;
+    crimsonLongPress.suppressClickTimer = setTimeout(clearCrimsonLongPressClickSuppression, 700);
+}
+
 function findContextItem(target){
     const item = target?.closest?.("[data-crimson-context], .songItem, .queueSong, .playlistItem");
     const interactiveTarget = target?.closest?.("button, a, input, textarea, select, label");
@@ -2855,6 +3171,7 @@ function findContextItem(target){
 }
 
 document.addEventListener("pointerdown", (event) => {
+    clearCrimsonLongPressClickSuppression();
     if(!event.isPrimary || event.button !== 0 || isPopupOpen){
         return;
     }
@@ -2874,7 +3191,6 @@ document.addEventListener("pointerdown", (event) => {
     crimsonLongPress.timer = setTimeout(() => {
         if(openItemContextMenu(item)){
             crimsonLongPress.openedPopup = true;
-            document.getElementById("popupWrapper")?.classList.add("popupAwaitingRelease");
             item.classList.remove("crimsonContextPressing");
             navigator.vibrate?.(24);
         }
@@ -2899,14 +3215,11 @@ document.addEventListener("pointermove", (event) => {
             crimsonLongPress.openedPopup = false;
 
             if(openedPopup){
-                crimsonLongPress.suppressUntil = performance.now() + 350;
                 if(eventName === "pointerup"){
+                    suppressNextCrimsonLongPressClick();
                     event.preventDefault();
                     event.stopImmediatePropagation();
                 }
-                setTimeout(() => {
-                    document.getElementById("popupWrapper")?.classList.remove("popupAwaitingRelease");
-                }, 80);
             }
         }
     }, true);
@@ -2915,7 +3228,8 @@ document.addEventListener("pointermove", (event) => {
 document.addEventListener("scroll", clearCrimsonLongPress, true);
 
 document.addEventListener("click", (event) => {
-    if(performance.now() < crimsonLongPress.suppressUntil){
+    if(crimsonLongPress.suppressNextClick){
+        clearCrimsonLongPressClickSuppression();
         event.preventDefault();
         event.stopImmediatePropagation();
     }
@@ -2928,15 +3242,27 @@ document.addEventListener("contextmenu", (event) => {
     }
 });
 
+document.addEventListener("keydown", (event) => {
+    const action = event.target.closest?.('.popupItem[role="button"], .vaultCat[role="button"]');
+    if(!action || (event.key !== "Enter" && event.key !== " ") || action.getAttribute("aria-disabled") === "true"){
+        return;
+    }
+    if(event.target !== action && event.target.closest?.("button, a, input, textarea, select")){
+        return;
+    }
+    event.preventDefault();
+    action.click();
+});
+
 // ----- SET APP THEME
 
 const autoThemeInput = document.getElementById('autoThemeInput');
 
 let themePreference = window.matchMedia("(prefers-color-scheme: dark)");
-let currentThemeMode = "Auto";
+let currentThemeMode = "Dark";
 
 function syncThemeInputs(themeMode){
-    const normalized = ["Dark", "Light", "Auto"].includes(themeMode) ? themeMode : "Auto";
+    const normalized = ["Dark", "Light", "Auto"].includes(themeMode) ? themeMode : "Dark";
     ["lightThemeInput", "lightThemeInput2"].forEach((id) => {
         const input = document.getElementById(id);
         if(input){ input.checked = normalized === "Light"; }
@@ -2954,9 +3280,9 @@ function syncThemeInputs(themeMode){
 function getSavedThemeMode(){
     try{
         const cachedUser = JSON.parse(localStorage.getItem("user") || "null");
-        return localStorage.getItem("crimsonTheme") || cachedUser?.AppTheme || "Auto";
+        return localStorage.getItem("crimsonTheme") || cachedUser?.AppTheme || "Dark";
     }catch(error){
-        return "Auto";
+        return "Dark";
     }
 }
 
@@ -2977,7 +3303,7 @@ themePreference.addEventListener('change', () => {
 });
 
 function setAppTheme(userTheme,clicked){
-    currentThemeMode = ["Dark", "Light", "Auto"].includes(userTheme) ? userTheme : "Auto";
+    currentThemeMode = ["Dark", "Light", "Auto"].includes(userTheme) ? userTheme : "Dark";
     syncThemeInputs(currentThemeMode);
     try{
         localStorage.setItem("crimsonTheme", currentThemeMode);
@@ -3095,8 +3421,6 @@ let moveStarted = true;
 let sidePageNormalPos = document.getElementsByClassName("loginScreen")[0].offsetLeft;
 let playerMoveFrame = null;
 let playerMoveTop = null;
-let popupMoveFrame = null;
-let popupMoveTop = null;
 let playerNavHideTimer = null;
 
 function setPlayerNavClosed(closed){
@@ -3249,17 +3573,11 @@ let playerDragStartTop = 0;
 
 function getSongSwipePreview(direction){
     if(direction === "previous"){
-        if(prevSongBtn != 0){
-            return parseSongItem(prevSongBtn, songQueue.sourceName);
-        }
         return songQueue.history[songQueue.history.length - 1] || null;
     }
 
     if(isShuffleOn){
         return null;
-    }
-    if(nextSongBtn != 0){
-        return parseSongItem(nextSongBtn, songQueue.sourceName);
     }
     return songQueue.upcoming[0] || null;
 }
@@ -3318,12 +3636,41 @@ function setSongSwipeCard(card, song){
     preload.src = source;
 }
 
+function setSongSwipeCardMotion(offset, cardWidth, animate){
+    const safeCardWidth = cardWidth > 0 ? cardWidth : 1;
+    const progress = Math.max(0, Math.min(1, Math.abs(offset) / safeCardWidth));
+    const incomingDirection = offset < 0 ? "next" : (offset > 0 ? "previous" : null);
+    const motionValues = {
+        previous: { scale: 0.92, opacity: 0.58 },
+        current: { scale: 1 - progress * 0.08, opacity: 1 - progress * 0.24 },
+        next: { scale: 0.92, opacity: 0.58 }
+    };
+
+    if(incomingDirection){
+        motionValues[incomingDirection] = {
+            scale: 0.92 + progress * 0.08,
+            opacity: 0.58 + progress * 0.42
+        };
+    }
+
+    Object.entries(songSwipeCards).forEach(([position, card]) => {
+        if(!card){
+            return;
+        }
+        const values = motionValues[position];
+        card.classList.toggle("songSwipeCardMotionAnimating", animate && !reduceAnimations);
+        card.style.setProperty("--song-swipe-scale", values.scale.toFixed(4));
+        card.style.setProperty("--song-swipe-opacity", values.opacity.toFixed(4));
+    });
+}
+
 function setSongSwipeTrackPosition(offset = 0, animate = false){
     if(!songSwipeViewport || !songSwipeTrack){
         return;
     }
     const cardWidth = songSwipeState.cardWidth || songSwipeViewport.getBoundingClientRect().width;
     songSwipeTrack.classList.toggle("songSwipeTrackAnimating", animate && !reduceAnimations);
+    setSongSwipeCardMotion(offset, cardWidth, animate);
     if(cardWidth > 0){
         songSwipeTrack.style.transform = `translate3d(${-cardWidth + offset}px, 0, 0)`;
     }
@@ -3371,6 +3718,9 @@ function completeSongSwipe(direction){
         return;
     }
 
+    const queueAtGestureStart = songQueue;
+    const queueRevisionAtGestureStart = songQueueRevision;
+    const songAtGestureStart = songQueue.current;
     songSwipeState.isCommitting = true;
     const cardWidth = songSwipeState.cardWidth || songSwipeViewport?.getBoundingClientRect().width || 0;
     const targetOffset = direction === "next" ? -cardWidth : cardWidth;
@@ -3378,7 +3728,12 @@ function completeSongSwipe(direction){
 
     const commit = () => {
         songSwipeState.settleTimer = null;
-        performSongChange(direction);
+        const currentSongIsUnchanged = songQueue === queueAtGestureStart
+            && songQueueRevision === queueRevisionAtGestureStart
+            && queueSongsMatch(songQueue.current, songAtGestureStart);
+        if(currentSongIsUnchanged){
+            playQueueSong(previewSong);
+        }
 
         rotateSongSwipeCards(direction);
         resetSongSwipeTrack();
@@ -3390,9 +3745,24 @@ function completeSongSwipe(direction){
     if(reduceAnimations){
         commit();
     }else{
-        songSwipeState.settleTimer = window.setTimeout(commit, 285);
+        songSwipeState.settleTimer = window.setTimeout(commit, 345);
     }
 }
+
+let songSwipeResizeFrame = null;
+window.addEventListener("resize", () => {
+    if(songSwipeResizeFrame !== null){
+        cancelAnimationFrame(songSwipeResizeFrame);
+    }
+    songSwipeResizeFrame = requestAnimationFrame(() => {
+        songSwipeResizeFrame = null;
+        if(songSwipeState.isDragging || songSwipeState.isCommitting){
+            return;
+        }
+        songSwipeState.cardWidth = songSwipeViewport?.getBoundingClientRect().width || 0;
+        setSongSwipeTrackPosition(0, false);
+    });
+}, {passive: true});
 
 const move2 = (e) => {
     const deltaX = e.touches[0].clientX - playerGestureStartX;
@@ -3676,39 +4046,146 @@ closeLicenseAndProfileScreenBtn.addEventListener("touchstart", (e) => {
 // Popup Screen
 
 const popupScreen = document.getElementsByClassName("popupScreen")[0];
-let playerTouchStarted3 = false;
-let popupDragStartY = 0;
-let popupDragOffset = 0;
+const popupDragThreshold = 8;
+const popupDragCloseThreshold = 100;
+const popupDragState = {
+    active: false,
+    touchId: null,
+    startX: 0,
+    startY: 0,
+    offsetY: 0,
+    direction: null,
+    isDragging: false,
+    frame: null,
+    suppressNextClick: false,
+    suppressClickTimer: null
+};
 
-const move3 = (e) => {
-    popupDragOffset = Math.max(0, e.touches[0].clientY - popupDragStartY);
-    currentTouchPos = popupDragOffset;
-    moveStarted = true;
-    if(popupDragOffset > 0){
-        popupScreen.classList.add("playerMovable");
-        popupMoveTop = popupDragOffset;
-        if(!popupMoveFrame){
-            popupMoveFrame = requestAnimationFrame(() => {
-                popupScreen.style.transform = `translate3d(0, ${popupMoveTop}px, 0)`;
-                popupMoveFrame = null;
-            });
-        }
-    }
-    // console.log("moved " + (e.touches[0].clientY - offsetY));
+function getPopupDragTouch(touchList){
+    return Array.from(touchList || []).find((touch) => touch.identifier === popupDragState.touchId);
 }
 
-popupScreen.addEventListener("touchstart", (e) => {
-    if(window.innerWidth < window.innerHeight){
-        popupDragStartY = e.touches[0].clientY;
-        popupDragOffset = 0;
-        popupScreen.style.transform = "translate3d(0, 0, 0)";
+function clearPopupDragClickSuppression(){
+    clearTimeout(popupDragState.suppressClickTimer);
+    popupDragState.suppressClickTimer = null;
+    popupDragState.suppressNextClick = false;
+}
+
+function suppressNextPopupDragClick(){
+    clearPopupDragClickSuppression();
+    popupDragState.suppressNextClick = true;
+    popupDragState.suppressClickTimer = setTimeout(clearPopupDragClickSuppression, 700);
+}
+
+function movePopupDrag(e){
+    if(!popupDragState.active){
+        return;
+    }
+
+    const touch = getPopupDragTouch(e.touches);
+    if(!touch){
+        return;
+    }
+
+    const deltaX = touch.clientX - popupDragState.startX;
+    const deltaY = touch.clientY - popupDragState.startY;
+    if(!popupDragState.direction){
+        popupDragState.direction = getGestureDirection(deltaX, deltaY, popupDragThreshold);
+    }
+    if(popupDragState.direction !== "vertical" || (!popupDragState.isDragging && deltaY <= 0)){
+        return;
+    }
+
+    if(!popupDragState.isDragging){
+        popupDragState.isDragging = true;
         popupScreen.classList.add("playerMovable");
         setInteractionActive(true);
-        document.addEventListener("touchmove", move3);
-        playerTouchStarted3 = true;
-        moveStarted = false;
     }
-})
+
+    if(e.cancelable){
+        e.preventDefault();
+    }
+    popupDragState.offsetY = Math.max(0, deltaY);
+    if(!popupDragState.frame){
+        popupDragState.frame = requestAnimationFrame(() => {
+            popupScreen.style.transform = `translate3d(0, ${popupDragState.offsetY}px, 0)`;
+            popupDragState.frame = null;
+        });
+    }
+}
+
+function finishPopupDrag(e, cancelled = false){
+    if(!popupDragState.active || !getPopupDragTouch(e.changedTouches)){
+        return;
+    }
+
+    document.removeEventListener("touchmove", movePopupDrag);
+    document.removeEventListener("touchend", endPopupDrag);
+    document.removeEventListener("touchcancel", cancelPopupDrag);
+    cancelScheduledMove(popupDragState.frame);
+    popupDragState.frame = null;
+    popupScreen.classList.remove("playerMovable");
+
+    const wasDragging = popupDragState.isDragging;
+    const shouldClose = !cancelled && wasDragging && popupDragState.offsetY > popupDragCloseThreshold;
+    if(wasDragging){
+        if(e.cancelable){
+            e.preventDefault();
+        }
+        suppressNextPopupDragClick();
+    }
+
+    popupDragState.active = false;
+    popupDragState.touchId = null;
+    popupDragState.direction = null;
+    popupDragState.isDragging = false;
+    popupDragState.offsetY = 0;
+
+    if(shouldClose){
+        closePopup();
+    }else{
+        popupScreen.style.transform = "";
+    }
+    setInteractionActive(false);
+}
+
+function endPopupDrag(e){
+    finishPopupDrag(e, false);
+}
+
+function cancelPopupDrag(e){
+    finishPopupDrag(e, true);
+}
+
+document.addEventListener("pointerdown", clearPopupDragClickSuppression, true);
+document.addEventListener("click", (e) => {
+    if(!popupDragState.suppressNextClick){
+        return;
+    }
+    clearPopupDragClickSuppression();
+    e.preventDefault();
+    e.stopImmediatePropagation();
+}, true);
+
+popupScreen.addEventListener("touchstart", (e) => {
+    const dragRegion = e.target.closest?.(".draggableBarTop, .popupInfo");
+    const interactiveTarget = e.target.closest?.("button, a, input, textarea, select, label");
+    if(window.innerWidth >= window.innerHeight || e.touches.length !== 1 || !dragRegion || interactiveTarget){
+        return;
+    }
+
+    const touch = e.changedTouches[0];
+    popupDragState.active = true;
+    popupDragState.touchId = touch.identifier;
+    popupDragState.startX = touch.clientX;
+    popupDragState.startY = touch.clientY;
+    popupDragState.offsetY = 0;
+    popupDragState.direction = null;
+    popupDragState.isDragging = false;
+    document.addEventListener("touchmove", movePopupDrag, {passive: false});
+    document.addEventListener("touchend", endPopupDrag, {passive: false});
+    document.addEventListener("touchcancel", cancelPopupDrag, {passive: false});
+}, {passive: true});
 
 // ----- TOUCH END
 
@@ -3822,23 +4299,7 @@ document.addEventListener("touchend", () => {
             songSwipeState.isDragging = false;
         }
     }
-    if(playerTouchStarted3){
-        popupScreen.classList.remove("playerMovable");
-        document.removeEventListener("touchmove", move3);
-        cancelScheduledMove(popupMoveFrame);
-        popupMoveFrame = null;
-        if(moveStarted){
-            if(popupDragOffset <= 100){
-                popupScreen.style.transform = "";
-            }else{
-                closePopup();
-            }
-        }else{
-            popupScreen.style.transform = "";
-        }
-    }
     playerMovedDown = false;
-    playerTouchStarted3 = false;
     playerTouchStarted2 = false;
     playerTouchStarted = false;
     playerGestureDirection = null;
@@ -4577,18 +5038,68 @@ function sortUlAtoZ(AtoZ){
 
 // ----- VAULT
 
+const vaultSectionElement = document.querySelector('.vaultSection');
+const vaultPlayButton = vaultSectionElement?.querySelector('.vaultPlayBtn');
+const vaultPlayIcon = vaultPlayButton?.querySelector('i');
+const vaultVideo = vaultSectionElement?.querySelector('video');
+const vaultHomeScreen = document.querySelector('.homeScreen');
+let isVaultInViewport = false;
+
+function setVaultExpanded(expanded){
+    const shouldExpand = Boolean(expanded);
+    vaultSectionElement?.classList.toggle('vaultSectionOn', shouldExpand);
+    vaultPlayButton?.setAttribute('aria-expanded', shouldExpand ? 'true' : 'false');
+    vaultPlayButton?.setAttribute('aria-label', shouldExpand ? 'Close Vault moods' : 'Choose a Vault mood');
+    vaultPlayIcon?.classList.toggle('fa-play', !shouldExpand);
+    vaultPlayIcon?.classList.toggle('fa-xmark', shouldExpand);
+}
+
 function openTheVault(){
-    document.querySelector('.vaultSection').classList.toggle('vaultSectionOn');
-    if(document.querySelector('.vaultSection').classList.contains('vaultSectionOn')){
-        document.querySelector('.vaultPlayBtn').innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-    }else{
-        document.querySelector('.vaultPlayBtn').innerHTML = `<i class="fa-solid fa-play"></i>`;
-    }
+    setVaultExpanded(!vaultSectionElement?.classList.contains('vaultSectionOn'));
 }
 
 function closeTheVault(){
-    document.querySelector('.vaultSection').classList.remove('vaultSectionOn');
-    document.querySelector('.vaultPlayBtn').innerHTML = `<i class="fa-solid fa-play"></i>`;
+    setVaultExpanded(false);
 }
+
+function syncVaultVideoPlayback(){
+    if(!vaultVideo){
+        return;
+    }
+    const shouldPlay = document.visibilityState === 'visible'
+        && isVaultInViewport
+        && !document.body.classList.contains('authLocked')
+        && vaultHomeScreen?.classList.contains('activeMain')
+        && !vaultHomeScreen.classList.contains('mainToSide');
+    if(shouldPlay){
+        if(vaultVideo.paused){
+            vaultVideo.play().catch(() => {});
+        }
+    }else if(!vaultVideo.paused){
+        vaultVideo.pause();
+    }
+}
+
+if(typeof IntersectionObserver === 'function' && vaultSectionElement){
+    new IntersectionObserver((entries) => {
+        isVaultInViewport = Boolean(entries[0]?.isIntersecting);
+        syncVaultVideoPlayback();
+    }, {threshold: .04}).observe(vaultSectionElement);
+}else{
+    isVaultInViewport = true;
+}
+if(typeof MutationObserver === 'function' && vaultHomeScreen){
+    const vaultPlaybackObserver = new MutationObserver(syncVaultVideoPlayback);
+    vaultPlaybackObserver.observe(vaultHomeScreen, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+    vaultPlaybackObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+}
+document.addEventListener('visibilitychange', syncVaultVideoPlayback);
+requestAnimationFrame(syncVaultVideoPlayback);
 
 initializeInactiveCrimsonViews();

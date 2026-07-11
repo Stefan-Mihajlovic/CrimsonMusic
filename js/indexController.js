@@ -395,9 +395,17 @@ window.crimsonGetRelatedSongs = async function(currentSong, limit = 8){
     return request;
 }
 
-async function playSongFromContext(songId, sourceName){
+function beginPlaybackRequest(){
+    return window.crimsonBeginPlaybackRequest?.() ?? null;
+}
+
+function isPlaybackRequestCurrent(requestRevision){
+    return requestRevision == null || window.crimsonIsPlaybackRequestCurrent?.(requestRevision) !== false;
+}
+
+async function playSongFromContext(songId, sourceName, requestRevision = beginPlaybackRequest()){
     const song = await window.crimsonGetSongById(songId);
-    if(!song || typeof window.playerSelectedSong !== "function"){
+    if(!isPlaybackRequestCurrent(requestRevision) || !song || typeof window.playerSelectedSong !== "function"){
         return false;
     }
 
@@ -415,38 +423,50 @@ async function playSongFromContext(songId, sourceName){
 }
 
 window.crimsonPlayPlaylistFromContext = async function(context){
+    const requestRevision = beginPlaybackRequest();
     if(context?.favorites){
         if(currentUser == undefined){
             openLoginPopup();
             return false;
         }
         const snapshot = await get(child(ref(realdb), "Users/"+currentUser.Username));
+        if(!isPlaybackRequestCurrent(requestRevision)){
+            return false;
+        }
         const firstLikedSong = String(snapshot.val()?.LikedSongs || "").split(',').filter(Boolean).reverse()[0];
-        return firstLikedSong ? playSongFromContext(firstLikedSong, "Favorites") : false;
+        return firstLikedSong ? playSongFromContext(firstLikedSong, "Favorites", requestRevision) : false;
     }
 
     const firstSong = String(context?.songs || "").split(',').find(Boolean);
-    return firstSong ? playSongFromContext(firstSong, context?.name || "Playlist") : false;
+    return firstSong ? playSongFromContext(firstSong, context?.name || "Playlist", requestRevision) : false;
 }
 
 window.crimsonPlayArtistFromContext = async function(context){
+    const requestRevision = beginPlaybackRequest();
     const snapshot = await get(child(ref(realdb), "Songs"));
+    if(!isPlaybackRequestCurrent(requestRevision)){
+        return false;
+    }
     const artistName = String(context?.name || "").toLowerCase();
     const match = Object.entries(snapshot.val() || {}).find(([, song]) =>
         String(song?.Creator || "").toLowerCase().includes(artistName)
     );
 
-    return match ? playSongFromContext(match[0], context?.name || "Artist") : false;
+    return match ? playSongFromContext(match[0], context?.name || "Artist", requestRevision) : false;
 }
 
 window.crimsonPlayCategoryFromContext = async function(context){
+    const requestRevision = beginPlaybackRequest();
     const snapshot = await get(child(ref(realdb), "Songs"));
+    if(!isPlaybackRequestCurrent(requestRevision)){
+        return false;
+    }
     const categoryName = String(context?.name || "").toLowerCase();
     const match = Object.entries(snapshot.val() || {}).find(([, song]) =>
         String(song?.Categories || "").toLowerCase().includes(categoryName)
     );
 
-    return match ? playSongFromContext(match[0], context?.name || "Category") : false;
+    return match ? playSongFromContext(match[0], context?.name || "Category", requestRevision) : false;
 }
 
 window.crimsonLoadLyricsIntoPlayerPopup = async function(songId){
@@ -1568,7 +1588,6 @@ export function openCategoryPage(category, color, banner){
     const categoryHeroContent = categoryScroller.querySelector(".categoryHeroContent");
     if(categoryHeroContent){
         categoryHeroContent.style.opacity = 1;
-        categoryHeroContent.style.transform = "";
     }
 
     if(lastOpenSideScreen != undefined && lastOpenSideScreen != null && lastOpenSideScreen != categoryPage){
@@ -1588,6 +1607,8 @@ export function openCategoryPage(category, color, banner){
 
     categoryPage.classList.add("categoryPageOpen");
     categoryPage.style.setProperty("--category-accent", color || "#8f59f5");
+    window.crimsonResetCategoryScroll?.();
+    requestAnimationFrame(() => window.crimsonResetCategoryScroll?.());
     let categoryNames = document.getElementsByName("categoryName");
     categoryNames.forEach((name) => {
         name.textContent = category;
@@ -2360,52 +2381,134 @@ window.crimsonTogglePlaylistLike = function(playlistId){
 // ----- THE VAULT
 
 let vaultSongArray = [];
+let vaultCurrentMood = "";
+let vaultLastSongId = "";
+let vaultRequestToken = 0;
+const vaultMoodCache = new Map();
+const vaultSongCache = new Map();
+const vaultSection = document.querySelector(".vaultSection");
+const vaultMoodButtons = Array.from(document.querySelectorAll(".vaultCat"));
 
-let isTheVaultOn = false;
-
-export function vaultEmotionLoad(categ){
-    playRandomSongForTheVault(categ);
-    closeTheVault();
+function setVaultLoadingState(loading, mood = ""){
+    const isLoading = Boolean(loading);
+    vaultSection?.classList.toggle("vaultSectionLoading", isLoading);
+    vaultSection?.setAttribute("aria-busy", isLoading ? "true" : "false");
+    vaultMoodButtons.forEach((button) => {
+        const isCurrentMood = isLoading && button.dataset.vaultMood === mood;
+        button.classList.toggle("vaultCatLoading", isCurrentMood);
+        button.setAttribute("aria-disabled", isLoading ? "true" : "false");
+    });
 }
 
-function playerSelectedSongVault(songName){
-    let name = songName;
+window.crimsonCancelVaultRequest = function(){
+    vaultRequestToken++;
+    setVaultLoadingState(false);
+};
 
-    let dbRef = ref(realdb);
+function loadVaultMoodSongs(mood){
+    if(vaultMoodCache.has(mood)){
+        return vaultMoodCache.get(mood);
+    }
 
-    get(child(dbRef, "Songs/"+name)).then((snapshot)=>{
-        if(snapshot.exists()){
-            songCreator = snapshot.val().Creator;
-            songToBePlayed = snapshot.val().SongURL;
-            songTitle  = snapshot.val().SongName;
-            imageURL = getSongImage(snapshot.val(), "large");
-            imageURLSmall = getSongImage(snapshot.val(), "small");
-            songColor = snapshot.val().Color;
+    const request = get(child(ref(realdb), "SongsByMoods/"+mood))
+        .then((snapshot) => snapshot.exists()
+            ? String(snapshot.val()?.Songs || "").split(',').map((songId) => songId.trim()).filter(Boolean)
+            : [])
+        .catch((error) => {
+            vaultMoodCache.delete(mood);
+            throw error;
+        });
+    vaultMoodCache.set(mood, request);
+    return request;
+}
 
-            playerSelectedSong(songToBePlayed,songTitle,songCreator,imageURL,songColor,"TheVault",'',name);
+function loadVaultSong(songId){
+    const normalizedId = String(songId || "");
+    if(vaultSongCache.has(normalizedId)){
+        return vaultSongCache.get(normalizedId);
+    }
+
+    const request = get(child(ref(realdb), "Songs/"+normalizedId))
+        .then((snapshot) => snapshot.exists() ? snapshot.val() : null)
+        .catch((error) => {
+            vaultSongCache.delete(normalizedId);
+            throw error;
+        });
+    vaultSongCache.set(normalizedId, request);
+    return request;
+}
+
+function selectVaultSongId(songIds){
+    const candidates = songIds.length > 1
+        ? songIds.filter((songId) => String(songId) !== vaultLastSongId)
+        : songIds;
+    return candidates[Math.floor(Math.random() * candidates.length)] || "";
+}
+
+async function playerSelectedSongVault(songId, token, playbackRequest){
+    const record = await loadVaultSong(songId);
+    if(token !== vaultRequestToken || !isPlaybackRequestCurrent(playbackRequest) || !record?.SongURL || !record?.SongName){
+        return false;
+    }
+
+    playerSelectedSong(
+        record.SongURL,
+        record.SongName,
+        record.Creator || "Unknown artist",
+        getSongImage(record, "large"),
+        record.Color || "#1c1625",
+        "TheVault",
+        0,
+        String(songId)
+    );
+    vaultLastSongId = String(songId);
+    return true;
+}
+
+export async function vaultEmotionLoad(categ){
+    const didStartPlaying = await playRandomSongForTheVault(categ);
+    if(didStartPlaying){
+        closeTheVault();
+    }
+    return didStartPlaying;
+}
+
+export async function playRandomSongForTheVault(categ){
+    const isMoodSelection = categ != null;
+    const requestedMood = isMoodSelection ? String(categ).trim() : vaultCurrentMood;
+    const token = ++vaultRequestToken;
+    const playbackRequest = beginPlaybackRequest();
+
+    if(isMoodSelection){
+        setVaultLoadingState(true, requestedMood);
+    }
+
+    try{
+        const moodSongs = isMoodSelection
+            ? await loadVaultMoodSongs(requestedMood)
+            : vaultSongArray;
+        if(token !== vaultRequestToken || !isPlaybackRequestCurrent(playbackRequest)){
+            return false;
         }
-    })
-}
+        if(!moodSongs.length){
+            throw new Error("No songs are available for this Vault mood.");
+        }
 
-export function playRandomSongForTheVault(categ){
-    if(categ != undefined || categ != null){
-        setTheVault();
-
-        let dbRef = ref(realdb);
-
-        get(child(dbRef, "SongsByMoods/"+categ)).then((snapshot)=>{
-            if(snapshot.exists()){
-                let setSongs = snapshot.val().Songs;
-                setSongs += "";
-                vaultSongArray = setSongs.split(',');
-
-                let songToPlayV = Math.floor(Math.random() * vaultSongArray.length);
-                playerSelectedSongVault(vaultSongArray[songToPlayV]);
-            }
-        })
-    }else{
-        let songToPlayV = Math.floor(Math.random() * vaultSongArray.length);
-        playerSelectedSongVault(vaultSongArray[songToPlayV]);
+        if(isMoodSelection){
+            vaultCurrentMood = requestedMood;
+            vaultSongArray = [...moodSongs];
+        }
+        const songId = selectVaultSongId(moodSongs);
+        return await playerSelectedSongVault(songId, token, playbackRequest);
+    }catch(error){
+        if(token === vaultRequestToken && isMoodSelection){
+            window.showCrimsonNotice?.("The Vault could not load this mood. Please try again.", "error");
+        }
+        return false;
+    }finally{
+        if(token === vaultRequestToken){
+            setVaultLoadingState(false);
+        }
     }
 }
 
