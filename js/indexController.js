@@ -2,6 +2,36 @@ const authGateway = document.getElementById('authGateway');
 const authViews = Array.from(document.querySelectorAll('[data-auth-view]'));
 const appBodyHolder = document.querySelector('.bodyHolder');
 let authViewTransitionTimer;
+let authSessionLoadingReleaseTimer;
+let initialAppLoadComplete = false;
+let loggedInInterfaceReady = false;
+
+function setAuthSessionLoading(loading){
+    document.documentElement.classList.toggle('authSessionLoading', Boolean(loading));
+}
+
+function releaseLoggedInGatewayWhenReady(){
+    if(!loggedInInterfaceReady || !initialAppLoadComplete){
+        return;
+    }
+    window.clearTimeout(authSessionLoadingReleaseTimer);
+    setAuthGatewayVisible(false);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    authSessionLoadingReleaseTimer = window.setTimeout(() => {
+        if(authGateway?.classList.contains('authGatewayHidden')){
+            setAuthSessionLoading(false);
+        }
+    }, reduceMotion ? 0 : 540);
+}
+
+function finishAuthGatewayForLoggedIn(){
+    loggedInInterfaceReady = true;
+    if(!initialAppLoadComplete){
+        setAuthSessionLoading(true);
+        setAuthGatewayVisible(true, 'welcome');
+    }
+    releaseLoggedInGatewayWhenReady();
+}
 
 authGateway?.addEventListener('scroll', () => {
     if(authGateway.scrollTop !== 0){
@@ -174,6 +204,8 @@ function showCrimsonNotice(message, type = 'auto', options = {}){
 
 window.setAuthView = setAuthView;
 window.setAuthGatewayVisible = setAuthGatewayVisible;
+window.setAuthSessionLoading = setAuthSessionLoading;
+window.finishAuthGatewayForLoggedIn = finishAuthGatewayForLoggedIn;
 window.setAuthInlineMessage = setAuthInlineMessage;
 window.showCrimsonNotice = showCrimsonNotice;
 window.alert = (message) => showCrimsonNotice(message, 'auto');
@@ -3573,6 +3605,9 @@ async function loadApp(){
     showSkeleton(categoriesList, "category", 10);
 
     let result = await loadAppNumbers();
+
+    initialAppLoadComplete = true;
+    releaseLoggedInGatewayWhenReady();
 
     document.querySelector('.loaderWrapper')?.classList.add('loaderOff');
 

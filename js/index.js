@@ -797,6 +797,7 @@ function openPlayerPopup(tabName = "queue"){
 
     showCrimsonView(queuePanel);
     showCrimsonView(playerPopupBackdrop);
+    queuePanel.style.setProperty("--player-popup-full-top", `${getPlayerPopupFullscreenTop()}px`);
     isQueueOpen = true;
     queuePanel.classList.add("queuePanelOpen");
     queuePanel.setAttribute("aria-hidden", "false");
@@ -815,6 +816,8 @@ function closePlayerPopup(){
     queuePanel.classList.remove("queuePanelDragging");
     queuePanel.classList.remove("playerMovable");
     queuePanel.setAttribute("aria-hidden", "true");
+    queuePanel.style.transform = "";
+    queuePanel.style.removeProperty("--player-popup-full-top");
     queuePanel.style.top = "";
     queuePanel.style.height = "";
     playerPopupBackdrop?.classList.remove("playerPopupBackdropOpen");
@@ -1481,7 +1484,11 @@ function setLoggedInScreen(){
     document.getElementsByClassName("loginCrimsonLogo")[0].style.display = "none";
     document.getElementsByClassName("loggedInScreen")[0].style.display = "flex";
     document.getElementsByName("regLogTitle")[0].innerHTML = "Settings";
-    window.setAuthGatewayVisible?.(false);
+    if(typeof window.finishAuthGatewayForLoggedIn === "function"){
+        window.finishAuthGatewayForLoggedIn();
+    }else{
+        window.setAuthGatewayVisible?.(false);
+    }
 
 }
 
@@ -1489,6 +1496,7 @@ function setLoggedOutScreen(){
     document.getElementsByClassName("loginForm")[0].style.display = "flex";
     document.getElementsByClassName("loggedInScreen")[0].style.display = "none";
     document.getElementsByName("regLogTitle")[0].innerHTML = "Register";
+    window.setAuthSessionLoading?.(false);
     window.setAuthGatewayVisible?.(true, 'welcome');
 }
 
@@ -2672,6 +2680,7 @@ function openPopup(type,src,art,nam,id,isLikedPage,contextData){
     popupScreen.classList.remove("playerMovable");
     popupScreen.focus();
     popupScreen.style.top = 'auto';
+    popupScreen.style.transform = "";
 
     addToPlBtn.setAttribute('name', id);
     addToPlBtn.onclick = addToPlFunc;
@@ -2722,6 +2731,7 @@ function closePopup(){
     popupWrapper.classList.remove("popupOpen");
     popupWrapper.classList.remove("artistContextPopup");
     popupWrapper.classList.remove("popupAwaitingRelease");
+    popupScreen.style.transform = "";
     hideCrimsonView(popupWrapper, "popupOpen");
 
     isPopupOpen = false;
@@ -3595,18 +3605,19 @@ closeLicenseAndProfileScreenBtn.addEventListener("touchstart", (e) => {
 
 const popupScreen = document.getElementsByClassName("popupScreen")[0];
 let playerTouchStarted3 = false;
-let startPopupOffsetTop = popupScreen.offsetTop;
+let popupDragStartY = 0;
+let popupDragOffset = 0;
 
 const move3 = (e) => {
-    currentTouchPos = (e.touches[0].clientY - offsetY);
+    popupDragOffset = Math.max(0, e.touches[0].clientY - popupDragStartY);
+    currentTouchPos = popupDragOffset;
     moveStarted = true;
-    // Update div pos based on new cursor pos
-    if(currentTouchPos > startPopupOffsetTop){
+    if(popupDragOffset > 0){
         popupScreen.classList.add("playerMovable");
-        popupMoveTop = e.touches[0].clientY - offsetY;
+        popupMoveTop = popupDragOffset;
         if(!popupMoveFrame){
             popupMoveFrame = requestAnimationFrame(() => {
-                popupScreen.style.top = `${popupMoveTop}px`;
+                popupScreen.style.transform = `translate3d(0, ${popupMoveTop}px, 0)`;
                 popupMoveFrame = null;
             });
         }
@@ -3616,10 +3627,9 @@ const move3 = (e) => {
 
 popupScreen.addEventListener("touchstart", (e) => {
     if(window.innerWidth < window.innerHeight){
-        // console.log("touched");
-        // Calc the initial offset Values
-        offsetY = e.touches[0].clientY - popupScreen.offsetTop;
-        popupScreen.style.top = `${e.touches[0].clientY - offsetY}px`;
+        popupDragStartY = e.touches[0].clientY;
+        popupDragOffset = 0;
+        popupScreen.style.transform = "translate3d(0, 0, 0)";
         popupScreen.classList.add("playerMovable");
         setInteractionActive(true);
         document.addEventListener("touchmove", move3);
@@ -3746,11 +3756,13 @@ document.addEventListener("touchend", () => {
         cancelScheduledMove(popupMoveFrame);
         popupMoveFrame = null;
         if(moveStarted){
-            if(currentTouchPos <= startPopupOffsetTop + 100){
-                popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
+            if(popupDragOffset <= 100){
+                popupScreen.style.transform = "";
             }else{
                 closePopup();
             }
+        }else{
+            popupScreen.style.transform = "";
         }
     }
     playerMovedDown = false;
@@ -3768,9 +3780,8 @@ document.addEventListener("touchend", () => {
 const closePopupPlBtn = document.querySelector('#closePopupPlBtn');
 closePopupPlBtn.addEventListener('click', () => {
     popupScreen.classList.remove("popupPl");
-    if(window.innerHeight > window.innerWidth){
-        popupScreen.style.top = "calc(" + startPopupOffsetTop + "px + env(safe-area-inset-top)";
-    }
+    popupScreen.style.top = "auto";
+    popupScreen.style.transform = "";
     setTimeout(() => {
         addToPlBtn.onclick = addToPlFunc;
     }, 100);
@@ -3786,6 +3797,7 @@ let playerPopupStartedFull = false;
 let playerPopupStartX = 0;
 let playerPopupGestureDirection = null;
 let playerPopupStartTarget = null;
+let playerPopupDragViewportHeight = 0;
 const playerPopupDragThreshold = 8;
 let cachedSafeAreaTop = null;
 
@@ -3823,22 +3835,38 @@ function getSafeAreaTopPx(){
 
 window.visualViewport?.addEventListener("resize", () => {
     cachedSafeAreaTop = null;
+    if(isQueueOpen){
+        requestAnimationFrame(syncPlayerPopupViewportOffset);
+    }
 });
 
 window.addEventListener("orientationchange", () => {
     cachedSafeAreaTop = null;
+    if(isQueueOpen){
+        requestAnimationFrame(syncPlayerPopupViewportOffset);
+    }
 });
+
+function syncPlayerPopupViewportOffset(){
+    if(!queuePanel || !isQueueOpen){
+        return;
+    }
+    const fullscreenTop = getPlayerPopupFullscreenTop();
+    queuePanel.style.setProperty("--player-popup-full-top", `${fullscreenTop}px`);
+    if(queuePanel.classList.contains("playerPopupFull")){
+        playerPopupCurrentTop = fullscreenTop;
+    }
+}
 
 function applyPlayerPopupPosition(top){
     if(!queuePanel){
         return;
     }
 
-    const viewportHeight = getPlayerPopupViewportHeight();
+    const viewportHeight = playerPopupDragViewportHeight || getPlayerPopupViewportHeight();
     const safeTop = Math.max(0, Math.min(top, viewportHeight - 80));
     playerPopupCurrentTop = safeTop;
-    queuePanel.style.top = `${safeTop}px`;
-    queuePanel.style.height = `${viewportHeight - safeTop}px`;
+    queuePanel.style.transform = `translate3d(0, ${safeTop}px, 0)`;
 }
 
 function applyPlayerPopupFullscreenPosition(){
@@ -3847,10 +3875,9 @@ function applyPlayerPopupFullscreenPosition(){
     }
 
     const fullscreenTop = getPlayerPopupFullscreenTop();
-    const viewportHeight = getPlayerPopupViewportHeight();
     playerPopupCurrentTop = fullscreenTop;
-    queuePanel.style.top = `${fullscreenTop}px`;
-    queuePanel.style.height = `${Math.max(120, viewportHeight - fullscreenTop)}px`;
+    queuePanel.style.setProperty("--player-popup-full-top", `${fullscreenTop}px`);
+    queuePanel.style.transform = "";
 }
 
 function clearPlayerPopupDragStyles(){
@@ -3918,6 +3945,7 @@ function startPlayerPopupDrag(clientX, clientY){
     playerPopupGestureDirection = null;
     const panelRect = queuePanel.getBoundingClientRect();
     const containerRect = getPlayerPopupContainerRect();
+    playerPopupDragViewportHeight = containerRect.height || window.innerHeight;
     playerPopupStartTop = panelRect.top - containerRect.top;
     playerPopupCurrentTop = playerPopupStartTop;
 }
@@ -3949,7 +3977,6 @@ function movePlayerPopupTo(clientX, clientY){
     if(playerPopupFrame){
         cancelAnimationFrame(playerPopupFrame);
     }
-    queuePanel.classList.remove("playerPopupFull");
     playerPopupFrame = requestAnimationFrame(() => {
         applyPlayerPopupPosition(nextTop);
         playerPopupFrame = null;
@@ -3968,6 +3995,7 @@ function finishPlayerPopupDrag(){
         playerPopupStartedFull = false;
         playerPopupGestureDirection = null;
         playerPopupStartTarget = null;
+        playerPopupDragViewportHeight = 0;
         setInteractionActive(false);
         return;
     }
@@ -3976,18 +4004,20 @@ function finishPlayerPopupDrag(){
     const fullscreenTop = getPlayerPopupFullscreenTop();
     if(deltaY > 110){
         closePlayerPopup();
-    }else if(playerPopupStartedFull || deltaY < -70 || playerPopupCurrentTop < fullscreenTop + getPlayerPopupViewportHeight() * 0.28){
+    }else if(playerPopupStartedFull || deltaY < -70 || playerPopupCurrentTop < fullscreenTop + playerPopupDragViewportHeight * 0.28){
         applyPlayerPopupFullscreenPosition();
         queuePanel.classList.add("playerPopupFull");
     }else{
-        queuePanel.style.top = "";
-        queuePanel.style.height = "";
+        queuePanel.style.transform = "";
+        queuePanel.classList.remove("playerPopupFull");
+        queuePanel.style.removeProperty("--player-popup-full-top");
     }
 
     playerPopupTouchStarted = false;
     playerPopupStartedFull = false;
     playerPopupGestureDirection = null;
     playerPopupStartTarget = null;
+    playerPopupDragViewportHeight = 0;
     moveStarted = false;
     setInteractionActive(false);
 }

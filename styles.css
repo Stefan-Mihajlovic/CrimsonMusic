@@ -3372,13 +3372,17 @@ a.toggleSection i{
     left: 0px;
     transform: translateY(112%);
     transition: transform .42s var(--softBounceEase), top .36s var(--softBounceEase), height .36s var(--softBounceEase);
-    will-change: transform, top, height;
+    will-change: transform;
     overflow: scroll;
 }
 
 .popupOpen .popupScreen{
     transform: translateY(0%);
     animation: bottomSheetBounceIn .42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.popupScreen.playerMovable{
+    animation: none !important;
 }
 
 .popupPl{
@@ -4253,6 +4257,11 @@ a.toggleSection i{
     box-shadow: none !important;
 }
 
+.playerInteractionActive #popupWrapper.popupOpen{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
 /* ---- ORIENT - LANDSCAPE PLAYER */
 
 @media screen and (orientation: landscape) {
@@ -4496,26 +4505,34 @@ a.toggleSection i{
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
-    height: 60%;
+    top: 0;
+    bottom: auto;
+    height: 100svh;
+    height: 100dvh;
     background: var(--popupScreenBg);
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     border-top: 1px solid #242027;
     box-shadow: none;
     transform: translateY(112%);
-    transition: transform .42s var(--softBounceEase), top .36s var(--softBounceEase), height .36s var(--softBounceEase), border-radius .32s var(--screenEase);
+    transition: transform .42s var(--softBounceEase), border-radius .32s var(--screenEase);
     z-index: 5;
     overflow: hidden;
     pointer-events: none;
-    will-change: transform, top, height;
+    will-change: transform;
     contain: layout paint;
 }
 
 .queuePanelOpen{
-    transform: translateY(0%);
-    animation: bottomSheetBounceIn .42s cubic-bezier(0.22, 1, 0.36, 1);
     pointer-events: all;
+}
+
+.queuePanelOpen:not(.playerPopupFull){
+    transform: translate3d(0, calc(40% + var(--player-popup-full-top, 0px)), 0);
+}
+
+.queuePanelOpen.playerPopupFull{
+    transform: translate3d(0, var(--player-popup-full-top, 0px), 0);
 }
 
 .queuePanelOpen:not(.playerPopupFull) .playerPopupContent{
@@ -4523,7 +4540,6 @@ a.toggleSection i{
 }
 
 .playerPopupFull{
-    height: 100%;
     border-radius: 0px;
     border-top: 1px solid transparent;
     padding-top: 0;
@@ -4531,6 +4547,7 @@ a.toggleSection i{
 
 .queuePanelDragging{
     transition: none !important;
+    animation: none !important;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
@@ -4539,6 +4556,11 @@ a.toggleSection i{
 .queuePanelDragging .playerPopupContent{
     overflow: hidden !important;
     pointer-events: none;
+}
+
+.queuePanelDragging .queueTabs{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 .queueHandle{
@@ -4812,6 +4834,7 @@ a.toggleSection i{
 
 @media screen and (orientation: landscape) {
     .queuePanel{
+        top: auto;
         left: auto;
         right: 18px;
         bottom: 18px;
@@ -4823,6 +4846,11 @@ a.toggleSection i{
     }
 
     .queuePanelOpen{
+        transform: translateX(0%);
+    }
+
+    .queuePanelOpen:not(.playerPopupFull),
+    .queuePanelOpen.playerPopupFull{
         transform: translateX(0%);
     }
 }
@@ -5374,6 +5402,24 @@ body.authLocked .bodyHolder{
     background:
         linear-gradient(180deg, #0d0a10 0%, rgba(13, 10, 16, .02) 17%, rgba(13, 10, 16, .08) 53%, #0d0a10 82%),
         linear-gradient(0deg, rgba(13, 10, 16, .86), transparent 58%);
+}
+
+.authSessionLoader{
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+html.authSessionLoading .authSessionLoader{
+    display: flex;
+}
+
+html.authSessionLoading .authWelcomeActions{
+    display: none;
 }
 
 .authView{

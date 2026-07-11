@@ -11,6 +11,17 @@
     <meta name="keywords" content="music app musicapp crimson music crimsonmusic music streaming stream music">
     <meta name="apple-mobile-web-app-title" content="Crimson" />
     <meta name="application-name" content="Crimson" />
+    <script>
+        try {
+            const cachedUser = JSON.parse(localStorage.getItem('user') || 'null');
+            if(localStorage.getItem('keepLoggedIn') === 'yes' && cachedUser?.Username){
+                document.documentElement.classList.add('authSessionLoading');
+            }
+        } catch (error) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('keepLoggedIn');
+        }
+    </script>
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
     <script src="js/index.js?v=20260711-view-lifecycle-1" defer></script>
@@ -24,6 +35,10 @@
 <body class="authLocked">
     <section class="authGateway" id="authGateway" aria-label="Crimson Music account access">
         <div class="authGatewayBackdrop" aria-hidden="true"></div>
+
+        <div class="authSessionLoader" role="status" aria-label="Loading your account">
+            <div class="loader" aria-hidden="true"></div>
+        </div>
 
         <div class="authView authWelcomeView isActive" data-auth-view="welcome">
             <img class="authWelcomeLogo" src="images/auth/crimson-logo.webp?v=20260710" alt="Crimson Music">
