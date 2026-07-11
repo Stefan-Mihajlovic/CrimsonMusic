@@ -1588,9 +1588,9 @@ main{
 .searchScreen .categoryArtwork{
     position: absolute;
     z-index: 0;
-    right: -11px;
-    bottom: -10px;
-    width: 74%;
+    right: -7px;
+    bottom: -15px;
+    width: 65%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 14px;

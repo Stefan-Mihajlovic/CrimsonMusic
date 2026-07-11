@@ -1406,8 +1406,9 @@ function renderCategoryCard(record){
     const categoryName = record.Name || "Category";
     const categoryColor = record.Color || "#3c2368";
     const categoryBanner = getCategoryImage(record, "large");
+    const categoryThumbnail = getCategoryImage(record, "small");
     return `<button class="catItem" type="button" data-crimson-context="${encodeContextPayload({type: "category", name: categoryName, color: categoryColor, image: categoryBanner, category: true})}" style="--category-color: ${categoryColor}" onclick="clickEffect(this); openCategoryPage('${categoryName}', '${categoryColor}', '${categoryBanner}')">
-        <img class="categoryArtwork" src="${categoryBanner}" alt="" loading="lazy">
+        <img class="categoryArtwork" src="${categoryThumbnail}" alt="" loading="lazy" decoding="async">
         <span class="categoryTint"></span>
         <h3>${categoryName}</h3>
         <span class="categoryCardArrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
