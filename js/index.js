@@ -424,6 +424,13 @@ function setScreen(screenToSet, clickedBtn, activeScreen){
     let activeMain = document.getElementsByClassName(activeScreen)[0];
     activeMain.classList.add("activeMain");
 
+    if(activeScreen === "yoursScreen"){
+        requestAnimationFrame(() => {
+            syncLibraryStickyThreshold();
+            scheduleStickySearchUpdate();
+        });
+    }
+
     if(activeScreen == "searchScreen"){
         let searchList = document.getElementsByClassName("searchList")[0];
         let searchInput = document.getElementById("searchInput");
@@ -4383,6 +4390,15 @@ const searchScreenElement = document.querySelector('.searchScreen');
 const libraryScreen = document.querySelector('.yoursScreen');
 const librarySearchBar = document.querySelector('#searchBarYours');
 let stickyStateFrame = null;
+let libraryStickyThreshold = 1;
+
+function syncLibraryStickyThreshold(){
+    if(!librarySearchBar){
+        return;
+    }
+    const stickyTop = Number.parseFloat(getComputedStyle(librarySearchBar).top) || 0;
+    libraryStickyThreshold = Math.max(1, librarySearchBar.offsetTop - stickyTop);
+}
 
 function syncSearchScrollerInset(){
     if(searchScreenBar && searchScreenElement){
@@ -4397,13 +4413,13 @@ if(searchBarResizeObserver && searchScreenBar){
     searchBarResizeObserver.observe(searchScreenBar);
 }
 syncSearchScrollerInset();
+syncLibraryStickyThreshold();
 
 function updateStickySearchStates(){
     stickyStateFrame = null;
     searchScreenBar?.classList.toggle('isSticky', (searchParallaxContainer?.scrollTop || 0) > 2);
     if(libraryScreen && librarySearchBar){
-        const stickyThreshold = Math.max(1, librarySearchBar.offsetTop - 1);
-        librarySearchBar.classList.toggle('isSticky', libraryScreen.scrollTop >= stickyThreshold);
+        librarySearchBar.classList.toggle('isSticky', libraryScreen.scrollTop >= libraryStickyThreshold);
     }
 }
 
@@ -4417,6 +4433,7 @@ searchParallaxContainer?.addEventListener('scroll', scheduleStickySearchUpdate, 
 libraryScreen?.addEventListener('scroll', scheduleStickySearchUpdate, {passive: true});
 window.addEventListener('resize', () => {
     syncSearchScrollerInset();
+    syncLibraryStickyThreshold();
     scheduleStickySearchUpdate();
 }, {passive: true});
 scheduleStickySearchUpdate();

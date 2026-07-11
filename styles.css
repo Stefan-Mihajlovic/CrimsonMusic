@@ -2917,13 +2917,28 @@ a.toggleSection i{
     transform: none;
     transition: max-height .38s var(--screenEase), opacity .24s ease-out, transform .38s var(--screenEase), padding .38s var(--screenEase), margin .38s var(--screenEase), background-color .32s ease-out, border-color .32s ease-out, box-shadow .32s ease-out, backdrop-filter .32s ease-out, -webkit-backdrop-filter .32s ease-out;
     position: sticky !important;
-    top: 0 !important;
+    top: env(safe-area-inset-top, 0px) !important;
     z-index: 20;
     margin-bottom: 4px !important;
     padding-top: 8px;
     padding-bottom: 4px;
     width: 100% !important;
     margin-left: 0 !important;
+}
+
+.yoursScreen .searchBar::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: env(safe-area-inset-top, 0px);
+    background-color: color-mix(in srgb, var(--footerBg) 84%, transparent);
+    backdrop-filter: blur(22px) saturate(1.2) brightness(1.04);
+    -webkit-backdrop-filter: blur(22px) saturate(1.2) brightness(1.04);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .32s ease-out;
 }
 
 .yoursScreen .searchBar{
@@ -2933,13 +2948,16 @@ a.toggleSection i{
 }
 
 .yoursScreen .searchBar.isSticky{
-    margin: 0 !important;
-    padding: calc(env(safe-area-inset-top) + 8px) 16px 8px !important;
+    padding: 8px 16px !important;
     background-color: color-mix(in srgb, var(--footerBg) 84%, transparent);
     border-bottom-color: rgba(220, 214, 247, 0.1);
     box-shadow: 0 12px 30px rgba(6, 4, 10, 0.2);
     backdrop-filter: blur(22px) saturate(1.2) brightness(1.04);
     -webkit-backdrop-filter: blur(22px) saturate(1.2) brightness(1.04);
+}
+
+.yoursScreen .searchBar.isSticky::before{
+    opacity: 1;
 }
 
 .yoursScreen .searchBar form{
