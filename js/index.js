@@ -1498,27 +1498,28 @@ let isPlayerOpen = false;
 let isSongPaused = true;
 
 function triggerMiniPlayerBounce(){
-    const player = document.getElementsByClassName("player")[0];
-    if(!player || reduceAnimations){
+    const miniPlayer = document.getElementsByClassName("miniPlayer")[0];
+    if(!miniPlayer || reduceAnimations){
         return;
     }
 
-    player.classList.remove("playerMiniBounce");
-    void player.offsetWidth;
-    player.classList.add("playerMiniBounce");
+    miniPlayer.classList.remove("playerMiniBounce");
+    void miniPlayer.offsetWidth;
+    miniPlayer.classList.add("playerMiniBounce");
     setTimeout(() => {
-        player.classList.remove("playerMiniBounce");
+        miniPlayer.classList.remove("playerMiniBounce");
     }, 460);
 }
 
 function closeBigPlayer(){
     let player = document.getElementsByClassName("player")[0];
     player.classList.remove("playerOpenTop");
+    player.classList.remove("playerMovable");
     player.classList.remove("playerOpen");
+    player.style.transform = "";
     triggerMiniPlayerBounce();
     closePlayerPopup();
-    player.style.top = 'auto';
-    document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+    setPlayerNavClosed(false);
     // Setting the opacity to 1 on main and header
     document.getElementsByClassName(currentScreen)[0].style.opacity = '1';
     document.querySelector('header').style.opacity = '1';
@@ -2033,7 +2034,7 @@ function openMiniPlayer(){
         let player = document.getElementsByClassName("player")[0];
         player.style.opacity = "1";
         player.style.pointerEvents = "all";
-        player.style.transform = "translateY(0%)";
+        player.style.transform = "";
         isPlayerOpen = true;
     }
 }
@@ -3009,12 +3010,45 @@ const playerOpenDiv2 = document.getElementsByClassName("playerClickDiv2")[0];
 let offsetY,currentTouchPos = 0;
 let playerTouchStarted = false, playerTouchStarted2 = false;
 let moveStarted = true;
-let playerNormalPos = movablePlayer.offsetTop;
 let sidePageNormalPos = document.getElementsByClassName("loginScreen")[0].offsetLeft;
 let playerMoveFrame = null;
 let playerMoveTop = null;
 let popupMoveFrame = null;
 let popupMoveTop = null;
+let playerNavHideTimer = null;
+
+function setPlayerNavClosed(closed){
+    const nav = document.getElementsByTagName("nav")[0];
+    if(!nav){
+        return;
+    }
+
+    if(playerNavHideTimer){
+        clearTimeout(playerNavHideTimer);
+        playerNavHideTimer = null;
+    }
+
+    if(closed){
+        nav.classList.remove("navPlayerHidden");
+        nav.classList.add("navClosed");
+        playerNavHideTimer = window.setTimeout(() => {
+            if(nav.classList.contains("navClosed")){
+                nav.classList.add("navPlayerHidden");
+            }
+            playerNavHideTimer = null;
+        }, reduceAnimations ? 0 : 420);
+        return;
+    }
+
+    const wasHidden = nav.classList.contains("navPlayerHidden");
+    nav.classList.remove("navPlayerHidden");
+    if(wasHidden && !reduceAnimations){
+        void nav.offsetWidth;
+        requestAnimationFrame(() => nav.classList.remove("navClosed"));
+    }else{
+        nav.classList.remove("navClosed");
+    }
+}
 
 function setInteractionActive(isActive){
     document.body.classList.toggle("playerInteractionActive", isActive);
@@ -3027,7 +3061,18 @@ function cancelScheduledMove(frame){
 }
 
 function getOpenPlayerTop(){
-    return "-50px";
+    return -50;
+}
+
+function applyPlayerDragTop(top){
+    const dragTop = Math.max(getOpenPlayerTop(), top);
+    movablePlayer.style.transform = `translate3d(0, ${dragTop - getOpenPlayerTop()}px, 0)`;
+}
+
+function settlePlayerPosition(open){
+    movablePlayer.classList.remove("playerMovable");
+    movablePlayer.classList.toggle("playerOpen", open);
+    movablePlayer.style.transform = "";
 }
 
 function getGestureDirection(deltaX, deltaY, threshold = 10){
@@ -3057,7 +3102,7 @@ const move = (e) => {
     playerMoveTop = e.touches[0].clientY - offsetY;
     if(!playerMoveFrame){
         playerMoveFrame = requestAnimationFrame(() => {
-            movablePlayer.style.top = `${playerMoveTop}px`;
+            applyPlayerDragTop(playerMoveTop);
             playerMoveFrame = null;
         });
     }
@@ -3069,8 +3114,10 @@ let isLyricsOn = false;
 playerOpenDiv.addEventListener("touchstart", (e) => {
     // console.log("touched");
     if(window.innerWidth < window.innerHeight){
+        const playerStartTop = movablePlayer.getBoundingClientRect().top;
+        playerDragStartTop = playerStartTop;
         playerMovedDown = true;
-        document.getElementsByTagName("nav")[0].classList.add("navClosed");
+        setPlayerNavClosed(true);
         movablePlayer.classList.add("playerOpen");
         if(reduceAnimations){
             document.querySelector('.bigControls').classList.add('noPointerEvents');
@@ -3080,8 +3127,8 @@ playerOpenDiv.addEventListener("touchstart", (e) => {
         }
 
         // Calc the initial offset Values
-        offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
-        movablePlayer.style.top = `${e.touches[0].clientY - offsetY}px`;
+        offsetY = e.touches[0].clientY - playerStartTop;
+        applyPlayerDragTop(playerStartTop);
         movablePlayer.classList.add("playerMovable");
         setInteractionActive(true);
 
@@ -3109,7 +3156,8 @@ const songSwipeState = {
     isDragging: false,
     isCommitting: false,
     pendingCurrent: null,
-    settleTimer: null
+    settleTimer: null,
+    cardWidth: 0
 };
 let playerMovedDown = false;
 let playerGestureStartX = 0;
@@ -3192,7 +3240,7 @@ function setSongSwipeTrackPosition(offset = 0, animate = false){
     if(!songSwipeViewport || !songSwipeTrack){
         return;
     }
-    const cardWidth = songSwipeViewport.getBoundingClientRect().width;
+    const cardWidth = songSwipeState.cardWidth || songSwipeViewport.getBoundingClientRect().width;
     songSwipeTrack.classList.toggle("songSwipeTrackAnimating", animate && !reduceAnimations);
     if(cardWidth > 0){
         songSwipeTrack.style.transform = `translate3d(${-cardWidth + offset}px, 0, 0)`;
@@ -3209,6 +3257,7 @@ function prepareSongSwipeCards(currentSong = currentPlayerSongPopup){
     if(!songSwipeTrack){
         return;
     }
+    songSwipeState.cardWidth = songSwipeViewport?.getBoundingClientRect().width || 0;
     setSongSwipeCard(songSwipeCards.previous, getSongSwipePreview("previous"));
     setSongSwipeCard(songSwipeCards.current, currentSong);
     setSongSwipeCard(songSwipeCards.next, getSongSwipePreview("next"));
@@ -3241,7 +3290,7 @@ function completeSongSwipe(direction){
     }
 
     songSwipeState.isCommitting = true;
-    const cardWidth = songSwipeViewport?.getBoundingClientRect().width || 0;
+    const cardWidth = songSwipeState.cardWidth || songSwipeViewport?.getBoundingClientRect().width || 0;
     const targetOffset = direction === "next" ? -cardWidth : cardWidth;
     setSongSwipeTrackPosition(targetOffset, true);
 
@@ -3284,7 +3333,7 @@ const move2 = (e) => {
         playerMoveTop = currentTouchPos;
         if(!playerMoveFrame){
             playerMoveFrame = requestAnimationFrame(() => {
-                movablePlayer.style.top = `${playerMoveTop}px`;
+                applyPlayerDragTop(playerMoveTop);
                 playerMoveFrame = null;
             });
         }
@@ -3305,8 +3354,8 @@ playerOpenDiv2.addEventListener("touchstart", (e) => {
         playerGestureStartX = e.touches[0].clientX;
         playerGestureStartY = e.touches[0].clientY;
         playerGestureDirection = null;
-        playerDragStartTop = movablePlayer.offsetTop;
-        offsetY = e.touches[0].clientY - movablePlayer.offsetTop;
+        playerDragStartTop = movablePlayer.getBoundingClientRect().top;
+        offsetY = e.touches[0].clientY - playerDragStartTop;
         offsetX = e.touches[0].clientX - movablePlayer.offsetLeft;
         movablePlayer.classList.add("playerMovable");
         bigSongBanner.classList.add("playerMovable");
@@ -3337,7 +3386,7 @@ const moveSideSkip = (e) =>{
         const rawOffset = e.touches[0].clientX - offsetX;
         const direction = rawOffset < 0 ? "next" : "previous";
         const hasPreview = !!getSongSwipePreview(direction);
-        const cardWidth = songSwipeViewport?.getBoundingClientRect().width || window.innerWidth;
+        const cardWidth = songSwipeState.cardWidth || window.innerWidth;
         const maxOffset = cardWidth * 0.92;
         currentTouchPosSkip = hasPreview ? Math.max(-maxOffset, Math.min(maxOffset, rawOffset)) : 0;
         songSwipeState.isDragging = true;
@@ -3587,25 +3636,23 @@ document.addEventListener("touchend", () => {
         cancelScheduledMove(playerMoveFrame);
         playerMoveFrame = null;
         movablePlayer.classList.remove("playerMovable");
-        if(currentTouchPos < playerNormalPos - 125){
-            movablePlayer.style.top = getOpenPlayerTop();
+        if(currentTouchPos < playerDragStartTop - 125){
+            settlePlayerPosition(true);
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
             isPlayerOpen = true;
         }else{
-            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
-            movablePlayer.classList.remove("playerOpen");
+            settlePlayerPosition(false);
             triggerMiniPlayerBounce();
-            document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+            setPlayerNavClosed(false);
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }
         playerTouchStarted = false;
         if(!moveStarted){
-            movablePlayer.classList.add("playerOpen");
-            movablePlayer.style.top = getOpenPlayerTop();
-            document.getElementsByTagName("nav")[0].classList.add("navClosed");
+            settlePlayerPosition(true);
+            setPlayerNavClosed(true);
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
@@ -3666,19 +3713,16 @@ document.addEventListener("touchend", () => {
         playerMoveFrame = null;
 
         if(moveStarted && currentTouchPos > 70){
-            movablePlayer.classList.remove("playerMovable");
-            movablePlayer.classList.remove("playerOpen");
+            settlePlayerPosition(false);
             triggerMiniPlayerBounce();
-            movablePlayer.style.top = `calc(${playerNormalPos}px + env(safe-area-inset-top) - env(safe-area-inset-bottom)*0.6)`;
-            document.getElementsByTagName("nav")[0].classList.remove("navClosed");
+            setPlayerNavClosed(false);
             document.getElementsByClassName('darkenPlayer')[0].style.opacity = '0';
             isPlayerOpen = false;
         }else if(moveStarted){
             if(isLyricsOn){
                 document.getElementsByClassName('darkenPlayer')[0].style.opacity = '1';
             }
-            movablePlayer.classList.remove("playerMovable");
-            movablePlayer.style.top = getOpenPlayerTop();
+            settlePlayerPosition(true);
             isPlayerOpen = true;
         }else{
             movablePlayer.classList.remove("playerMovable");
@@ -3687,7 +3731,7 @@ document.addEventListener("touchend", () => {
     }
     document.removeEventListener("touchmove", moveSideSkip);
     if(songSwipeState.isDragging && !playerMovedDown && !songSwipeState.isCommitting){
-        const cardWidth = songSwipeViewport?.getBoundingClientRect().width || window.innerWidth;
+        const cardWidth = songSwipeState.cardWidth || window.innerWidth;
         const threshold = cardWidth * 0.22;
         if(Math.abs(currentTouchPosSkip) >= threshold){
             completeSongSwipe(currentTouchPosSkip < 0 ? "next" : "previous");

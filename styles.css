@@ -3748,25 +3748,23 @@ a.toggleSection i{
     position: fixed;
     left: 0;
     right: 0;
-    top: auto;
-    bottom: calc(-100svh + 85px + env(safe-area-inset-bottom)*0.6);
+    top: -50px;
+    bottom: auto;
+    --player-collapsed-y: calc(100dvh - 90px - env(safe-area-inset-bottom)*0.6);
     z-index: 1000;
     display: flex;
     flex-direction: column;
     height: calc(100svh + 55px) !important;
-    transition: top .42s var(--softBounceEase), bottom .42s var(--softBounceEase), opacity .22s ease-out, padding-top 0s, background-color .28s ease-out, border-color .28s ease-out;
+    transition: transform .42s var(--softBounceEase), opacity .22s ease-out, padding-top 0s, background-color .28s ease-out, border-color .28s ease-out;
     opacity: 0;
     pointer-events: none;
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
+    transform: translate3d(0, var(--player-collapsed-y), 0);
     background-color: transparent;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    will-change: top, transform;
+    will-change: transform;
     contain: layout paint;
+    isolation: isolate;
 }
 
 .playerGradientLayers{
@@ -3862,7 +3860,7 @@ a.toggleSection i{
 }
 
 .playerOpen{
-    bottom: 0;
+    transform: translate3d(0, 0, 0);
     height: calc(100svh + 50px + env(safe-area-inset-bottom)) !important;
     height: calc(100dvh + 50px + env(safe-area-inset-bottom)) !important;
     padding-top: 50px;
@@ -3888,7 +3886,8 @@ a.toggleSection i{
         height: calc(100svh) !important;
     }
     .player{
-        top: auto !important;
+        top: 0 !important;
+        --player-collapsed-y: calc(100dvh - 70px);
     }
     .miniPlayer{
         bottom: 5px !important;
@@ -3994,7 +3993,7 @@ a.toggleSection i{
     box-shadow: none;
 }
 
-.playerMiniBounce{
+.miniPlayer.playerMiniBounce{
     animation: playerMiniReturnBounce .42s cubic-bezier(0.2, 0.92, 0.24, 1);
 }
 
@@ -4024,6 +4023,15 @@ a.toggleSection i{
 
 .playerOpen .miniPlayer{
     display: none;
+}
+
+.player:not(.playerOpen) .bigPlayer{
+    visibility: hidden;
+}
+
+.playerOpen .bigPlayer{
+    visibility: visible;
+    transition-delay: 0s;
 }
 
 .miniSeek{
@@ -4126,6 +4134,7 @@ a.toggleSection i{
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: visibility 0s .42s;
 }
 
 .bigSongInfo{
@@ -4221,11 +4230,21 @@ a.toggleSection i{
     transition: none !important;
 }
 
+.playerInteractionActive .playerGradientLayer,
+.playerInteractionActive .songSwipeViewport,
+.playerInteractionActive .bigControls{
+    backface-visibility: hidden;
+}
+
 .playerInteractionActive .miniPlayer,
 .playerInteractionActive nav,
 .playerInteractionActive .playerPopupBackdropOpen{
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+}
+
+.playerInteractionActive nav{
+    background-color: var(--footerBgHO) !important;
 }
 
 .playerInteractionActive .queuePanel,
@@ -4846,6 +4865,10 @@ nav{
     -webkit-backdrop-filter: none;
 }
 
+.navPlayerHidden{
+    display: none !important;
+}
+
 .navBig{
     display: none;
     top: env(safe-area-inset-top, 0px);
@@ -5051,7 +5074,7 @@ nav button i{
         display: none !important;
     }
     .player{
-        bottom: calc(-100svh + 15px + env(safe-area-inset-bottom));
+        --player-collapsed-y: calc(100dvh - 20px - env(safe-area-inset-bottom));
     }
     .playerOpen{
         height: calc(100svh);
@@ -5279,6 +5302,12 @@ nav button i{
 
 .displayNone{
     display: none !important;
+}
+
+@media (min-width: 500px) and (orientation: landscape){
+    .player{
+        --player-collapsed-y: calc(100dvh - 70px - env(safe-area-inset-bottom));
+    }
 }
 
 /* ----- AUTH GATEWAY (Figma: Crimson Music Welcome / Login / Register) ----- */
