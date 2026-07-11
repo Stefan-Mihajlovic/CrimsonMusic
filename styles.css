@@ -5475,7 +5475,7 @@ body.authLocked .bodyHolder{
     position: absolute;
     inset: -24px;
     z-index: -2;
-    background-image: url("images/auth/auth-background.png");
+    background-image: url("images/auth/auth-background.webp");
     background-size: cover;
     background-position: center top;
     filter: blur(2.5px);
