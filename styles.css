@@ -97,6 +97,7 @@ html{
     overscroll-behavior-y: none;
     width: 100%;
     height: 100%;
+    height: 100dvh;
     overflow: hidden !important;
     background-color: var(--bodyBg);
 }
@@ -107,6 +108,7 @@ body{
     font-family: 'Outfit', sans-serif !important;
     width: 100%;
     height: 100%;
+    height: 100dvh;
     min-height: 0;
     color: var(--offWhite);
     -ms-touch-action: none;
@@ -118,6 +120,7 @@ body{
 .bodyHolder{
     position: relative;
     height: 100%;
+    height: 100dvh;
     min-height: 0;
     overflow: hidden !important;
 }
@@ -332,6 +335,7 @@ header .buttonClicked{
 main{
     width: 100%;
     height: 100%;
+    height: 100dvh;
     z-index: 10;
     padding-bottom: calc(env(safe-area-inset-bottom) + 200px);
     overflow-x: hidden !important;
