@@ -11,9 +11,16 @@
     <meta name="keywords" content="music app musicapp crimson music crimsonmusic music streaming stream music">
     <meta name="apple-mobile-web-app-title" content="Crimson" />
     <meta name="application-name" content="Crimson" />
+    <meta name="theme-color" content="#0e0d13" id="themeColorMeta" />
     <script>
         try {
             const cachedUser = JSON.parse(localStorage.getItem('user') || 'null');
+            const savedTheme = localStorage.getItem('crimsonTheme') || cachedUser?.AppTheme || 'Auto';
+            const resolvedTheme = savedTheme === 'Auto'
+                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Dark' : 'Light')
+                : savedTheme;
+            document.documentElement.dataset.crimsonTheme = resolvedTheme.toLowerCase();
+            document.documentElement.style.colorScheme = resolvedTheme.toLowerCase();
             if(localStorage.getItem('keepLoggedIn') === 'yes' && cachedUser?.Username){
                 document.documentElement.classList.add('authSessionLoading');
             }
@@ -192,8 +199,10 @@
                 </div>
             </div>
         </div>
-        <ul class="searchList" name="Search"></ul>
-        <ul class="categories" aria-label="Music categories"></ul>
+        <div class="searchResultsScroller">
+            <ul class="searchList" name="Search"></ul>
+            <ul class="categories" aria-label="Music categories"></ul>
+        </div>
     </main>
 
     <main class="yoursScreen">

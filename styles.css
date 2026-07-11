@@ -55,6 +55,24 @@
     --tapEase: cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
+html[data-crimson-theme="light"]{
+    --bodyBg: #ece8ff;
+    --bodyBgMP: rgba(255, 255, 255, 0.4);
+    --playerColor: #CFB7E3;
+    --offWhite: #100e1c;
+    --offWhiteDark: #100e1c;
+    --darken: #ede7ff;
+    --yoursBubbleColor: rgba(134, 69, 255, 0.5);
+    --sidePageback: linear-gradient(0deg, #ece8ff, rgba(134, 69, 255, 0.1));
+    --mainColor: #d3cdee;
+    --mainColorLighter: rgba(255, 255, 255, 0.5);
+    --secondaryColor: rgba(230, 230, 230, 0.45);
+    --latestReleaseBox: rgba(0, 0, 0, 0.2);
+    --popupScreenBg: var(--darken);
+    --footerBg: rgba(222, 213, 255, 0.8);
+    --footerBgHO: rgba(192, 179, 219, 1);
+}
+
 @property --playerGradientPrimary {
     syntax: "<color>";
     inherits: false;
@@ -90,6 +108,7 @@ html{
     touch-action: none;
     overscroll-behavior-y: none;
     overflow-x: hidden !important;
+    background-color: var(--bodyBg);
 }
 
 body{
@@ -1174,7 +1193,7 @@ main{
 }
 
 .searchHistoryOpen{
-    max-height: 78px;
+    max-height: 120px;
     opacity: 1;
     margin-top: 2px;
     transform: translateY(0);
@@ -1201,6 +1220,30 @@ main{
     transform: scale(.94);
     background: rgba(143, 89, 245, 0.18);
     border-color: rgba(143, 89, 245, 0.28);
+}
+
+.searchBar .searchHistory .searchHistoryClear{
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(220, 214, 247, 0.72);
+    background: rgba(143, 89, 245, 0.08);
+    border-color: rgba(143, 89, 245, 0.2);
+}
+
+.searchBar .searchHistory .searchHistoryClear span{
+    display: grid;
+    place-items: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    font-size: 15px;
+    line-height: 1;
+    transform: translateY(-0.5px);
+}
+
+.searchBar .searchHistory .searchHistoryClear:active{
+    background: rgba(143, 89, 245, 0.2);
 }
 
 .searchList{
@@ -1438,29 +1481,47 @@ main{
 
 .searchScreen{
     gap: 0;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 120px);
-    background:
-        radial-gradient(circle at 86% 0%, rgba(143, 89, 245, 0.11), transparent 26%),
-        var(--bodyBg);
+    height: 100svh;
+    height: 100dvh;
+    padding-bottom: 0;
+    overflow-y: hidden !important;
+    background: var(--bodyBg);
 }
 
 .searchScreen .searchBar{
-    position: sticky;
+    position: absolute;
     top: 0;
+    left: 0;
     margin: 0;
     padding: calc(env(safe-area-inset-top) + 10px) 16px 6px;
     gap: 0;
-    background: linear-gradient(180deg, color-mix(in srgb, var(--footerBg) 80%, transparent) 0%, color-mix(in srgb, var(--bodyBg) 58%, transparent) 72%, transparent 100%);
+    background-color: transparent;
     border-bottom: 1px solid transparent;
-    backdrop-filter: blur(22px) saturate(1.28) brightness(1.04);
-    -webkit-backdrop-filter: blur(22px) saturate(1.28) brightness(1.04);
-    box-shadow: 0 12px 28px rgba(6, 4, 10, .08);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 12px 28px rgba(6, 4, 10, 0);
+    transition: background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out, backdrop-filter .3s ease-out, -webkit-backdrop-filter .3s ease-out;
+}
+
+.searchResultsScroller{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-top: var(--search-bar-height, calc(env(safe-area-inset-top) + 72px));
+    padding-bottom: calc(env(safe-area-inset-bottom) + 120px);
 }
 
 .searchScreen .searchBar.isSticky{
     border-color: rgba(220, 214, 247, 0.08);
-    background: color-mix(in srgb, var(--footerBg) 72%, transparent);
+    background-color: color-mix(in srgb, var(--footerBg) 78%, transparent);
     box-shadow: 0 12px 30px rgba(6, 4, 10, .2);
+    backdrop-filter: blur(22px) saturate(1.28) brightness(1.04);
+    -webkit-backdrop-filter: blur(22px) saturate(1.28) brightness(1.04);
 }
 
 .searchScreen .searchBar form{
@@ -2854,9 +2915,10 @@ a.toggleSection i{
     overflow: visible;
     pointer-events: all;
     transform: none;
-    transition: max-height .38s var(--screenEase), opacity .24s ease-out, transform .38s var(--screenEase), padding .38s var(--screenEase), margin .38s var(--screenEase);
-    position: relative !important;
-    top: auto !important;
+    transition: max-height .38s var(--screenEase), opacity .24s ease-out, transform .38s var(--screenEase), padding .38s var(--screenEase), margin .38s var(--screenEase), background-color .32s ease-out, border-color .32s ease-out, box-shadow .32s ease-out, backdrop-filter .32s ease-out, -webkit-backdrop-filter .32s ease-out;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20;
     margin-bottom: 4px !important;
     padding-top: 8px;
     padding-bottom: 4px;
@@ -2868,6 +2930,16 @@ a.toggleSection i{
     margin: 2px 0 8px !important;
     padding: 2px 16px !important;
     gap: 0;
+}
+
+.yoursScreen .searchBar.isSticky{
+    margin: 0 !important;
+    padding: calc(env(safe-area-inset-top) + 8px) 16px 8px !important;
+    background-color: color-mix(in srgb, var(--footerBg) 84%, transparent);
+    border-bottom-color: rgba(220, 214, 247, 0.1);
+    box-shadow: 0 12px 30px rgba(6, 4, 10, 0.2);
+    backdrop-filter: blur(22px) saturate(1.2) brightness(1.04);
+    -webkit-backdrop-filter: blur(22px) saturate(1.2) brightness(1.04);
 }
 
 .yoursScreen .searchBar form{
@@ -5131,7 +5203,7 @@ nav button i{
         border-bottom: 1px solid var(--playerColor);
         -webkit-backdrop-filter: blur(15px) brightness(1.2);
     }
-    .yoursScreen .searchBar{
+    .yoursScreen .searchBar:not(.isSticky){
         background-color: none !important;
         backdrop-filter: none !important;
         border: none !important;

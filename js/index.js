@@ -261,6 +261,17 @@ function setCrimsonSearchHistory(scope, terms){
     }
 }
 
+function clearCrimsonSearchHistory(scope){
+    const scopeConfig = crimsonSearchHistoryScopes[scope];
+    if(!scopeConfig){
+        return;
+    }
+    try{
+        localStorage.removeItem(scopeConfig.key);
+    }catch(error){}
+    renderCrimsonSearchHistory(scope);
+}
+
 function renderCrimsonSearchHistory(scope){
     const scopeConfig = crimsonSearchHistoryScopes[scope];
     if(!scopeConfig){
@@ -276,9 +287,20 @@ function renderCrimsonSearchHistory(scope){
     historyContainer.innerHTML = "";
     historyContainer.classList.toggle("searchHistoryOpen", terms.length > 0);
 
+    if(terms.length > 0){
+        const clearButton = document.createElement("button");
+        clearButton.type = "button";
+        clearButton.className = "searchHistoryClear";
+        clearButton.setAttribute("aria-label", "Clear recent searches");
+        clearButton.innerHTML = `<span aria-hidden="true">×</span> Clear`;
+        clearButton.addEventListener("click", () => clearCrimsonSearchHistory(scope));
+        historyContainer.appendChild(clearButton);
+    }
+
     terms.forEach((term) => {
         const historyBtn = document.createElement("button");
         historyBtn.type = "button";
+        historyBtn.className = "searchHistoryTerm";
         historyBtn.textContent = term;
         historyBtn.addEventListener("click", () => {
             const input = document.getElementById(scopeConfig.inputId);
@@ -342,7 +364,7 @@ function updateSearchCategoryParallax(){
     });
 }
 
-const searchParallaxContainer = document.querySelector(".searchScreen");
+const searchParallaxContainer = document.querySelector(".searchResultsScroller");
 searchParallaxContainer?.addEventListener("scroll", () => {
     if(searchCategoryParallaxFrame || reduceAnimations){
         return;
@@ -355,6 +377,7 @@ searchParallaxContainer?.addEventListener("scroll", () => {
 
 window.crimsonSaveSearchHistory = saveCrimsonSearchHistory;
 window.crimsonRenderSearchHistory = renderCrimsonSearchHistory;
+window.crimsonClearSearchHistory = clearCrimsonSearchHistory;
 window.crimsonAnimateSearchCategories = animateSearchCategories;
 
 function setScreen(screenToSet, clickedBtn, activeScreen){
@@ -2903,40 +2926,76 @@ document.addEventListener("contextmenu", (event) => {
 const autoThemeInput = document.getElementById('autoThemeInput');
 
 let themePreference = window.matchMedia("(prefers-color-scheme: dark)");
+let currentThemeMode = "Auto";
+
+function syncThemeInputs(themeMode){
+    const normalized = ["Dark", "Light", "Auto"].includes(themeMode) ? themeMode : "Auto";
+    ["lightThemeInput", "lightThemeInput2"].forEach((id) => {
+        const input = document.getElementById(id);
+        if(input){ input.checked = normalized === "Light"; }
+    });
+    ["darkThemeInput", "darkThemeInput2"].forEach((id) => {
+        const input = document.getElementById(id);
+        if(input){ input.checked = normalized === "Dark"; }
+    });
+    ["autoThemeInput", "autoThemeInput2"].forEach((id) => {
+        const input = document.getElementById(id);
+        if(input){ input.checked = normalized === "Auto"; }
+    });
+}
+
+function getSavedThemeMode(){
+    try{
+        const cachedUser = JSON.parse(localStorage.getItem("user") || "null");
+        return localStorage.getItem("crimsonTheme") || cachedUser?.AppTheme || "Auto";
+    }catch(error){
+        return "Auto";
+    }
+}
+
 const setAutoTheme = e => {
-    let autoThemeInput2 = document.getElementById('autoThemeInput2');
-    lightThemeInput2.checked = false;
-    autoThemeInput2.checked = true;
-    darkThemeInput2.checked = false;
     if(e.matches){
         setDarkTheme();
-        // console.log("Set to Dark!");
     }else{
         setLightTheme();
-        // console.log("Set to Light!");
     }
 }
 
 setAppPMode();
-setAutoTheme(themePreference);
+setAppTheme(getSavedThemeMode(), false);
 themePreference.addEventListener('change', () => {
-    if(autoThemeInput.checked){
+    if(currentThemeMode === "Auto"){
         setAutoTheme(themePreference);
     }
 });
 
 function setAppTheme(userTheme,clicked){
+    currentThemeMode = ["Dark", "Light", "Auto"].includes(userTheme) ? userTheme : "Auto";
+    syncThemeInputs(currentThemeMode);
+    try{
+        localStorage.setItem("crimsonTheme", currentThemeMode);
+    }catch(error){}
 
-    if(userTheme === "Dark"){
+    if(currentThemeMode === "Dark"){
         setDarkTheme(clicked);
-    }else if(userTheme === "Light"){
+    }else if(currentThemeMode === "Light"){
         setLightTheme(clicked);
     }else{
-        autoThemeInput.checked = true;
         themePreference = window.matchMedia("(prefers-color-scheme: dark)");
         setAutoTheme(themePreference);
     }
 }
+
+function restoreSavedTheme(){
+    setAppTheme(currentThemeMode || getSavedThemeMode(), false);
+}
+
+document.addEventListener("visibilitychange", () => {
+    if(document.visibilityState === "visible"){
+        restoreSavedTheme();
+    }
+});
+window.addEventListener("pageshow", restoreSavedTheme);
 
 function setDarkTheme(clicked){
 
@@ -2945,6 +3004,9 @@ function setDarkTheme(clicked){
     let darkThemeInput = document.getElementById("darkThemeInput");
     let darkThemeInput2 = document.getElementById("darkThemeInput2");
     let autoThemeInput2 = document.getElementById('autoThemeInput2');
+    document.documentElement.dataset.crimsonTheme = "dark";
+    document.documentElement.style.colorScheme = "dark";
+    document.getElementById("themeColorMeta")?.setAttribute("content", "#0e0d13");
     
     if(clicked){
         lightThemeInput2.checked = false;
@@ -2981,6 +3043,9 @@ function setLightTheme(clicked){
     let darkThemeInput = document.getElementById("darkThemeInput");
     let darkThemeInput2 = document.getElementById("darkThemeInput2");
     let autoThemeInput2 = document.getElementById('autoThemeInput2');
+    document.documentElement.dataset.crimsonTheme = "light";
+    document.documentElement.style.colorScheme = "light";
+    document.getElementById("themeColorMeta")?.setAttribute("content", "#ece8ff");
 
     if(clicked){
         lightThemeInput2.checked = true;
@@ -4311,16 +4376,50 @@ function openLoginPopup(){
 //     isLoginPopupOn = false;
 // }
 
-// ----- Search sticky
+// ----- Search and library sticky states
 
-const stickyElm = document.querySelector('#searchScreenBar');
+const searchScreenBar = document.querySelector('#searchScreenBar');
+const searchScreenElement = document.querySelector('.searchScreen');
+const libraryScreen = document.querySelector('.yoursScreen');
+const librarySearchBar = document.querySelector('#searchBarYours');
+let stickyStateFrame = null;
 
-const observer2 = new IntersectionObserver( 
-  ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
-  {threshold: [1]}
-);
+function syncSearchScrollerInset(){
+    if(searchScreenBar && searchScreenElement){
+        searchScreenElement.style.setProperty('--search-bar-height', `${searchScreenBar.offsetHeight}px`);
+    }
+}
 
-observer2.observe(stickyElm);
+const searchBarResizeObserver = typeof ResizeObserver === 'function'
+    ? new ResizeObserver(syncSearchScrollerInset)
+    : null;
+if(searchBarResizeObserver && searchScreenBar){
+    searchBarResizeObserver.observe(searchScreenBar);
+}
+syncSearchScrollerInset();
+
+function updateStickySearchStates(){
+    stickyStateFrame = null;
+    searchScreenBar?.classList.toggle('isSticky', (searchParallaxContainer?.scrollTop || 0) > 2);
+    if(libraryScreen && librarySearchBar){
+        const stickyThreshold = Math.max(1, librarySearchBar.offsetTop - 1);
+        librarySearchBar.classList.toggle('isSticky', libraryScreen.scrollTop >= stickyThreshold);
+    }
+}
+
+function scheduleStickySearchUpdate(){
+    if(!stickyStateFrame){
+        stickyStateFrame = requestAnimationFrame(updateStickySearchStates);
+    }
+}
+
+searchParallaxContainer?.addEventListener('scroll', scheduleStickySearchUpdate, {passive: true});
+libraryScreen?.addEventListener('scroll', scheduleStickySearchUpdate, {passive: true});
+window.addEventListener('resize', () => {
+    syncSearchScrollerInset();
+    scheduleStickySearchUpdate();
+}, {passive: true});
+scheduleStickySearchUpdate();
 
 // ----- PC player seek
 

@@ -1014,6 +1014,8 @@ function loginUser(user){
     })
 
     accountTheme = user.AppTheme || "Dark";
+    localStorage.setItem('crimsonTheme', accountTheme);
+    window.setAppTheme?.(accountTheme, false);
     setLoggedInScreen();
 }
 
