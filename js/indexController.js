@@ -1525,6 +1525,7 @@ async function loadCategoryContent(category, token){
 
 export function openCategoryPage(category, color, banner){
 
+    window.crimsonShowView?.(categoryPage);
     categoryPage.classList.add('screenOpenOnTop');
     const categoryScroller = document.getElementById("screenScrollableCat");
     categoryScroller.scrollTop = 0;
@@ -1579,6 +1580,7 @@ export function closeCategoryPage(){
     categoryPage.classList.remove("playerMovable");
 
     categoryPage.classList.remove('screenOpenOnTop');
+    window.crimsonHideView?.(categoryPage, "categoryPageOpen", 350);
 }
 
 let closeCategoryPageBtn = document.getElementById("closeCategoryPage");
@@ -1670,6 +1672,7 @@ export function closeArtistPage(){
     artistScreen.classList.remove('screenOpenOnTop');
 
     artistScreen.classList.remove("playerMovable");
+    window.crimsonHideView?.(artistScreen, "artistScreenOpen", 350);
 
     isArtistPageOpen = false;
 }
@@ -1677,6 +1680,7 @@ export function closeArtistPage(){
 export async function openArtistPage(artistID, artistName, artistImage, artistFollowers, artistListens, artistAImage){
 
     let artistScreen = document.getElementsByClassName("artistScreen")[0];
+    window.crimsonShowView?.(artistScreen);
     artistScreen.classList.add('screenOpenOnTop');
     artistSongs.setAttribute("name", artistName);
 
@@ -2103,6 +2107,7 @@ let isPlaylistPageOpen = false;
 export function openPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
     let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+    window.crimsonShowView?.(playlistScreen);
     playlistScreen.classList.add('screenOpenOnTop');
     playlistSongsList.setAttribute("name", pName);
     document.getElementById("editOwnedPlaylistBtn").style.display = "none";
@@ -2200,6 +2205,7 @@ export function closePlaylistPage(){
     playlistScreen.classList.remove("playerMovable");
 
     playlistScreen.classList.remove('screenOpenOnTop');
+    window.crimsonHideView?.(playlistScreen, "playlistScreenOpen", 350);
 }
 
 const closePlaylistBtn = document.getElementById("closePlaylistPage");
@@ -2676,6 +2682,8 @@ function DeLoadUserFArtists(){
 
 export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
 
+    const playlistScreen = document.getElementsByClassName("playlistScreen")[0];
+    window.crimsonShowView?.(playlistScreen);
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
     playlistSongsList.setAttribute("name", pName);
 
@@ -2693,7 +2701,6 @@ export function openMyPlaylistPage(playlistID, pName, pBanner, pLikes, pSongs){
             };
         }
 
-        let playlistScreen = document.getElementsByClassName("playlistScreen")[0];
         playlistScreen.classList.add("playlistScreenOpen");
         isPlaylistPageOpen = true;
 

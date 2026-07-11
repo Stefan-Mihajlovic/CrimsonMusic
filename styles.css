@@ -6602,6 +6602,11 @@ body.authLocked .bodyHolder{
     pointer-events: none !important;
 }
 
+/* Remove inactive off-canvas views from layout after their exit animation. */
+.crimsonDisplayNone{
+    display: none !important;
+}
+
 /* ----- LOADER ----- */
 
 .loaderWrapper{

@@ -15,6 +15,64 @@ let brojKategorija = 14;
 
 let isPerformanceModeOn = false;
 
+const crimsonViewHideTimers = new WeakMap();
+
+function showCrimsonView(view){
+    if(!view){
+        return;
+    }
+
+    clearTimeout(crimsonViewHideTimers.get(view));
+    crimsonViewHideTimers.delete(view);
+    const wasHidden = view.classList.contains("crimsonDisplayNone");
+    view.classList.remove("crimsonDisplayNone");
+    if(wasHidden){
+        void view.offsetWidth;
+    }
+}
+
+function hideCrimsonView(view, activeClass, delay = 450){
+    if(!view){
+        return;
+    }
+
+    clearTimeout(crimsonViewHideTimers.get(view));
+    const timer = setTimeout(() => {
+        if(!activeClass || !view.classList.contains(activeClass)){
+            view.classList.add("crimsonDisplayNone");
+        }
+        crimsonViewHideTimers.delete(view);
+    }, reduceAnimations ? 0 : delay);
+    crimsonViewHideTimers.set(view, timer);
+}
+
+function initializeInactiveCrimsonViews(){
+    const inactiveViews = [
+        [".artistScreen", "artistScreenOpen"],
+        [".playlistScreen", "playlistScreenOpen"],
+        [".categoryScreen", "categoryPageOpen"],
+        [".makePlaylistScreen", "makePlaylistScreenOpen"],
+        [".bugReportScreen", "bugReportScreenOpen"],
+        [".loginScreen", "loginScreenOpen"],
+        [".LicenseAndProfileScreen", "LicenseAndProfileScreenOpen"],
+        ["#popupWrapper", "popupOpen"],
+        [".sortPopupWrapper", "sortPopupOpen"],
+        [".queuePanel", "queuePanelOpen"],
+        [".playerPopupBackdrop", "playerPopupBackdropOpen"],
+        [".loginPopup", "loginPopupOn"]
+    ];
+
+    inactiveViews.forEach(([selector, activeClass]) => {
+        const view = document.querySelector(selector);
+        if(view && !view.classList.contains(activeClass)){
+            view.classList.add("crimsonDisplayNone");
+        }
+    });
+}
+
+window.crimsonShowView = showCrimsonView;
+window.crimsonHideView = hideCrimsonView;
+
 const crimsonDefaultImages = {
     song: "images/defaultSong.webp",
     artist: "images/defaultArtist.webp",
@@ -737,6 +795,8 @@ function openPlayerPopup(tabName = "queue"){
         return;
     }
 
+    showCrimsonView(queuePanel);
+    showCrimsonView(playerPopupBackdrop);
     isQueueOpen = true;
     queuePanel.classList.add("queuePanelOpen");
     queuePanel.setAttribute("aria-hidden", "false");
@@ -758,6 +818,8 @@ function closePlayerPopup(){
     queuePanel.style.top = "";
     queuePanel.style.height = "";
     playerPopupBackdrop?.classList.remove("playerPopupBackdropOpen");
+    hideCrimsonView(queuePanel, "queuePanelOpen");
+    hideCrimsonView(playerPopupBackdrop, "playerPopupBackdropOpen", 220);
     setInteractionActive(false);
 }
 
@@ -811,6 +873,7 @@ function revealSideSourceScreen(sourceScreen){
         return;
     }
 
+    showCrimsonView(sourceScreen);
     document.getElementsByClassName(currentScreen)[0]?.classList.add("mainToSide");
     sourceScreen.classList.add("screenOpenOnTop");
     if(lastOpenSideScreen && lastOpenSideScreen !== sourceScreen){
@@ -1259,6 +1322,7 @@ queueTabs?.setAttribute("data-active-tab", currentPlayerPopupTab);
 
 function openLoginScreen(){
     let loginScreen = document.getElementsByClassName("loginScreen")[0];
+    showCrimsonView(loginScreen);
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     let buttons = document.querySelectorAll("nav > button");
@@ -1292,6 +1356,7 @@ function closeLoginScreen(){
     loginScreen.classList.remove("playerMovable");
 
     loginScreen.classList.remove("loginScreenOpen");
+    hideCrimsonView(loginScreen, "loginScreenOpen", 350);
     setTimeout(() => {
         loginScreen.style.left = 'auto';
     }, 350);
@@ -1301,6 +1366,7 @@ function closeLoginScreen(){
 
 function openLicenseAndProfileScreen(isLicenseScreen){
     let LicenseAndProfileScreen = document.getElementsByClassName("LicenseAndProfileScreen")[0];
+    showCrimsonView(LicenseAndProfileScreen);
     document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
 
     if(isLicenseScreen){
@@ -1329,6 +1395,7 @@ function closeLicenseAndProfileScreen(){
     LicenseAndProfileScreen.classList.remove("playerMovable");
 
     LicenseAndProfileScreen.classList.remove("LicenseAndProfileScreenOpen");
+    hideCrimsonView(LicenseAndProfileScreen, "LicenseAndProfileScreenOpen", 350);
     setTimeout(() => {
         LicenseAndProfileScreen.style.left = 'auto';
     }, 350);
@@ -2355,6 +2422,8 @@ let isMakePlOpen = false;
 
 function OpenMakePlaylistScreen(editing, playlistIdP, playlistNameP, playlistBannerP, playlistSongsP){
 
+    showCrimsonView(makePlScreen);
+
     document.getElementById('imageInput').value = "";
     document.querySelector('.formImageInput').classList.remove('displayNone');
     document.querySelector('.makePlaylistForm').classList.remove('makePlaylistSubmitting');
@@ -2402,6 +2471,7 @@ function CloseMakePlaylistScreen(){
     makePlScreen.classList.remove('screenOpenOnTop');
 
     makePlaylistScreen.classList.remove("playerMovable");
+    hideCrimsonView(makePlScreen, "makePlaylistScreenOpen", 350);
 
     document.getElementsByClassName(currentScreen)[0].classList.remove("mainToSide");
 }
@@ -2571,6 +2641,7 @@ function openPopup(type,src,art,nam,id,isLikedPage,contextData){
     const isPlaylistContext = type === "playlist" || type === "publicPlaylist" || type === "libraryPlaylist" || type === "vaultPlaylist" || type === "category";
     src = getCrimsonImageSrc(src, isPlaylistContext ? "playlist" : type === "artist" ? "artist" : "song");
     const popupWrapper = document.getElementById("popupWrapper");
+    showCrimsonView(popupWrapper);
     popupWrapper.classList.add("popupOpen");
     popupWrapper.classList.toggle("artistContextPopup", type === "artist");
 
@@ -2650,6 +2721,7 @@ function closePopup(){
     popupWrapper.classList.remove("popupOpen");
     popupWrapper.classList.remove("artistContextPopup");
     popupWrapper.classList.remove("popupAwaitingRelease");
+    hideCrimsonView(popupWrapper, "popupOpen");
 
     isPopupOpen = false;
     currentPopupContext = null;
@@ -4148,9 +4220,12 @@ let isLoginPopupOn = false;
 
 function openLoginPopup(){
     if(!isLoginPopupOn){
-        document.getElementsByClassName('loginPopup')[0].classList.add('loginPopupOn');
+        const loginPopup = document.getElementsByClassName('loginPopup')[0];
+        showCrimsonView(loginPopup);
+        loginPopup.classList.add('loginPopupOn');
         setTimeout(() => {
-            document.getElementsByClassName('loginPopup')[0].classList.remove('loginPopupOn');
+            loginPopup.classList.remove('loginPopupOn');
+            hideCrimsonView(loginPopup, "loginPopupOn", 250);
             isLoginPopupOn = false;
         }, 2500);
         isLoginPopupOn = true;
@@ -4195,6 +4270,7 @@ function openBugReportFromSettings(){
 }
 
 function openBugReport(fromSettings = false){
+    showCrimsonView(bugReportScreen);
     bugReportScreen.dataset.openedFromSettings = String(fromSettings);
     if(!fromSettings){
         document.getElementsByClassName(currentScreen)[0].classList.add("mainToSide");
@@ -4213,6 +4289,7 @@ function closeBugScreenF(){
     bugReportScreen.classList.remove("bugReportScreenOpen");
     
     bugReportScreen.classList.remove("playerMovable");
+    hideCrimsonView(bugReportScreen, "bugReportScreenOpen", 350);
     delete bugReportScreen.dataset.openedFromSettings;
 
     isBugReportScreenOpen = false;
@@ -4234,6 +4311,8 @@ sortBtns.forEach((sortBtn) => {
     sortBtn.addEventListener("click", () => {
         playlistToSort = document.querySelector(`.${sortBtn.getAttribute('data-playlisttosort')}`);
 
+        const sortPopupWrapper = document.querySelector('.sortPopupWrapper');
+        showCrimsonView(sortPopupWrapper);
         let sortPopup = document.querySelector('.sortPopup');
 
         let sortBtnRect = sortBtn.getBoundingClientRect();
@@ -4252,7 +4331,9 @@ sortBtns.forEach((sortBtn) => {
 })
 
 function closeSortPopup(){
-    document.querySelector('.sortPopupWrapper').classList.remove('sortPopupOpen');
+    const sortPopupWrapper = document.querySelector('.sortPopupWrapper');
+    sortPopupWrapper.classList.remove('sortPopupOpen');
+    hideCrimsonView(sortPopupWrapper, "sortPopupOpen", 250);
 }
 
 function sortPlaylist(sortType){
@@ -4319,3 +4400,5 @@ function closeTheVault(){
     document.querySelector('.vaultSection').classList.remove('vaultSectionOn');
     document.querySelector('.vaultPlayBtn').innerHTML = `<i class="fa-solid fa-play"></i>`;
 }
+
+initializeInactiveCrimsonViews();
