@@ -4341,6 +4341,33 @@ document.addEventListener("touchend", () => {
     }
 })
 
+document.addEventListener("touchcancel", () => {
+    if(!playerTouchStarted && !playerTouchStarted2){
+        return;
+    }
+
+    document.removeEventListener("touchmove", move);
+    document.removeEventListener("touchmove", move2);
+    document.removeEventListener("touchmove", moveSideSkip);
+    cancelScheduledMove(playerMoveFrame);
+    playerMoveFrame = null;
+    movablePlayer.classList.remove("playerMovable", "playerSheetDragging");
+    bigSongBanner.classList.remove("playerMovable");
+
+    if(songSwipeState.isDragging && !songSwipeState.isCommitting){
+        resetSongSwipeTrack();
+    }
+
+    settlePlayerPosition(isPlayerOpen);
+    setPlayerNavClosed(isPlayerOpen);
+    playerMovedDown = false;
+    playerTouchStarted = false;
+    playerTouchStarted2 = false;
+    playerGestureDirection = null;
+    currentTouchPosSkip = 0;
+    setInteractionActive(false);
+});
+
 // ----- CLOSE THE POPUP ADD TO PLAYLIST UL
 
 const closePopupPlBtn = document.querySelector('#closePopupPlBtn');
@@ -4413,6 +4440,10 @@ function clearPlayerPopupDragStyles(){
 }
 
 function canStartPlayerPopupDrag(target){
+    if(target?.closest("button, a, input, select, textarea, [role='switch']")){
+        return false;
+    }
+
     if(!queuePanel?.classList.contains("playerPopupFull")){
         return true;
     }
@@ -4430,7 +4461,7 @@ function getActivePlayerPopupContent(){
 }
 
 function isPlayerPopupContentAtTop(content = getActivePlayerPopupContent()){
-    return !!content && content.scrollTop <= 0;
+    return !!content && content.scrollTop <= 2;
 }
 
 function shouldDragPlayerPopupFromContent(deltaY){
@@ -4521,9 +4552,19 @@ function finishPlayerPopupDrag(){
 
     const deltaY = playerPopupCurrentY - playerPopupStartY;
     const fullscreenTop = getPlayerPopupFullscreenTop();
-    if(deltaY > 110){
+    if(playerPopupStartedFull){
+        if(deltaY > playerPopupDragViewportHeight * 0.55){
+            closePlayerPopup();
+        }else if(deltaY > 72){
+            queuePanel.style.transform = "";
+            queuePanel.classList.remove("playerPopupFull");
+        }else{
+            applyPlayerPopupFullscreenPosition();
+            queuePanel.classList.add("playerPopupFull");
+        }
+    }else if(deltaY > 110){
         closePlayerPopup();
-    }else if(playerPopupStartedFull || deltaY < -70 || playerPopupCurrentTop < fullscreenTop + playerPopupDragViewportHeight * 0.28){
+    }else if(deltaY < -70 || playerPopupCurrentTop < fullscreenTop + playerPopupDragViewportHeight * 0.28){
         applyPlayerPopupFullscreenPosition();
         queuePanel.classList.add("playerPopupFull");
     }else{
@@ -4531,6 +4572,28 @@ function finishPlayerPopupDrag(){
         queuePanel.classList.remove("playerPopupFull");
     }
 
+    playerPopupTouchStarted = false;
+    playerPopupStartedFull = false;
+    playerPopupGestureDirection = null;
+    playerPopupStartTarget = null;
+    playerPopupDragViewportHeight = 0;
+    moveStarted = false;
+    setInteractionActive(false);
+}
+
+function cancelPlayerPopupDrag(){
+    if(!playerPopupTouchStarted || !queuePanel){
+        return;
+    }
+
+    clearPlayerPopupDragStyles();
+    if(playerPopupStartedFull){
+        applyPlayerPopupFullscreenPosition();
+        queuePanel.classList.add("playerPopupFull");
+    }else{
+        queuePanel.style.transform = "";
+        queuePanel.classList.remove("playerPopupFull");
+    }
     playerPopupTouchStarted = false;
     playerPopupStartedFull = false;
     playerPopupGestureDirection = null;
@@ -4576,7 +4639,7 @@ if(queuePanel){
     queuePanel.addEventListener("touchcancel", (e) => {
         e.stopPropagation();
         document.removeEventListener("touchmove", movePlayerPopup);
-        finishPlayerPopupDrag();
+        cancelPlayerPopupDrag();
     });
 
     queuePanel.addEventListener("mousedown", (e) => {

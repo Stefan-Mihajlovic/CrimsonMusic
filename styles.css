@@ -122,6 +122,21 @@ body{
     overflow: hidden !important;
 }
 
+@supports (-webkit-touch-callout: none){
+    @media (display-mode: standalone){
+        html,
+        body,
+        .bodyHolder{
+            height: 100vh;
+            min-height: 100vh;
+        }
+
+        main{
+            height: 100%;
+        }
+    }
+}
+
 .highlightSpan{
     color: var(--accentColor);
     font-weight: 900;
@@ -4744,6 +4759,7 @@ a.toggleSection i{
 
 .queuePanelOpen:not(.playerPopupFull) .playerPopupContent{
     overflow: hidden !important;
+    touch-action: none;
 }
 
 .playerPopupFull{
@@ -4758,6 +4774,11 @@ a.toggleSection i{
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+}
+
+.playerPopupFull.queuePanelDragging{
+    border-top-color: rgba(220, 214, 247, .16);
+    border-radius: 30px 30px 0 0;
 }
 
 .queuePanelDragging .playerPopupContent{
@@ -4776,6 +4797,16 @@ a.toggleSection i{
     border-radius: 30px;
     background-color: #DCD6F7;
     margin: 10px auto 8px;
+    opacity: .65;
+    touch-action: none;
+    transition: opacity .24s ease-out;
+}
+
+.playerPopupFull .queueHandle{
+    opacity: 0;
+}
+
+.playerPopupFull.queuePanelDragging .queueHandle{
     opacity: .65;
 }
 
@@ -4796,6 +4827,7 @@ a.toggleSection i{
     -webkit-backdrop-filter: blur(16px) brightness(1.08);
     position: relative;
     overflow: hidden;
+    touch-action: none;
 }
 
 .queueTabs[data-active-tab="lyrics"]{
@@ -5011,6 +5043,13 @@ body.crimsonScrollLocked main{
     padding: 0;
     scroll-padding-top: 84px;
     touch-action: pan-y;
+    transition: background-color .32s ease-out;
+}
+
+.queueLyricsBody.karaokeModeActive{
+    background:
+        radial-gradient(circle at 18% 4%, color-mix(in srgb, var(--currentSongColorBig) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, rgba(220, 214, 247, .018), transparent 30%);
 }
 
 .queueRelatedBody{
@@ -5019,18 +5058,22 @@ body.crimsonScrollLocked main{
 
 .lyricsModeBar{
     position: sticky;
-    top: 0;
+    top: 8px;
     z-index: 3;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
-    min-height: 70px;
-    padding: 12px 18px;
-    background: rgba(14, 11, 19, .9);
-    border-bottom: 1px solid rgba(220, 214, 247, .08);
-    backdrop-filter: blur(18px) saturate(1.12);
-    -webkit-backdrop-filter: blur(18px) saturate(1.12);
+    gap: 10px;
+    width: calc(100% - 24px);
+    min-height: 56px;
+    margin: 8px 12px 4px;
+    padding: 9px 10px 9px 13px;
+    background: linear-gradient(135deg, rgba(30, 25, 39, .94), rgba(17, 14, 23, .92));
+    border: 1px solid rgba(220, 214, 247, .1);
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255, 255, 255, .035);
+    backdrop-filter: blur(12px) saturate(1.08);
+    -webkit-backdrop-filter: blur(12px) saturate(1.08);
 }
 
 .lyricsModeBar[hidden]{
@@ -5040,30 +5083,49 @@ body.crimsonScrollLocked main{
 .lyricsModeBar > div{
     display: grid;
     gap: 2px;
+    min-width: 0;
 }
 
 .lyricsModeBar strong{
+    display: flex;
+    align-items: center;
+    gap: 6px;
     color: #fff;
-    font-size: 15px;
-    line-height: 18px;
+    font-size: 13px;
+    line-height: 16px;
 }
 
 .lyricsModeBar > div span{
     color: rgba(220, 214, 247, .58);
-    font-size: 11px;
-    line-height: 14px;
+    font-size: 10px;
+    line-height: 12px;
+}
+
+.lyricsModeBar .lyricsBetaBadge{
+    display: inline-flex;
+    align-items: center;
+    min-height: 16px;
+    padding: 0 5px;
+    color: color-mix(in srgb, var(--accentColor) 72%, white);
+    background: color-mix(in srgb, var(--accentColor) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accentColor) 30%, transparent);
+    border-radius: 999px;
+    font-size: 8px;
+    line-height: 1;
+    letter-spacing: .06em;
 }
 
 #karaokeLyricsToggle{
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    min-height: 38px;
-    padding: 0 10px;
+    gap: 7px;
+    min-height: 34px;
+    padding: 0 8px;
     color: rgba(220, 214, 247, .66);
     background: rgba(220, 214, 247, .06);
     border: 1px solid rgba(220, 214, 247, .11);
     border-radius: 999px;
+    touch-action: manipulation;
 }
 
 #karaokeLyricsToggle i{
@@ -5078,8 +5140,8 @@ body.crimsonScrollLocked main{
 
 .karaokeToggleTrack{
     position: relative;
-    width: 34px;
-    height: 20px;
+    width: 32px;
+    height: 18px;
     border-radius: 999px;
     background: rgba(220, 214, 247, .16);
     transition: background-color .24s ease-out;
@@ -5089,8 +5151,8 @@ body.crimsonScrollLocked main{
     position: absolute;
     top: 3px;
     left: 3px;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: #DCD6F7;
     transition: transform .28s var(--softBounceEase), box-shadow .24s ease-out;
@@ -5132,53 +5194,82 @@ body.crimsonScrollLocked main{
 .karaokeLyricsContent{
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding-inline: 18px;
+    gap: 24px;
+    padding: 24px 20px calc(env(safe-area-inset-bottom) + 46px);
+    overflow-x: clip;
 }
 
 .karaokeLine{
     width: 100%;
-    min-height: 48px;
+    min-height: 42px;
     margin: 0;
-    padding: 6px 2px 9px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    color: rgba(220, 214, 247, .28);
-    font-size: clamp(23px, 7.4vw, 34px);
-    line-height: 1.28;
-    font-weight: 700;
-    white-space: nowrap;
-    scrollbar-width: none;
-    touch-action: pan-x;
-    transition: opacity .28s ease-out, transform .32s var(--screenEase), color .28s ease-out;
-}
-
-.karaokeLine::-webkit-scrollbar{
-    display: none;
+    padding: 3px 1px 5px;
+    overflow: visible;
+    color: rgba(220, 214, 247, .44);
+    font-size: clamp(25px, 7.7vw, 36px);
+    line-height: 1.22;
+    font-weight: 750;
+    white-space: normal;
+    overflow-wrap: normal;
+    touch-action: pan-y;
+    opacity: .42;
+    filter: blur(1.25px);
+    transform: translate3d(0, 2px, 0) scale(.985);
+    transform-origin: left center;
+    transition: opacity .38s ease-out, transform .44s var(--screenEase), color .38s ease-out, filter .38s ease-out;
 }
 
 .karaokeLinePast{
-    opacity: .58;
+    color: rgba(220, 214, 247, .34);
+    opacity: .28;
+    filter: blur(1.75px);
+}
+
+.karaokeLineNear{
+    color: rgba(220, 214, 247, .5);
+    opacity: .48;
+    filter: blur(.85px);
+    transform: translate3d(0, 1px, 0) scale(.992);
 }
 
 .karaokeLineUpcoming{
-    color: rgba(220, 214, 247, .5);
-    transform: translateY(-1px);
+    color: rgba(220, 214, 247, .56);
+    opacity: .5;
+    filter: blur(.9px);
+    transform: translate3d(0, 0, 0) scale(.992);
 }
 
 .karaokeLineActive{
-    color: rgba(220, 214, 247, .48);
+    color: rgba(255, 255, 255, .76);
     opacity: 1;
-    transform: scale(1.012);
-    transform-origin: left center;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1.018);
+}
+
+.karaokeLineFocused{
+    color: rgba(255, 255, 255, .72);
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1.012);
+}
+
+.karaokeLineFocused.karaokeLineActive{
+    color: #fff;
+    transform: translate3d(0, 0, 0) scale(1.018);
 }
 
 .karaokeWord{
     --karaoke-progress: 0%;
+    --karaoke-jelly-x: 1;
+    --karaoke-jelly-y: 1;
+    --karaoke-jelly-lift: 0px;
     position: relative;
     display: inline-grid;
     margin-right: .28em;
     isolation: isolate;
+    transform: translate3d(0, var(--karaoke-jelly-lift), 0) scaleX(var(--karaoke-jelly-x)) scaleY(var(--karaoke-jelly-y));
+    transform-origin: left 72%;
+    transition: transform 70ms linear;
 }
 
 .karaokeWord:last-child{
@@ -5199,7 +5290,7 @@ body.crimsonScrollLocked main{
     z-index: 1;
     color: #fff;
     clip-path: inset(0 calc(100% - var(--karaoke-progress)) 0 0);
-    text-shadow: 0 0 9px color-mix(in srgb, var(--accentColor) 74%, white), 0 0 20px color-mix(in srgb, var(--accentColor) 54%, transparent);
+    text-shadow: 0 0 8px color-mix(in srgb, var(--accentColor) 64%, white), 0 0 18px color-mix(in srgb, var(--accentColor) 48%, transparent);
 }
 
 .karaokeWordGlow{
@@ -5207,8 +5298,8 @@ body.crimsonScrollLocked main{
     z-index: 2;
     top: 50%;
     left: var(--karaoke-progress);
-    width: 16px;
-    height: 135%;
+    width: 18px;
+    height: 142%;
     pointer-events: none;
     opacity: 0;
     background: radial-gradient(ellipse at center, rgba(255, 255, 255, .9) 0%, color-mix(in srgb, var(--accentColor) 75%, transparent) 34%, transparent 72%);
@@ -5218,7 +5309,24 @@ body.crimsonScrollLocked main{
 }
 
 .karaokeWordActive .karaokeWordGlow{
-    opacity: .92;
+    opacity: .86;
+}
+
+@media (prefers-reduced-motion: reduce){
+    .queueLyricsBody{
+        scroll-behavior: auto !important;
+    }
+
+    .karaokeLine,
+    .karaokeWord{
+        transition-duration: .01ms !important;
+    }
+
+    .karaokeWord{
+        --karaoke-jelly-x: 1 !important;
+        --karaoke-jelly-y: 1 !important;
+        --karaoke-jelly-lift: 0px !important;
+    }
 }
 
 .playerPopupLoading{

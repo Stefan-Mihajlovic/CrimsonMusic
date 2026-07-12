@@ -219,7 +219,7 @@ import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, Google
 
 const firebaseHostedAuthDomain = "crimsonmusic-b97d9.firebaseapp.com";
 const usesSameOriginAuthHelper = location.protocol === "https:"
-    && (location.hostname === "crimsonmusic.netlify.app" || location.hostname.endsWith("--crimsonmusic.netlify.app"));
+    && location.hostname === "crimsonmusic.netlify.app";
 
 // Firebase Config with all IDs
 const firebaseConfig = {
@@ -707,6 +707,7 @@ function renderKaraokePlayerLyrics(){
             const fill = document.createElement("span");
             fill.className = "karaokeWordFill";
             fill.textContent = word.text;
+            fill.setAttribute("aria-hidden", "true");
             const glow = document.createElement("span");
             glow.className = "karaokeWordGlow";
             glow.setAttribute("aria-hidden", "true");
@@ -728,9 +729,26 @@ function setKaraokeWordProgress(wordRef, currentTime){
     const rawProgress = (currentTime - wordRef.word.start) / wordRef.word.duration;
     const clampedProgress = clampKaraokeProgress(rawProgress);
     const easedProgress = getKaraokeEasing(wordRef.word.ease)(clampedProgress);
+    const isActive = rawProgress >= 0 && rawProgress < 1;
     wordRef.element.style.setProperty("--karaoke-progress", `${(easedProgress * 100).toFixed(2)}%`);
-    wordRef.element.classList.toggle("karaokeWordActive", rawProgress >= 0 && rawProgress < 1);
-    return rawProgress >= 0 && rawProgress < 1;
+    wordRef.element.classList.toggle("karaokeWordActive", isActive);
+
+    if(isActive){
+        const longWordWeight = clampKaraokeProgress((wordRef.word.duration - 0.32) / 0.78);
+        const jellyPulse = Math.sin(Math.PI * easedProgress);
+        const jellySettle = Math.sin(Math.PI * 2 * easedProgress) * (1 - easedProgress);
+        const stretchX = 1 + longWordWeight * (jellyPulse * 0.048 + jellySettle * 0.009);
+        const stretchY = 1 - longWordWeight * jellyPulse * 0.022;
+        const lift = -longWordWeight * jellyPulse * 0.7;
+        wordRef.element.style.setProperty("--karaoke-jelly-x", stretchX.toFixed(4));
+        wordRef.element.style.setProperty("--karaoke-jelly-y", stretchY.toFixed(4));
+        wordRef.element.style.setProperty("--karaoke-jelly-lift", `${lift.toFixed(2)}px`);
+    }else{
+        wordRef.element.style.setProperty("--karaoke-jelly-x", "1");
+        wordRef.element.style.setProperty("--karaoke-jelly-y", "1");
+        wordRef.element.style.setProperty("--karaoke-jelly-lift", "0px");
+    }
+    return isActive;
 }
 
 function syncKaraokeLineWords(lineIndex, currentTime){
@@ -747,8 +765,8 @@ function syncKaraokeLineWords(lineIndex, currentTime){
     return activeWordIndex;
 }
 
-function scrollKaraokeLine(lineIndex, activeWordIndex){
-    if(Date.now() < playerLyricsState.manualScrollUntil){
+function scrollKaraokeLine(lineIndex){
+    if(Date.now() < playerLyricsState.manualScrollUntil || document.getElementById("queuePanel")?.classList.contains("queuePanelDragging")){
         return;
     }
     const lineRef = playerLyricsState.renderedLines[lineIndex];
@@ -756,14 +774,8 @@ function scrollKaraokeLine(lineIndex, activeWordIndex){
         return;
     }
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const targetTop = Math.max(0, lineRef.element.offsetTop - playerLyricsBody.clientHeight * 0.38);
+    const targetTop = Math.max(0, lineRef.element.offsetTop - playerLyricsBody.clientHeight * 0.3);
     playerLyricsBody.scrollTo({top: targetTop, behavior: reduceMotion ? "auto" : "smooth"});
-
-    const wordRef = lineRef.words[activeWordIndex];
-    if(wordRef){
-        const targetLeft = Math.max(0, wordRef.element.offsetLeft - lineRef.element.clientWidth * 0.42);
-        lineRef.element.scrollTo({left: targetLeft, behavior: reduceMotion ? "auto" : "smooth"});
-    }
 }
 
 function updateKaraokeAtTime(currentTime, force = false){
@@ -782,7 +794,10 @@ function updateKaraokeAtTime(currentTime, force = false){
     const lineChanged = focusLineIndex !== playerLyricsState.focusLineIndex;
     if(lineChanged || force){
         playerLyricsState.renderedLines.forEach((lineRef, index) => {
+            const distanceFromFocus = Math.abs(index - focusLineIndex);
             lineRef.element.classList.toggle("karaokeLineActive", index === activeLineIndex);
+            lineRef.element.classList.toggle("karaokeLineFocused", index === focusLineIndex);
+            lineRef.element.classList.toggle("karaokeLineNear", distanceFromFocus === 1);
             lineRef.element.classList.toggle("karaokeLinePast", currentTime >= lineRef.line.end_time);
             lineRef.element.classList.toggle("karaokeLineUpcoming", index === focusLineIndex && activeLineIndex < 0);
             syncKaraokeLineWords(index, currentTime);
@@ -793,7 +808,7 @@ function updateKaraokeAtTime(currentTime, force = false){
     const activeWordKey = `${focusLineIndex}:${activeWordIndex}`;
     if(lineChanged || activeWordKey !== playerLyricsState.activeWordKey){
         playerLyricsState.activeWordKey = activeWordKey;
-        scrollKaraokeLine(focusLineIndex, activeWordIndex);
+        scrollKaraokeLine(focusLineIndex);
     }
 }
 
@@ -827,10 +842,12 @@ function renderPlayerLyrics(){
     cancelKaraokeFrame();
     updateKaraokeToggle();
     if(playerLyricsState.karaokeEnabled && playerLyricsState.karaokeLines.length){
+        playerLyricsBody?.classList.add("karaokeModeActive");
         renderKaraokePlayerLyrics();
         updateKaraokeAtTime(lyricsAudio?.currentTime || 0, true);
         scheduleKaraokeFrame();
     }else{
+        playerLyricsBody?.classList.remove("karaokeModeActive");
         playerLyricsState.renderedLines = [];
         renderPlainPlayerLyrics();
     }
@@ -844,6 +861,7 @@ function resetPlayerLyrics(songId){
     playerLyricsState.karaokeLines = [];
     playerLyricsState.renderedLines = [];
     playerLyricsState.focusLineIndex = -1;
+    playerLyricsBody?.classList.remove("karaokeModeActive");
     updateKaraokeToggle();
     if(playerLyricsState.panelActive && playerLyricsContent){
         playerLyricsContent.className = "queueLyricsContent";
@@ -888,8 +906,8 @@ window.crimsonLoadLyricsIntoPlayerPopup = async function(songId){
         }
         playerLyricsState.plainLines = plainLines;
         playerLyricsState.karaokeLines = karaokeLines;
+        playerLyricsBody.scrollTop = 0;
         renderPlayerLyrics();
-        playerLyricsBody.scrollTo(0, 0);
     }catch(error){
         if(requestRevision === playerLyricsState.loadRevision){
             playerLyricsState.plainLines = [];
@@ -911,6 +929,13 @@ karaokeLyricsToggle?.addEventListener("click", () => {
 });
 
 playerLyricsBody?.addEventListener("touchstart", () => {
+    const currentScrollTop = playerLyricsBody.scrollTop;
+    const previousInlineScrollBehavior = playerLyricsBody.style.scrollBehavior;
+    playerLyricsBody.style.scrollBehavior = "auto";
+    playerLyricsBody.scrollTop = currentScrollTop;
+    requestAnimationFrame(() => {
+        playerLyricsBody.style.scrollBehavior = previousInlineScrollBehavior;
+    });
     playerLyricsState.manualScrollUntil = Date.now() + 1800;
 }, {passive: true});
 playerLyricsBody?.addEventListener("wheel", () => {
@@ -1361,21 +1386,33 @@ async function ensureGoogleUser(authUser){
     }
 
     const baseUsername = sanitizeGoogleUsername(authUser);
-    let nextUsername = baseUsername;
-    let usernameSnapshot = await get(child(ref(realdb), "Users/"+nextUsername));
+    const uidSuffix = authUser.uid.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6) || "google";
+    for(let attempt = 0; attempt < 50; attempt++){
+        const suffix = attempt === 0 ? "" : `${uidSuffix}${attempt === 1 ? "" : attempt}`;
+        const nextUsername = `${baseUsername}${suffix}`;
+        const usernameRef = ref(realdb, "Users/"+nextUsername);
+        const usernameSnapshot = await get(usernameRef);
 
-    if(usernameSnapshot.exists() && usernameSnapshot.val().GoogleUid !== authUser.uid){
-        nextUsername = `${baseUsername}${authUser.uid.slice(0, 6)}`;
-        usernameSnapshot = await get(child(ref(realdb), "Users/"+nextUsername));
+        if(usernameSnapshot.exists()){
+            const candidateUser = usernameSnapshot.val();
+            if(candidateUser.GoogleUid !== authUser.uid){
+                continue;
+            }
+            const googleUserPatch = {
+                AuthProvider: "google",
+                GoogleUid: authUser.uid,
+                GooglePhotoURL: authUser.photoURL || candidateUser.GooglePhotoURL || ""
+            };
+            await update(usernameRef, googleUserPatch);
+            return {...candidateUser, ...googleUserPatch};
+        }
+
+        const newUser = createDefaultUser(nextUsername, authUser.email || "", authUser);
+        await set(usernameRef, newUser);
+        return newUser;
     }
 
-    if(usernameSnapshot.exists()){
-        return usernameSnapshot.val();
-    }
-
-    const newUser = createDefaultUser(nextUsername, authUser.email || "", authUser);
-    await set(ref(realdb, "Users/"+nextUsername), newUser);
-    return newUser;
+    throw new Error("Could not reserve a unique Crimson username for this Google account.");
 }
 
 async function handleGoogleCredential(authUser){
