@@ -968,6 +968,7 @@ function closePlayerPopup(){
     queuePanel.classList.remove("playerMovable");
     queuePanel.setAttribute("aria-hidden", "true");
     queuePanel.style.transform = "";
+    queuePanel.style.paddingTop = "";
     queuePanel.style.top = "";
     queuePanel.style.height = "";
     playerPopupBackdrop?.classList.remove("playerPopupBackdropOpen");
@@ -4405,7 +4406,20 @@ let playerPopupStartX = 0;
 let playerPopupGestureDirection = null;
 let playerPopupStartTarget = null;
 let playerPopupDragViewportHeight = 0;
+let playerPopupSafeTop = null;
 const playerPopupDragThreshold = 8;
+
+function getPlayerPopupSafeTop(){
+    if(playerPopupSafeTop !== null){
+        return playerPopupSafeTop;
+    }
+    const probe = document.createElement("div");
+    probe.style.cssText = "position:fixed;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top);";
+    document.body.appendChild(probe);
+    playerPopupSafeTop = parseFloat(getComputedStyle(probe).paddingTop) || 0;
+    probe.remove();
+    return playerPopupSafeTop;
+}
 
 function getPlayerPopupContainerRect(){
     return queuePanel?.closest(".player")?.getBoundingClientRect() || document.documentElement.getBoundingClientRect();
@@ -4427,7 +4441,11 @@ function applyPlayerPopupPosition(top){
     const viewportHeight = playerPopupDragViewportHeight || getPlayerPopupViewportHeight();
     const safeTop = Math.max(0, Math.min(top, viewportHeight - 80));
     playerPopupCurrentTop = safeTop;
-    queuePanel.style.transform = `translate3d(0, ${safeTop}px, 0)`;
+    const fullscreenInset = playerPopupStartedFull ? getPlayerPopupSafeTop() : 0;
+    const currentInset = fullscreenInset * Math.max(0, 1 - safeTop / 88);
+    const anchoredTop = safeTop + fullscreenInset - currentInset;
+    queuePanel.style.paddingTop = `${currentInset}px`;
+    queuePanel.style.transform = `translate3d(0, ${anchoredTop}px, 0)`;
 }
 
 function applyPlayerPopupFullscreenPosition(){
@@ -4437,6 +4455,7 @@ function applyPlayerPopupFullscreenPosition(){
 
     const fullscreenTop = getPlayerPopupFullscreenTop();
     playerPopupCurrentTop = fullscreenTop;
+    queuePanel.style.paddingTop = `${getPlayerPopupSafeTop()}px`;
     queuePanel.style.transform = "";
 }
 
@@ -4591,6 +4610,7 @@ function finishPlayerPopupDrag(){
         queuePanel.classList.add("playerPopupFull");
         recenterFullscreenKaraokeLyrics();
     }else{
+        queuePanel.style.paddingTop = "0px";
         queuePanel.style.transform = "";
         queuePanel.classList.remove("playerPopupFull");
     }
@@ -4615,6 +4635,7 @@ function cancelPlayerPopupDrag(){
         queuePanel.classList.add("playerPopupFull");
         recenterFullscreenKaraokeLyrics();
     }else{
+        queuePanel.style.paddingTop = "0px";
         queuePanel.style.transform = "";
         queuePanel.classList.remove("playerPopupFull");
     }

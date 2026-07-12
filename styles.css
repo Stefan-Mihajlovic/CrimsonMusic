@@ -4757,7 +4757,7 @@ a.toggleSection i{
     box-shadow: none;
     transform: translateY(112%);
     padding-top: 0;
-    transition: transform .42s var(--softBounceEase), border-radius .32s var(--screenEase), padding-top .2s var(--screenEase);
+    transition: transform .42s var(--softBounceEase), border-radius .32s var(--screenEase);
     z-index: 5;
     overflow: hidden;
     pointer-events: none;
@@ -4789,7 +4789,7 @@ a.toggleSection i{
 }
 
 .queuePanelDragging{
-    transition: transform 0s, border-radius .18s var(--screenEase), padding-top .18s var(--screenEase) !important;
+    transition: transform 0s, border-radius .18s var(--screenEase) !important;
     animation: none !important;
     touch-action: none;
     user-select: none;
@@ -4799,7 +4799,6 @@ a.toggleSection i{
 .playerPopupFull.queuePanelDragging{
     border-top-color: rgba(220, 214, 247, .16);
     border-radius: 30px 30px 0 0;
-    padding-top: 0;
 }
 
 .queuePanelDragging .playerPopupContent{
