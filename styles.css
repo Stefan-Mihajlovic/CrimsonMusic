@@ -127,6 +127,17 @@ body{
 }
 
 @supports (-webkit-touch-callout: none){
+    @media (display-mode: browser){
+        html,
+        body,
+        .bodyHolder{
+            height: 100svh;
+            min-height: 100svh;
+            height: 100dvh;
+            min-height: 100dvh;
+        }
+    }
+
     @media (display-mode: standalone){
         main{
             height: 100%;
