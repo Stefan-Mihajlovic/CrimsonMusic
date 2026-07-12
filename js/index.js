@@ -4553,11 +4553,8 @@ function finishPlayerPopupDrag(){
     const deltaY = playerPopupCurrentY - playerPopupStartY;
     const fullscreenTop = getPlayerPopupFullscreenTop();
     if(playerPopupStartedFull){
-        if(deltaY > playerPopupDragViewportHeight * 0.55){
+        if(deltaY > 72){
             closePlayerPopup();
-        }else if(deltaY > 72){
-            queuePanel.style.transform = "";
-            queuePanel.classList.remove("playerPopupFull");
         }else{
             applyPlayerPopupFullscreenPosition();
             queuePanel.classList.add("playerPopupFull");
