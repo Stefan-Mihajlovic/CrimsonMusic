@@ -4756,7 +4756,8 @@ a.toggleSection i{
     border-top: 1px solid #242027;
     box-shadow: none;
     transform: translateY(112%);
-    transition: transform .42s var(--softBounceEase), border-radius .32s var(--screenEase);
+    padding-top: 0;
+    transition: transform .42s var(--softBounceEase), border-radius .32s var(--screenEase), padding-top .2s var(--screenEase);
     z-index: 5;
     overflow: hidden;
     pointer-events: none;
@@ -4788,7 +4789,7 @@ a.toggleSection i{
 }
 
 .queuePanelDragging{
-    transition: none !important;
+    transition: transform 0s, border-radius .18s var(--screenEase), padding-top .18s var(--screenEase) !important;
     animation: none !important;
     touch-action: none;
     user-select: none;
@@ -4798,6 +4799,7 @@ a.toggleSection i{
 .playerPopupFull.queuePanelDragging{
     border-top-color: rgba(220, 214, 247, .16);
     border-radius: 30px 30px 0 0;
+    padding-top: 0;
 }
 
 .queuePanelDragging .playerPopupContent{
@@ -5219,6 +5221,11 @@ body.crimsonScrollLocked main{
     overflow-x: clip;
 }
 
+.playerPopupFull .karaokeLyricsContent{
+    padding-top: calc(50dvh - 170px);
+    padding-bottom: calc(50dvh - 70px + env(safe-area-inset-bottom));
+}
+
 .karaokeLine{
     width: 100%;
     min-height: 42px;
@@ -5289,7 +5296,7 @@ body.crimsonScrollLocked main{
     isolation: isolate;
     transform: translate3d(0, var(--karaoke-jelly-lift), 0) scaleX(var(--karaoke-jelly-x)) scaleY(var(--karaoke-jelly-y));
     transform-origin: left 72%;
-    transition: transform 70ms linear;
+    transition: transform 105ms cubic-bezier(.2, .82, .3, 1.18);
 }
 
 .karaokeWord:last-child{

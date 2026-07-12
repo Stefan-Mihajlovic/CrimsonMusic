@@ -4440,6 +4440,10 @@ function applyPlayerPopupFullscreenPosition(){
     queuePanel.style.transform = "";
 }
 
+function recenterFullscreenKaraokeLyrics(){
+    requestAnimationFrame(() => window.crimsonRecenterKaraokeLyrics?.());
+}
+
 function clearPlayerPopupDragStyles(){
     if(!queuePanel){
         return;
@@ -4578,12 +4582,14 @@ function finishPlayerPopupDrag(){
         }else{
             applyPlayerPopupFullscreenPosition();
             queuePanel.classList.add("playerPopupFull");
+            recenterFullscreenKaraokeLyrics();
         }
     }else if(deltaY > 110){
         closePlayerPopup();
     }else if(deltaY < -70 || playerPopupCurrentTop < fullscreenTop + playerPopupDragViewportHeight * 0.28){
         applyPlayerPopupFullscreenPosition();
         queuePanel.classList.add("playerPopupFull");
+        recenterFullscreenKaraokeLyrics();
     }else{
         queuePanel.style.transform = "";
         queuePanel.classList.remove("playerPopupFull");
@@ -4607,6 +4613,7 @@ function cancelPlayerPopupDrag(){
     if(playerPopupStartedFull){
         applyPlayerPopupFullscreenPosition();
         queuePanel.classList.add("playerPopupFull");
+        recenterFullscreenKaraokeLyrics();
     }else{
         queuePanel.style.transform = "";
         queuePanel.classList.remove("playerPopupFull");

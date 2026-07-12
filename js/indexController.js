@@ -737,9 +737,9 @@ function setKaraokeWordProgress(wordRef, currentTime){
         const longWordWeight = clampKaraokeProgress((wordRef.word.duration - 0.32) / 0.78);
         const jellyPulse = Math.sin(Math.PI * easedProgress);
         const jellySettle = Math.sin(Math.PI * 2 * easedProgress) * (1 - easedProgress);
-        const stretchX = 1 + longWordWeight * (jellyPulse * 0.048 + jellySettle * 0.009);
-        const stretchY = 1 - longWordWeight * jellyPulse * 0.022;
-        const lift = -longWordWeight * jellyPulse * 0.7;
+        const stretchX = 1 + longWordWeight * (jellyPulse * 0.072 + jellySettle * 0.018);
+        const stretchY = 1 - longWordWeight * (jellyPulse * 0.034 + jellySettle * 0.006);
+        const lift = -longWordWeight * (jellyPulse * 1.15 + jellySettle * 0.2);
         wordRef.element.style.setProperty("--karaoke-jelly-x", stretchX.toFixed(4));
         wordRef.element.style.setProperty("--karaoke-jelly-y", stretchY.toFixed(4));
         wordRef.element.style.setProperty("--karaoke-jelly-lift", `${lift.toFixed(2)}px`);
@@ -765,8 +765,9 @@ function syncKaraokeLineWords(lineIndex, currentTime){
     return activeWordIndex;
 }
 
-function scrollKaraokeLine(lineIndex){
-    if(Date.now() < playerLyricsState.manualScrollUntil || document.getElementById("queuePanel")?.classList.contains("queuePanelDragging")){
+function scrollKaraokeLine(lineIndex, force = false){
+    const queuePanel = document.getElementById("queuePanel");
+    if((!force && Date.now() < playerLyricsState.manualScrollUntil) || queuePanel?.classList.contains("queuePanelDragging")){
         return;
     }
     const lineRef = playerLyricsState.renderedLines[lineIndex];
@@ -774,9 +775,16 @@ function scrollKaraokeLine(lineIndex){
         return;
     }
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const targetTop = Math.max(0, lineRef.element.offsetTop - playerLyricsBody.clientHeight * 0.3);
+    const focusRatio = queuePanel?.classList.contains("playerPopupFull") ? 0.5 : 0.3;
+    const targetTop = Math.max(0, lineRef.element.offsetTop - (playerLyricsBody.clientHeight - lineRef.element.offsetHeight) * focusRatio);
     playerLyricsBody.scrollTo({top: targetTop, behavior: reduceMotion ? "auto" : "smooth"});
 }
+
+window.crimsonRecenterKaraokeLyrics = function(){
+    if(playerLyricsState.karaokeEnabled && playerLyricsState.focusLineIndex >= 0){
+        requestAnimationFrame(() => scrollKaraokeLine(playerLyricsState.focusLineIndex, true));
+    }
+};
 
 function updateKaraokeAtTime(currentTime, force = false){
     if(!playerLyricsState.karaokeEnabled || !playerLyricsState.renderedLines.length){
