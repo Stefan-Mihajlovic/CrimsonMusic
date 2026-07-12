@@ -116,8 +116,11 @@ body{
 }
 
 .bodyHolder{
-    position: relative;
-    height: 100%;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100lvh;
     min-height: 0;
     overflow: hidden !important;
 }
@@ -125,10 +128,16 @@ body{
 @supports (-webkit-touch-callout: none){
     @media (display-mode: standalone){
         html,
-        body,
+        body{
+            height: 100%;
+            min-height: 100%;
+        }
+
         .bodyHolder{
             height: 100vh;
+            height: 100lvh;
             min-height: 100vh;
+            min-height: 100lvh;
         }
 
         main{
@@ -6013,6 +6022,32 @@ html.authSessionLoading .authWelcomeActions{
     transform: translateX(-50%);
 }
 
+.authLegalLinks{
+    margin: 6px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 28px;
+    color: rgba(255, 255, 255, .68);
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.authLegalLinks a{
+    color: inherit;
+    text-decoration: none;
+    transition: color .18s ease;
+}
+
+.authLegalLinks a:hover,
+.authLegalLinks a:focus-visible{
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 .authWelcomeActions > *,
 .authFormFooter > *{
     opacity: 0;
@@ -6030,8 +6065,12 @@ html.authSessionLoading .authWelcomeActions{
     transition-delay: .38s !important;
 }
 
-.authWelcomeView.isActive .authWelcomeActions > :last-child{
+.authWelcomeView.isActive .authWelcomeActions > .authPrimaryButton{
     transition-delay: .47s !important;
+}
+
+.authWelcomeView.isActive .authWelcomeActions > .authLegalLinks{
+    transition-delay: .54s !important;
 }
 
 .authView.isActive .authFormFooter > :first-child{
