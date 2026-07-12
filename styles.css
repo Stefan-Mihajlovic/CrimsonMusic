@@ -128,17 +128,21 @@ body{
     @media (display-mode: standalone){
         html,
         body{
-            height: 100%;
-            min-height: 100%;
+            height: calc(100vh + env(safe-area-inset-top));
+            min-height: calc(100vh + env(safe-area-inset-top));
         }
 
         .bodyHolder{
-            height: 100vh;
-            min-height: 100vh;
+            height: calc(100vh + env(safe-area-inset-top));
+            min-height: calc(100vh + env(safe-area-inset-top));
         }
 
         main{
             height: 100%;
+        }
+
+        #mobileNav{
+            position: absolute;
         }
     }
 }
