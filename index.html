@@ -14,6 +14,9 @@
     <meta property="og:site_name" content="Crimson Music" />
     <meta name="theme-color" content="#0e0d13" id="themeColorMeta" />
     <script>
+        if(window.navigator.standalone === true){
+            document.documentElement.classList.add('iosStandalone');
+        }
         try {
             const cachedUser = JSON.parse(localStorage.getItem('user') || 'null');
             const savedTheme = localStorage.getItem('crimsonTheme') || cachedUser?.AppTheme || 'Dark';
@@ -30,7 +33,7 @@
             localStorage.removeItem('keepLoggedIn');
         }
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260712-safari-browser-viewport-7">
+    <link rel="stylesheet" href="styles.css?v=20260712-ios-mode-split-8">
     <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
     <script src="js/index.js?v=20260712-player-popup-polish-3" defer></script>
     <script src="js/indexController.js?v=20260712-karaoke-pwa-1" type="module"></script>
