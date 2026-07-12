@@ -891,9 +891,18 @@ function moveQueueToSong(selectedSong){
 }
 
 function resetPlayerPopupScroll(){
-    queueList?.scrollTo(0, 0);
-    queueLyricsBody?.scrollTo(0, 0);
-    queueRelatedBody?.scrollTo(0, 0);
+    [queueList, queueLyricsBody, queueRelatedBody].forEach((content) => {
+        if(!content){
+            return;
+        }
+        const previousScrollBehavior = content.style.scrollBehavior;
+        content.style.scrollBehavior = "auto";
+        content.scrollTop = 0;
+        content.scrollLeft = 0;
+        requestAnimationFrame(() => {
+            content.style.scrollBehavior = previousScrollBehavior;
+        });
+    });
 }
 
 function setPlayerPopupTab(tabName){
@@ -940,6 +949,10 @@ function openPlayerPopup(tabName = "queue"){
     playerPopupBackdrop?.classList.add("playerPopupBackdropOpen");
     setCrimsonScrollLock("player-popup", true);
     setPlayerPopupTab(tabName);
+    requestAnimationFrame(() => {
+        resetPlayerPopupScroll();
+        requestAnimationFrame(resetPlayerPopupScroll);
+    });
 }
 
 function closePlayerPopup(){
@@ -948,6 +961,7 @@ function closePlayerPopup(){
     }
 
     isQueueOpen = false;
+    resetPlayerPopupScroll();
     queuePanel.classList.remove("queuePanelOpen");
     queuePanel.classList.remove("playerPopupFull");
     queuePanel.classList.remove("queuePanelDragging");
@@ -4440,7 +4454,9 @@ function clearPlayerPopupDragStyles(){
 }
 
 function canStartPlayerPopupDrag(target){
-    if(target?.closest("button, a, input, select, textarea, [role='switch']")){
+    const dragChrome = target?.closest(".queueHandle, .queueTabs, .queuePlayingFrom, .lyricsModeBar");
+    const interactiveTarget = target?.closest("button, a, input, select, textarea, [role='switch']");
+    if(interactiveTarget && !dragChrome){
         return false;
     }
 
@@ -4448,7 +4464,7 @@ function canStartPlayerPopupDrag(target){
         return true;
     }
 
-    if(target?.closest(".queueHandle, .queueTabs, .queuePlayingFrom")){
+    if(dragChrome){
         return true;
     }
 
@@ -4465,6 +4481,10 @@ function isPlayerPopupContentAtTop(content = getActivePlayerPopupContent()){
 }
 
 function shouldDragPlayerPopupFromContent(deltaY){
+    if(playerPopupStartTarget?.closest?.(".queueHandle, .queueTabs, .queuePlayingFrom, .lyricsModeBar")){
+        return true;
+    }
+
     const activeContent = getActivePlayerPopupContent();
     if(!queuePanel?.classList.contains("playerPopupFull") || !activeContent || !activeContent.contains(playerPopupStartTarget)){
         return true;
