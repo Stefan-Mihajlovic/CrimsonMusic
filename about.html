@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Crimson Music is a modern web music app for streaming, discovering songs, building playlists, and enjoying synchronized lyrics.">
+    <meta name="application-name" content="Crimson Music">
+    <meta name="apple-mobile-web-app-title" content="Crimson Music">
+    <meta property="og:site_name" content="Crimson Music">
+    <meta property="og:title" content="Crimson Music — Your music, beautifully organized">
+    <meta property="og:description" content="Discover music, create playlists, save favorites, and follow synchronized lyrics with Crimson Music.">
+    <meta name="theme-color" content="#0d0a10">
+    <link rel="shortcut icon" href="images/CrimsonLogo.png" type="image/x-icon">
+    <title>About Crimson Music</title>
+    <style>
+        :root { color-scheme: dark; font-family: "Outfit", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        * { box-sizing: border-box; }
+        html, body { width: 100%; min-height: 100%; margin: 0; background: #0d0a10; }
+        body { color: #fff; overflow-x: hidden; }
+        .page { position: relative; min-height: 100vh; min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; isolation: isolate; }
+        .backdrop { position: fixed; inset: -24px; z-index: -2; background: url("images/auth/auth-background.webp") center top / cover no-repeat; filter: blur(2.5px); opacity: .34; transform: scale(1.08); }
+        .page::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, #0d0a10 0%, rgba(13,10,16,.04) 18%, rgba(13,10,16,.12) 58%, #0d0a10 91%), linear-gradient(0deg, rgba(13,10,16,.8), transparent 55%); }
+        header { display: flex; flex-direction: column; align-items: center; padding: max(38px, calc(env(safe-area-inset-top) + 22px)) 24px 18px; text-align: center; }
+        header img { width: min(174px, 48vw); height: auto; object-fit: contain; }
+        h1 { margin: 28px 0 0; font-size: clamp(28px, 8vw, 42px); line-height: 1.05; letter-spacing: -.035em; font-weight: 650; }
+        .tagline { max-width: 430px; margin: 9px 0 0; color: rgba(255,255,255,.68); font-size: 14px; line-height: 1.45; }
+        .carouselSection { width: 100%; align-self: center; padding: 8px 0 18px; overflow: hidden; }
+        .carousel { position: relative; width: min(390px, 100%); margin: 0 auto; }
+        .viewport { overflow: hidden; touch-action: pan-y; cursor: grab; }
+        .viewport.isDragging { cursor: grabbing; }
+        .track { display: flex; transition: transform .48s cubic-bezier(.22,.78,.24,1); will-change: transform; }
+        .viewport.isDragging .track { transition: none; }
+        .slide { min-width: 100%; padding: 8px 28px; }
+        .card { min-height: 238px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 26px 24px; text-align: center; }
+        .icon { width: 45px; height: 45px; display: grid; place-items: center; margin-bottom: 18px; border: 1px solid rgba(169,134,237,.34); border-radius: 15px; color: #b38af4; background: rgba(143,89,245,.13); font-size: 22px; }
+        h2 { margin: 0 0 9px; font-size: 24px; line-height: 1.15; letter-spacing: -.02em; }
+        .card p { max-width: 330px; margin: 0; color: rgba(220,214,247,.7); font-size: 14px; line-height: 1.55; }
+        .card strong { color: #fff; }
+        .controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 7px; }
+        .arrow { width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 50%; color: #fff; background: rgba(220,214,247,.09); cursor: pointer; }
+        .arrow:disabled { opacity: .3; }
+        .dots { display: flex; align-items: center; gap: 7px; }
+        .dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 99px; background: rgba(220,214,247,.3); cursor: pointer; transition: width .25s ease, background-color .25s ease; }
+        .dot.active { width: 23px; background: #8f59f5; }
+        footer { width: min(390px, calc(100% - 48px)); margin: 0 auto; padding: 8px 0 max(28px, calc(env(safe-area-inset-bottom) + 18px)); text-align: center; }
+        .enter { width: 100%; min-height: 48px; display: grid; place-items: center; border-radius: 999px; color: #0d0a10; background: #fff; font-size: 16px; font-weight: 700; text-decoration: none; box-shadow: 0 14px 36px rgba(0,0,0,.24); }
+        .legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 15px 0 0; color: rgba(255,255,255,.58); font-size: 12px; }
+        .legal a { color: inherit; text-decoration: none; }
+        .legal a:hover, .legal a:focus-visible { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+        @media (min-width: 700px) { header { padding-top: 58px; } .carousel { width: min(520px, 100%); } .slide { padding-inline: 34px; } .card { min-height: 260px; padding: 32px; } footer { width: 452px; } }
+        @media (max-height: 720px) { header { padding-top: max(24px, calc(env(safe-area-inset-top) + 12px)); padding-bottom: 8px; } header img { width: 116px; } h1 { margin-top: 20px; font-size: 29px; } .tagline { margin-top: 5px; } .card { min-height: 205px; padding: 20px; } .icon { margin-bottom: 12px; } footer { padding-bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px)); } }
+        @media (prefers-reduced-motion: reduce) { .track, .dot { transition-duration: .01ms; } }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="backdrop" aria-hidden="true"></div>
+        <header>
+            <img src="images/auth/crimson-logo.webp?v=20260710" alt="Crimson Music logo">
+            <h1>Crimson Music</h1>
+            <p class="tagline">A modern web music app for discovering songs, building your library, and enjoying every word.</p>
+        </header>
+
+        <section class="carouselSection" aria-label="About Crimson Music">
+            <div class="carousel">
+                <div class="viewport" id="aboutCarousel">
+                    <div class="track" id="aboutTrack">
+                        <article class="slide" aria-label="1 of 3">
+                            <div class="card">
+                                <div class="icon" aria-hidden="true">♪</div>
+                                <h2>Music made personal</h2>
+                                <p>Stream and discover music, save favorites, create playlists, explore artists, and keep your listening experience together in one place.</p>
+                            </div>
+                        </article>
+                        <article class="slide" aria-label="2 of 3">
+                            <div class="card">
+                                <div class="icon" aria-hidden="true">◎</div>
+                                <h2>Lyrics that move with you</h2>
+                                <p>Follow synchronized lyrics with optional karaoke-style word highlighting, manage your queue, and find related songs without leaving the player.</p>
+                            </div>
+                        </article>
+                        <article class="slide" aria-label="3 of 3">
+                            <div class="card">
+                                <div class="icon" aria-hidden="true">✓</div>
+                                <h2>Simple, optional Google sign-in</h2>
+                                <p>When you choose Google sign-in, Crimson Music uses your <strong>name, email address, profile photo, and Google account identifier</strong> only to create and secure your account and personalize your profile. Your Google password is never shared with us.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="arrow" id="previousSlide" type="button" aria-label="Previous slide">←</button>
+                    <div class="dots" aria-label="Choose a slide">
+                        <button class="dot active" type="button" data-slide="0" aria-label="Show slide 1" aria-current="true"></button>
+                        <button class="dot" type="button" data-slide="1" aria-label="Show slide 2"></button>
+                        <button class="dot" type="button" data-slide="2" aria-label="Show slide 3"></button>
+                    </div>
+                    <button class="arrow" id="nextSlide" type="button" aria-label="Next slide">→</button>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <a class="enter" href="index.html">Open Crimson Music</a>
+            <nav class="legal" aria-label="Legal information">
+                <a href="privacy.html">Privacy Policy</a><span aria-hidden="true">•</span><a href="terms.html">Terms of Service</a>
+            </nav>
+        </footer>
+    </main>
+    <script>
+        (() => {
+            const viewport = document.getElementById('aboutCarousel');
+            const track = document.getElementById('aboutTrack');
+            const dots = [...document.querySelectorAll('[data-slide]')];
+            const previous = document.getElementById('previousSlide');
+            const next = document.getElementById('nextSlide');
+            let active = 0;
+            let startX = null;
+            let dragX = 0;
+            let startedAt = 0;
+            let pointerId = null;
+
+            const show = (index) => {
+                active = Math.max(0, Math.min(dots.length - 1, index));
+                track.style.transform = `translate3d(${-active * 100}%, 0, 0)`;
+                dots.forEach((dot, dotIndex) => {
+                    const isActive = dotIndex === active;
+                    dot.classList.toggle('active', isActive);
+                    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                });
+                previous.disabled = active === 0;
+                next.disabled = active === dots.length - 1;
+            };
+
+            viewport.addEventListener('pointerdown', (event) => {
+                if(event.pointerType === 'mouse' && event.button !== 0) return;
+                startX = event.clientX;
+                dragX = 0;
+                startedAt = performance.now();
+                pointerId = event.pointerId;
+                viewport.classList.add('isDragging');
+                viewport.setPointerCapture?.(event.pointerId);
+            });
+            viewport.addEventListener('pointermove', (event) => {
+                if(startX === null || event.pointerId !== pointerId) return;
+                dragX = event.clientX - startX;
+                if((active === 0 && dragX > 0) || (active === dots.length - 1 && dragX < 0)){
+                    dragX *= .28;
+                }
+                track.style.transform = `translate3d(calc(${-active * 100}% + ${dragX}px), 0, 0)`;
+            });
+            viewport.addEventListener('pointerup', (event) => {
+                if(startX === null || event.pointerId !== pointerId) return;
+                const elapsed = Math.max(1, performance.now() - startedAt);
+                const velocity = dragX / elapsed;
+                const threshold = viewport.clientWidth * .18;
+                viewport.classList.remove('isDragging');
+                if(Math.abs(dragX) > threshold || Math.abs(velocity) > .42){
+                    show(active + (dragX < 0 ? 1 : -1));
+                }else{
+                    show(active);
+                }
+                startX = null;
+                dragX = 0;
+                pointerId = null;
+            });
+            viewport.addEventListener('pointercancel', () => {
+                viewport.classList.remove('isDragging');
+                startX = null;
+                dragX = 0;
+                pointerId = null;
+                show(active);
+            });
+            previous.addEventListener('click', () => show(active - 1));
+            next.addEventListener('click', () => show(active + 1));
+            dots.forEach((dot) => dot.addEventListener('click', () => show(Number(dot.dataset.slide))));
+            show(0);
+        })();
+    </script>
+</body>
+</html>

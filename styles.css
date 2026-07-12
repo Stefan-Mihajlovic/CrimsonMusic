@@ -6041,7 +6041,7 @@ html.authSessionLoading .authWelcomeActions{
     gap: 5px;
     min-height: 28px;
     color: rgba(255, 255, 255, .68);
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.4;
     white-space: nowrap;
 }
